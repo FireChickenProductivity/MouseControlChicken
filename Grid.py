@@ -1,6 +1,11 @@
 from .fire_chicken.mouse_position import MousePosition
 
-
+class Rectangle:
+    def __init__(self, top, bottom, left, right):
+        self.top = top
+        self.bottom = bottom
+        self.left = left
+        self.right = right
 
 class Grid:
     def __init__(self, rectangle): pass
