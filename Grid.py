@@ -8,7 +8,7 @@ class Rectangle:
         self.right = right
 
 class Grid:
-    def __init__(self, rectangle): pass
+    def __init__(self, rectangle: Rectangle): pass
     def compute_absolute_position(self, grid_coordinates: str) -> MousePosition: pass
 
 class VerticallyOrderedGrid:
