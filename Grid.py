@@ -30,9 +30,14 @@ class HorizontallyOrderedGrid:
 
 class RecursiveDivisionGrid(Grid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
-    the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
+        the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
     def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: pass
     def compute_current_position(self) -> MousePosition: pass
     def re_expand_grid(self) -> None: pass
     def get_regions(self) -> List: pass
     def get_expansion_options(self) -> List: pass
+
+class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+    '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
+        the positions are determined by a vertical and a horizontal axis'''
+    def get_coordinate_pairs(self) -> List: pass
