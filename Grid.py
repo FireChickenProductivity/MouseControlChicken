@@ -27,3 +27,12 @@ class HorizontallyOrderedGrid:
     def compute_absolute_position_to_the_left_of_grid_position_by_horizontal_amount(self, grid_coordinates: str, amount: int) -> MousePosition: pass
     def get_horizontal_coordinates(self) -> List: pass
     def compute_absolute_horizontal_from(self, coordinates) -> int: pass
+
+class RecursiveDivisionGrid(Grid):
+    '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
+    the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
+    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: pass
+    def compute_current_position(self) -> MousePosition: pass
+    def re_expand_grid(self) -> None: pass
+    def get_regions(self) -> List: pass
+    def get_expansion_options(self) -> List: pass
