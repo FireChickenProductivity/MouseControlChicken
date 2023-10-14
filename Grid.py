@@ -8,8 +8,8 @@ class Rectangle:
         self.right = right
 
 class Grid:
-    def make_grid_around(rectangle: Rectangle) -> None: pass
-    def compute_absolute_position(self, grid_coordinates: str) -> MousePosition: pass
+    def make_around(rectangle: Rectangle) -> None: pass
+    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
 
 class VerticallyOrderedGrid:
     def compute_absolute_position_above_grid_position_by_vertical_amount(self, grid_coordinates: str, amount: int) -> MousePosition: pass
