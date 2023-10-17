@@ -8,6 +8,11 @@ def compute_center_position(rectangle: Rectangle) -> MousePosition:
     center = MousePosition(int(horizontal), int(vertical))
     return center
 
+class OneDimensionalLine:
+    def __init__(self, start: int, ending: int):
+        self.start = start
+        self.ending = ending
+
 class LineDivider:
     def __init__(self, start: int, ending: int, number_of_divisors: int):
         self.start = start
@@ -21,8 +26,17 @@ class LineDivider:
             self.number_of_divisors = math.floor((self.ending - self.start)/(self.division_size))
 
     def compute_divisor_position(self, number: int) -> int:
+        if self.number_of_divisors < number < 1:
+            raise IndexError(f"Attempt to access nonexistent divisor number {number} with number of divisors {self.number_of_divisors}")
         position = self.start + self.division_size*number
         return position
+
+    def compute_split(self, number: int) -> OneDimensionalLine:
+        if self.number_of_divisors + 1 < number < 1: 
+            raise IndexError(f"Attempt to access nonexistent divisor split number {number} with number of divisors {self.number_of_divisors}")
+        if number == 1: return LineDivider(self.start, self.compute_divisor_position(number))
+        if number == self.number_of_divisors + 1: return LineDivider(self.compute_divisor_position(number - 1), self.ending)
+        return LineDivider(self.compute_divisor_position(number - 1), self.compute_divisor_position(number))
 
     def get_number_of_divisors(self) -> int:
         return self.number_of_divisors
