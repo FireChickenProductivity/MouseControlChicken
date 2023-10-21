@@ -41,6 +41,16 @@ class LineDivider:
     def get_number_of_divisors(self) -> int:
         return self.number_of_divisors
 
+class RectangleDivider:
+    def __init__(self, horizontal_divider: LineDivider, vertical_divider: LineDivider):
+        self.horizontal_divider = horizontal_divider
+        self.vertical_divider = vertical_divider
+
+    def compute_sub_rectangle(self, horizontal_split_number: int, vertical_split_number: int):
+        horizontal_line = self.horizontal_divider.compute_split(horizontal_split_number)
+        vertical_line = self.vertical_divider.compute_split(vertical_split_number)
+        rectangle = Rectangle(vertical_line.start, vertical_line.ending, horizontal_line.start, horizontal_line.ending)
+        return rectangle
 
 def compute_average(*args):
     sum = 0
