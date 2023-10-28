@@ -1,5 +1,5 @@
 from .Grid import Rectangle
-from ..fire_chicken.mouse_position import MousePosition
+from .fire_chicken.mouse_position import MousePosition
 import math
 
 def compute_center_position(rectangle: Rectangle) -> MousePosition:
