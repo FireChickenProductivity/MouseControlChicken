@@ -16,3 +16,8 @@ class CrisscrossDisplay(Display):
     '''Displays a grid within a rectangle by showing positions on the grade with criss crossing horizontal and vertical lines'''
     pass
 
+class PositionDisplay(Display):
+    '''Displays a grid within a rectangle showing the positions on the grid'''
+    pass
+
+
