@@ -2,6 +2,15 @@ from talon import canvas
 from talon.skia import Paint
 from .Grid import Rectangle
 
+def update_canvas_color(canvas, color: str):
+    canvas.paint.color = "FF0000"
+
+def update_canvas_text_size(canvas, size: int):
+    canvas.paint.textsize = size
+
+def update_canvas_line_thickness(canvas, thickness: int):
+    canvas.paint.stroke_width = thickness
+
 class Text:
     def __init__(self, x: int, y: int, text: str):
         self.x = x
@@ -15,27 +24,50 @@ class Line:
         self.x2 = x2
         self.y2 = y2
 
-class ElementManager:
-    def __init__(self):
+class CanvasElementOptions:
+    def __init__(self, size: int, color: str):
+        self.size = size
+        self.color = color
+
+class LineManager:
+    def __init__(self, options: CanvasElementOptions):
         self.elements = []
+        self.options = options
     
-    def insert(self, element):
-        self.elements.append(element)
+    def insert(self, line: Line):
+        self.elements.append(line)
     
     def clear(self):
         self.elements.clear()
     
-    def __iter__(self):
-        for element in self.elements:
-            yield element
+    def add_to_canvas(self, canvas):
+        update_canvas_color(canvas, self.options.color)
+        update_canvas_line_thickness(canvas, self.options.size)
+        for line in self.elements: canvas.draw_line(line.x1, line.y1, line.x2, line.y2)
+
+class TextManager:
+    def __init__(self, options: CanvasElementOptions):
+        self.elements = []
+        self.options = options
+    
+    def insert(self, text: Text):
+        self.elements.append(text)
+    
+    def clear(self):
+        self.elements.clear()
+    
+    def add_to_canvas(self, canvas):
+        update_canvas_color(canvas, self.options.color)
+        update_canvas_text_size(canvas, self.options.size)
+        for text in self.elements: canvas.draw_text(text.text, text.x, text.y)
 
 class Canvas:
     def __init__(self):
         self.rect = None
         self.canvas = None
         self.showing = False
-        self.lines = ElementManager()
-        self.text = ElementManager()
+        self.lines = LineManager(CanvasElementOptions(2, "FF0000"))
+        self.text = TextManager(CanvasElementOptions(30, "FF0000"))
         self.text.insert(Text(50, 50, 'St'))
         self.lines.insert(Line(10, 10, 30, 30))
 
@@ -52,13 +84,10 @@ class Canvas:
         return 
 
     def draw(self, canvas):
-        paint = canvas.paint
-        paint.textsize = 40
         canvas.paint.text_align = canvas.paint.TextAlign.CENTER
-        paint.color = "FF0000"
-        paint.style = Paint.Style.FILL
-        for line in self.lines: canvas.draw_line(line.x1, line.y1, line.x2, line.y2)
-        for text in self.text: canvas.draw_text(text.text, text.x, text.y)
+        canvas.paint.style = Paint.Style.FILL
+        self.lines.add_to_canvas(canvas)
+        self.text.add_to_canvas(canvas)
         print(canvas.rect)
 
     def hide(self):
@@ -73,3 +102,4 @@ class Canvas:
         if self.is_showing():
             self.hide()
             self.show()
+experiment = Canvas().show(Rectangle(0, 1000, 0, 1000))
