@@ -3,7 +3,7 @@ from talon.skia import Paint
 from .Grid import Rectangle
 
 def update_canvas_color(canvas, color: str):
-    canvas.paint.color = "FF0000"
+    canvas.paint.color = color
 
 def update_canvas_text_size(canvas, size: int):
     canvas.paint.textsize = size
@@ -28,6 +28,10 @@ class CanvasElementOptions:
     def __init__(self, size: int, color: str):
         self.size = size
         self.color = color
+    
+    def update(self, new_options):
+        self.size = new_options.size
+        self.color = new_options.color
 
 class LineManager:
     def __init__(self, options: CanvasElementOptions):
@@ -66,10 +70,10 @@ class Canvas:
         self.rect = None
         self.canvas = None
         self.showing = False
-        self.lines = LineManager(CanvasElementOptions(2, "FF0000"))
-        self.text = TextManager(CanvasElementOptions(30, "FF0000"))
-        self.text.insert(Text(50, 50, 'St'))
-        self.lines.insert(Line(10, 10, 30, 30))
+        self.line_options = CanvasElementOptions(2, "FF0000")
+        self.text_options = CanvasElementOptions(15, "FF0000")
+        self.lines = LineManager(self.line_options)
+        self.text = TextManager(self.text_options)
 
     def setup(self, rectangle: Rectangle):
         self.hide()
@@ -102,4 +106,24 @@ class Canvas:
         if self.is_showing():
             self.hide()
             self.show()
-experiment = Canvas().show(Rectangle(0, 1000, 0, 1000))
+        
+    def insert_line(self, line: Line):
+        self.lines.insert(line)
+    
+    def insert_text(self, text: Text):
+        self.text.insert(text)
+    
+    def update_line_options(self, options: CanvasElementOptions):
+        self.line_options.update(options)
+    
+    def update_text_options(self, options: CanvasElementOptions):
+        self.text_options.update(options)
+
+# experiment = Canvas()
+# experiment.insert_text(Text(50, 50, 'St'))
+# experiment.insert_text(Text(100, 70, 'ab'))
+# experiment.insert_line(Line(10, 10, 30, 30))
+# experiment.insert_line(Line(60, 60, 100, 80))
+# experiment.update_line_options(CanvasElementOptions(2, "00FF00"))
+# experiment.update_text_options(CanvasElementOptions(40, "10FF40"))
+# experiment.show(Rectangle(0, 1000, 0, 1000))
