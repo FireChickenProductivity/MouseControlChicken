@@ -36,12 +36,14 @@ class ListBasedGrid(RectangularGrid):
 
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: 
         horizontal_coordinate = self._compute_horizontal_coordinate(coordinates)
-        horizontal = self.horizontal_divider.compute_divisor_position(horizontal_coordinate)
+        divider_position = self.horizontal_coordinates[horizontal_coordinate]
+        horizontal = self.horizontal_divider.compute_divisor_position(divider_position)
         return horizontal
     
     def compute_absolute_vertical_from(self, coordinates) -> int:
         vertical_coordinate = self._compute_vertical_coordinate(coordinates)
-        vertical = self.horizontal_divider.compute_divisor_position(vertical_coordinate)
+        divider_position = self.horizontal_coordinates[vertical_coordinate]
+        vertical = self.horizontal_divider.compute_divisor_position(divider_position)
         return vertical
 
     def _compute_horizontal_coordinate(self, grid_coordinates: str) -> str:
