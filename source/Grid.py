@@ -11,7 +11,7 @@ class Rectangle:
 
 class Grid:
     '''Grid is responsible for mapping from a grid coordinate system to absolute coordinates within a given rectangle on the screen'''
-    def make_around(rectangle: Rectangle) -> None: pass
+    def make_around(self, rectangle: Rectangle) -> None: pass
     def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
 
 class VerticallyOrderedGrid:
