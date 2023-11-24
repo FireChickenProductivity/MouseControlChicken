@@ -15,7 +15,6 @@ class ListBasedGrid(RectangularGrid):
         self.vertical_divider = None
         self.separator = separator
     
-
     def make_around(self, rectangle: Rectangle) -> None:
         self.rectangle = rectangle
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))
