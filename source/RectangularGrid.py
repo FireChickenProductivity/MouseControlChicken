@@ -21,16 +21,35 @@ class ListBasedGrid(RectangularGrid):
         self.vertical_divider = LineDivider(rectangle.top, rectangle.bottom, len(self.vertical_coordinates))
     
     def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition:
-        if len(self.separator) == 0: 
-            coordinates = grid_coordinates
-        else:
-            coordinates = grid_coordinates.split(self.separator)
-        horizontal_coordinate = coordinates[0]
-        vertical_coordinate = coordinates[1]
-        horizontal = self.horizontal_divider.compute_divisor_position(horizontal_coordinate)
-        vertical = self.vertical_divider.compute_divisor_position(vertical_coordinate)
+        horizontal = self.compute_absolute_horizontal_from(grid_coordinates)
+        vertical = self.compute_absolute_vertical_from(grid_coordinates)
         position = MousePosition(horizontal, vertical)
         return position
+
+    def compute_absolute_horizontal_from(self, coordinates: str) -> int: 
+        horizontal_coordinate = self._compute_horizontal_coordinate(coordinates)
+        horizontal = self.horizontal_divider.compute_divisor_position(horizontal_coordinate)
+        return horizontal
+    
+    def compute_absolute_vertical_from(self, coordinates) -> int:
+        vertical_coordinate = self._compute_vertical_coordinate(coordinates)
+        vertical = self.horizontal_divider.compute_divisor_position(vertical_coordinate)
+        return vertical
+
+    def _compute_horizontal_coordinate(self, grid_coordinates: str) -> str:
+        return self._compute_coordinate_from_index(grid_coordinates, 0)
+
+    def _compute_vertical_coordinate(self, grid_coordinates: str) -> str:
+        return self._compute_coordinate_from_index(grid_coordinates, 1)
+    
+    def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
+        return self._compute_coordinates(grid_coordinates)[index]
+
+    def _compute_coordinates(self, grid_coordinates: str) -> List:
+        if len(self.separator) == 0: 
+            return grid_coordinates
+        else:
+            return grid_coordinates.split(self.separator)
 
 def create_ordering_dictionary(list: List):
     ordering = {}
