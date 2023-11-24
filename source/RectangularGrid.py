@@ -1,6 +1,6 @@
 from .Grid import Rectangle, RectangularGrid
 from typing import List
-from .fire_chicken import MousePosition
+from .fire_chicken.mouse_position import MousePosition
 from .RectangleUtilities import LineDivider
 
 class ListBasedGrid(RectangularGrid):
