@@ -12,13 +12,11 @@ class ListBasedGrid(RectangularGrid):
         self.vertical_list = vertical_list
         self.horizontal_coordinates = create_ordering_dictionary(horizontal_list)
         self.vertical_coordinates = create_ordering_dictionary(vertical_list)
-        self.rectangle = None
         self.horizontal_divider = None
         self.vertical_divider = None
         self.separator = separator
-    
+
     def make_around(self, rectangle: Rectangle) -> None:
-        self.rectangle = rectangle
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))
         self.vertical_divider = LineDivider(rectangle.top, rectangle.bottom, len(self.vertical_coordinates))
     
