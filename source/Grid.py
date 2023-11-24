@@ -36,4 +36,10 @@ class RecursiveDivisionGrid(Grid):
 class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
-    def get_coordinate_pairs(self) -> Generator: pass
+    def get_coordinate_pairs(self) -> Generator:
+        for horizontal in self.get_horizontal_coordinates():
+            horizontal_value = self.compute_absolute_horizontal_from(horizontal)
+            for vertical in self.get_vertical_coordinates():
+                vertical_value = self.compute_absolute_vertical_from(vertical)
+                yield MousePosition(horizontal_value, vertical_value)
+
