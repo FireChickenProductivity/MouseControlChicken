@@ -1,5 +1,5 @@
 from .Grid import Rectangle, RectangularGrid
-from typing import List
+from typing import List, Generator
 from .fire_chicken.mouse_position import MousePosition
 from .RectangleUtilities import LineDivider
 
@@ -28,11 +28,11 @@ class ListBasedGrid(RectangularGrid):
         position = MousePosition(horizontal, vertical)
         return position
     
-    def get_horizontal_coordinates(self) -> List:
-        return self.horizontal_list[:]
+    def get_horizontal_coordinates(self) -> Generator:
+        for element in self.horizontal_list: yield element
 
-    def get_vertical_coordinates(self) -> List:
-        return self.vertical_list[:]
+    def get_vertical_coordinates(self) -> Generator:
+        for element in self.vertical_list: yield element
 
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: 
         horizontal_coordinate = self._compute_horizontal_coordinate(coordinates)

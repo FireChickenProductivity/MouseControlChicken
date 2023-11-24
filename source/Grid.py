@@ -1,5 +1,5 @@
 from .fire_chicken.mouse_position import MousePosition
-from typing import List
+from typing import List, Generator
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''
@@ -16,12 +16,12 @@ class Grid:
 
 class VerticallyOrderedGrid:
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''
-    def get_vertical_coordinates(self) -> List: pass
+    def get_vertical_coordinates(self) -> Generator: pass
     def compute_absolute_vertical_from(self, coordinates) -> int: pass
 
 class HorizontallyOrderedGrid:
     '''HorizontallyOrderedGrid is responsible for handling a horizontally ordered coordinate system'''
-    def get_horizontal_coordinates(self) -> List: pass
+    def get_horizontal_coordinates(self) -> Generator: pass
     def compute_absolute_horizontal_from(self, coordinates) -> int: pass
 
 class RecursiveDivisionGrid(Grid):
@@ -30,10 +30,10 @@ class RecursiveDivisionGrid(Grid):
     def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: pass
     def compute_current_position(self) -> MousePosition: pass
     def re_expand_grid(self) -> None: pass
-    def get_regions(self) -> List: pass
-    def get_expansion_options(self) -> List: pass
+    def get_regions(self) -> Generator: pass
+    def get_expansion_options(self) -> Generator: pass
 
 class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
-    def get_coordinate_pairs(self) -> List: pass
+    def get_coordinate_pairs(self) -> Generator: pass
