@@ -1,5 +1,5 @@
 from .fire_chicken.mouse_position import MousePosition
-from typing import List, Generator
+from typing import Generator
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''
