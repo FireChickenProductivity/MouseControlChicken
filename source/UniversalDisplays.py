@@ -22,10 +22,15 @@ class LabeledPosition:
 class UniversalPositionDisplay(PositionDisplay):
     def __init__(self):
         self.grid: Grid = None
-        self.labeled_positions = None
+        self.canvas: Canvas = None
     
-    def set_grid(grid: Grid): pass
-    def set_rectangle(rectangle: Rectangle): pass
-    def show(): pass
-    def hide(): pass
-    def refresh(): pass
+    def set_grid(self, grid: Grid): 
+        self.grid = grid
+        self.hide()
+        for coordinates in self.grid.get_primary_coordinates():
+            position = self.grid.compute_absolute_position_from(coordinates)
+            text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
+            self.canvas.insert_text(text)
+
+    def set_rectangle(self, rectangle: Rectangle):
+        self.canvas.setup(rectangle)

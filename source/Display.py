@@ -1,11 +1,17 @@
 from .Grid import Grid, Rectangle
 
 class Display:
-    def set_grid(grid: Grid): pass
-    def set_rectangle(rectangle: Rectangle): pass
-    def show(): pass
-    def hide(): pass
-    def refresh(): pass
+    def set_grid(self, grid: Grid): pass
+    def set_rectangle(self, rectangle: Rectangle): pass
+    def show(self):
+        if self.canvas:
+            self.canvas.show()
+    def hide(self):
+        if self.canvas:
+            self.canvas.hide()
+    def refresh(self):
+        if self.canvas:
+            self.canvas.refresh()
 
 
 class FrameDisplay(Display): 
