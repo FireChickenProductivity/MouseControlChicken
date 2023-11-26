@@ -2,6 +2,7 @@ from .Grid import Rectangle, RecursiveDivisionGrid
 from typing import List, Generator, Tuple
 from .fire_chicken.mouse_position import MousePosition
 from .RectangleUtilities import LineDivider, compute_average
+from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     def __init__(self, division_factor: int, separator: str = ""):
@@ -37,7 +38,26 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.horizontal_divider = LineDivider(self.rectangle.left, self.rectangle.right, self.division_factor)
         self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self.division_factor)
         
-    def get_regions(self) -> Generator: pass
+    def get_regions(self) -> Generator: 
+        for horizontal in range(1, self.division_factor):
+            horizontal_split = self.horizontal_divider.compute_split(horizontal)
+            for vertical in range(1, self.division_factor):
+                vertical_split = self.vertical_divider.compute_split(vertical)
+                left = horizontal_split.start
+                right = horizontal_split.ending
+                top = vertical_split.start 
+                bottom = vertical_split.ending
+                upper_left = MousePosition(left, top)
+                upper_right = MousePosition(right, top)
+                bottom_left = MousePosition(left, bottom)
+                bottom_right = MousePosition(right, bottom)
+                lines = [MousePositionLine(upper_left, bottom_left),
+                         MousePositionLine(upper_left, upper_right),
+                         MousePositionLine(bottom_left, bottom_right),
+                         MousePositionLine(upper_right, bottom_right)
+                         ]
+                region = LinearRegion(lines)
+                return region
 
     def get_expansion_options(self) -> Generator:
         maximum_option = self.division_factor**2
