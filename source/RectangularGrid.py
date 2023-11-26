@@ -45,7 +45,7 @@ class ListBasedGrid(RectangularGrid):
     def compute_absolute_vertical_from(self, coordinates) -> int:
         vertical_coordinate = self._compute_vertical_coordinate(coordinates)
         divider_position = self.horizontal_coordinates[vertical_coordinate]
-        vertical = self.horizontal_divider.compute_divisor_position(divider_position)
+        vertical = self.vertical_divider.compute_divisor_position(divider_position)
         return vertical
 
     def _compute_horizontal_coordinate(self, grid_coordinates: str) -> str:
