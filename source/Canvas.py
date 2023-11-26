@@ -80,8 +80,7 @@ class Canvas:
         self.canvas = canvas.Canvas(0, 0, rectangle.right - rectangle.left, rectangle.bottom - rectangle.top)
         self.canvas.move(rectangle.left, rectangle.top)
        
-    def show(self, rectangle: Rectangle):
-        self.setup(rectangle)
+    def show(self):
         self.showing = True
         self.canvas.register("draw", self.draw)
         self.canvas.freeze()

@@ -49,7 +49,7 @@ class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     def get_coordinate_pairs(self) -> Generator:
         for horizontal in self.get_horizontal_coordinates():
             for vertical in self.get_vertical_coordinates():
-                yield (horizontal, vertical)
+                yield vertical + self.separator + horizontal
     
     def get_primary_coordinates(self) -> Generator:
         return self.get_coordinate_pairs()

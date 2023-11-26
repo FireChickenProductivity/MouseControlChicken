@@ -59,6 +59,6 @@ class ListBasedGrid(RectangularGrid):
 
 def create_ordering_dictionary(list: List):
     ordering = {}
-    for index, element in list:
+    for index, element in enumerate(list):
         ordering[element] = index + 1
     return ordering

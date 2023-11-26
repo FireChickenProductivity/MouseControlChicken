@@ -23,14 +23,33 @@ class UniversalPositionDisplay(PositionDisplay):
     def __init__(self):
         self.grid: Grid = None
         self.canvas: Canvas = None
+        self.rectangle: Rectangle = None
     
     def set_grid(self, grid: Grid): 
         self.grid = grid
         self.hide()
+        if self.rectangle:
+            self.set_rectangle(self.rectangle)
+
+    def set_rectangle(self, rectangle: Rectangle):
+        self.canvas = Canvas()
+        self.canvas.setup(rectangle)
+        self.rectangle = rectangle
+        self.grid.make_around(rectangle)
         for coordinates in self.grid.get_primary_coordinates():
             position = self.grid.compute_absolute_position_from(coordinates)
             text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
+            print(coordinates)
             self.canvas.insert_text(text)
-
-    def set_rectangle(self, rectangle: Rectangle):
-        self.canvas.setup(rectangle)
+    
+from talon import ui
+from .RectangularGrid import ListBasedGrid
+screens = ui.screens()
+screen = screens[0]
+talon_rectangle = screen.rect
+rectangle: Rectangle = Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
+rectangular_grid = ListBasedGrid.create_square_grid(["a", "b", "c"])
+display = UniversalPositionDisplay()
+display.set_grid(rectangular_grid)
+display.set_rectangle(rectangle)
+display.show()
