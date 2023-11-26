@@ -91,7 +91,6 @@ class Canvas:
         canvas.paint.style = Paint.Style.FILL
         self.lines.add_to_canvas(canvas)
         self.text.add_to_canvas(canvas)
-        print(canvas.rect)
 
     def hide(self):
         self.showing = False

@@ -40,6 +40,7 @@ class UniversalPositionDisplay(PositionDisplay):
             position = self.grid.compute_absolute_position_from(coordinates)
             text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
             print(coordinates)
+            print(position)
             self.canvas.insert_text(text)
     
 from talon import ui

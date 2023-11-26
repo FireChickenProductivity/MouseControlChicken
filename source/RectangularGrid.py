@@ -49,10 +49,10 @@ class ListBasedGrid(RectangularGrid):
         return vertical
 
     def _compute_horizontal_coordinate(self, grid_coordinates: str) -> str:
-        return self._compute_coordinate_from_index(grid_coordinates, 0)
+        return self._compute_coordinate_from_index(grid_coordinates, 1)
 
     def _compute_vertical_coordinate(self, grid_coordinates: str) -> str:
-        return self._compute_coordinate_from_index(grid_coordinates, 1)
+        return self._compute_coordinate_from_index(grid_coordinates, 0)
     
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
         return self._compute_coordinates(grid_coordinates)[index]
