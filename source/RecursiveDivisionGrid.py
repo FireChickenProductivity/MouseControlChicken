@@ -86,9 +86,9 @@ def compute_region_from_left_and_top_lines(horizontal_split: OneDimensionalLine,
     bottom_left = MousePosition(left, bottom)
     bottom_right = MousePosition(right, bottom)
     lines = [MousePositionLine(upper_left, bottom_left),
-                MousePositionLine(upper_left, upper_right),
-                MousePositionLine(bottom_left, bottom_right),
-                MousePositionLine(upper_right, bottom_right)
-                ]
+             MousePositionLine(upper_left, upper_right),
+             MousePositionLine(bottom_left, bottom_right),
+             MousePositionLine(upper_right, bottom_right)
+            ]
     region = LinearRegion(lines)
     return region
