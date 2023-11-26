@@ -71,8 +71,8 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         horizontal: int = target % self.division_factor
         return horizontal, vertical
 
-    def _compute_sub_divider(self, divisor: LineDivider, split_number: int) -> LineDivider:
-        line = divisor.compute_split(split_number)
+    def _compute_sub_divider(self, divider: LineDivider, split_number: int) -> LineDivider:
+        line = divider.compute_split(split_number)
         result = LineDivider(line.start, line.ending, self.division_factor)
         return result
 
