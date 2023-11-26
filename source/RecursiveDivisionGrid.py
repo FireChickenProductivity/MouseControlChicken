@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RecursiveDivisionGrid
-from typing import List, Generator, Tuple
+from typing import Generator, Tuple
 from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider, compute_average
+from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine
 from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
@@ -43,21 +43,8 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
             horizontal_split = self.horizontal_divider.compute_split(horizontal)
             for vertical in range(1, self.division_factor):
                 vertical_split = self.vertical_divider.compute_split(vertical)
-                left = horizontal_split.start
-                right = horizontal_split.ending
-                top = vertical_split.start 
-                bottom = vertical_split.ending
-                upper_left = MousePosition(left, top)
-                upper_right = MousePosition(right, top)
-                bottom_left = MousePosition(left, bottom)
-                bottom_right = MousePosition(right, bottom)
-                lines = [MousePositionLine(upper_left, bottom_left),
-                         MousePositionLine(upper_left, upper_right),
-                         MousePositionLine(bottom_left, bottom_right),
-                         MousePositionLine(upper_right, bottom_right)
-                         ]
-                region = LinearRegion(lines)
-                return region
+                region = compute_region_from_left_and_top_lines(horizontal_split, vertical_split)
+                yield region
 
     def get_expansion_options(self) -> Generator:
         maximum_option = self.division_factor**2
@@ -88,3 +75,20 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         line = divisor.compute_split(split_number)
         result = LineDivider(line.start, line.ending, self.division_factor)
         return result
+
+def compute_region_from_left_and_top_lines(horizontal_split: OneDimensionalLine, vertical_split: OneDimensionalLine) -> Generator:
+    left = horizontal_split.start
+    right = horizontal_split.ending
+    top = vertical_split.start 
+    bottom = vertical_split.ending
+    upper_left = MousePosition(left, top)
+    upper_right = MousePosition(right, top)
+    bottom_left = MousePosition(left, bottom)
+    bottom_right = MousePosition(right, bottom)
+    lines = [MousePositionLine(upper_left, bottom_left),
+                MousePositionLine(upper_left, upper_right),
+                MousePositionLine(bottom_left, bottom_right),
+                MousePositionLine(upper_right, bottom_right)
+                ]
+    region = LinearRegion(lines)
+    return region
