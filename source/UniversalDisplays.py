@@ -49,7 +49,7 @@ screens = ui.screens()
 screen = screens[0]
 talon_rectangle = screen.rect
 rectangle: Rectangle = Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
-rectangular_grid = ListBasedGrid.create_square_grid(["a", "b", "c"])
+rectangular_grid = ListBasedGrid(["a", "b", "c", "d"], ["a", "b", "c", "d", "e"])
 display = UniversalPositionDisplay()
 display.set_grid(rectangular_grid)
 display.set_rectangle(rectangle)
