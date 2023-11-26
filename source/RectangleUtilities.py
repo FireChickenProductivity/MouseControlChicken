@@ -1,6 +1,7 @@
 from .Grid import Rectangle
 from .fire_chicken.mouse_position import MousePosition
 import math
+from typing import List, Generator
 
 def compute_center_position(rectangle: Rectangle) -> MousePosition:
     horizontal = compute_average(rectangle.left, rectangle.right)
@@ -12,6 +13,13 @@ class OneDimensionalLine:
     def __init__(self, start: int, ending: int):
         self.start = start
         self.ending = ending
+
+class LinearRegion:
+    def __init__(self, lines: List[OneDimensionalLine]):
+        self.lines = lines
+    
+    def get_lines(self) -> Generator:
+        for line in self.lines: yield line
 
 class LineDivider:
     def __init__(self, start: int, ending: int, number_of_divisors: int):
