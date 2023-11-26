@@ -15,11 +15,21 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.rectangle = rectangle
         self.re_expand_grid()
 
-    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
-    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: pass
+    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition:
+        horizontal_divider, vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
+        position = self._compute_position_from_dividers(horizontal_divider, vertical_divider)
+        return position
+
+    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None:
+        self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
+
     def compute_current_position(self) -> MousePosition: 
-        horizontal = compute_average(self.horizontal_divider.start, self.horizontal_divider.ending)
-        vertical = compute_average(self.vertical_divider.start, self.vertical_divider.ending)
+        position = self._compute_position_from_dividers(self.horizontal_divider, self.vertical_divider)
+        return position
+    
+    def _compute_position_from_dividers(self, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> MousePosition:
+        horizontal = compute_average(horizontal_divider.start, horizontal_divider.ending)
+        vertical = compute_average(vertical_divider.start, vertical_divider.ending)
         center = MousePosition(int(horizontal), int(vertical))
         return center
 
@@ -33,10 +43,19 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         maximum_option = self.division_factor**2
         for value in range(1, maximum_option): yield str(value)
     
-    def _compute_divisors_for_coordinate(self, grid_coordinate: str) -> Tuple[LineDivider, LineDivider]:
+    def _compute_dividers_for_coordinates(self, grid_coordinates: str) -> Tuple[LineDivider, LineDivider]:
+        coordinates = self._compute_coordinates(grid_coordinates)
+        return self._compute_dividers_for_separated_coordinates(coordinates, self.horizontal_divider, self.vertical_divider)
+
+    def _compute_dividers_for_separated_coordinates(self, separated_coordinates: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
+        horizontal_divider, vertical_divider = self._compute_dividers_for_coordinate(separated_coordinates[0], horizontal_divider, vertical_divider)
+        if len(separated_coordinates) == 1: return horizontal_divider, vertical_divider
+        else: return self._compute_dividers_for_separated_coordinates(separated_coordinates[1:])
+
+    def _compute_dividers_for_coordinate(self, grid_coordinate: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal, vertical = self._compute_grid_position_from_coordinate(grid_coordinate)
-        horizontal_divider = self._compute_sub_divider(self.horizontal_divider, horizontal)
-        vertical_divider = self._compute_sub_divider(self.vertical_divider, vertical)
+        horizontal_divider = self._compute_sub_divider(horizontal_divider, horizontal)
+        vertical_divider = self._compute_sub_divider(vertical_divider, vertical)
         return horizontal_divider, vertical_divider
     
     def _compute_grid_position_from_coordinate(self, grid_coordinate: str) -> Tuple[int, int]:

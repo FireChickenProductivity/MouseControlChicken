@@ -1,5 +1,5 @@
 from .fire_chicken.mouse_position import MousePosition
-from typing import Generator
+from typing import Generator, List
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''
@@ -13,6 +13,11 @@ class Grid:
     '''Grid is responsible for mapping from a grid coordinate system to absolute coordinates within a given rectangle on the screen'''
     def make_around(self, rectangle: Rectangle) -> None: pass
     def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
+    def _compute_coordinates(self, grid_coordinates: str) -> List:
+        if len(self.separator) == 0: 
+            return grid_coordinates
+        else:
+            return grid_coordinates.split(self.separator)
 
 class VerticallyOrderedGrid:
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''

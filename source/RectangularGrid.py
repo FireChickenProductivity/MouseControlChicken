@@ -57,12 +57,6 @@ class ListBasedGrid(RectangularGrid):
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
         return self._compute_coordinates(grid_coordinates)[index]
 
-    def _compute_coordinates(self, grid_coordinates: str) -> List:
-        if len(self.separator) == 0: 
-            return grid_coordinates
-        else:
-            return grid_coordinates.split(self.separator)
-
 def create_ordering_dictionary(list: List):
     ordering = {}
     for index, element in list:
