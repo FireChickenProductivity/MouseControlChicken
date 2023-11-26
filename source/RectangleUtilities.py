@@ -34,9 +34,9 @@ class LineDivider:
     def compute_split(self, number: int) -> OneDimensionalLine:
         if self.number_of_divisors + 1 < number < 1: 
             raise IndexError(f"Attempt to access nonexistent divisor split number {number} with number of divisors {self.number_of_divisors}")
-        if number == 1: return LineDivider(self.start, self.compute_divisor_position(number))
-        if number == self.number_of_divisors + 1: return LineDivider(self.compute_divisor_position(number - 1), self.ending)
-        return LineDivider(self.compute_divisor_position(number - 1), self.compute_divisor_position(number))
+        if number == 1: return OneDimensionalLine(self.start, self.compute_divisor_position(number))
+        if number == self.number_of_divisors + 1: return OneDimensionalLine(self.compute_divisor_position(number - 1), self.ending)
+        return OneDimensionalLine(self.compute_divisor_position(number - 1), self.compute_divisor_position(number))
 
     def get_number_of_divisors(self) -> int:
         return self.number_of_divisors

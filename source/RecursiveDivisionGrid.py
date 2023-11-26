@@ -67,7 +67,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     
     def _compute_grid_position_from_coordinate(self, grid_coordinate: str) -> Tuple[int, int]:
         target: int = int(grid_coordinate)
-        vertical: int = grid_coordinate//self.division_factor + 1
+        vertical: int = target//self.division_factor + 1
         horizontal: int = target % self.division_factor
         return horizontal, vertical
 
