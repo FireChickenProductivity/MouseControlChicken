@@ -19,6 +19,8 @@ class Grid:
         else:
             return grid_coordinates.split(self.separator)
 
+    def get_primary_coordinates(self) -> Generator: pass
+
 class VerticallyOrderedGrid:
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''
     def get_vertical_coordinates(self) -> Generator: pass
@@ -38,6 +40,9 @@ class RecursiveDivisionGrid(Grid):
     def get_regions(self) -> Generator: pass
     def get_expansion_options(self) -> Generator: pass
 
+    def get_primary_coordinates(self) -> Generator:
+        return self.get_expansion_options()
+
 class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
@@ -45,4 +50,7 @@ class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
         for horizontal in self.get_horizontal_coordinates():
             for vertical in self.get_vertical_coordinates():
                 yield (horizontal, vertical)
+    
+    def get_primary_coordinates(self) -> Generator:
+        return self.get_coordinate_pairs()
 
