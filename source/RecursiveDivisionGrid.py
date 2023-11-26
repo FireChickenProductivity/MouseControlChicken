@@ -48,7 +48,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def get_expansion_options(self) -> Generator:
         maximum_option = self.division_factor**2
-        for value in range(1, maximum_option): yield str(value)
+        for value in range(1, maximum_option + 1): yield str(value)
     
     def _compute_dividers_for_coordinates(self, grid_coordinates: str) -> Tuple[LineDivider, LineDivider]:
         coordinates = self._compute_coordinates(grid_coordinates)
