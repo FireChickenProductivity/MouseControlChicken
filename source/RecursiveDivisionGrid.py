@@ -35,8 +35,8 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         return center
 
     def re_expand_grid(self) -> None: 
-        self.horizontal_divider = LineDivider(self.rectangle.left, self.rectangle.right, self.division_factor)
-        self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self.division_factor)
+        self.horizontal_divider = LineDivider(self.rectangle.left, self.rectangle.right, self._compute_number_of_divisions())
+        self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self._compute_number_of_divisions())
         
     def get_regions(self) -> Generator: 
         for horizontal in range(1, self.division_factor):
@@ -48,7 +48,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def get_expansion_options(self) -> Generator:
         maximum_option = self.division_factor**2
-        for value in range(1, maximum_option): yield str(value)
+        for value in range(1, maximum_option + 1): yield str(value)
     
     def _compute_dividers_for_coordinates(self, grid_coordinates: str) -> Tuple[LineDivider, LineDivider]:
         coordinates = self._compute_coordinates(grid_coordinates)
@@ -67,14 +67,19 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     
     def _compute_grid_position_from_coordinate(self, grid_coordinate: str) -> Tuple[int, int]:
         target: int = int(grid_coordinate)
-        vertical: int = grid_coordinate//self.division_factor + 1
-        horizontal: int = target % self.division_factor
+        if target % self.division_factor == 0: vertical = int(target/self.division_factor)
+        else: vertical = (target//self.division_factor) + 1
+        horizontal: int = (target % self.division_factor)
+        if horizontal == 0: horizontal = self.division_factor
         return horizontal, vertical
 
-    def _compute_sub_divider(self, divisor: LineDivider, split_number: int) -> LineDivider:
-        line = divisor.compute_split(split_number)
-        result = LineDivider(line.start, line.ending, self.division_factor)
+    def _compute_sub_divider(self, divider: LineDivider, split_number: int) -> LineDivider:
+        line = divider.compute_split(split_number)
+        result = LineDivider(line.start, line.ending, self._compute_number_of_divisions())
         return result
+    
+    def _compute_number_of_divisions(self):
+        return self.division_factor - 1
 
 def compute_region_from_left_and_top_lines(horizontal_split: OneDimensionalLine, vertical_split: OneDimensionalLine) -> Generator:
     left = horizontal_split.start

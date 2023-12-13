@@ -13,6 +13,8 @@ class Grid:
     '''Grid is responsible for mapping from a grid coordinate system to absolute coordinates within a given rectangle on the screen'''
     def make_around(self, rectangle: Rectangle) -> None: pass
     def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
+    def get_primary_coordinates(self) -> Generator: pass
+
     def _compute_coordinates(self, grid_coordinates: str) -> List:
         if len(self.separator) == 0: 
             return grid_coordinates
@@ -22,12 +24,14 @@ class Grid:
 class VerticallyOrderedGrid:
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''
     def get_vertical_coordinates(self) -> Generator: pass
-    def compute_absolute_vertical_from(self, coordinates) -> int: pass
+    def compute_absolute_vertical_from(self, coordinates: str) -> int: pass
+    def compute_absolute_vertical_from_from_vertical_coordinates(self, coordinates: str) -> int: pass
 
 class HorizontallyOrderedGrid:
     '''HorizontallyOrderedGrid is responsible for handling a horizontally ordered coordinate system'''
     def get_horizontal_coordinates(self) -> Generator: pass
-    def compute_absolute_horizontal_from(self, coordinates) -> int: pass
+    def compute_absolute_horizontal_from(self, coordinates: str) -> int: pass
+    def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int: pass
 
 class RecursiveDivisionGrid(Grid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
@@ -38,11 +42,17 @@ class RecursiveDivisionGrid(Grid):
     def get_regions(self) -> Generator: pass
     def get_expansion_options(self) -> Generator: pass
 
+    def get_primary_coordinates(self) -> Generator:
+        return self.get_expansion_options()
+
 class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
         for horizontal in self.get_horizontal_coordinates():
             for vertical in self.get_vertical_coordinates():
-                yield (horizontal, vertical)
+                yield vertical + self.separator + horizontal
+    
+    def get_primary_coordinates(self) -> Generator:
+        return self.get_coordinate_pairs()
 

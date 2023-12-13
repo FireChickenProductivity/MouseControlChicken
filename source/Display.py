@@ -1,11 +1,17 @@
 from .Grid import Grid, Rectangle
 
 class Display:
-    def set_grid(grid: Grid): pass
-    def set_rectangle(rectangle: Rectangle): pass
-    def show(): pass
-    def hide(): pass
-    def refresh(): pass
+    def set_grid(self, grid: Grid): pass
+    def set_rectangle(self, rectangle: Rectangle): pass
+    def show(self):
+        if self.canvas:
+            self.canvas.show()
+    def hide(self):
+        if self.canvas:
+            self.canvas.hide()
+    def refresh(self):
+        if self.canvas:
+            self.canvas.refresh()
 
 
 class FrameDisplay(Display): 
@@ -13,7 +19,7 @@ class FrameDisplay(Display):
     pass
 
 class CrisscrossDisplay(Display):
-    '''Displays a grid within a rectangle by showing positions on the grade with criss crossing horizontal and vertical lines'''
+    '''Displays a grid within a rectangle by showing positions on the grid with criss crossing horizontal and vertical lines'''
     pass
 
 class PositionDisplay(Display):
