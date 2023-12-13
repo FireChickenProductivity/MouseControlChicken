@@ -1,4 +1,4 @@
-from .Display import FrameDisplay, PositionDisplay
+from .Display import PositionDisplay
 from .Grid import Grid, Rectangle
 from .fire_chicken.mouse_position import MousePosition
 from .Canvas import Canvas, Text, Line, CanvasElementOptions

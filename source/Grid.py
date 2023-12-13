@@ -24,12 +24,14 @@ class Grid:
 class VerticallyOrderedGrid:
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''
     def get_vertical_coordinates(self) -> Generator: pass
-    def compute_absolute_vertical_from(self, coordinates) -> int: pass
+    def compute_absolute_vertical_from(self, coordinates: str) -> int: pass
+    def compute_absolute_vertical_from_from_vertical_coordinates(self, coordinates: str) -> int: pass
 
 class HorizontallyOrderedGrid:
     '''HorizontallyOrderedGrid is responsible for handling a horizontally ordered coordinate system'''
     def get_horizontal_coordinates(self) -> Generator: pass
-    def compute_absolute_horizontal_from(self, coordinates) -> int: pass
+    def compute_absolute_horizontal_from(self, coordinates: str) -> int: pass
+    def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int: pass
 
 class RecursiveDivisionGrid(Grid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
