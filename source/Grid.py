@@ -21,13 +21,13 @@ class Grid:
         else:
             return grid_coordinates.split(self.separator)
 
-class VerticallyOrderedGrid:
+class VerticallyOrderedGrid(Grid):
     '''VerticallyOrderedGrid is responsible for handling a vertically ordered coordinate system'''
     def get_vertical_coordinates(self) -> Generator: pass
     def compute_absolute_vertical_from(self, coordinates: str) -> int: pass
     def compute_absolute_vertical_from_from_vertical_coordinates(self, coordinates: str) -> int: pass
 
-class HorizontallyOrderedGrid:
+class HorizontallyOrderedGrid(Grid):
     '''HorizontallyOrderedGrid is responsible for handling a horizontally ordered coordinate system'''
     def get_horizontal_coordinates(self) -> Generator: pass
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: pass
@@ -45,7 +45,7 @@ class RecursiveDivisionGrid(Grid):
     def get_primary_coordinates(self) -> Generator:
         return self.get_expansion_options()
 
-class RectangularGrid(Grid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class RectangularGrid(VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
