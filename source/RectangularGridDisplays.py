@@ -1,5 +1,5 @@
 from .Display import FrameDisplay
-from .Grid import RectangularGrid, Rectangle
+from .Grid import Grid, RectangularGrid, Rectangle
 from .fire_chicken.mouse_position import MousePosition
 from .Canvas import Canvas, Text, Line, CanvasElementOptions
 
@@ -34,3 +34,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
             self.canvas.insert_text(left_text)
             right_text = Text(self.rectangle.right - FRAME_OFFSET, vertical, vertical_coordinate)
             self.canvas.insert_text(right_text)
+
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return isinstance(grid, RectangularGrid)
