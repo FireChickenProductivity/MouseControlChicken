@@ -12,7 +12,9 @@ class Display:
     def refresh(self):
         if self.canvas:
             self.canvas.refresh()
-
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return True
 
 class FrameDisplay(Display): 
     '''Displays a grid around a rectangle showing the coordinates of the grid'''
