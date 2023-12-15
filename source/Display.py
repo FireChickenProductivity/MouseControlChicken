@@ -1,5 +1,7 @@
 from .Grid import Grid, Rectangle
 
+DISPLAY_CLASS_NAME_POSTFIX = "Display"
+
 class Display:
     def set_grid(self, grid: Grid): pass
     def set_rectangle(self, rectangle: Rectangle): pass
@@ -15,6 +17,11 @@ class Display:
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
         return True
+    @classmethod
+    def get_name(cls):
+        instance = cls()
+        name: str = instance.__class__.__name__[:-len(DISPLAY_CLASS_NAME_POSTFIX)]
+        return name
 
 class FrameDisplay(Display): 
     '''Displays a grid around a rectangle showing the coordinates of the grid'''
