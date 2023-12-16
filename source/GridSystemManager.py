@@ -30,9 +30,11 @@ class GridSystemManager:
 
     def refresh(self):
         if self.grid and self.display:
-            self.grid.make_around(self.rectangle_manager.compute_rectangle())
+            rectangle = self.rectangle_manager.compute_rectangle()
+            self.grid.make_around(rectangle)
             self.display.hide()
             self.display.set_grid(self.grid)
+            self.display.set_rectangle(rectangle)
             self.display.show()
 
     def hide(self):
