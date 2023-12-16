@@ -22,6 +22,9 @@ class GridSystemManager:
         self.rectangle_manager = rectangle_manager
         self.refresh()
     
+    def get_grid(self) -> Grid:
+        return self.grid
+
     def refresh(self):
         if self.grid and self.display:
             self.grid.make_around(self.rectangle_manager.compute_rectangle())
