@@ -98,6 +98,7 @@ class SettingsMediator:
         self.main_transparency = settings.get(default_main_transparency)
         self.current_screen_number = settings.get(default_current_screen_number)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
+        self._handle_change()
 
     def get_text_size(self) -> int:
         return self.text_size
