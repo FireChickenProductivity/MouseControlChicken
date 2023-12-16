@@ -17,7 +17,7 @@ class Actions:
     def mouse_control_chicken_guarantee_grid_options_file_initialized():
         '''If the grid options file does not exist, this initializes it with defaults'''
         if not os.path.exists(GRID_OPTIONS_PATH):
-            with open(GRID_OPTIONS_PATH, "w") as file:
+            with open(GRID_OPTIONS_PATH, "w", newline = '') as file:
                 file_writer = writer(file)
                 file_writer.writerow(['one to nine', 'Square Recursive Division Grid', 'UniversalPosition', '3'])
                 file_writer.writerow(['alphabet', 'Alphabet', 'RectangularGridFrame', ''])
@@ -25,7 +25,7 @@ class Actions:
     def mouse_control_chicken_read_grid_options() -> GridOptions:
         '''Obtains the mouse control chicken grid options from the file'''
         options = []
-        with open(GRID_OPTIONS_PATH, "r") as file:
+        with open(GRID_OPTIONS_PATH, "r", newline = '') as file:
             file_reader = reader(file)
             for entry in file_reader:
                 if len(entry) == 4:
