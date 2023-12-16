@@ -2,8 +2,7 @@ from .Display import FrameDisplay
 from .Grid import Grid, RectangularGrid, Rectangle
 from .fire_chicken.mouse_position import MousePosition
 from .Canvas import Canvas, Text, Line, CanvasElementOptions
-
-FRAME_OFFSET = 10
+from .SettingsMediator import settings_mediator
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
@@ -22,17 +21,18 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self.canvas.setup(rectangle)
         self.rectangle = rectangle
         self.grid.make_around(rectangle)
+        frame_offset = settings_mediator.get_frame_grid_offset()
         for horizontal_coordinate in self.grid.get_horizontal_coordinates():
             horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
-            top_text = Text(horizontal, self.rectangle.top + FRAME_OFFSET, horizontal_coordinate)
+            top_text = Text(horizontal, self.rectangle.top + frame_offset, horizontal_coordinate)
             self.canvas.insert_text(top_text)
-            bottom_text = Text(horizontal, self.rectangle.bottom - FRAME_OFFSET, horizontal_coordinate)
+            bottom_text = Text(horizontal, self.rectangle.bottom - frame_offset, horizontal_coordinate)
             self.canvas.insert_text(bottom_text)
         for vertical_coordinate in self.grid.get_vertical_coordinates():
             vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
-            left_text = Text(self.rectangle.left + FRAME_OFFSET, vertical, vertical_coordinate)
+            left_text = Text(self.rectangle.left + frame_offset, vertical, vertical_coordinate)
             self.canvas.insert_text(left_text)
-            right_text = Text(self.rectangle.right - FRAME_OFFSET, vertical, vertical_coordinate)
+            right_text = Text(self.rectangle.right - frame_offset, vertical, vertical_coordinate)
             self.canvas.insert_text(right_text)
 
     @staticmethod
