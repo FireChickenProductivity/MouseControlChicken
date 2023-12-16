@@ -13,27 +13,24 @@ class GridFactory:
     def create_grid(self, argument: str) -> Grid:
         pass
 
-    def get_name() -> str:
+    def get_name(self) -> str:
         pass
 
     def matches_option(self, option: str) -> bool:
         return option == self.get_name()
     
-    def get_arguments_description() -> str:
+    def get_arguments_description(self) -> str:
         return ""
 
 class SquareRecursiveDivisionGridFactory:
     def create_grid(self, argument: str) -> Grid:
-        argument = int(self.get_argument_text(argument))
+        argument = int(argument)
         return SquareRecursiveDivisionGrid(argument)
 
-    def get_name() -> str:
+    def get_name(self) -> str:
         return "Square Recursive Division Grid"
     
-    def get_argument_text(self, option: str) -> str:
-        return option[len(self.get_name()):]
-    
-    def get_arguments_description() -> str:
+    def get_arguments_description(self) -> str:
         return "A single integer. That integer squared gives the number of times to divide the rectangle."
 
 
@@ -41,10 +38,10 @@ class AlphabetGridFactory:
     def create_grid(self, argument: str) -> Grid:
         return ListBasedGrid(ALPHABET, ALPHABET)
 
-    def get_name() -> str:
+    def get_name(self) -> str:
         return ALPHABET_GRID_NAME
 
-options = [SquareRecursiveDivisionGridFactory, AlphabetGridFactory]
+options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory()]
 
 class GridFactoryOptions:
     def __init__(self, options: List[GridFactory]):

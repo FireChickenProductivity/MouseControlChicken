@@ -8,6 +8,7 @@ class RectangleManager:
 class ScreenRectangleManager(RectangleManager):
     def compute_rectangle(self) -> Rectangle:
         screens = ui.screens()
+        print(settings_mediator, settings_mediator.get_current_screen_number())
         screen = screens[settings_mediator.get_current_screen_number()]
         talon_rectangle = screen.rect
         rectangle = convert_talon_rectangle_to_rectangle(talon_rectangle)
