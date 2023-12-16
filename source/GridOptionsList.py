@@ -4,9 +4,12 @@ from .GridOptions import GridOptions
 module = Module()
 context = Context()
 
-LIST_NAME = "mouse_control_chicken_grid_options"
+LIST_NAME = "mouse_control_chicken_grid_option"
 LIST_NAME_WITH_PREFIX = 'user.' + LIST_NAME
 module.list(LIST_NAME, desc = "The options for the mouse control chicken grid")
+@module.capture(rule = f"{{{LIST_NAME_WITH_PREFIX}}}")
+def mouse_control_chicken_grid_option(m) -> str:
+    return m.mouse_control_chicken_grid_option
 
 GRID_OPTIONS_PATH = actions.user.mouse_control_chicken_get_grid_options_file_path()
 
