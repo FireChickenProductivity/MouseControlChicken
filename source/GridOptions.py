@@ -28,6 +28,9 @@ class GridOptions:
     def get_option(self, name: str) -> GridOption:
         return self.options[name]
 
+    def get_option_names(self) -> List[str]:
+        return self.options.keys()
+    
 options = []
 grid_options = GridOptions(options)
 
