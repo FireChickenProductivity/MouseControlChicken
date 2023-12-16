@@ -2,6 +2,8 @@ from .Grid import Grid
 from .Display import Display
 from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .SettingsMediator import settings_mediator
+from .GridOptions import GridOptions
+from .DisplayOptionsComputer import DisplayOptionComputer
 from talon import Module, actions
 
 class GridSystemManager:
@@ -15,6 +17,7 @@ class GridSystemManager:
         self.refresh()
 
     def set_display(self, display: Display):
+        if self.display: self.display.hide()
         self.display = display
         self.refresh()
 
@@ -32,6 +35,12 @@ class GridSystemManager:
             self.display.set_grid(self.grid)
             self.display.show()
 
+    def hide(self):
+        self.display.hide()
+    
+    def show(self):
+        self.refresh()
+        
 manager = GridSystemManager()
 
 module = Module()
@@ -44,3 +53,24 @@ class Actions:
     def mouse_control_chicken_make_grid_around_window():
         '''Makes the mouse control chicken grid form around the current window'''
         manager.set_rectangle_manager(CurrentWindowRectangleManager())
+    
+    def mouse_control_chicken_choose_grid_from_options(name: str):
+        '''Updates the current grid to the specified grid option'''
+        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        option = options.get_option(name)
+        grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
+        display = DisplayOptionComputer().create_display_from_option(option.get_default_display_option())
+        global manager
+        manager.hide()
+        manager.set_display(display)
+        manager.set_grid(grid)
+    
+    def mouse_control_chicken_hide_grid():
+        '''Hides the mouse control chicken grid'''
+        global manager
+        manager.hide()
+    
+    def mouse_control_chicken_show_grid():
+        '''Shows the mouse control chicken grid'''
+        global manager
+        manager.show()

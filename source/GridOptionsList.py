@@ -28,4 +28,11 @@ def on_ready():
     actions.user.mouse_control_chicken_guarantee_grid_options_file_initialized()
     update_options(GRID_OPTIONS_PATH, "")
 
+@module.action_class
+class Actions:
+    def mouse_control_chicken_get_grid_options() -> GridOptions:
+        '''Returns the mouse control chicken grid options'''
+        global options
+        return options
+
 app.register("ready", on_ready)
