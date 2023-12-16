@@ -1,4 +1,4 @@
-from talon import Module
+from talon import Module, settings
 
 module = Module()
 
@@ -86,7 +86,19 @@ module.setting(
 class SettingsMediator:
     def __init__(self):
         self.callbacks = []
-        
+        self.restore_default_settings()
+    
+    def restore_default_settings(self):
+        self.text_size = settings.get(default_text_size)
+        self.text_color = settings.get(default_text_color)
+        self.line_width = settings.get(default_line_width)
+        self.line_color = settings.get(default_line_color)
+        self.background_transparency = settings.get(default_background_transparency)
+        self.backround_size = settings.get(default_backround_size)
+        self.main_transparency = settings.get(default_main_transparency)
+        self.current_screen_number = settings.get(default_current_screen_number)
+        self.frame_grid_offset = settings.get(default_frame_grid_offset)
+
     def get_text_size(self) -> int:
         return self.text_size
 
