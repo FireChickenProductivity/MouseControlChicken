@@ -1,6 +1,7 @@
 from talon import canvas
 from talon.skia import Paint
 from .Grid import Rectangle
+from .SettingsMediator import settings_mediator
 
 def update_canvas_color(canvas, color: str):
     canvas.paint.color = color
@@ -70,8 +71,8 @@ class Canvas:
         self.rect = None
         self.canvas = None
         self.showing = False
-        self.line_options = CanvasElementOptions(2, "FF0000")
-        self.text_options = CanvasElementOptions(15, "FF0000")
+        self.line_options = CanvasElementOptions(settings_mediator.get_line_width(), settings_mediator.get_line_color())
+        self.text_options = CanvasElementOptions(settings_mediator.get_text_size(), settings_mediator.get_text_color())
         self.lines = LineManager(self.line_options)
         self.text = TextManager(self.text_options)
 
@@ -122,6 +123,7 @@ class Canvas:
 # experiment.insert_text(Text(100, 70, 'ab'))
 # experiment.insert_line(Line(10, 10, 30, 30))
 # experiment.insert_line(Line(60, 60, 100, 80))
-# experiment.update_line_options(CanvasElementOptions(2, "00FF00"))
-# experiment.update_text_options(CanvasElementOptions(40, "10FF40"))
-# experiment.show(Rectangle(0, 1000, 0, 1000))
+# # experiment.update_line_options(CanvasElementOptions(2, "00FF00"))
+# # experiment.update_text_options(CanvasElementOptions(40, "10FF40"))
+# experiment.setup(Rectangle(0, 1000, 0, 1000))
+# experiment.show()

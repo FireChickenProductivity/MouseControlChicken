@@ -16,7 +16,7 @@ default_text_color = 'user.' + default_text_color_setting_name
 module.setting(
     default_text_color_setting_name,
     type = str,
-    default = "10FF40",
+    default = "FF0000",
     desc = 'The default text color used by Mouse Control Chicken'
 ) 
 
@@ -34,7 +34,7 @@ default_line_color = 'user.' + default_line_color_setting_name
 module.setting(
     default_line_color_setting_name,
     type = str,
-    default = "10FF40",
+    default = "FF0000",
     desc = 'The default line color used by Mouse Control Chicken'
 ) 
 
@@ -168,3 +168,5 @@ class SettingsMediator:
     
     def _handle_change(self):
         for callback in self.callbacks: callback()
+
+settings_mediator = SettingsMediator()
