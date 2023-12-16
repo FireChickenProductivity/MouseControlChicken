@@ -3,7 +3,7 @@ from typing import List
 from talon import Module, actions
 
 class GridOption:
-    def __init__(self, name: str, factory_name: str, default_display_option: str, argument: str = ""):
+    def __init__(self, name: str, factory_name: str, default_display_option: str, argument: str):
         self.name = name
         self.factory_name = factory_name
         self.default_display_option = default_display_option
