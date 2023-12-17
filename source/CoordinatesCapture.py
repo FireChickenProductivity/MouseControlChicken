@@ -1,7 +1,7 @@
 from talon import Module
 
 module = Module()
-@module.capture(rule = "({user.letter}|<number>)+")
+@module.capture(rule = "({user.letter}|<number_small>)+")
 def mouse_control_chicken_coordinates(m) -> str:
     result: str = ""
     after_first_element: bool = False
