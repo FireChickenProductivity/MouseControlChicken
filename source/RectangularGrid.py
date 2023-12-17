@@ -7,7 +7,7 @@ class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order
         Separator is used for parsing horizontal versus vertical. Empty string separator means single character coordinates
     '''
-    def __init__(self, horizontal_list: List, vertical_list: List, separator: str = ""):
+    def __init__(self, horizontal_list: List, vertical_list: List, separator: str = " "):
         self.horizontal_list = horizontal_list
         self.vertical_list = vertical_list
         self.horizontal_coordinates = create_ordering_dictionary(horizontal_list)
@@ -17,7 +17,7 @@ class ListBasedGrid(RectangularGrid):
         self.separator = separator
 
     @staticmethod
-    def create_square_grid(coordinate_list: List, separator: str = ""):
+    def create_square_grid(coordinate_list: List, separator: str = " "):
         return ListBasedGrid(coordinate_list, coordinate_list, separator)
 
     def make_around(self, rectangle: Rectangle) -> None:
@@ -43,7 +43,7 @@ class ListBasedGrid(RectangularGrid):
         return horizontal
 
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int:
-        return self.compute_absolute_horizontal_from("_" + coordinates)
+        return self.compute_absolute_horizontal_from("_" + self.separator + coordinates)
     
     def compute_absolute_vertical_from(self, coordinates: str) -> int:
         vertical_coordinate = self._compute_vertical_coordinate(coordinates)
@@ -61,6 +61,8 @@ class ListBasedGrid(RectangularGrid):
         return self._compute_coordinate_from_index(grid_coordinates, 0)
     
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
+        coordinate_list = self._compute_coordinates(grid_coordinates)
+        print("!!!!!!!!!!!!!!!!!!!!", coordinate_list, index, grid_coordinates)
         return self._compute_coordinates(grid_coordinates)[index]
 
 def create_ordering_dictionary(list: List):

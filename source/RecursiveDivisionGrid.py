@@ -5,7 +5,7 @@ from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine
 from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
-    def __init__(self, division_factor: int, separator: str = ""):
+    def __init__(self, division_factor: int, separator: str = " "):
         self.division_factor: int = division_factor
         self.separator: str = separator
         self.horizontal_divider: LineDivider = None
