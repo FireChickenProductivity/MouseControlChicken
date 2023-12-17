@@ -57,7 +57,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     def _compute_dividers_for_separated_coordinates(self, separated_coordinates: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinate(separated_coordinates[0], horizontal_divider, vertical_divider)
         if len(separated_coordinates) == 1: return horizontal_divider, vertical_divider
-        else: return self._compute_dividers_for_separated_coordinates(separated_coordinates[1:])
+        else: return self._compute_dividers_for_separated_coordinates(separated_coordinates[1:], horizontal_divider, vertical_divider)
 
     def _compute_dividers_for_coordinate(self, grid_coordinate: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal, vertical = self._compute_grid_position_from_coordinate(grid_coordinate)
