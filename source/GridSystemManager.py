@@ -4,6 +4,7 @@ from .SettingsMediator import settings_mediator
 from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
+from .fire_chicken.mouse_position import MousePosition
 from talon import Module, actions
 
 class GridSystemManager:
@@ -77,3 +78,13 @@ class Actions:
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+    
+    def mouse_control_chicken_move_to_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken grid'''
+        position: MousePosition = get_position_on_grid(coordinates)
+        position.go()
+
+def get_position_on_grid(coordinates: str) -> MousePosition:
+    grid = manager.get_grid()
+    position = grid.compute_absolute_position_from(coordinates)
+    return position
