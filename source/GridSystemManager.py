@@ -31,13 +31,13 @@ class GridSystemManager:
 
     def refresh(self):
         if self.grid and self.display:
-            print("!!!!!!!!!!!!!!!!!!!!", self.grid, self.display)
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
             self.display.hide()
             self.display.set_grid(self.grid)
             self.display.set_rectangle(rectangle)
             self.display.show()
+            actions.user.mouse_control_chicken_enable_grid_showing_tag()
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
@@ -45,6 +45,7 @@ class GridSystemManager:
     
     def hide(self):
         if self.display: self.display.hide()
+        actions.user.mouse_control_chicken_disable_grid_showing_tag()
     
     def show(self):
         self.refresh()
