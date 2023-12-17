@@ -31,6 +31,7 @@ class GridSystemManager:
 
     def refresh(self):
         if self.grid and self.display:
+            print("!!!!!!!!!!!!!!!!!!!!", self.grid, self.display)
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
             self.display.hide()
@@ -38,6 +39,10 @@ class GridSystemManager:
             self.display.set_rectangle(rectangle)
             self.display.show()
 
+    def prepare_for_grid_switch(self):
+        self.set_display(None)
+        self.set_grid(None)
+    
     def hide(self):
         if self.display: self.display.hide()
     
@@ -65,7 +70,7 @@ class Actions:
         display_options = DisplayOptionComputer().compute_display_options(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
         global manager
-        manager.hide()
+        manager.prepare_for_grid_switch()
         manager.set_display(display)
         manager.set_grid(grid)
     
