@@ -1,5 +1,6 @@
 from talon import Module, fs, actions, Context, app
 from .GridOptions import GridOptions
+from .FileUtilities import *
 
 module = Module()
 context = Context()
@@ -11,21 +12,22 @@ module.list(LIST_NAME, desc = "The options for the mouse control chicken grid")
 def mouse_control_chicken_grid_option(m) -> str:
     return m.mouse_control_chicken_grid_option
 
-GRID_OPTIONS_PATH = actions.user.mouse_control_chicken_get_grid_options_file_path()
+GRID_OPTIONS_PATH = None
 
 options: GridOptions = None
 def update_options(name, flags):
     global options
     if name != GRID_OPTIONS_PATH: return 
-    options = actions.user.mouse_control_chicken_read_grid_options()
+    options = mouse_control_chicken_read_grid_options()
     option_list = {option:option for option in options.get_option_names()}
     context.lists[LIST_NAME_WITH_PREFIX] = option_list
 
-fs.watch(GRID_OPTIONS_PATH, update_options)
-
 def on_ready():
-    actions.user.mouse_control_chicken_guarantee_data_directory_exists()
-    actions.user.mouse_control_chicken_guarantee_grid_options_file_initialized()
+    global GRID_OPTIONS_PATH
+    GRID_OPTIONS_PATH = mouse_control_chicken_get_grid_options_file_path()
+    mouse_control_chicken_guarantee_data_directory_exists()
+    mouse_control_chicken_guarantee_grid_options_file_initialized()
+    fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")
 
 @module.action_class

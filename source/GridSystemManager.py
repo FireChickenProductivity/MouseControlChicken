@@ -1,7 +1,7 @@
 from .Grid import Grid
 from .Display import Display
-from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .SettingsMediator import settings_mediator
+from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
 from talon import Module, actions
