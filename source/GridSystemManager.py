@@ -90,14 +90,26 @@ class Actions:
         position.go()
 
     def mouse_control_chicken_click_position(coordinates: str):
-        '''Clicks the specified position on the current mouse position chicken grid'''
+        '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         actions.mouse_click()
     
     def mouse_control_chicken_right_click_position(coordinates: str):
-        '''Clicks the specified position on the current mouse position chicken grid'''
+        '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         actions.mouse_click(1)
+    
+    def mouse_control_chicken_drag_from_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and starts dragging'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.sleep(0.5)
+        actions.user.mouse_drag(0)
+    
+    def mouse_control_chicken_end_drag_at_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and stops dragging'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.sleep(0.5)
+        actions.user.mouse_drag_end()
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
