@@ -89,6 +89,16 @@ class Actions:
         position: MousePosition = get_position_on_grid(coordinates)
         position.go()
 
+    def mouse_control_chicken_click_position(coordinates: str):
+        '''Clicks the specified position on the current mouse position chicken grid'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_click()
+    
+    def mouse_control_chicken_right_click_position(coordinates: str):
+        '''Clicks the specified position on the current mouse position chicken grid'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_click(1)
+
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
     position = grid.compute_absolute_position_from(coordinates)
