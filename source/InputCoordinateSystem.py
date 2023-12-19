@@ -22,6 +22,20 @@ class SequentialCombinationCoordinateSystem:
         self.systems = systems
         self.separator = separator
     
+    def get_primary_coordinates(self) -> Generator:
+        primary_coordinates = [system.get_primary_coordinates() for system in self.systems]
+        primary_system = primary_coordinates[0]
+        for value in primary_system: 
+            yield value + self.separator + SequentialCombinationCoordinateSystem._get_primary_coordinates_recursively(primary_coordinates[1:], self.separator)
+
+    @staticmethod
+    def _get_primary_coordinates_recursively(remaining_primary_coordinates: List[Generator], separator: str, head: str = "") -> Generator:
+        more_systems_remaining: bool = len(remaining_primary_coordinates) > 1
+        for value in remaining_primary_coordinates[0]:
+            result = head + separator + value
+            if more_systems_remaining: result += SequentialCombinationCoordinateSystem._get_primary_coordinates_recursively(remaining_primary_coordinates[1:], separator, head)
+            yield result
+
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
         remaining_coordinates = coordinates
         for index, system in enumerate(self.systems):
