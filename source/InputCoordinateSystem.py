@@ -17,7 +17,32 @@ class InputCoordinateSystem:
         coordinate_list = coordinates.split(self.separator)
         return coordinate_list
 
-class SequentialCombinationCoordinateSystem:
+class DisjointUnionCoordinateSystem(InputCoordinateSystem):
+    def __init__(self, systems: List[InputCoordinateSystem], separator: str = " "):
+        self.systems = systems
+        self.separator = separator
+    
+    def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
+        for system in self.systems:
+            if system.do_coordinates_belong_to_system(coordinates): return True
+        return False
+
+    def do_coordinates_start_belong_to_system(self, coordinates: str) -> bool:
+        for system in self.systems:
+            if system.do_coordinates_start_belong_to_system(coordinates): return True
+        return False
+
+    def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
+        for system in self.systems:
+            if system.do_coordinates_start_belong_to_system(coordinates): 
+                return system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+            
+    def get_primary_coordinates(self) -> Generator:
+        for system in self.systems:
+            for coordinate in system.get_primary_coordinates():
+                yield coordinate
+                
+class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
     def __init__(self, systems: List[InputCoordinateSystem], separator: str = " "):
         self.systems = systems
         self.separator = separator
