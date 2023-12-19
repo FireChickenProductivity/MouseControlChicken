@@ -26,15 +26,15 @@ class UniversalPositionDisplay(PositionDisplay):
             text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
             self.canvas.insert_text(text)
     
-# from talon import ui
-# from .RectangularGrid import ListBasedGrid
-# from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
-# screens = ui.screens()
-# screen = screens[0]
-# talon_rectangle = screen.rect
-# rectangle: Rectangle = Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
-# current_grid = ListBasedGrid(["a", "b", "c", "d"], ["a", "b", "c", "d", "e"])
-# display = UniversalPositionDisplay()
-# display.set_grid(current_grid)
-# display.set_rectangle(rectangle)
-# display.show()
+from talon import ui
+from .RectangularGrid import ListBasedGrid
+from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
+screens = ui.screens()
+screen = screens[0]
+talon_rectangle = screen.rect
+rectangle: Rectangle = Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
+current_grid = ListBasedGrid(["a", "b", "c", "d"], ["a", "b", "c", "d", "e"])
+display = UniversalPositionDisplay()
+display.set_grid(current_grid)
+display.set_rectangle(rectangle)
+display.show()
