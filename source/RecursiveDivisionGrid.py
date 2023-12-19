@@ -11,6 +11,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.horizontal_divider: LineDivider = None
         self.vertical_divider: LineDivider = None
         self.rectangle: Rectangle = None
+        self.build_coordinate_system()
 
     def make_around(self, rectangle: Rectangle) -> None: 
         self.rectangle = rectangle

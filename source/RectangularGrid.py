@@ -15,6 +15,7 @@ class ListBasedGrid(RectangularGrid):
         self.horizontal_divider = None
         self.vertical_divider = None
         self.separator = separator
+        self.build_coordinate_system()
 
     @staticmethod
     def create_square_grid(coordinate_list: List, separator: str = " "):
