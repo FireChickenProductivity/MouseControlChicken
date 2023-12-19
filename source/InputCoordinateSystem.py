@@ -17,6 +17,38 @@ class InputCoordinateSystem:
         coordinate_list = coordinates.split(self.separator)
         return coordinate_list
 
+class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
+    def __init__(self, system: InputCoordinateSystem, separator: str = " "):
+        self.system = system
+        self.separator = separator
+    
+    def get_primary_coordinates(self) -> Generator:
+        return self.system.get_primary_coordinates()
+    
+    def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
+        pass
+    
+    def do_coordinates_start_belong_to_system(self, coordinates: str) -> bool:
+        return self.system.do_coordinates_start_belong_to_system(coordinates)
+    
+    def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
+        coordinate_list = self.compute_coordinate_list(coordinates)
+        head = ""
+        split_index: int = None
+        tail = ""
+        for index in range(len(coordinate_list)):
+            coordinate = coordinate_list[index]
+            potential_next_head = head
+            if potential_next_head: potential_next_head += self.separator
+            potential_next_head += coordinate
+            if self.do_coordinates_belong_to_system(potential_next_head):
+                head = potential_next_head
+            else:
+                split_index = index
+                break
+        if split_index: tail = self.separator.join(coordinate_list[split_index:])
+        return (head, tail)
+
 class DisjointUnionCoordinateSystem(InputCoordinateSystem):
     def __init__(self, systems: List[InputCoordinateSystem], separator: str = " "):
         self.systems = systems
