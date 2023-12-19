@@ -26,27 +26,23 @@ class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
         return self.system.get_primary_coordinates()
     
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
-        pass
+        if not self.do_coordinates_start_belong_to_system(coordinates): return False
+        _, tail = self.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+        return len(tail) == 0
     
     def do_coordinates_start_belong_to_system(self, coordinates: str) -> bool:
         return self.system.do_coordinates_start_belong_to_system(coordinates)
     
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
-        coordinate_list = self.compute_coordinate_list(coordinates)
         head = ""
-        split_index: int = None
-        tail = ""
-        for index in range(len(coordinate_list)):
-            coordinate = coordinate_list[index]
-            potential_next_head = head
-            if potential_next_head: potential_next_head += self.separator
-            potential_next_head += coordinate
-            if self.do_coordinates_belong_to_system(potential_next_head):
-                head = potential_next_head
-            else:
-                split_index = index
-                break
-        if split_index: tail = self.separator.join(coordinate_list[split_index:])
+        tail = coordinates
+        unfinished: bool = True
+        while unfinished:
+            subhead, new_tail = self.system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(tail)
+            if head and subhead: head += self.separator
+            head += subhead
+            if len(tail) == 0 or new_tail == tail: unfinished = False
+            tail = new_tail
         return (head, tail)
 
 class DisjointUnionCoordinateSystem(InputCoordinateSystem):
