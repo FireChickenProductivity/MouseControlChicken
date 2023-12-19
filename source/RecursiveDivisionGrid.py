@@ -17,12 +17,12 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.rectangle = rectangle
         self.re_expand_grid()
 
-    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition:
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
         position = self._compute_position_from_dividers(horizontal_divider, vertical_divider)
         return position
 
-    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None:
+    def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None:
         self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
 
     def compute_current_position(self) -> MousePosition: 

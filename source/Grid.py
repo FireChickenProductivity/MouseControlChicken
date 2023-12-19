@@ -10,10 +10,19 @@ class Rectangle:
         self.left = left
         self.right = right
 
+class CoordinatesNotSupportedException(Exception): pass
+
 class Grid:
     '''Grid is responsible for mapping from a grid coordinate system to absolute coordinates within a given rectangle on the screen'''
     def make_around(self, rectangle: Rectangle) -> None: pass
-    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: pass
+
+    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: 
+        if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+            return self.compute_absolute_position_from_valid_coordinates(grid_coordinates)
+        raise CoordinatesNotSupportedException()
+
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition: pass
+
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.coordinate_system
 
@@ -38,7 +47,12 @@ class HorizontallyOrderedGrid(Grid):
 class RecursiveDivisionGrid(Grid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
         the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
-    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: pass
+    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: 
+        if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+            return self.narrow_grid_using_valid_coordinates(grid_coordinates)
+        raise CoordinatesNotSupportedException()
+        
+    def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None: pass
     def compute_current_position(self) -> MousePosition: pass
     def re_expand_grid(self) -> None: pass
     def get_regions(self) -> Generator: pass

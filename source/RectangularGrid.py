@@ -25,7 +25,7 @@ class ListBasedGrid(RectangularGrid):
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))
         self.vertical_divider = LineDivider(rectangle.top, rectangle.bottom, len(self.vertical_coordinates))
     
-    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition:
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal = self.compute_absolute_horizontal_from(grid_coordinates)
         vertical = self.compute_absolute_vertical_from(grid_coordinates)
         position = MousePosition(horizontal, vertical)
