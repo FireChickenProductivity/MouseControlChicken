@@ -1,4 +1,5 @@
 from typing import Generator, Tuple, List
+from itertools import product
 
 class InputCoordinateSystem:
     def get_primary_coordinates(self) -> Generator:
@@ -77,19 +78,8 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
     
     def get_primary_coordinates(self) -> Generator:
         primary_coordinates = [system.get_primary_coordinates() for system in self.systems]
-        primary_system = primary_coordinates[0]
-        for value in primary_system: 
-            return SequentialCombinationCoordinateSystem._get_primary_coordinates_recursively(primary_coordinates[1:], self.separator, value)
-
-    @staticmethod
-    def _get_primary_coordinates_recursively(remaining_primary_coordinates: List[Generator], separator: str, head: str = "") -> Generator:
-        more_systems_remaining: bool = len(remaining_primary_coordinates) > 1
-        for value in remaining_primary_coordinates[0]:
-            result = head + separator + value
-            if more_systems_remaining: 
-                return SequentialCombinationCoordinateSystem._get_primary_coordinates_recursively(remaining_primary_coordinates[1:], separator, result)
-            else:
-                yield result
+        for result in product(*primary_coordinates):
+            yield self.separator.join(result)
 
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
         remaining_coordinates = coordinates
@@ -131,7 +121,7 @@ class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         pass
 
-class ListCoordinateSystem(InputCoordinateSystem):
+class ListCoordinateSystem(SingleCoordinateCoordinateSystem):
     def __init__(self, coordinate_list: List[str], separator: str = " "):
         self.coordinates = set(coordinate_list)
         self.separator = separator
@@ -142,7 +132,7 @@ class ListCoordinateSystem(InputCoordinateSystem):
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         return coordinate in self.coordinates
 
-class SimpleNumericCoordinateSystem(InputCoordinateSystem):
+class SimpleNumericCoordinateSystem(SingleCoordinateCoordinateSystem):
     def __init__(self, minimum: int, maximum: int, separator: str = " "):
         self.minimum = minimum
         self.maximum = maximum

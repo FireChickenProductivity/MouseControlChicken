@@ -62,6 +62,6 @@ class RectangularGrid(VerticallyOrderedGrid, HorizontallyOrderedGrid):
         vertical_coordinates = [vertical for vertical in self.get_vertical_coordinates()]
         horizontal_system = ListCoordinateSystem(horizontal_coordinates)
         vertical_system = ListCoordinateSystem(vertical_coordinates)
-        system = SequentialCombinationCoordinateSystem([horizontal_system, vertical_system])
+        system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
         return system
 
