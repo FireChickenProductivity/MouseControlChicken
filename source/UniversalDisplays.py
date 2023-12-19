@@ -20,7 +20,8 @@ class UniversalPositionDisplay(PositionDisplay):
         self.canvas.setup(rectangle)
         self.rectangle = rectangle
         self.grid.make_around(rectangle)
-        for coordinates in self.grid.get_primary_coordinates():
+        coordinate_system = self.grid.get_coordinate_system()
+        for coordinates in coordinate_system.get_primary_coordinates():
             position = self.grid.compute_absolute_position_from(coordinates)
             text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
             self.canvas.insert_text(text)
@@ -32,8 +33,7 @@ class UniversalPositionDisplay(PositionDisplay):
 # screen = screens[0]
 # talon_rectangle = screen.rect
 # rectangle: Rectangle = Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
-# # current_grid = ListBasedGrid(["a", "b", "c", "d"], ["a", "b", "c", "d", "e"])
-# current_grid = SquareRecursiveDivisionGrid(3)
+# current_grid = ListBasedGrid(["a", "b", "c", "d"], ["a", "b", "c", "d", "e"])
 # display = UniversalPositionDisplay()
 # display.set_grid(current_grid)
 # display.set_rectangle(rectangle)

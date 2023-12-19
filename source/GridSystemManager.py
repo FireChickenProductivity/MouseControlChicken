@@ -1,9 +1,10 @@
 from .Grid import Grid
 from .Display import Display
-from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .SettingsMediator import settings_mediator
+from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
+from .fire_chicken.mouse_position import MousePosition
 from talon import Module, actions
 
 class GridSystemManager:
@@ -36,9 +37,15 @@ class GridSystemManager:
             self.display.set_grid(self.grid)
             self.display.set_rectangle(rectangle)
             self.display.show()
+            actions.user.mouse_control_chicken_enable_grid_showing_tag()
 
+    def prepare_for_grid_switch(self):
+        self.set_display(None)
+        self.set_grid(None)
+    
     def hide(self):
         if self.display: self.display.hide()
+        actions.user.mouse_control_chicken_disable_grid_showing_tag()
     
     def show(self):
         self.refresh()
@@ -64,7 +71,7 @@ class Actions:
         display_options = DisplayOptionComputer().compute_display_options(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
         global manager
-        manager.hide()
+        manager.prepare_for_grid_switch()
         manager.set_display(display)
         manager.set_grid(grid)
     
@@ -77,3 +84,35 @@ class Actions:
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+    
+    def mouse_control_chicken_move_to_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken grid'''
+        position: MousePosition = get_position_on_grid(coordinates)
+        position.go()
+
+    def mouse_control_chicken_click_position(coordinates: str):
+        '''Clicks the specified position on the current mouse control chicken grid'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_click()
+    
+    def mouse_control_chicken_right_click_position(coordinates: str):
+        '''Clicks the specified position on the current mouse control chicken grid'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_click(1)
+    
+    def mouse_control_chicken_drag_from_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and starts dragging'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.sleep(0.5)
+        actions.user.mouse_drag(0)
+    
+    def mouse_control_chicken_end_drag_at_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and stops dragging'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.sleep(0.5)
+        actions.user.mouse_drag_end()
+
+def get_position_on_grid(coordinates: str) -> MousePosition:
+    grid = manager.get_grid()
+    position = grid.compute_absolute_position_from(coordinates)
+    return position

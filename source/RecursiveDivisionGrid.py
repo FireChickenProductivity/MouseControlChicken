@@ -5,23 +5,24 @@ from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine
 from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
-    def __init__(self, division_factor: int, separator: str = ""):
+    def __init__(self, division_factor: int, separator: str = " "):
         self.division_factor: int = division_factor
         self.separator: str = separator
         self.horizontal_divider: LineDivider = None
         self.vertical_divider: LineDivider = None
         self.rectangle: Rectangle = None
+        self.build_coordinate_system()
 
     def make_around(self, rectangle: Rectangle) -> None: 
         self.rectangle = rectangle
         self.re_expand_grid()
 
-    def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition:
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
         position = self._compute_position_from_dividers(horizontal_divider, vertical_divider)
         return position
 
-    def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None:
+    def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None:
         self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
 
     def compute_current_position(self) -> MousePosition: 
@@ -57,7 +58,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     def _compute_dividers_for_separated_coordinates(self, separated_coordinates: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinate(separated_coordinates[0], horizontal_divider, vertical_divider)
         if len(separated_coordinates) == 1: return horizontal_divider, vertical_divider
-        else: return self._compute_dividers_for_separated_coordinates(separated_coordinates[1:])
+        else: return self._compute_dividers_for_separated_coordinates(separated_coordinates[1:], horizontal_divider, vertical_divider)
 
     def _compute_dividers_for_coordinate(self, grid_coordinate: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal, vertical = self._compute_grid_position_from_coordinate(grid_coordinate)
