@@ -90,7 +90,7 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
     
     def do_coordinates_start_belong_to_system(self, coordinates: str) -> bool:
         remaining_coordinates = coordinates
-        for index, system in enumerate(self.systems):
+        for system in self.systems:
             if not system.do_coordinates_start_belong_to_system(remaining_coordinates): return False
             remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)[1]
         return True
@@ -98,12 +98,11 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
         remaining_coordinates = coordinates
         head = ""
-        for index, system in enumerate(self.systems):
+        for system in self.systems:
             part_belonging_to_system, remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)[1]
             if head: head += self.separator
             head += part_belonging_to_system
         return part_belonging_to_system, remaining_coordinates
-
 
 class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
@@ -146,7 +145,3 @@ class SimpleNumericCoordinateSystem(SingleCoordinateCoordinateSystem):
 
     def number_is_in_range(self, number: int):
         return self.minimum <= number and number <= self.maximum
-
-
-
-
