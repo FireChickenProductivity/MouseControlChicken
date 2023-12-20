@@ -12,7 +12,7 @@ module.list(LIST_NAME, desc = "The options for the mouse control chicken grid")
 def mouse_control_chicken_grid_option(m) -> str:
     return m.mouse_control_chicken_grid_option
 
-GRID_OPTIONS_PATH = None
+GRID_OPTIONS_PATH = None10
 
 options: GridOptions = None
 def update_options(name, flags):
