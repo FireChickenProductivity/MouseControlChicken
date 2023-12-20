@@ -54,7 +54,7 @@ class RecursiveDivisionGrid(Grid):
         
     def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None: pass
     def compute_current_position(self) -> MousePosition: pass
-    def re_expand_grid(self) -> None: pass
+    def reset_grid(self) -> None: pass
     def get_regions(self) -> Generator: pass
     def get_expansion_options(self) -> Generator: pass
 

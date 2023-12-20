@@ -15,7 +15,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def make_around(self, rectangle: Rectangle) -> None: 
         self.rectangle = rectangle
-        self.re_expand_grid()
+        self.reset_grid()
 
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
@@ -35,7 +35,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         center = MousePosition(int(horizontal), int(vertical))
         return center
 
-    def re_expand_grid(self) -> None: 
+    def reset_grid(self) -> None: 
         self.horizontal_divider = LineDivider(self.rectangle.left, self.rectangle.right, self._compute_number_of_divisions())
         self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self._compute_number_of_divisions())
         
