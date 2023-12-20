@@ -102,12 +102,9 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         return self.secondary_coordinate_system
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
-        print('?????????', f'{{{grid_coordinates}}}')
         head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
-        print('???????', f'{{{head}}}', ",", f'{{{tail}}}')
         if tail:
             rectangle = self.primary.compute_sub_rectangle_for(head)
-            print('rectangle', rectangle)
             self.secondary.make_around(rectangle)
             position = self.secondary.compute_absolute_position_from_valid_coordinates(tail)
         else:
