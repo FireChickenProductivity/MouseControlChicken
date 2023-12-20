@@ -99,11 +99,10 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
         remaining_coordinates = coordinates
         head = ""
         for system in self.systems:
-            print("!!!!!!!!", type(system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)), system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates))
-            part_belonging_to_system, remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
-            if head: head += self.separator
+            part_belonging_to_system, remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(remaining_coordinates)
+            if head and part_belonging_to_system: head += self.separator
             head += part_belonging_to_system
-        return part_belonging_to_system, remaining_coordinates
+        return head, remaining_coordinates
 
 class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
