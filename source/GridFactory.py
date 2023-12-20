@@ -1,11 +1,12 @@
-from .Grid import Grid
+from .Grid import Grid, RecursivelyDivisibleGridCombination
 from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
 from .RectangularGrid import ListBasedGrid
 from typing import List
-from talon import Module
+from talon import Module, actions
 
 ONE_TO_NINE_GRID_NAME = "one to nine division"
 ALPHABET_GRID_NAME = "Alphabet"
+RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination"
 
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
 
@@ -41,7 +42,21 @@ class AlphabetGridFactory:
     def get_name(self) -> str:
         return ALPHABET_GRID_NAME
 
-options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory()]
+class RecursivelyDivisibleGridCombinationGridFactory:
+    def create_grid(self, argument: str) -> Grid:
+        options = argument.split(" ")
+        primary = actions.user.mouse_control_chicken_create_grid_from_option(options[0]) 
+        secondary = actions.user.mouse_control_chicken_create_grid_from_option(options[1])
+        combination = RecursivelyDivisibleGridCombination(primary, secondary)
+        return combination
+
+    def get_name(self) -> str:
+        return RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME
+    
+    def get_arguments_description(self) -> str:
+        return "(grid option one) (grid option two)"
+
+options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
 
 class GridFactoryOptions:
     def __init__(self, options: List[GridFactory]):
