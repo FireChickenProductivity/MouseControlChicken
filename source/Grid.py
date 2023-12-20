@@ -56,10 +56,10 @@ class RecursiveDivisionGrid(Grid):
     def compute_current_position(self) -> MousePosition: pass
     def reset_grid(self) -> None: pass
     def get_regions(self) -> Generator: pass
-    def get_expansion_options(self) -> Generator: pass
+    def get_narrowing_options(self) -> Generator: pass
 
     def build_coordinate_system(self):
-        options = [option for option in self.get_expansion_options()]
+        options = [option for option in self.get_narrowing_options()]
         base_system = ListCoordinateSystem(options)
         self.coordinate_system = InfiniteSequenceCoordinateSystem(base_system)
 

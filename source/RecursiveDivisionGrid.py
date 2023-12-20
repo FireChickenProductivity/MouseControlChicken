@@ -47,7 +47,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
                 region = compute_region_from_left_and_top_lines(horizontal_split, vertical_split)
                 yield region
 
-    def get_expansion_options(self) -> Generator:
+    def get_narrowing_options(self) -> Generator:
         maximum_option = self.division_factor**2
         for value in range(1, maximum_option + 1): yield str(value)
     
