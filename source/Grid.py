@@ -44,7 +44,10 @@ class HorizontallyOrderedGrid(Grid):
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: pass
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int: pass
 
-class RecursiveDivisionGrid(Grid):
+class RecursivelyDivisibleGrid(Grid):
+    def compute_sub_rectangle_for(coordinates: str) -> Rectangle: pass
+
+class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
         the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
     def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: 
@@ -63,7 +66,7 @@ class RecursiveDivisionGrid(Grid):
         base_system = ListCoordinateSystem(options)
         self.coordinate_system = InfiniteSequenceCoordinateSystem(base_system)
 
-class RectangularGrid(VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
