@@ -45,7 +45,7 @@ class HorizontallyOrderedGrid(Grid):
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int: pass
 
 class RecursivelyDivisibleGrid(Grid):
-    def compute_sub_rectangle_for(coordinates: str) -> Rectangle: pass
+    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle: pass
 
 class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
