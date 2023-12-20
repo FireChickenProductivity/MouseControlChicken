@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RecursiveDivisionGrid
 from typing import Generator, Tuple
 from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine
+from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine, compute_rectangle_from_line_dividers
 from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
@@ -26,7 +26,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.horizontal_divider, self.vertical_divider = self.compute_sub_rectangle_for(grid_coordinates)
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
-        return self._compute_dividers_for_coordinates(grid_coordinates)
+        return compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))
 
     def compute_current_position(self) -> MousePosition: 
         position = self._compute_position_from_dividers(self.horizontal_divider, self.vertical_divider)
