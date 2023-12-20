@@ -8,10 +8,15 @@ def compute_center_position(rectangle: Rectangle) -> MousePosition:
     center = MousePosition(int(horizontal), int(vertical))
     return center
 
+
 class OneDimensionalLine:
     def __init__(self, start: int, ending: int):
         self.start = start
         self.ending = ending
+
+def compute_rectangle_from_line_splits(horizontal_split: OneDimensionalLine, vertical_split: OneDimensionalLine) -> Rectangle:
+    rectangle = Rectangle(vertical_split.start, vertical_split.ending, horizontal_split.start, horizontal_split.ending)
+    return rectangle
 
 class LineDivider:
     def __init__(self, start: int, ending: int, number_of_divisors: int):
@@ -42,6 +47,10 @@ class LineDivider:
 
     def get_number_of_divisors(self) -> int:
         return self.number_of_divisors
+
+def compute_rectangle_from_line_dividers(horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Rectangle:
+    rectangle = Rectangle(vertical_divider.start, vertical_divider.ending, horizontal_divider.start, horizontal_divider.ending)
+    return rectangle
 
 class RectangleDivider:
     def __init__(self, horizontal_divider: LineDivider, vertical_divider: LineDivider):

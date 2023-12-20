@@ -30,15 +30,3 @@ class GridOptions:
 
     def get_option_names(self) -> List[str]:
         return self.options.keys()
-    
-options = []
-grid_options = GridOptions(options)
-
-module = Module()
-@module.action_class
-class Actions:
-    def mouse_control_chicken_create_grid_from_option(name: str) -> Grid:
-        '''Creates the specified mouse control chicken grid from the available grid options'''
-        option = GridOptions.get_option(name)
-        grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
-        return grid

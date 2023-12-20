@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RecursiveDivisionGrid
 from typing import Generator, Tuple
 from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine
+from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine, compute_rectangle_from_line_dividers
 from .Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
@@ -15,7 +15,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def make_around(self, rectangle: Rectangle) -> None: 
         self.rectangle = rectangle
-        self.re_expand_grid()
+        self.reset_grid()
 
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal_divider, vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
@@ -23,7 +23,10 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         return position
 
     def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None:
-        self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
+        self.horizontal_divider, self.vertical_divider = self.compute_sub_rectangle_for(grid_coordinates)
+
+    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
+        return compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))
 
     def compute_current_position(self) -> MousePosition: 
         position = self._compute_position_from_dividers(self.horizontal_divider, self.vertical_divider)
@@ -35,7 +38,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         center = MousePosition(int(horizontal), int(vertical))
         return center
 
-    def re_expand_grid(self) -> None: 
+    def reset_grid(self) -> None: 
         self.horizontal_divider = LineDivider(self.rectangle.left, self.rectangle.right, self._compute_number_of_divisions())
         self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self._compute_number_of_divisions())
         
@@ -47,7 +50,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
                 region = compute_region_from_left_and_top_lines(horizontal_split, vertical_split)
                 yield region
 
-    def get_expansion_options(self) -> Generator:
+    def get_narrowing_options(self) -> Generator:
         maximum_option = self.division_factor**2
         for value in range(1, maximum_option + 1): yield str(value)
     

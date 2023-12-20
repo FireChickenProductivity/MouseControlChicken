@@ -1,6 +1,6 @@
 from .fire_chicken.mouse_position import MousePosition
 from typing import Generator, List
-from .InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem
+from .InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem, DisjointUnionCoordinateSystem
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''
@@ -44,7 +44,10 @@ class HorizontallyOrderedGrid(Grid):
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: pass
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int: pass
 
-class RecursiveDivisionGrid(Grid):
+class RecursivelyDivisibleGrid(Grid):
+    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle: pass
+
+class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
     '''RecursiveDivisionGrid offers a coordinate system that recursively divides a given rectangle into smaller regions such that the center of
         the region formed by a series of recursive divisions is the absolute position given by the series of coordinates causing that division'''
     def narrow_grid_using_coordinates(self, grid_coordinates: str) -> None: 
@@ -54,16 +57,16 @@ class RecursiveDivisionGrid(Grid):
         
     def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None: pass
     def compute_current_position(self) -> MousePosition: pass
-    def re_expand_grid(self) -> None: pass
+    def reset_grid(self) -> None: pass
     def get_regions(self) -> Generator: pass
-    def get_expansion_options(self) -> Generator: pass
+    def get_narrowing_options(self) -> Generator: pass
 
     def build_coordinate_system(self):
-        options = [option for option in self.get_expansion_options()]
+        options = [option for option in self.get_narrowing_options()]
         base_system = ListCoordinateSystem(options)
         self.coordinate_system = InfiniteSequenceCoordinateSystem(base_system)
 
-class RectangularGrid(VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
@@ -77,3 +80,44 @@ class RectangularGrid(VerticallyOrderedGrid, HorizontallyOrderedGrid):
         horizontal_system = ListCoordinateSystem(horizontal_coordinates)
         vertical_system = ListCoordinateSystem(vertical_coordinates)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
+
+class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
+    def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
+        self.primary = primary
+        self.secondary = secondary
+        self.primary_coordinate_system = primary.get_coordinate_system()
+        self.secondary_coordinate_system = secondary.get_coordinate_system()
+        self.coordinate_system = DisjointUnionCoordinateSystem([
+            self.primary_coordinate_system,
+            SequentialCombinationCoordinateSystem([
+                self.primary_coordinate_system,
+                self.secondary_coordinate_system
+            ])
+        ])
+    
+    def get_coordinate_system(self) -> InputCoordinateSystem:
+        return self.primary_coordinate_system
+    
+    def get_secondary_coordinate_system(self) -> InputCoordinateSystem:
+        return self.secondary_coordinate_system
+    
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
+        head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
+        if tail:
+            rectangle = self.primary.compute_sub_rectangle_for(head)
+            self.secondary.make_around(rectangle)
+            position = self.secondary.compute_absolute_position_from_valid_coordinates(tail)
+        else:
+            position = self.primary.compute_absolute_position_from_valid_coordinates(head)
+        return position
+
+    def make_around(self, rectangle: Rectangle) -> None:
+        self.primary.make_around(rectangle)
+
+    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
+        head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
+        primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
+        self.secondary.make_around(primary_sub_rectangle)
+        rectangle = self.secondary.compute_sub_rectangle_for(tail)
+        return rectangle
+        

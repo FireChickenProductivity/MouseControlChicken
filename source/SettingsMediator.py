@@ -173,5 +173,4 @@ settings_mediator = SettingsMediator()
 def load_default_settings():
     global settings_mediator
     settings_mediator.restore_default_settings()
-    print('loading default settings')
 app.register('ready', load_default_settings)

@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RectangularGrid
 from typing import List, Generator
 from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider
+from .RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine
 
 class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order
@@ -25,6 +25,18 @@ class ListBasedGrid(RectangularGrid):
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))
         self.vertical_divider = LineDivider(rectangle.top, rectangle.bottom, len(self.vertical_coordinates))
     
+    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
+        horizontal_divider_position = self._compute_horizontal_divider_position_from(grid_coordinates)
+        vertical_divider_position = self._compute_vertical_divider_position_from(grid_coordinates)
+        first_horizontal_split = self.horizontal_divider.compute_split(horizontal_divider_position)
+        first_vertical_split = self.vertical_divider.compute_split(vertical_divider_position)
+        second_horizontal_split = self.horizontal_divider.compute_split(horizontal_divider_position + 1)
+        second_vertical_split = self.vertical_divider.compute_split(vertical_divider_position + 1)
+        combined_horizontal_split = OneDimensionalLine(first_horizontal_split.start, second_horizontal_split.ending)
+        combined_vertical_split = OneDimensionalLine(first_vertical_split.start, second_vertical_split.ending)
+        rectangle = compute_rectangle_from_line_splits(combined_horizontal_split, combined_vertical_split)
+        return rectangle
+
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         horizontal = self.compute_absolute_horizontal_from(grid_coordinates)
         vertical = self.compute_absolute_vertical_from(grid_coordinates)
@@ -38,19 +50,27 @@ class ListBasedGrid(RectangularGrid):
         for element in self.vertical_list: yield element
 
     def compute_absolute_horizontal_from(self, coordinates: str) -> int: 
-        horizontal_coordinate = self._compute_horizontal_coordinate(coordinates)
-        divider_position = self.horizontal_coordinates[horizontal_coordinate]
+        divider_position = self._compute_horizontal_divider_position_from(coordinates)
         horizontal = self.horizontal_divider.compute_divisor_position(divider_position)
         return horizontal
+    
+    def _compute_horizontal_divider_position_from(self, coordinates: str) -> int:
+        horizontal_coordinate = self._compute_horizontal_coordinate(coordinates)
+        divider_position = self.horizontal_coordinates[horizontal_coordinate]
+        return divider_position
 
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int:
         return self.compute_absolute_horizontal_from("_" + self.separator + coordinates)
     
     def compute_absolute_vertical_from(self, coordinates: str) -> int:
-        vertical_coordinate = self._compute_vertical_coordinate(coordinates)
-        divider_position = self.vertical_coordinates[vertical_coordinate]
+        divider_position = self._compute_vertical_divider_position_from(coordinates)
         vertical = self.vertical_divider.compute_divisor_position(divider_position)
         return vertical
+    
+    def _compute_vertical_divider_position_from(self, coordinates: str) -> int:
+        vertical_coordinate = self._compute_vertical_coordinate(coordinates)
+        divider_position = self.vertical_coordinates[vertical_coordinate]
+        return divider_position
 
     def compute_absolute_vertical_from_from_vertical_coordinates(self, coordinates: str):
         return self.compute_absolute_vertical_from(coordinates)
