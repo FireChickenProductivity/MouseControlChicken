@@ -44,7 +44,7 @@ class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
             head += subhead
             if len(tail) == 0 or new_tail == tail: unfinished = False
             tail = new_tail
-        return (head, tail)
+        return head, tail
 
 class DisjointUnionCoordinateSystem(InputCoordinateSystem):
     def __init__(self, systems: List[InputCoordinateSystem], separator: str = " "):
@@ -99,7 +99,8 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
         remaining_coordinates = coordinates
         head = ""
         for system in self.systems:
-            part_belonging_to_system, remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)[1]
+            print("!!!!!!!!", type(system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)), system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates))
+            part_belonging_to_system, remaining_coordinates = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
             if head: head += self.separator
             head += part_belonging_to_system
         return part_belonging_to_system, remaining_coordinates
@@ -115,7 +116,7 @@ class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
 
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
         coordinate_list = self.compute_coordinate_list(coordinates)
-        return (coordinate_list[0], self.separator.join(coordinate_list[1:]))
+        return coordinate_list[0], self.separator.join(coordinate_list[1:])
 
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         pass

@@ -1,4 +1,5 @@
 from .Grid import Grid, RecursivelyDivisibleGridCombination
+from .GridOptions import GridOptions
 from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
 from .RectangularGrid import ListBasedGrid
 from typing import List
@@ -44,9 +45,9 @@ class AlphabetGridFactory:
 
 class RecursivelyDivisibleGridCombinationGridFactory:
     def create_grid(self, argument: str) -> Grid:
-        options = argument.split(" ")
-        primary = actions.user.mouse_control_chicken_create_grid_from_option(options[0]) 
-        secondary = actions.user.mouse_control_chicken_create_grid_from_option(options[1])
+        options = argument.split(":")
+        primary = create_grid_from_options(options[0]) 
+        secondary = create_grid_from_options(options[1])
         combination = RecursivelyDivisibleGridCombination(primary, secondary)
         return combination
 
@@ -80,3 +81,14 @@ class Actions:
     def mouse_control_chicken_create_grid_from_factory(factory: str, argument: str) -> Grid:
         '''Creates the specified mouse control chicken grid using the specified factory'''
         return grid_factory_options.create_grid(factory, argument)
+
+    def mouse_control_chicken_create_grid_from_options(name: str) -> Grid:
+        '''Creates the specified mouse control chicken grid using the specified option name'''
+        return create_grid_from_options(name)
+
+
+def create_grid_from_options(name: str) -> Grid:
+    options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+    option = options.get_option(name)
+    grid = grid_factory_options.create_grid(option.get_factory_name(), option.get_argument())
+    return grid

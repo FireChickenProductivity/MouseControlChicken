@@ -87,13 +87,13 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         self.secondary = secondary
         self.primary_coordinate_system = primary.get_coordinate_system()
         self.secondary_coordinate_system = secondary.get_coordinate_system()
-        self.coordinate_system = DisjointUnionCoordinateSystem(
+        self.coordinate_system = DisjointUnionCoordinateSystem([
             self.primary_coordinate_system,
-            SequentialCombinationCoordinateSystem(
+            SequentialCombinationCoordinateSystem([
                 self.primary_coordinate_system,
                 self.secondary_coordinate_system
-            )
-        )
+            ])
+        ])
     
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary_coordinate_system
