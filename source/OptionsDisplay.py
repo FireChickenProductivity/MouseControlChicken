@@ -1,7 +1,6 @@
 from talon import Module, actions, imgui
 from typing import List, Callable
 
-
 class OptionsDisplayInformation:
     def __init__(self, title: str, options: List[str]):
         self.title = title
@@ -53,10 +52,12 @@ class Actions:
         information = OptionsDisplayInformation(title, options)
         global callback
         callback = new_callback
+        actions.user.mouse_control_chicken_enable_options_display_tag(tag)
         gui.show()
     
     def mouse_control_chicken_hide_options_display():
         '''Hides the options display for mouse control chicken'''
+        actions.user.mouse_control_chicken_disable_options_display_tag()
         if gui.showing: gui.hide()
         global callback
         callback = None
