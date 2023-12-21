@@ -7,9 +7,11 @@ from talon import Module, actions
 
 ONE_TO_NINE_GRID_NAME = "one to nine division"
 ALPHABET_GRID_NAME = "Alphabet"
+DOUBLE_ALPHABET_GRID_NAME = "Double Alphabet"
 RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination"
 
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
+DOUBLE_ALPHABET = ALPHABET + ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ]
 
 class GridFactory:
     def create_grid(self, argument: str) -> Grid:
@@ -42,6 +44,13 @@ class AlphabetGridFactory:
 
     def get_name(self) -> str:
         return ALPHABET_GRID_NAME
+    
+class DoubleAlphabetGridFactory:
+    def create_grid(self, argument: str) -> Grid:
+        return ListBasedGrid(DOUBLE_ALPHABET, DOUBLE_ALPHABET)
+
+    def get_name(self) -> str:
+        return DOUBLE_ALPHABET_GRID_NAME
 
 class RecursivelyDivisibleGridCombinationGridFactory:
     def create_grid(self, argument: str) -> Grid:
@@ -57,7 +66,7 @@ class RecursivelyDivisibleGridCombinationGridFactory:
     def get_arguments_description(self) -> str:
         return "(grid option one) (grid option two)"
 
-options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
+options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
 
 class GridFactoryOptions:
     def __init__(self, options: List[GridFactory]):

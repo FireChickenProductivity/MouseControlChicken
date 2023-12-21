@@ -24,7 +24,9 @@ def mouse_control_chicken_guarantee_grid_options_file_initialized():
             file_writer = writer(file)
             file_writer.writerow(['one to nine', 'Square Recursive Division Grid', 'UniversalPosition', '3'])
             file_writer.writerow(['alphabet', 'Alphabet', 'RectangularGridFrame', ''])
+            file_writer.writerow(['double alphabet', 'Double Alphabet', 'RectangularGridFrame', ''])
             file_writer.writerow(['alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'alphabet:one to nine'])
+            file_writer.writerow(['double alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'double alphabet:one to nine'])
 
 def mouse_control_chicken_read_grid_options() -> GridOptions:
     '''Obtains the mouse control chicken grid options from the file'''
