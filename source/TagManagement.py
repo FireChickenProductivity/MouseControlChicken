@@ -4,7 +4,7 @@ module = Module()
 GRID_SHOWING_TAG_NAME = 'mouse_control_chicken_showing'
 GRID_SHOWING_TAG = 'user.' + GRID_SHOWING_TAG_NAME
 module.tag(GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse controlled chicken commands for working with the active grid')
-GRID_OPTIONS_TAG_NAME = 'mouse_control_chicken_grid_options_showing'
+GRID_OPTIONS_TAG_NAME = 'mouse_control_chicken_options_showing'
 GRID_OPTIONS_TAG = 'user.' + GRID_OPTIONS_TAG_NAME
 module.tag(GRID_OPTIONS_TAG_NAME, desc = 'Tag for enabling choosing between mouse control chicken grid options')
 grid_open_context = Context()
@@ -20,9 +20,11 @@ class Actions:
         '''Disables commands for working with the active mouse control chicken grid'''
         remove_tags_from_context(grid_open_context)
 
-    def mouse_control_chicken_enable_options_display_tag(tag: str):
+    def mouse_control_chicken_enable_options_display_tag(tag: str = ""):
         '''Enables the specified options display tag'''
-        assign_tag_to_context(options_display_context, tag)
+        tags = [GRID_OPTIONS_TAG]
+        if tag: tags.append(tag)
+        assign_tags_to_context(options_display_context, tags)
     
     def mouse_control_chicken_disable_options_display_tag():
         '''Disables the specified options display tag'''
@@ -30,6 +32,9 @@ class Actions:
     
 def assign_tag_to_context(context, tag):
     context.tags = [tag]
+
+def assign_tags_to_context(context, tags):
+    context.tags = tags
 
 def remove_tags_from_context(context):
     context.tags = []

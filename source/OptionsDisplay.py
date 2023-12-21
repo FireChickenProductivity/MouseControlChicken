@@ -45,7 +45,7 @@ def gui(gui: imgui.GUI):
 module = Module()
 @module.action_class
 class Actions:
-    def mouse_control_chicken_show_options_display_with_options_title_tag_and_callback(options: List[str], title: str, tag: str, new_callback: Callable[[str], None]):
+    def mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options: List[str], title: str, new_callback: Callable[[str], None], tag: str = ""):
         '''Shows options for mouse control chicken'''
         actions.user.mouse_control_chicken_hide_options_display()
         global information
