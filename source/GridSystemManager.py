@@ -75,6 +75,26 @@ class Actions:
         manager.set_display(display)
         manager.set_grid(grid)
     
+    def mouse_control_chicken_choose_display_from_options(name: str):
+        '''Changes the active mouse control chicken grid display based on the name of the option'''
+        global manager
+        display_options = DisplayOptionComputer().compute_display_options(manager.get_grid())
+        display = display_options.create_display_from_option(name)
+        manager.set_display(display)
+
+    def mouse_control_chicken_show_grid_options():
+        '''Shows the mouse control chicken grid options'''
+        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        names = [name for name in options.get_option_names()]
+        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
+
+    def mouse_control_chicken_show_display_options():
+        '''Shows the mouse control chicken display options for the active grid'''
+        grid = manager.get_grid()
+        display_options = DisplayOptionComputer().compute_display_options(grid)
+        options_text = [option for option in display_options.get_names()]
+        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, "Display Options", actions.user.mouse_control_chicken_choose_display_from_options)
+
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
         global manager
