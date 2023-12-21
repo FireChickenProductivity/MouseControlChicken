@@ -1,6 +1,7 @@
 from talon import Module, actions, imgui
 from typing import List, Callable
 
+
 class OptionsDisplayInformation:
     def __init__(self, title: str, options: List[str]):
         self.title = title
