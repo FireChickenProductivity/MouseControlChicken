@@ -16,8 +16,13 @@ class OptionsDisplayInformation:
     
     def advance_page(self):
         self.page_number += 1
-        self.page_number = self.page_number % (len(self.options)//self.items_per_page)
+        number_of_pages = self.compute_number_of_pages()
+        if self.page_number > number_of_pages: self.page_number = number_of_pages
         self.compute_page()
+        print(self.page_number, number_of_pages)
+    
+    def compute_number_of_pages(self) -> int:
+        return len(self.options)//self.items_per_page + 1
     
     def go_to_previous_page(self):
         if self.page_number > 1: self.page_number -= 1
