@@ -75,6 +75,12 @@ class Actions:
         manager.set_display(display)
         manager.set_grid(grid)
     
+    def mouse_control_chicken_show_grid_options():
+        '''Shows the mouse control chicken grid options'''
+        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        names = [name for name in options.get_option_names()]
+        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
+
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
         global manager
