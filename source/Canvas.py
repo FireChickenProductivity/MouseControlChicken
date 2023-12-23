@@ -1,5 +1,6 @@
 from talon import canvas
-from talon.skia import Paint
+from talon.skia import Paint, Rect
+from talon.types.point import Point2d
 from .Grid import Rectangle
 from .SettingsMediator import settings_mediator
 
@@ -62,9 +63,44 @@ class TextManager:
         self.elements.clear()
     
     def add_to_canvas(self, canvas):
-        update_canvas_color(canvas, self.options.color)
+        self.add_background_rectangles_to_canvas(canvas)
+        self.add_text_to_canvas(canvas)
+    
+    def add_background_rectangles_to_canvas(self, canvas):
+        update_canvas_color(canvas, settings_mediator.get_background_color() + compute_transparency_in_hexadecimal(settings_mediator.get_background_transparency()))
+        for text in self.elements: draw_background_rectangle_for_text(canvas, text, self.options.size)
+    
+    def add_text_to_canvas(self, canvas):
+        update_canvas_color(canvas, self.options.color + compute_transparency_in_hexadecimal(settings_mediator.get_main_transparency()))
         update_canvas_text_size(canvas, self.options.size)
-        for text in self.elements: canvas.draw_text(text.text, text.x, text.y)
+        for text in self.elements: draw_canvas_text(canvas, text)
+
+def compute_transparency_in_hexadecimal(transparency) -> str:
+    transparency_amount = 0xFF*(1 - transparency)
+    hexadecimal = hex(round(transparency_amount))
+    result = hexadecimal[2:4]
+    return result
+
+def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
+    vertical = compute_text_vertical(canvas, text)
+    width = len(text.text)*text_size/1.5
+    original_background_rectangle = compute_background_rectangle_for_text(canvas, text)
+    height = vertical - text.y
+    height = original_background_rectangle.height*2
+    height = text_size*1.5
+    text_background_rectangle = Rect(text.x - width/2, vertical - text_size, width, height)
+    canvas.draw_rect(text_background_rectangle)
+
+def draw_canvas_text(canvas, text: Text):
+    vertical = compute_text_vertical(canvas, text)
+    canvas.draw_text(text.text, text.x, vertical)
+
+def compute_text_vertical(canvas, text: Text):
+    background_text_rectangle = compute_background_rectangle_for_text(canvas, text)
+    return text.y + background_text_rectangle.height/2
+
+def compute_background_rectangle_for_text(canvas, text: Text):
+    return canvas.paint.measure_text(text.text)[1].copy()
 
 class Canvas:
     def __init__(self):
