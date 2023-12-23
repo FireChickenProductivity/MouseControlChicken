@@ -56,6 +56,15 @@ module.setting(
     desc = 'The default background size used by Mouse Control Chicken'
 ) 
 
+default_background_color_setting_name = 'mouse_control_chicken_default_background_color'
+default_background_color = 'user.' + default_background_color_setting_name
+module.setting(
+    default_background_color_setting_name,
+    type = str,
+    default = "000000",
+    desc = "The default background color used by Mouse Control Chicken"
+)
+
 default_main_transparency_setting_name = 'mouse_control_chicken_default_main_transparency'
 default_main_transparency = 'user.' + default_main_transparency_setting_name
 module.setting(
@@ -94,6 +103,7 @@ class SettingsMediator:
         self.line_width = settings.get(default_line_width)
         self.line_color = settings.get(default_line_color)
         self.background_transparency = settings.get(default_background_transparency)
+        self.background_color = settings.get(default_background_color)
         self.backround_size = settings.get(default_backround_size)
         self.main_transparency = settings.get(default_main_transparency)
         self.current_screen_number = settings.get(default_current_screen_number)
@@ -117,6 +127,9 @@ class SettingsMediator:
 
     def get_backround_size(self) -> int:
         return self.backround_size
+
+    def get_background_color(self) -> str:
+        return self.background_color
 
     def get_main_transparency(self) -> int:
         return self.main_transparency
@@ -150,6 +163,10 @@ class SettingsMediator:
     def set_backround_size(self, size: int):
         self.backround_size = size
         self._handle_change()
+    
+    def set_background_color(self, color: str):
+        self.background_color = color
+        self._handle_change()
 
     def set_main_transparency(self, transparency: int):
         self.main_transparency = transparency
@@ -173,4 +190,5 @@ settings_mediator = SettingsMediator()
 def load_default_settings():
     global settings_mediator
     settings_mediator.restore_default_settings()
+    print(settings_mediator.background_color)
 app.register('ready', load_default_settings)

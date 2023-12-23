@@ -1,5 +1,6 @@
 from talon import canvas
 from talon.skia import Paint
+from talon.types.point import Point2d
 from .Grid import Rectangle
 from .SettingsMediator import settings_mediator
 
@@ -62,9 +63,25 @@ class TextManager:
         self.elements.clear()
     
     def add_to_canvas(self, canvas):
+        self.add_background_rectangles_to_canvas(canvas)
+        self.add_text_to_canvas(canvas)
+    
+    def add_background_rectangles_to_canvas(self, canvas):
+        update_canvas_color(canvas, settings_mediator.get_background_color())
+        for text in self.elements: draw_background_rectangle_for_text(canvas, text)
+    
+    def add_text_to_canvas(self, canvas):
         update_canvas_color(canvas, self.options.color)
         update_canvas_text_size(canvas, self.options.size)
         for text in self.elements: draw_canvas_text(canvas, text)
+
+def draw_background_rectangle_for_text(canvas, text: Text):
+    vertical = compute_text_vertical(canvas, text)
+    text_background_rectangle = compute_background_rectangle_for_text(canvas, text)
+    #text_background_rectangle.center = Point2d(text.x, vertical)
+    text_background_rectangle.x = text.x
+    text_background_rectangle.y = vertical
+    canvas.draw_rect(text_background_rectangle)
 
 def draw_canvas_text(canvas, text: Text):
     vertical = compute_text_vertical(canvas, text)
@@ -75,7 +92,7 @@ def compute_text_vertical(canvas, text: Text):
     return text.y + background_text_rectangle.height/2
 
 def compute_background_rectangle_for_text(canvas, text: Text):
-    return canvas.paint.measure_text(text.text)[1]
+    return canvas.paint.measure_text(text.text)[1].copy()
 
 class Canvas:
     def __init__(self):
