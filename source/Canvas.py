@@ -1,5 +1,5 @@
 from talon import canvas
-from talon.skia import Paint
+from talon.skia import Paint, Rect
 from talon.types.point import Point2d
 from .Grid import Rectangle
 from .SettingsMediator import settings_mediator
@@ -68,19 +68,23 @@ class TextManager:
     
     def add_background_rectangles_to_canvas(self, canvas):
         update_canvas_color(canvas, settings_mediator.get_background_color())
-        for text in self.elements: draw_background_rectangle_for_text(canvas, text)
+        for text in self.elements: draw_background_rectangle_for_text(canvas, text, self.options.size)
     
     def add_text_to_canvas(self, canvas):
         update_canvas_color(canvas, self.options.color)
         update_canvas_text_size(canvas, self.options.size)
         for text in self.elements: draw_canvas_text(canvas, text)
 
-def draw_background_rectangle_for_text(canvas, text: Text):
+def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     vertical = compute_text_vertical(canvas, text)
-    text_background_rectangle = compute_background_rectangle_for_text(canvas, text)
+    width = len(text.text)*text_size/1.5
+    original_background_rectangle = compute_background_rectangle_for_text(canvas, text)
+    height = vertical - text.y
+    height = original_background_rectangle.height*2
+    height = text_size*1.5
+    text_background_rectangle = Rect(text.x - width/2, vertical - height/2, width, height)
+    #text_background_rectangle = compute_background_rectangle_for_text(canvas, text)
     #text_background_rectangle.center = Point2d(text.x, vertical)
-    text_background_rectangle.x = text.x
-    text_background_rectangle.y = vertical
     canvas.draw_rect(text_background_rectangle)
 
 def draw_canvas_text(canvas, text: Text):

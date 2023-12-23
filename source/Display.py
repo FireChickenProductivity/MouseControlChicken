@@ -1,5 +1,5 @@
 from .Grid import Grid, Rectangle
-
+from .Canvas import Canvas
 DISPLAY_CLASS_NAME_POSTFIX = "Display"
 
 class Display:
