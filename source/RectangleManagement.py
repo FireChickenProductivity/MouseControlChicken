@@ -29,15 +29,24 @@ module = Module()
 class Actions:
     def mouse_control_chicken_use_next_screen():
         '''Updates the mouse control chicken grid screen to the next one'''
-        screens = ui.screens()
-        screen_number = settings_mediator.get_current_screen_number() + 1
-        if screen_number >= len(screens): screen_number = 0
-        settings_mediator.set_current_screen_number(screen_number)
+        add_amount_to_screen_number(1)
 
     def mouse_control_chicken_use_previous_screen():
         '''Updates the mouse control chicken grid screen to the previous one'''
-        screens = ui.screens()
-        screen_number = settings_mediator.get_current_screen_number() - 1
-        if screen_number >= len(screens): screen_number = 0
-        if screen_number < 0: screen_number = len(screens) - 1
-        settings_mediator.set_current_screen_number(screen_number)
+        add_amount_to_screen_number(-1)
+    
+    def mouse_control_chicken_use_screen(screen_number: int):
+        '''Updates the mouse control chicken grid screen to the specified one'''
+        new_screen_number = compute_corrected_screen_number(screen_number - 1)
+        settings_mediator.set_current_screen_number(new_screen_number)
+
+def add_amount_to_screen_number(amount: int):
+    screen_number = settings_mediator.get_current_screen_number() + amount
+    screen_number = compute_corrected_screen_number(screen_number)
+    settings_mediator.set_current_screen_number(screen_number)
+
+def compute_corrected_screen_number(screen_number: int) -> int:
+    screens = ui.screens()
+    if screen_number >= len(screens): screen_number = 0
+    if screen_number < 0: screen_number = len(screens) - 1
+    return screen_number
