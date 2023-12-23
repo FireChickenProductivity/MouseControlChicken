@@ -64,7 +64,12 @@ class TextManager:
     def add_to_canvas(self, canvas):
         update_canvas_color(canvas, self.options.color)
         update_canvas_text_size(canvas, self.options.size)
-        for text in self.elements: canvas.draw_text(text.text, text.x, text.y)
+        for text in self.elements: draw_canvas_text(canvas, text)
+
+def draw_canvas_text(canvas, text: Text):
+    background_text_rectangle = canvas.paint.measure_text(text.text)[1]
+    print(background_text_rectangle)
+    canvas.draw_text(text.text, text.x, text.y + background_text_rectangle.height/2)
 
 class Canvas:
     def __init__(self):
