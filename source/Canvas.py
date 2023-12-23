@@ -67,8 +67,12 @@ class TextManager:
         for text in self.elements: draw_canvas_text(canvas, text)
 
 def draw_canvas_text(canvas, text: Text):
+    vertical = compute_text_vertical(canvas, text)
+    canvas.draw_text(text.text, text.x, vertical)
+
+def compute_text_vertical(canvas, text: Text):
     background_text_rectangle = compute_background_rectangle_for_text(canvas, text)
-    canvas.draw_text(text.text, text.x, text.y + background_text_rectangle.height/2)
+    return text.y + background_text_rectangle.height/2
 
 def compute_background_rectangle_for_text(canvas, text: Text):
     return canvas.paint.measure_text(text.text)[1]
