@@ -9,3 +9,4 @@ chicken choose grid: user.mouse_control_chicken_show_grid_options()
 chicken choose display: user.mouse_control_chicken_show_display_options()
 
 chicken next: user.mouse_control_chicken_use_next_screen()
+chicken last: user.mouse_control_chicken_use_previous_screen()
