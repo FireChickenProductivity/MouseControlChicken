@@ -7,3 +7,7 @@ chicken show: user.mouse_control_chicken_show_grid()
 
 chicken choose grid: user.mouse_control_chicken_show_grid_options()
 chicken choose display: user.mouse_control_chicken_show_display_options()
+
+chicken [screen] next: user.mouse_control_chicken_use_next_screen()
+chicken [screen] last: user.mouse_control_chicken_use_previous_screen()
+chicken screen <number_small>: user.mouse_control_chicken_use_screen(number_small)
