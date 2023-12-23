@@ -67,7 +67,7 @@ class TextManager:
         self.add_text_to_canvas(canvas)
     
     def add_background_rectangles_to_canvas(self, canvas):
-        update_canvas_color(canvas, settings_mediator.get_background_color())
+        update_canvas_color(canvas, settings_mediator.get_background_color() + "04")
         for text in self.elements: draw_background_rectangle_for_text(canvas, text, self.options.size)
     
     def add_text_to_canvas(self, canvas):
