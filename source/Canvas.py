@@ -88,9 +88,7 @@ def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     height = vertical - text.y
     height = original_background_rectangle.height*2
     height = text_size*1.5
-    text_background_rectangle = Rect(text.x - width/2, vertical - height/2, width, height)
-    #text_background_rectangle = compute_background_rectangle_for_text(canvas, text)
-    #text_background_rectangle.center = Point2d(text.x, vertical)
+    text_background_rectangle = Rect(text.x - width/2, vertical - text_size, width, height)
     canvas.draw_rect(text_background_rectangle)
 
 def draw_canvas_text(canvas, text: Text):

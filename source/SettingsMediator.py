@@ -7,7 +7,7 @@ default_text_size = 'user.' + default_text_size_setting_name
 module.setting(
     default_text_size_setting_name,
     type = int,
-    default = 15,
+    default = 10,
     desc = 'The default text size used by Mouse Control Chicken'
 ) 
 
