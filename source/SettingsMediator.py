@@ -45,16 +45,7 @@ module.setting(
     type = float,
     default = 0.50,
     desc = 'The default background transparency used by Mouse Control Chicken'
-) 
-
-default_backround_size_setting_name = 'mouse_control_chicken_default_backround_size'
-default_backround_size = 'user.' + default_backround_size_setting_name
-module.setting(
-    default_backround_size_setting_name,
-    type = int,
-    default = 1,
-    desc = 'The default background size used by Mouse Control Chicken'
-) 
+)  
 
 default_background_color_setting_name = 'mouse_control_chicken_default_background_color'
 default_background_color = 'user.' + default_background_color_setting_name
@@ -104,7 +95,6 @@ class SettingsMediator:
         self.line_color = settings.get(default_line_color)
         self.background_transparency = settings.get(default_background_transparency)
         self.background_color = settings.get(default_background_color)
-        self.backround_size = settings.get(default_backround_size)
         self.main_transparency = settings.get(default_main_transparency)
         self.current_screen_number = settings.get(default_current_screen_number)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
@@ -124,9 +114,6 @@ class SettingsMediator:
 
     def get_background_transparency(self) -> float:
         return self.background_transparency
-
-    def get_backround_size(self) -> int:
-        return self.backround_size
 
     def get_background_color(self) -> str:
         return self.background_color
@@ -158,10 +145,6 @@ class SettingsMediator:
 
     def set_background_transparency(self, transparency: float):
         self.background_transparency = transparency
-        self._handle_change()
-
-    def set_backround_size(self, size: int):
-        self.backround_size = size
         self._handle_change()
     
     def set_background_color(self, color: str):
