@@ -71,7 +71,7 @@ class TextManager:
         for text in self.elements: draw_background_rectangle_for_text(canvas, text, self.options.size)
     
     def add_text_to_canvas(self, canvas):
-        update_canvas_color(canvas, self.options.color)
+        update_canvas_color(canvas, self.options.color + compute_transparency_in_hexadecimal(settings_mediator.get_main_transparency()))
         update_canvas_text_size(canvas, self.options.size)
         for text in self.elements: draw_canvas_text(canvas, text)
 

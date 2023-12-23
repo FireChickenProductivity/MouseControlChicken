@@ -70,7 +70,7 @@ default_main_transparency = 'user.' + default_main_transparency_setting_name
 module.setting(
     default_main_transparency_setting_name,
     type = float,
-    default = 0,
+    default = 0.3,
     desc = 'The default main transparency used by Mouse Control Chicken'
 ) 
 
