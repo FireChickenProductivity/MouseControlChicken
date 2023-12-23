@@ -1,6 +1,6 @@
 from .Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui
+from talon import ui, Module
 
 class RectangleManager:
     def compute_rectangle(self) -> Rectangle: pass
@@ -23,3 +23,13 @@ class CurrentWindowRectangleManager(RectangleManager):
 
 def convert_talon_rectangle_to_rectangle(talon_rectangle):
     return Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
+
+module = Module()
+@module.action_class
+class Actions:
+    def mouse_control_chicken_use_next_screen():
+        '''Updates the mouse control chicken grid screen to the next one'''
+        screens = ui.screens()
+        screen_number = settings_mediator.get_current_screen_number() + 1
+        if screen_number >= len(screens): screen_number = 0
+        settings_mediator.set_current_screen_number(screen_number)

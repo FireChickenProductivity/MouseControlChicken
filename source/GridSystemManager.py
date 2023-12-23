@@ -1,7 +1,7 @@
 from .Grid import Grid
 from .Display import Display
 from .SettingsMediator import settings_mediator
-from .RectangleManager import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
+from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
 from .fire_chicken.mouse_position import MousePosition
@@ -51,6 +51,7 @@ class GridSystemManager:
         self.refresh()
         
 manager = GridSystemManager()
+settings_mediator.register_on_change_callback(manager.refresh)
 
 module = Module()
 @module.action_class
