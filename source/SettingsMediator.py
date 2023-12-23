@@ -16,7 +16,7 @@ default_text_color = 'user.' + default_text_color_setting_name
 module.setting(
     default_text_color_setting_name,
     type = str,
-    default = "FF0000",
+    default = "66ff00",
     desc = 'The default text color used by Mouse Control Chicken'
 ) 
 
@@ -42,8 +42,8 @@ default_background_transparency_setting_name = 'mouse_control_chicken_default_ba
 default_background_transparency = 'user.' + default_background_transparency_setting_name
 module.setting(
     default_background_transparency_setting_name,
-    type = int,
-    default = 0,
+    type = float,
+    default = 0.50,
     desc = 'The default background transparency used by Mouse Control Chicken'
 ) 
 
@@ -69,7 +69,7 @@ default_main_transparency_setting_name = 'mouse_control_chicken_default_main_tra
 default_main_transparency = 'user.' + default_main_transparency_setting_name
 module.setting(
     default_main_transparency_setting_name,
-    type = int,
+    type = float,
     default = 0,
     desc = 'The default main transparency used by Mouse Control Chicken'
 ) 
@@ -122,7 +122,7 @@ class SettingsMediator:
     def get_line_color(self) -> str:
         return self.line_color
 
-    def get_background_transparency(self) -> int:
+    def get_background_transparency(self) -> float:
         return self.background_transparency
 
     def get_backround_size(self) -> int:
@@ -131,7 +131,7 @@ class SettingsMediator:
     def get_background_color(self) -> str:
         return self.background_color
 
-    def get_main_transparency(self) -> int:
+    def get_main_transparency(self) -> float:
         return self.main_transparency
 
     def get_current_screen_number(self) -> int:
@@ -156,7 +156,7 @@ class SettingsMediator:
         self.line_color = color
         self._handle_change()
 
-    def set_background_transparency(self, transparency: int):
+    def set_background_transparency(self, transparency: float):
         self.background_transparency = transparency
         self._handle_change()
 
@@ -168,7 +168,7 @@ class SettingsMediator:
         self.background_color = color
         self._handle_change()
 
-    def set_main_transparency(self, transparency: int):
+    def set_main_transparency(self, transparency: float):
         self.main_transparency = transparency
         self._handle_change()
 
