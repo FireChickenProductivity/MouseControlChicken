@@ -133,6 +133,16 @@ class Actions:
         actions.sleep(0.5)
         actions.user.mouse_drag_end()
 
+    def mouse_control_chicken_set_rectangle_manager_to_window():
+        '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
+        rectangle_manager = CurrentWindowRectangleManager()
+        manager.set_rectangle_manager(rectangle_manager)
+
+    def mouse_control_chicken_set_rectangle_manager_to_screen():
+        '''Has mouse control chicken manage the active rectangle using the screen rectangle manager'''
+        rectangle_manager = ScreenRectangleManager()
+        manager.set_rectangle_manager(rectangle_manager)
+
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
     position = grid.compute_absolute_position_from(coordinates)
