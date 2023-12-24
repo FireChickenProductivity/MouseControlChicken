@@ -4,7 +4,7 @@ from .RectangularGridDisplays import *
 from .Grid import Grid
 from typing import List
 
-display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay]
+display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay]
 
 class DisplayOption:
     def __init__(self, display_type: type):
