@@ -1,5 +1,5 @@
 from .Display import FrameDisplay
-from .Grid import Grid, RectangularGrid, Rectangle
+from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .fire_chicken.mouse_position import MousePosition
 from .Canvas import Canvas, Text, Line, CanvasElementOptions
 from .SettingsMediator import settings_mediator
@@ -11,7 +11,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self.rectangle: Rectangle = None
     
     def set_grid(self, grid: RectangularGrid): 
-        self.grid = grid
+        self.grid = compute_primary_grid(grid)
         self.hide()
         if self.rectangle:
             self.set_rectangle(self.rectangle)
@@ -37,4 +37,5 @@ class RectangularGridFrameDisplay(FrameDisplay):
 
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
-        return isinstance(grid, RectangularGrid)
+        primary_grid = compute_primary_grid(grid)
+        return isinstance(primary_grid, RectangularGrid)

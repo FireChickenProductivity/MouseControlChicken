@@ -26,6 +26,9 @@ class Grid:
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.coordinate_system
 
+    def is_combination(self) -> bool:
+        return False
+
     def _compute_coordinates(self, grid_coordinates: str) -> List:
         if len(self.separator) == 0: 
             return grid_coordinates
@@ -121,3 +124,20 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         rectangle = self.secondary.compute_sub_rectangle_for(tail)
         return rectangle
         
+    def get_primary_grid(self) -> Grid:
+        return self.primary
+
+    def get_secondary_grid(self) -> Grid:
+        return self.secondary
+    
+    def is_combination(self) -> bool:
+        return True
+
+def compute_primary_grid(grid: Grid):
+    return compute_sub_grids(grid)[0]
+
+def compute_sub_grids(grid: Grid) -> List[Grid]:
+    if grid.is_combination():
+        return compute_sub_grids(grid.get_primary_grid()) + compute_sub_grids(grid.get_secondary_grid())
+    else:
+        return [grid]
