@@ -1,6 +1,7 @@
 from .Grid import Rectangle
 from .fire_chicken.mouse_position import MousePosition
 import math
+from typing import Tuple
 
 def compute_center_position(rectangle: Rectangle) -> MousePosition:
     horizontal = compute_average(rectangle.left, rectangle.right)
@@ -8,6 +9,14 @@ def compute_center_position(rectangle: Rectangle) -> MousePosition:
     center = MousePosition(int(horizontal), int(vertical))
     return center
 
+def compute_rectangle_corners(rectangle: Rectangle) -> Tuple[Rectangle]:
+    middle_vertical = round(compute_average(rectangle.bottom, rectangle.top))
+    middle_horizontal = round(compute_average(rectangle.left, rectangle.right))
+    upper_left: Rectangle = Rectangle(rectangle.top, middle_vertical, rectangle.left, middle_horizontal)
+    bottom_left: Rectangle = Rectangle(middle_vertical, rectangle.bottom, rectangle.left, rectangle.right)
+    upper_right: Rectangle = Rectangle(rectangle.top, middle_vertical, middle_horizontal, rectangle.right)
+    bottom_right: Rectangle = Rectangle(middle_vertical, rectangle.bottom, middle_horizontal, rectangle.right)
+    return (upper_left, bottom_left, upper_right, bottom_right)
 
 class OneDimensionalLine:
     def __init__(self, start: int, ending: int):

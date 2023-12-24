@@ -2,7 +2,7 @@ from .Display import FrameDisplay
 from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .fire_chicken.mouse_position import MousePosition
 from .Canvas import Canvas, Text, Line, CanvasElementOptions
-from .RectangleUtilities import compute_average
+from .RectangleUtilities import compute_average, compute_rectangle_corners
 from .SettingsMediator import settings_mediator
 
 class RectangularGridFrameDisplay(FrameDisplay):
@@ -59,14 +59,6 @@ class DoubleFrameDisplay(RectangularGridFrameDisplay):
 class QuadrupleFrameDisplay(DoubleFrameDisplay):
     def set_rectangle(self, rectangle: Rectangle):
         super().set_rectangle(rectangle)
-        middle_vertical = round(compute_average(rectangle.bottom, rectangle.top))
-        middle_horizontal = round(compute_average(rectangle.left, rectangle.right))
-        upper_left: Rectangle = Rectangle(rectangle.top, middle_vertical, rectangle.left, middle_horizontal)
-        bottom_left: Rectangle = Rectangle(middle_vertical, rectangle.bottom, rectangle.left, rectangle.right)
-        upper_right: Rectangle = Rectangle(rectangle.top, middle_vertical, middle_horizontal, rectangle.right)
-        bottom_right: Rectangle = Rectangle(middle_vertical, rectangle.bottom, middle_horizontal, rectangle.right)
-        self._add_middle_frame(upper_left)
-        self._add_middle_frame(bottom_left)
-        self._add_middle_frame(upper_right)
-        self._add_middle_frame(bottom_right)
-
+        coroners = compute_rectangle_corners(rectangle)
+        for corner in coroners:
+            self._add_middle_frame(corner)
