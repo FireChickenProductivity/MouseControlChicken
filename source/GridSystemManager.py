@@ -1,4 +1,4 @@
-from .Grid import Grid
+from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .Display import Display
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
@@ -28,6 +28,9 @@ class GridSystemManager:
     
     def get_grid(self) -> Grid:
         return self.grid
+
+    def get_display(self) -> Display:
+        return self.display
 
     def refresh(self):
         if self.grid and self.display:
@@ -145,14 +148,19 @@ class Actions:
     def mouse_control_chicken_narrow_grid(coordinates: str):
         '''Narrows the current mouse control chicken grid using the specified coordinates'''
         if manager_has_narrow_able_grid():
-            grid = manager.get_grid()
+            grid: RecursivelyDivisibleGrid = manager.get_grid()
+            new_rectangle: Rectangle = grid.compute_sub_rectangle_for(coordinates)
             grid.narrow_grid_using_coordinates(coordinates)
+            display = manager.get_display()
+            display.hide()
+            display.set_grid(grid)
+            display.set_rectangle(new_rectangle)
+            display.show()
 
     def mouse_control_chicken_reset_narrow_able_grid():
         '''Resets the current mouse control chicken grid'''
         if manager_has_narrow_able_grid():
-            grid = manager.get_grid()
-            grid.reset_grid()
+            manager.refresh()
     
     def mouse_control_chicken_click_current_position_on_narrow_able_grid():
         '''Clicks the current position on the current mouse control chicken grid'''
