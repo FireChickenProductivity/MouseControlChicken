@@ -36,11 +36,14 @@ class GridSystemManager:
         if self.grid and self.display:
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
-            self.display.hide()
-            self.display.set_grid(self.grid)
-            self.display.set_rectangle(rectangle)
-            self.display.show()
+            self.refresh_display(self.grid, rectangle)
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
+
+    def refresh_display(self, grid: Grid, rectangle: Rectangle):
+        self.display.hide()
+        self.display.set_grid(grid)
+        self.display.set_rectangle(rectangle)
+        self.display.show()
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
@@ -151,11 +154,7 @@ class Actions:
             grid: RecursivelyDivisibleGrid = manager.get_grid()
             new_rectangle: Rectangle = grid.compute_sub_rectangle_for(coordinates)
             grid.narrow_grid_using_coordinates(coordinates)
-            display = manager.get_display()
-            display.hide()
-            display.set_grid(grid)
-            display.set_rectangle(new_rectangle)
-            display.show()
+            manager.refresh_display(grid, new_rectangle)
 
     def mouse_control_chicken_reset_narrow_able_grid():
         '''Resets the current mouse control chicken grid'''
