@@ -5,21 +5,11 @@ from .Canvas import Canvas, Text, Line, CanvasElementOptions
 
 class UniversalPositionDisplay(PositionDisplay):
     def __init__(self):
+        super().__init__()
         self.grid: Grid = None
-        self.canvas: Canvas = None
-        self.rectangle: Rectangle = None
-    
-    def set_grid(self, grid: Grid): 
-        self.grid = grid
-        self.hide()
-        if self.rectangle:
-            self.set_rectangle(self.rectangle)
 
     def set_rectangle(self, rectangle: Rectangle):
-        self.canvas = Canvas()
-        self.canvas.setup(rectangle)
-        self.rectangle = rectangle
-        self.grid.make_around(rectangle)
+        self._perform_pre_drawing_setup_given_new_rectangle(rectangle)
         coordinate_system = self.grid.get_coordinate_system()
         for coordinates in coordinate_system.get_primary_coordinates():
             position = self.grid.compute_absolute_position_from(coordinates)
