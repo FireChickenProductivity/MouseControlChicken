@@ -5,7 +5,7 @@ from .RectangleManagement import RectangleManager, ScreenRectangleManager, Curre
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
 from .fire_chicken.mouse_position import MousePosition
-from talon import Module, actions
+from talon import Module, actions, app
 
 class GridSystemManager:
     def __init__(self):
@@ -56,6 +56,7 @@ class GridSystemManager:
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
+        print("!!!!!!!!!!!!!!!!!!!!", "show", "!!!!!!!!!!!!!!!!!!!!", self.display, self.grid)
         self.refresh()
         
 manager = GridSystemManager()
@@ -73,9 +74,11 @@ class Actions:
         manager.set_rectangle_manager(CurrentWindowRectangleManager())
     
     def mouse_control_chicken_choose_grid_from_options(name: str):
-        '''Updates the current grid to the specified grid option'''
+        '''Updates the mouse control chicken current grid to the specified grid option'''
+        print("!!!!!!!!!!!!!!!!!!!!", name, "!!!!!!!!!!!!!!!!!!!!")
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
+        print("!!!!!!!!!!!!!!!!!!!!", option, option.get_factory_name(), option.get_argument(), "!!!!!!!!!!!!!!!!!!!!")
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = DisplayOptionComputer().compute_display_options(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
@@ -232,3 +235,9 @@ def drag_from_position():
 def end_drag_at_position():
     actions.sleep(0.5)
     actions.user.mouse_drag_end()
+
+def setup_default_grid():
+    actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
+    manager.hide()
+
+app.register("ready", setup_default_grid)
