@@ -154,11 +154,13 @@ class Actions:
             new_rectangle: Rectangle = grid.compute_sub_rectangle_for(coordinates)
             grid.narrow_grid_using_coordinates(coordinates)
             manager.refresh_display(grid, new_rectangle)
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
     def mouse_control_chicken_reset_narrow_able_grid():
         '''Resets the current mouse control chicken grid'''
         if manager_has_narrow_able_grid():
             manager.refresh()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
     
     def mouse_control_chicken_click_current_position_on_narrow_able_grid():
         '''Clicks the current position on the current mouse control chicken grid'''
@@ -167,6 +169,7 @@ class Actions:
             position.go()
             actions.mouse_click()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
     def mouse_control_chicken_right_click_current_position_on_narrow_able_grid():
         '''Right clicks the current position on the current mouse control chicken grid'''
@@ -175,6 +178,7 @@ class Actions:
             position.go()
             actions.mouse_click(1)
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
     def mouse_control_chicken_drag_from_current_position_on_narrow_able_grid():
         '''Starts dragging from the current position on the current mouse control chicken grid'''
@@ -183,6 +187,7 @@ class Actions:
             position.go()
             drag_from_position()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
     
     def mouse_control_chicken_end_drag_at_current_position_on_narrow_able_grid():
         '''Ends dragging at the current position on the current mouse control chicken narrow able grid'''
@@ -191,6 +196,7 @@ class Actions:
             position.go()
             end_drag_at_position()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
     def mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid():
         '''Moves the mouse to the current position on the current mouse control chicken narrow able grid'''
@@ -198,6 +204,7 @@ class Actions:
             position = get_current_position_on_narrow_able_grid()
             position.go()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
