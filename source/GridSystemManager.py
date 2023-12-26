@@ -154,7 +154,6 @@ class Actions:
             new_rectangle: Rectangle = grid.compute_sub_rectangle_for(coordinates)
             grid.narrow_grid_using_coordinates(coordinates)
             manager.refresh_display(grid, new_rectangle)
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
     def mouse_control_chicken_reset_narrow_able_grid():
         '''Resets the current mouse control chicken grid'''

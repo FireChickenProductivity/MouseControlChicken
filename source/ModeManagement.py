@@ -29,3 +29,4 @@ class NarrowAbleGridModeActions:
         '''Disables the narrow able mouse control chicken grid mode'''
         actions.mode.disable(narrow_able_grid_mode_name)
         actions.mode.restore()
+        print('restoring')
