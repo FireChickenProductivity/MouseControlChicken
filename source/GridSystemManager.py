@@ -12,10 +12,17 @@ class GridSystemManager:
         self.grid: Grid = None
         self.display: Display = None
         self.rectangle_manager: RectangleManager = ScreenRectangleManager()
+        self.is_default_grid: bool = True
     
     def set_grid(self, grid: Grid):
         self.grid = grid
-        self.refresh()
+        if self._has_received_first_grid():
+            self.is_default_grid = False
+        else:
+            self.refresh()
+        
+    def _has_received_first_grid(self) -> bool:
+        return self.grid and self.is_default_grid
 
     def set_display(self, display: Display):
         if self.display: self.display.hide()
@@ -56,7 +63,6 @@ class GridSystemManager:
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
-        print("!!!!!!!!!!!!!!!!!!!!", "show", "!!!!!!!!!!!!!!!!!!!!", self.display, self.grid)
         self.refresh()
         
 manager = GridSystemManager()
@@ -238,6 +244,5 @@ def end_drag_at_position():
 
 def setup_default_grid():
     actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
-    manager.hide()
 
 app.register("ready", setup_default_grid)
