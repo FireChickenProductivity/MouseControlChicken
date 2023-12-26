@@ -1,6 +1,7 @@
 from .fire_chicken.mouse_position import MousePosition
 from typing import List, Generator
 from .Canvas import Line, Canvas
+from .MousePositionUtilities import compute_mouse_position_average
 
 class MousePositionLine:
     def __init__(self, start: MousePosition, ending: MousePosition):
@@ -24,9 +25,6 @@ def compute_half_mouse_position_line_around_midpoint(mouse_position_line: MouseP
     midpoint_of_bottom_half = compute_mouse_position_average(mouse_position_line.start, midpoint)
     midpoint_of_top_half = compute_mouse_position_average(midpoint, mouse_position_line.ending)
     return MousePositionLine(midpoint_of_bottom_half, midpoint_of_top_half)
-
-def compute_mouse_position_average(start: MousePosition, ending: MousePosition) -> MousePosition:
-    return 0.5*(start + ending)
 
 def draw_linear_region_on_canvas(canvas: Canvas, linear_region: LinearRegion):
     for line in linear_region.get_lines(): draw_mouse_position_line_on_canvas(canvas, line)
