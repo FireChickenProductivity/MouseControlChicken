@@ -135,8 +135,7 @@ class Actions:
     def mouse_control_chicken_end_drag_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and stops dragging'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
-        actions.sleep(0.5)
-        actions.user.mouse_drag_end()
+        end_drag_at_position()
 
     def mouse_control_chicken_set_rectangle_manager_to_window():
         '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
@@ -184,6 +183,21 @@ class Actions:
             position.go()
             drag_from_position()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
+    
+    def mouse_control_chicken_end_drag_at_current_position_on_narrow_able_grid():
+        '''Ends dragging at the current position on the current mouse control chicken narrow able grid'''
+        if manager_has_narrow_able_grid():
+            position = get_current_position_on_narrow_able_grid()
+            position.go()
+            end_drag_at_position()
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
+
+    def mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid():
+        '''Moves the mouse to the current position on the current mouse control chicken narrow able grid'''
+        if manager_has_narrow_able_grid():
+            position = get_current_position_on_narrow_able_grid()
+            position.go()
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
@@ -202,3 +216,7 @@ def manager_has_narrow_able_grid() -> bool:
 def drag_from_position():
     actions.sleep(0.5)
     actions.user.mouse_drag(0)
+
+def end_drag_at_position():
+    actions.sleep(0.5)
+    actions.user.mouse_drag_end()
