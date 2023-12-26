@@ -22,7 +22,7 @@ class GridSystemManager:
             self.refresh()
         
     def _has_received_first_grid(self) -> bool:
-        return self.grid and self.is_default_grid
+        return self.is_default_grid and self.grid
 
     def set_display(self, display: Display):
         if self.display: self.display.hide()
@@ -65,8 +65,7 @@ class GridSystemManager:
     def show(self):
         self.refresh()
         
-manager = GridSystemManager()
-settings_mediator.register_on_change_callback(manager.refresh)
+manager: GridSystemManager = None
 
 module = Module()
 @module.action_class
@@ -81,10 +80,8 @@ class Actions:
     
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
-        print("!!!!!!!!!!!!!!!!!!!!", name, "!!!!!!!!!!!!!!!!!!!!")
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
-        print("!!!!!!!!!!!!!!!!!!!!", option, option.get_factory_name(), option.get_argument(), "!!!!!!!!!!!!!!!!!!!!")
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = DisplayOptionComputer().compute_display_options(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
@@ -242,7 +239,10 @@ def end_drag_at_position():
     actions.sleep(0.5)
     actions.user.mouse_drag_end()
 
-def setup_default_grid():
+def setup():
+    global manager
+    manager = GridSystemManager()
+    settings_mediator.register_on_change_callback(manager.refresh)
     actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
 
-app.register("ready", setup_default_grid)
+app.register("ready", setup)
