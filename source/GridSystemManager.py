@@ -38,6 +38,8 @@ class GridSystemManager:
             self.grid.make_around(rectangle)
             self.refresh_display(self.grid, rectangle)
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
+        else:
+            self.hide()
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.display.hide()
