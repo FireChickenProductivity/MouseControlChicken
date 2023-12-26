@@ -43,9 +43,9 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.vertical_divider = LineDivider(self.rectangle.top, self.rectangle.bottom, self._compute_number_of_divisions())
         
     def get_regions(self) -> Generator: 
-        for horizontal in range(1, self.division_factor):
+        for horizontal in range(1, self.division_factor + 1):
             horizontal_split = self.horizontal_divider.compute_split(horizontal)
-            for vertical in range(1, self.division_factor):
+            for vertical in range(1, self.division_factor + 1):
                 vertical_split = self.vertical_divider.compute_split(vertical)
                 region = compute_region_from_left_and_top_lines(horizontal_split, vertical_split)
                 yield region
