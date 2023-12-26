@@ -206,6 +206,10 @@ class Actions:
             position.go()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        
+    def mouse_control_chicken_toggle_frame_display_crisscross():
+        '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
+        settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
