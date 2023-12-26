@@ -1,7 +1,7 @@
 from .Display import *
 from .UniversalDisplays import *
 from .RectangularGridDisplays import *
-from .NarrowDisplay import *
+from .NarrowDisplays import *
 from .Grid import Grid
 from typing import List
 

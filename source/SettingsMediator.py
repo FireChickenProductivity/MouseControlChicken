@@ -83,6 +83,15 @@ module.setting(
     desc = 'The default frame grid offset used by Mouse Control Chicken. Determines how far from the frame the text is in a frame grid display.'
 )
 
+default_frame_grid_should_show_crisscross_setting_name = 'mouse_control_chicken_default_frame_grid_should_show_crisscross'
+default_frame_grid_should_show_crisscross = 'user.' + default_frame_grid_should_show_crisscross_setting_name
+module.setting(
+    default_frame_grid_should_show_crisscross_setting_name,
+    type = bool,
+    default = False,
+    desc = 'Determines whether or not mouse control chicken frame grids should show crisscross lines by default.'
+)
+
 class SettingsMediator:
     def __init__(self):
         self.callbacks = []
@@ -98,6 +107,7 @@ class SettingsMediator:
         self.main_transparency = settings.get(default_main_transparency)
         self.current_screen_number = settings.get(default_current_screen_number)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
+        self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self._handle_change()
 
     def get_text_size(self) -> int:
@@ -126,6 +136,9 @@ class SettingsMediator:
 
     def get_frame_grid_offset(self) -> int:
         return self.frame_grid_offset
+
+    def get_frame_grid_should_show_crisscross(self) -> bool:
+        return self.frame_grid_should_show_crisscross
 
     def set_text_size(self, size: int):
         self.text_size = size
@@ -161,6 +174,10 @@ class SettingsMediator:
 
     def set_frame_grid_offset(self, offset: int):
         self.frame_grid_offset = offset
+        self._handle_change()
+
+    def set_frame_grid_should_show_crisscross(self, should_show: bool):
+        self.frame_grid_should_show_crisscross = should_show
         self._handle_change()
 
     def register_on_change_callback(self, callback):

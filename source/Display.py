@@ -1,6 +1,6 @@
 from .Grid import Grid, Rectangle
 from .Canvas import Canvas
-from typing import List
+
 DISPLAY_CLASS_NAME_POSTFIX = "Display"
 
 class Display:
@@ -47,12 +47,6 @@ class FrameDisplay(Display):
     '''Displays a grid around a rectangle showing the coordinates of the grid'''
     pass
 
-class CrisscrossDisplay(Display):
-    '''Displays a grid within a rectangle by showing positions on the grid with criss crossing horizontal and vertical lines'''
-    pass
-
 class PositionDisplay(Display):
     '''Displays a grid within a rectangle showing the positions on the grid'''
     pass
-
-
