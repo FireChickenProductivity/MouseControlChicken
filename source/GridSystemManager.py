@@ -5,6 +5,7 @@ from .RectangleManagement import RectangleManager, ScreenRectangleManager, Curre
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
 from .fire_chicken.mouse_position import MousePosition
+from .FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
 
 class GridSystemManager:
@@ -66,6 +67,7 @@ class GridSystemManager:
         self.refresh()
         
 manager: GridSystemManager = None
+current_option: str = None
 
 module = Module()
 @module.action_class
@@ -80,6 +82,8 @@ class Actions:
     
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
+        global current_option
+        current_option = name
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
@@ -105,10 +109,11 @@ class Actions:
 
     def mouse_control_chicken_show_display_options():
         '''Shows the mouse control chicken display options for the active grid'''
-        grid = manager.get_grid()
-        display_options = DisplayOptionComputer().compute_display_options(grid)
-        options_text = [option for option in display_options.get_names()]
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, "Display Options", actions.user.mouse_control_chicken_choose_display_from_options)
+        show_display_options("Display Options", actions.user.mouse_control_chicken_choose_display_from_options)
+
+    def mouse_control_chicken_show_default_display_options():
+        '''Shows options for the new default grid for the active mouse control chicken grid'''
+        show_display_options("Default Display Options", lambda display_name: mouse_control_chicken_update_option_default_display(current_option, display_name))
 
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
@@ -216,6 +221,12 @@ class Actions:
     def mouse_control_chicken_toggle_frame_display_crisscross():
         '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
         settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
+
+def show_display_options(title: str, callback):
+    grid = manager.get_grid()
+    display_options = DisplayOptionComputer().compute_display_options(grid)
+    options_text = [option for option in display_options.get_names()]
+    actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, title, callback)
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
