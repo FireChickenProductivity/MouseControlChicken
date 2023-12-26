@@ -1,7 +1,6 @@
-from .Display import FrameDisplay, CrisscrossDisplay
+from .Display import FrameDisplay
 from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
-from .fire_chicken.mouse_position import MousePosition
-from .Canvas import Canvas, Text, Line, CanvasElementOptions
+from .Canvas import Text, Line
 from .RectangleUtilities import compute_average, compute_rectangle_corners
 from .SettingsMediator import settings_mediator
 
