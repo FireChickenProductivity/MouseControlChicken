@@ -23,7 +23,7 @@ class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
         return position
 
     def narrow_grid_using_valid_coordinates(self, grid_coordinates: str) -> None:
-        self.horizontal_divider, self.vertical_divider = self.compute_sub_rectangle_for(grid_coordinates)
+        self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
         return compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))

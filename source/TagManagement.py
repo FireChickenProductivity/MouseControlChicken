@@ -1,22 +1,32 @@
 from talon import Module, Context
+from .Grid import Grid
 
 module = Module()
+
 GRID_SHOWING_TAG_NAME = 'mouse_control_chicken_showing'
 GRID_SHOWING_TAG = 'user.' + GRID_SHOWING_TAG_NAME
-module.tag(GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse controlled chicken commands for working with the active grid')
+module.tag(GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse control chicken commands for working with the active grid')
+
+NARROW_ABLE_GRID_SHOWING_TAG_NAME = 'mouse_control_chicken_narrow_able_showing'
+NARROW_ABLE_GRID_SHOWING_TAG = 'user.' + NARROW_ABLE_GRID_SHOWING_TAG_NAME
+module.tag(NARROW_ABLE_GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse control chicken commands for working with the active narrow able grid')
+
 GRID_OPTIONS_TAG_NAME = 'mouse_control_chicken_options_showing'
 GRID_OPTIONS_TAG = 'user.' + GRID_OPTIONS_TAG_NAME
 module.tag(GRID_OPTIONS_TAG_NAME, desc = 'Tag for enabling choosing between mouse control chicken grid options')
+
 grid_open_context = Context()
 options_display_context = Context()
 
 @module.action_class
 class Actions:
-    def mouse_control_chicken_enable_grid_showing_tag():
+    def mouse_control_chicken_enable_grid_showing_tags(grid: Grid):
         '''Enables commands for working with the active mouse control chicken grid'''
-        assign_tag_to_context(grid_open_context, GRID_SHOWING_TAG)
+        tags = [GRID_SHOWING_TAG]
+        if grid.supports_narrowing(): tags.append(NARROW_ABLE_GRID_SHOWING_TAG)
+        assign_tags_to_context(grid_open_context, tags)
     
-    def mouse_control_chicken_disable_grid_showing_tag():
+    def mouse_control_chicken_disable_grid_showing_tags():
         '''Disables commands for working with the active mouse control chicken grid'''
         remove_tags_from_context(grid_open_context)
 

@@ -29,6 +29,9 @@ class Grid:
     def is_combination(self) -> bool:
         return False
 
+    def supports_narrowing(self) -> bool:
+        return False
+
     def _compute_coordinates(self, grid_coordinates: str) -> List:
         if len(self.separator) == 0: 
             return grid_coordinates
@@ -68,6 +71,9 @@ class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
         options = [option for option in self.get_narrowing_options()]
         base_system = ListCoordinateSystem(options)
         self.coordinate_system = InfiniteSequenceCoordinateSystem(base_system)
+
+    def supports_narrowing(self) -> bool:
+        return True
 
 class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
