@@ -46,7 +46,6 @@ class GridSystemManager:
         self.display.show()
 
     def prepare_for_grid_switch(self):
-        if self.display: self.display.hide()
         self.set_display(None)
         self.set_grid(None)
     
