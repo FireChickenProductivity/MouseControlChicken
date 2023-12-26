@@ -14,6 +14,20 @@ class LinearRegion:
     def get_lines(self) -> Generator:
         for line in self.lines: yield line
 
+def draw_linear_region_on_canvas_with_lines_converted_to_half_lines_around_midpoint(canvas: Canvas, linear_region: LinearRegion):
+    for line in linear_region.get_lines():
+        half_line = compute_half_mouse_position_line_around_midpoint(line)
+        draw_mouse_position_line_on_canvas(canvas, half_line)
+
+def compute_half_mouse_position_line_around_midpoint(mouse_position_line: MousePositionLine)-> MousePositionLine:
+    midpoint = compute_mouse_position_average(mouse_position_line.start, mouse_position_line.ending)
+    midpoint_of_bottom_half = compute_mouse_position_average(mouse_position_line.start, midpoint)
+    midpoint_of_top_half = compute_mouse_position_average(midpoint, mouse_position_line.ending)
+    return MousePositionLine(midpoint_of_bottom_half, midpoint_of_top_half)
+
+def compute_mouse_position_average(start: MousePosition, ending: MousePosition) -> MousePosition:
+    return 0.5*(start + ending)
+
 def draw_linear_region_on_canvas(canvas: Canvas, linear_region: LinearRegion):
     for line in linear_region.get_lines(): draw_mouse_position_line_on_canvas(canvas, line)
 
