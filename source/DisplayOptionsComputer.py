@@ -1,10 +1,11 @@
 from .Display import *
 from .UniversalDisplays import *
 from .RectangularGridDisplays import *
+from .NarrowDisplay import *
 from .Grid import Grid
 from typing import List
 
-display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay]
+display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay]
 
 class DisplayOption:
     def __init__(self, display_type: type):

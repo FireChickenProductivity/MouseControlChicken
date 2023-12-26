@@ -7,21 +7,15 @@ from .SettingsMediator import settings_mediator
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
+        super().__init__()
         self.grid: RectangularGrid = None
-        self.canvas: Canvas = None
-        self.rectangle: Rectangle = None
-    
+
     def set_grid(self, grid: RectangularGrid): 
-        self.grid = compute_primary_grid(grid)
-        self.hide()
-        if self.rectangle:
-            self.set_rectangle(self.rectangle)
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
 
     def set_rectangle(self, rectangle: Rectangle):
-        self.canvas = Canvas()
-        self.canvas.setup(rectangle)
-        self.rectangle = rectangle
-        self.grid.make_around(rectangle)
+        self._perform_pre_drawing_setup_given_new_rectangle(rectangle)
         frame_offset = settings_mediator.get_frame_grid_offset()
         self._add_horizontal_coordinates_to_frame(self.rectangle.top + frame_offset)
         self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset)
