@@ -2,6 +2,15 @@ from talon import Module, settings, app
 
 module = Module()
 
+default_grid_option_setting_name = 'mouse_control_chicken_default_grid_option'
+default_grid_option = 'user.' + default_grid_option_setting_name
+module.setting(
+    default_grid_option_setting_name,
+    type = str,
+    default = "double alphabet numbers",
+    desc = 'The default grid option used by Mouse Control Chicken',
+)
+
 default_text_size_setting_name = 'mouse_control_chicken_default_text_size'
 default_text_size = 'user.' + default_text_size_setting_name
 module.setting(
@@ -98,6 +107,7 @@ class SettingsMediator:
         self.restore_default_settings()
     
     def restore_default_settings(self):
+        self.default_grid_option = settings.get(default_grid_option)
         self.text_size = settings.get(default_text_size)
         self.text_color = settings.get(default_text_color)
         self.line_width = settings.get(default_line_width)
@@ -109,6 +119,9 @@ class SettingsMediator:
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self._handle_change()
+
+    def get_default_grid_option(self) -> str:
+        return self.default_grid_option
 
     def get_text_size(self) -> int:
         return self.text_size
@@ -190,5 +203,5 @@ settings_mediator = SettingsMediator()
 def load_default_settings():
     global settings_mediator
     settings_mediator.restore_default_settings()
-    print(settings_mediator.background_color)
+
 app.register('ready', load_default_settings)

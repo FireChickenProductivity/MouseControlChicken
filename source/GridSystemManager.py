@@ -5,17 +5,24 @@ from .RectangleManagement import RectangleManager, ScreenRectangleManager, Curre
 from .GridOptions import GridOptions
 from .DisplayOptionsComputer import DisplayOptionComputer
 from .fire_chicken.mouse_position import MousePosition
-from talon import Module, actions
+from talon import Module, actions, app
 
 class GridSystemManager:
     def __init__(self):
         self.grid: Grid = None
         self.display: Display = None
         self.rectangle_manager: RectangleManager = ScreenRectangleManager()
+        self.is_default_grid: bool = True
     
     def set_grid(self, grid: Grid):
         self.grid = grid
-        self.refresh()
+        if self._has_received_first_grid():
+            self.is_default_grid = False
+        else:
+            self.refresh()
+        
+    def _has_received_first_grid(self) -> bool:
+        return self.is_default_grid and self.grid
 
     def set_display(self, display: Display):
         if self.display: self.display.hide()
@@ -58,8 +65,7 @@ class GridSystemManager:
     def show(self):
         self.refresh()
         
-manager = GridSystemManager()
-settings_mediator.register_on_change_callback(manager.refresh)
+manager: GridSystemManager = None
 
 module = Module()
 @module.action_class
@@ -73,7 +79,7 @@ class Actions:
         manager.set_rectangle_manager(CurrentWindowRectangleManager())
     
     def mouse_control_chicken_choose_grid_from_options(name: str):
-        '''Updates the current grid to the specified grid option'''
+        '''Updates the mouse control chicken current grid to the specified grid option'''
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
@@ -232,3 +238,11 @@ def drag_from_position():
 def end_drag_at_position():
     actions.sleep(0.5)
     actions.user.mouse_drag_end()
+
+def setup():
+    global manager
+    manager = GridSystemManager()
+    settings_mediator.register_on_change_callback(manager.refresh)
+    actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
+
+app.register("ready", setup)
