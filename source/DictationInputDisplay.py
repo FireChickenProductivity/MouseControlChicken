@@ -17,6 +17,7 @@ module = Module()
 class Actions:
     def mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_and_cancellation_callback(new_title: str, new_acceptance_callback: Callable[[str], None], new_cancellation_callback: Callable[[], None], tag: str = ""):
         '''Shows dictation input for mouse control chicken'''
+        erase_dictation_input_data()
         actions.user.mouse_control_chicken_hide_dictation_input_display()
         global title
         title = new_title
@@ -25,10 +26,12 @@ class Actions:
         global cancellation_callback
         cancellation_callback = new_cancellation_callback
         actions.user.mouse_control_chicken_enable_dictation_input_display_tag()
+        gui.show()
 
     def mouse_control_chicken_hide_dictation_input_display():
         '''Hides the dictation input display for mouse control chicken'''
         actions.user.mouse_control_chicken_disable_dictation_input_display_tag()
+        gui.hide()
 
     def mouse_control_chicken_accept_dictation_input():
         '''Accepts the current dictation input for mouse control chicken'''
