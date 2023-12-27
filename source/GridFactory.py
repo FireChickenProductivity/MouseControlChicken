@@ -14,6 +14,8 @@ RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
 DOUBLE_ALPHABET = ALPHABET + ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ]
 
+class OptionsNotSupportedException(Exception): pass
+
 class FactoryArgumentType:
     def __init__(self, type: type, tag: str):
         self.type = type
@@ -28,6 +30,12 @@ class FactoryArgumentType:
     def get_tag(self) -> str:
         return self.tag
 
+    def supports_options_display(self) -> bool:
+        return False
+
+    def get_options(self) -> List[str]:
+        raise OptionsNotSupportedException()
+
 class TwoToNineArgumentType(FactoryArgumentType):
     def __init__(self):
         super().__init__(int, GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG)
@@ -40,8 +48,15 @@ class GridOptionArgumentType(FactoryArgumentType):
         super().__init__(str, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG)
 
     def _argument_has_valid_value(self, argument):
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: self.get_options()
         return options.has_option(argument)
+
+    def supports_options_display(self) -> bool:
+        return True
+
+    def get_options(self) -> List[str]:
+        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        return options.get_option_names()
 
 class GridFactory:
     def create_grid(self, argument: str) -> Grid:
