@@ -1,4 +1,5 @@
 from .GridOptions import GridOption
+from .FileUtilities import write_grid_option_to_file
 from talon import Module, actions
 
 class CurrentGrid:
@@ -44,6 +45,7 @@ class Actions:
         """Starts creating a new mouse control chicken grid"""
         global current_grid
         current_grid = CurrentGrid()
+        actions.user.mouse_control_chicken_enable_grid_creation_tag()
 
     def mouse_control_chicken_set_current_grid_name(name: str):
         """Sets the name of the current mouse control chicken grid under construction"""
@@ -65,3 +67,15 @@ class Actions:
         global current_grid
         current_grid.set_default_display_name(default_display_name)
     
+    def mouse_control_chicken_finish_creating_new_grid():
+        """Finishes creating a new mouse control chicken grid"""
+        actions.user.mouse_control_chicken_disable_grid_creation_tag()
+        global current_grid
+        write_grid_option_to_file(current_grid.compute_grid_option())
+        current_grid = None
+
+    def mouse_control_chicken_cancel_grid_creation():
+        """Cancels the creation of a new mouse control chicken grid"""
+        actions.user.mouse_control_chicken_disable_grid_creation_tag()
+        global current_grid
+        current_grid = None
