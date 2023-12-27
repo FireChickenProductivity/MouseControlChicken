@@ -17,7 +17,6 @@ GRID_OPTIONS_PATH = None
 options: GridOptions = None
 def update_options(name, flags):
     global options
-    if name != GRID_OPTIONS_PATH: return 
     options = mouse_control_chicken_read_grid_options()
     option_list = {option:option for option in options.get_option_names()}
     context.lists[LIST_NAME_WITH_PREFIX] = option_list
