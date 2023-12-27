@@ -26,6 +26,9 @@ class GridFactory:
     def get_arguments_description(self) -> str:
         return ""
 
+    def get_argument_types(self) -> List:
+        return []
+
 class SquareRecursiveDivisionGridFactory:
     def create_grid(self, argument: str) -> Grid:
         argument = int(argument)
