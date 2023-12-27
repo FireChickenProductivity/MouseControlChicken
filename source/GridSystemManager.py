@@ -17,12 +17,11 @@ class GridSystemManager:
     
     def set_grid(self, grid: Grid):
         self.grid = grid
-        if self._has_received_first_grid():
+        if self.has_received_first_grid():
             self.is_default_grid = False
-        else:
-            self.refresh()
+        self.refresh()
         
-    def _has_received_first_grid(self) -> bool:
+    def has_received_first_grid(self) -> bool:
         return self.is_default_grid and self.grid
 
     def set_display(self, display: Display):
@@ -64,6 +63,8 @@ class GridSystemManager:
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
+        if not self.grid and self.is_default_grid:
+            actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
         self.refresh()
         
 manager: GridSystemManager = None
@@ -255,6 +256,5 @@ def setup():
     global manager
     manager = GridSystemManager()
     settings_mediator.register_on_change_callback(manager.refresh)
-    actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
 
 app.register("ready", setup)
