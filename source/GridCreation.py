@@ -1,5 +1,5 @@
 from .GridOptions import GridOption
-from .FileUtilities import write_grid_option_to_file
+from .FileUtilities import mouse_control_chicken_write_grid_option
 from talon import Module, actions
 
 class CurrentGrid:
@@ -71,7 +71,7 @@ class Actions:
         """Finishes creating a new mouse control chicken grid"""
         actions.user.mouse_control_chicken_disable_grid_creation_tag()
         global current_grid
-        write_grid_option_to_file(current_grid.compute_grid_option())
+        mouse_control_chicken_write_grid_option(current_grid.compute_grid_option())
         current_grid = None
 
     def mouse_control_chicken_cancel_grid_creation():
