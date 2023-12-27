@@ -56,7 +56,7 @@ class GridFactory:
     def get_arguments_description(self) -> str:
         return ""
 
-    def get_argument_types(self) -> List:
+    def get_argument_types(self) -> List[FactoryArgumentType]:
         return []
 
 class SquareRecursiveDivisionGridFactory:
@@ -69,6 +69,9 @@ class SquareRecursiveDivisionGridFactory:
     
     def get_arguments_description(self) -> str:
         return "A single integer. That integer squared gives the number of times to divide the rectangle."
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [TwoToNineArgumentType()]
 
 
 class AlphabetGridFactory:
@@ -98,6 +101,9 @@ class RecursivelyDivisibleGridCombinationGridFactory:
     
     def get_arguments_description(self) -> str:
         return "(grid option one) (grid option two)"
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [GridOptionArgumentType(), GridOptionArgumentType()]
 
 options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
 
