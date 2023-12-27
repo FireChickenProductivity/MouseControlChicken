@@ -19,9 +19,18 @@ GRID_CREATION_TAG_NAME = 'mouse_control_chicken_grid_creation'
 GRID_CREATION_TAG = 'user.' + GRID_CREATION_TAG_NAME
 module.tag(GRID_CREATION_TAG_NAME, desc = 'Tag for enabling mouse control chicken grid creation commands')
 
+GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_two_to_nine'
+GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG = 'user.' + GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME
+module.tag(GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME, desc = 'Tag for setting the current argument type to two to nine for mouse control chicken grid creation')
+
+GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_grid_option'
+GRID_CREATION_ARGUMENT_GRID_OPTION_TAG = 'user.' + GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME
+module.tag(GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME, desc = 'Tag for setting the current argument type to grid option for mouse control chicken grid creation')
+
 grid_open_context = Context()
 options_display_context = Context()
 grid_creation_context = Context()
+grid_creation_argument_type_context = Context()
 
 @module.action_class
 class Actions:
@@ -52,6 +61,14 @@ class Actions:
     def mouse_control_chicken_disable_grid_creation_tag():
         '''Disables the mouse control chicken grid creation tag'''
         remove_tags_from_context(grid_creation_context)
+
+    def mouse_control_chicken_enable_grid_creation_argument_type_tag(tag: str):
+        '''Enables the specified mouse control chicken grid creation argument type tag'''
+        assign_tag_to_context(grid_creation_argument_type_context, tag)
+    
+    def mouse_control_chicken_disable_grid_creation_argument_type_tag():
+        '''Disables the mouse control chicken grid creation argument type tag'''
+        remove_tags_from_context(grid_creation_argument_type_context)
     
 def assign_tag_to_context(context, tag):
     context.tags = [tag]

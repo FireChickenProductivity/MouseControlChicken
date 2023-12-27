@@ -33,3 +33,6 @@ class GridOptions:
     
     def _set_options(self, options: List[GridOption]):
         self.options = {option.get_name():option for option in options}
+    
+    def has_option(self, name: str) -> bool:
+        return name in self.get_option_names()
