@@ -2,6 +2,7 @@ from .Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
 from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
 from .RectangularGrid import ListBasedGrid
+from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG
 from typing import List
 from talon import Module, actions
 
@@ -29,14 +30,14 @@ class FactoryArgumentType:
 
 class TwoToNineArgumentType(FactoryArgumentType):
     def __init__(self):
-        super().__init__(int, "")
+        super().__init__(int, GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG)
     
     def _argument_has_valid_value(self, argument):
         return argument >= 2 and argument <= 9
     
 class GridOptionArgumentType(FactoryArgumentType):
     def __init__(self):
-        super().__init__(str, "")
+        super().__init__(str, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG)
 
     def _argument_has_valid_value(self, argument):
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
