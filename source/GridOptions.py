@@ -23,10 +23,13 @@ class GridOption:
 
 class GridOptions:
     def __init__(self, options: List[GridOption]):
-        self.options = {option.get_name():option for option in options}
+        self._set_options(options)
     
     def get_option(self, name: str) -> GridOption:
         return self.options[name]
 
     def get_option_names(self) -> List[str]:
         return self.options.keys()
+    
+    def _set_options(self, options: List[GridOption]):
+        self.options = {option.get_name():option for option in options}
