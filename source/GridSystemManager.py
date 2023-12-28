@@ -3,7 +3,7 @@ from .Display import Display
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .DisplayOptionsComputer import DisplayOptionComputer
+from .DisplayOptionsComputer import compute_display_options_given_grid, create_display_given_name_and_grid
 from .fire_chicken.mouse_position import MousePosition
 from .FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
@@ -89,7 +89,7 @@ class Actions:
         option = options.get_option(name)
         print(option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument())
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
-        display_options = DisplayOptionComputer().compute_display_options(grid)
+        display_options = compute_display_options_given_grid(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
         global manager
         manager.prepare_for_grid_switch()
@@ -99,7 +99,7 @@ class Actions:
     def mouse_control_chicken_choose_display_from_options(name: str):
         '''Changes the active mouse control chicken grid display based on the name of the option'''
         global manager
-        display_options = DisplayOptionComputer().compute_display_options(manager.get_grid())
+        display_options = compute_display_options_given_grid(manager.get_grid())
         display = display_options.create_display_from_option(name)
         manager.set_display(display)
 
@@ -226,7 +226,7 @@ class Actions:
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
-    display_options = DisplayOptionComputer().compute_display_options(grid)
+    display_options = compute_display_options_given_grid(grid)
     options_text = [option for option in display_options.get_names()]
     actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, title, callback)
 

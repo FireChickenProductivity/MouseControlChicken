@@ -38,3 +38,10 @@ class DisplayOptionComputer:
     def compute_display_options(self, grid: Grid) -> DisplayOptions:
         options = DisplayOptions([DisplayOption(display_type) for display_type in display_types if display_type.supports_grid(grid)])
         return options
+
+def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
+    return DisplayOptionComputer().compute_display_options(grid)
+
+def create_display_given_name_and_grid(name: str, grid: Grid) -> Display:
+    options = compute_display_options_given_grid(grid)
+    return options.create_display_from_option(name)

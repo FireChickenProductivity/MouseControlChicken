@@ -14,6 +14,8 @@ RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
 DOUBLE_ALPHABET = ALPHABET + ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ]
 
+GRID_ARGUMENT_SEPARATOR = ":"
+
 class OptionsNotSupportedException(Exception): pass
 
 class FactoryArgumentType:
@@ -105,7 +107,7 @@ class DoubleAlphabetGridFactory:
 
 class RecursivelyDivisibleGridCombinationGridFactory:
     def create_grid(self, argument: str) -> Grid:
-        options = argument.split(":")
+        options = argument.split(GRID_ARGUMENT_SEPARATOR)
         primary = create_grid_from_options(options[0]) 
         secondary = create_grid_from_options(options[1])
         combination = RecursivelyDivisibleGridCombination(primary, secondary)
@@ -131,6 +133,9 @@ class GridFactoryOptions:
 
     def create_grid(self, factory_name: str, arguments: str) -> Grid:
         return self.options[factory_name].create_grid(arguments)
+    
+    def get_factory(self, factory_name: str) -> GridFactory:
+        return self.options[factory_name]
 
 grid_factory_options = GridFactoryOptions(options)
 
@@ -139,7 +144,8 @@ module = Module()
 class Actions:
     def mouse_control_chicken_get_grid_factory_options() -> List[str]:
         '''Returns the mouse control chicken grid options'''
-        return grid_factory_options.get_option_names()
+        names = [name for name in grid_factory_options.get_option_names()]
+        return names
     
     def mouse_control_chicken_create_grid_from_factory(factory: str, argument: str) -> Grid:
         '''Creates the specified mouse control chicken grid using the specified factory'''
@@ -148,6 +154,10 @@ class Actions:
     def mouse_control_chicken_create_grid_from_options(name: str) -> Grid:
         '''Creates the specified mouse control chicken grid using the specified option name'''
         return create_grid_from_options(name)
+
+    def mouse_control_chicken_get_grid_factory(name: str) -> GridFactory:
+        '''Returns the mouse control chicken grid factory with the specified name'''
+        return grid_factory_options.get_factory(name)
 
 
 def create_grid_from_options(name: str) -> Grid:
