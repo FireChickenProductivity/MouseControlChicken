@@ -65,3 +65,8 @@ def erase_dictation_input_data():
     acceptance_callback = None
     global cancellation_callback
     cancellation_callback = None
+
+@module.capture(rule = "<user.text>")
+def mouse_control_chicken_dictation_input(m) -> str:
+    '''Dictation input given to a mouse control chicken dialogue'''
+    return m.text
