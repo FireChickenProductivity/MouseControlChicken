@@ -46,6 +46,11 @@ class Actions:
         global current_grid
         current_grid = CurrentGrid()
         actions.user.mouse_control_chicken_enable_grid_creation_tag()
+        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_and_cancellation_callback(
+            "Choose Grid Name: say choose <grid name>",
+            actions.user.mouse_control_chicken_set_current_grid_name,
+            actions.user.mouse_control_chicken_cancel_grid_creation
+        )
 
     def mouse_control_chicken_set_current_grid_name(name: str):
         """Sets the name of the current mouse control chicken grid under construction"""
@@ -79,3 +84,4 @@ class Actions:
         actions.user.mouse_control_chicken_disable_grid_creation_tag()
         global current_grid
         current_grid = None
+        print('cancelled')

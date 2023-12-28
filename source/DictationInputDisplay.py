@@ -10,6 +10,10 @@ cancellation_callback: Callable[[], None] = None
 def gui(gui: imgui.GUI):
     if title: gui.text(title)
     gui.line()
+    gui.text("choose <text>: chooses the dictated text")
+    gui.text("accept: accepts the current text input")
+    gui.text("cancel or reject: cancels the current text input")
+    gui.line()
     if dictation_input: gui.text(dictation_input)
 
 module = Module()
