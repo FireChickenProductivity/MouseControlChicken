@@ -27,7 +27,7 @@ class Actions:
             new_cancellation_callback: Callable[[], None]
         ):
         '''Shows dictation input for mouse control chicken'''
-        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_cancellation_callback_and_tag_name(
+        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_cancellation_callback_and_tag_names(
             new_title, 
             new_acceptance_callback, 
             new_cancellation_callback, 

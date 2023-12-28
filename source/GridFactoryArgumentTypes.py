@@ -50,7 +50,7 @@ class GridOptionArgumentType(FactoryArgumentType):
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         return options.get_option_names()
 
-CAPTURE_NAME = "mouse_control_chicken_grid_factory_argument"
+CAPTURE_NAME = "user.mouse_control_chicken_grid_factory_argument"
 module = Module()
 @module.capture(rule = "placeholder")
 def mouse_control_chicken_grid_factory_argument(m) -> str:
