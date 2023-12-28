@@ -2,7 +2,7 @@ from .Grid import Grid
 from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
-from .DisplayOptionsComputer import compute_display_options_names_given_grid, create_display_given_name_and_grid, DisplayOptions
+from .DisplayOptionsComputer import compute_display_options_names_given_grid
 from .FileUtilities import mouse_control_chicken_write_grid_option
 from talon import Module, actions
 
@@ -135,6 +135,7 @@ class Actions:
         """Shows the dialogue for selecting the default display name for the current grid"""
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_default_display_name(choice)
+            actions.user.mouse_control_chicken_hide_options_display()
             actions.user.mouse_control_chicken_finish_creating_new_grid()
         actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(
             compute_display_options_names_given_grid(current_grid.compute_grid()),
