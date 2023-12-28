@@ -1,6 +1,7 @@
 from .Grid import Grid
 from .GridOptions import GridOption
-from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR, FactoryArgumentType
+from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
+from .GridFactoryArgumentTypes import FactoryArgumentType
 from .DisplayOptionsComputer import compute_display_options_names_given_grid, create_display_given_name_and_grid, DisplayOptions
 from .FileUtilities import mouse_control_chicken_write_grid_option
 from talon import Module, actions
