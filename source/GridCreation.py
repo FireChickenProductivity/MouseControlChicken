@@ -1,6 +1,7 @@
+from .Grid import Grid
 from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR, FactoryArgumentType
-from .DisplayOptionsComputer import compute_display_options_given_grid, create_display_given_name_and_grid, DisplayOptions
+from .DisplayOptionsComputer import compute_display_options_names_given_grid, create_display_given_name_and_grid, DisplayOptions
 from .FileUtilities import mouse_control_chicken_write_grid_option
 from talon import Module, actions
 
@@ -37,6 +38,9 @@ class CurrentGrid:
     
     def compute_grid_option(self) -> GridOption:
         return GridOption(self.name, self.factory_name, self.default_display_name, self.arguments)
+
+    def compute_grid(self) -> Grid:
+        return actions.user.mouse_control_chicken_create_grid_from_factory(self.factory_name, self.arguments)
 
 class ArgumentBuilder:
     def __init__(self, factory: GridFactory):
@@ -127,14 +131,9 @@ class Actions:
             actions.user.mouse_control_chicken_set_current_grid_default_display_name(choice)
             actions.user.mouse_control_chicken_finish_creating_new_grid()
         actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(
-            compute_display_options_given_grid(current_grid.compute_grid_option()),
+            compute_display_options_names_given_grid(current_grid.compute_grid()),
             "Choose Default Display: say choose <display number>",
             handle_choice
-        )
-        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_and_cancellation_callback(
-            "Choose Default Display: say choose <display number>",
-            handle_choice,
-            actions.user.mouse_control_chicken_cancel_grid_creation
         )
 
     def mouse_control_chicken_set_current_grid_name(name: str):

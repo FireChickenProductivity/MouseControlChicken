@@ -3,7 +3,7 @@ from .Display import Display
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .DisplayOptionsComputer import compute_display_options_given_grid, create_display_given_name_and_grid
+from .DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
@@ -226,8 +226,7 @@ class Actions:
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
-    display_options = compute_display_options_given_grid(grid)
-    options_text = [option for option in display_options.get_names()]
+    options_text = compute_display_options_names_given_grid(grid)
     actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, title, callback)
 
 def get_position_on_grid(coordinates: str) -> MousePosition:

@@ -76,7 +76,7 @@ class GridFactory:
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return []
 
-class SquareRecursiveDivisionGridFactory:
+class SquareRecursiveDivisionGridFactory(GridFactory):
     def create_grid(self, argument: str) -> Grid:
         argument = int(argument)
         return SquareRecursiveDivisionGrid(argument)
@@ -91,7 +91,7 @@ class SquareRecursiveDivisionGridFactory:
         return [TwoToNineArgumentType()]
 
 
-class AlphabetGridFactory:
+class AlphabetGridFactory(GridFactory):
     def create_grid(self, argument: str) -> Grid:
         return ListBasedGrid(ALPHABET, ALPHABET)
 

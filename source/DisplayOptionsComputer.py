@@ -42,6 +42,11 @@ class DisplayOptionComputer:
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     return DisplayOptionComputer().compute_display_options(grid)
 
+def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
+    display_options = compute_display_options_given_grid(grid)
+    options_text = [option for option in display_options.get_names()]
+    return options_text
+
 def create_display_given_name_and_grid(name: str, grid: Grid) -> Display:
     options = compute_display_options_given_grid(grid)
     return options.create_display_from_option(name)
