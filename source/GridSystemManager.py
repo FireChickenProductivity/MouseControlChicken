@@ -87,7 +87,6 @@ class Actions:
         current_option = name
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
-        print(option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument())
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = compute_display_options_given_grid(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
