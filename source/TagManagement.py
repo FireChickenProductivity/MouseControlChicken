@@ -1,4 +1,5 @@
 from talon import Module, Context
+from typing import List
 from .Grid import Grid
 
 module = Module()
@@ -30,6 +31,10 @@ module.tag(GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME, desc = 'Tag for setting 
 DICTATION_INPUT_TAG_NAME = 'mouse_control_chicken_dictation_input_showing'
 DICTATION_INPUT_TAG = 'user.' + DICTATION_INPUT_TAG_NAME
 module.tag(DICTATION_INPUT_TAG_NAME, desc = 'Tag for enabling dictation input for mouse control chicken')
+
+ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME = 'mouse_control_chicken_argument_input_through_dictation_input'
+ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG = 'user.' + ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME
+module.tag(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME, desc = 'Tag for enabling argument input through dictation input for mouse control chicken')
 
 grid_open_context = Context()
 options_display_context = Context()
@@ -74,9 +79,11 @@ class Actions:
         '''Disables the mouse control chicken grid creation argument type tag'''
         remove_tags_from_context(grid_creation_argument_type_context)
 
-    def mouse_control_chicken_enable_dictation_input_display_tag():
-        '''Enables the mouse control chicken dictation input display tag'''
-        assign_tag_to_context(grid_creation_argument_type_context, DICTATION_INPUT_TAG)
+    def mouse_control_chicken_enable_dictation_input_display_tag(secondary_tags: List[str] = []):
+        '''Enables the mouse control chicken dictation input display tag and secondary tag'''
+        tags = [DICTATION_INPUT_TAG]
+        if secondary_tags: tags.extend(secondary_tags)
+        assign_tags_to_context(grid_creation_argument_type_context, tags)
     
     def mouse_control_chicken_disable_dictation_input_display_tag():
         '''Disables the mouse control chicken dictation input display tag'''

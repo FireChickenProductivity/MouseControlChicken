@@ -79,7 +79,12 @@ class ArgumentBuilder:
             self.argument_index += 1
             self.arguments.append(str(argument))
             self.obtain_next_argument_from_user()
-        
+        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_cancellation_callback_and_tag_names(
+            f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument>",
+            handle_argument,
+            actions.user.mouse_control_chicken_cancel_grid_creation,
+            [argument_type.get_tag()]
+        )
 
     def handle_having_obtained_all_arguments(self):
         argument: str = GRID_ARGUMENT_SEPARATOR.join(self.arguments)
