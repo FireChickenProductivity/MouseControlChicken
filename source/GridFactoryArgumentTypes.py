@@ -1,4 +1,4 @@
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME
+from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG
 from .DictationInputDisplay import DICTATION_INPUT_CAPTURE
 from .ContextUtilities import create_context_matches_single_tag_string
 from .GridOptions import GridOptions
@@ -21,6 +21,9 @@ class FactoryArgumentType:
 
     def get_tag(self) -> str:
         return self.tag
+
+    def get_tags(self) -> List[str]:
+        return [self.get_tag(), ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG]
 
     def supports_options_display(self) -> bool:
         return False
@@ -57,7 +60,7 @@ def mouse_control_chicken_grid_factory_argument(m) -> str:
     return ""
 
 context = Context()
-context.matches = create_context_matches_single_tag_string(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME)
+context.matches = create_context_matches_single_tag_string(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG)
 @context.capture(DICTATION_INPUT_CAPTURE, rule = f"<user.mouse_control_chicken_grid_factory_argument>")
 def mouse_control_chicken_dictation_input(m) -> str:
     return m.mouse_control_chicken_grid_factory_argument

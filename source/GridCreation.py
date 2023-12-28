@@ -83,7 +83,7 @@ class ArgumentBuilder:
             f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument>",
             handle_argument,
             actions.user.mouse_control_chicken_cancel_grid_creation,
-            [argument_type.get_tag()]
+            argument_type.get_tags()
         )
 
     def handle_having_obtained_all_arguments(self):
