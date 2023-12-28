@@ -6,6 +6,8 @@ dictation_input = None
 acceptance_callback: Callable[[str], None] = None
 cancellation_callback: Callable[[], None] = None
 
+DICTATION_INPUT_CAPTURE = "mouse_control_chicken_dictation_input"
+
 @imgui.open(y = 0)
 def gui(gui: imgui.GUI):
     if title: gui.text(title)

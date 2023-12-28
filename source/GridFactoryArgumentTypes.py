@@ -1,4 +1,6 @@
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG
+from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME
+from .DictationInputDisplay import DICTATION_INPUT_CAPTURE
+from .ContextUtilities import create_context_matches_single_tag_string
 from .GridOptions import GridOptions
 from talon import actions, Context, Module
 from typing import List
@@ -54,3 +56,8 @@ module = Module()
 def mouse_control_chicken_grid_factory_argument(m) -> str:
     return ""
 
+context = Context()
+context.matches = create_context_matches_single_tag_string(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME)
+@context.capture(DICTATION_INPUT_CAPTURE, rule = f"<user.mouse_control_chicken_grid_factory_argument>")
+def mouse_control_chicken_dictation_input(m) -> str:
+    return m.mouse_control_chicken_grid_factory_argument
