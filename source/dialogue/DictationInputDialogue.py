@@ -106,7 +106,7 @@ class Actions:
         options_information = OptionsDialogueInformation("Options:", options)
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
             new_title, 
-            new_acceptance_callback, 
+            lambda number_text: new_acceptance_callback(options_information.get_item_on_page_from_number(int(number_text))), 
             new_cancellation_callback, 
             tag_names
         )
