@@ -1,3 +1,4 @@
+from .OptionsDialogue import OptionsDialogueInformation
 from talon import Module, actions, imgui
 from typing import Callable, List
 
@@ -5,18 +6,27 @@ title = None
 dictation_input = None
 acceptance_callback: Callable[[str], None] = None
 cancellation_callback: Callable[[], None] = None
+options_information: OptionsDialogueInformation = None
 
 DICTATION_INPUT_CAPTURE = "user.mouse_control_chicken_dictation_input"
 
 @imgui.open(y = 0)
 def gui(gui: imgui.GUI):
     if title: gui.text(title)
+    show_commands_on(gui)
+    if dictation_input: gui.text(dictation_input)
+    if options_information: show_options_information_on(gui)
+
+def show_commands_on(gui: imgui.GUI):
     gui.line()
     gui.text("choose <text>: chooses the dictated text")
     gui.text("accept: accepts the current text input")
     gui.text("cancel or reject: cancels the current text input")
     gui.line()
-    if dictation_input: gui.text(dictation_input)
+
+def show_options_information_on(gui: imgui.GUI):
+    gui.line()
+    options_information.show_on(gui)
 
 module = Module()
 @module.action_class
@@ -76,6 +86,31 @@ class Actions:
         global dictation_input
         dictation_input = text
     
+    def mouse_control_chicken_advance_dictation_input_dialogue_page():
+        '''Advances the page of the mouse control chicken dictation input dialogue'''
+        if options_information: options_information.advance_page()
+    
+    def mouse_control_chicken_return_to_previous_dictation_input_dialogue_page():
+        '''Returns to the previous page of the mouse control chicken dictation input dialogue'''
+        if options_information: options_information.go_to_previous_page()
+    
+    def mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_tag_names_and_options(
+            new_title: str, 
+            new_acceptance_callback: Callable[[str], None], 
+            new_cancellation_callback: Callable[[], None], 
+            tag_names: List[str], 
+            options: List[str]
+        ):
+        '''Shows the dictation input dialogue for mouse control chicken with the specified options'''
+        global options_information
+        options_information = OptionsDialogueInformation("Options:", options)
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
+            new_title, 
+            new_acceptance_callback, 
+            new_cancellation_callback, 
+            tag_names
+        )
+
 def erase_dictation_input_data():
     global dictation_input
     dictation_input = None
@@ -85,6 +120,11 @@ def erase_dictation_input_data():
     acceptance_callback = None
     global cancellation_callback
     cancellation_callback = None
+    erase_options_information()
+
+def erase_options_information():
+    global options_information
+    options_information = None
 
 @module.capture(rule = "<user.text>")
 def mouse_control_chicken_dictation_input(m) -> str:
