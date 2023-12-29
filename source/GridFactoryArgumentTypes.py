@@ -1,5 +1,5 @@
 from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG
-from .DictationInputDialogue import DICTATION_INPUT_CAPTURE
+from .dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
 from .ContextUtilities import create_context_matches_single_tag_string
 from .GridOptions import GridOptions
 from talon import actions, Context, Module

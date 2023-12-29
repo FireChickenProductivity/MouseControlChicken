@@ -14,7 +14,7 @@ def mouse_control_chicken_grid_factory_argument(m) -> str:
     elif number_text == "three":
         return "3"
     elif number_text == "four":
-        return ""
+        return "4"
     elif number_text == "five":
         return "5"
     elif number_text == "six":
