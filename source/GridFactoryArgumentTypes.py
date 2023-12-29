@@ -8,14 +8,24 @@ from typing import List
 
 class OptionsNotSupportedException(Exception): pass
 
+class InvalidFactoryArgumentException(Exception): pass
+
 class FactoryArgumentType:
     def __init__(self, type: type, tag: str):
         self.type = type
         self.tag = tag
     
     def does_argument_match_type(self, argument):
-        return isinstance(argument, self.type) and self._argument_has_valid_value(argument)
+        try:
+            converted_value = self.convert_argument(argument)
+        except:
+            return False
+        print('checking the value')
+        return self._argument_has_valid_value(converted_value)
     
+    def convert_argument(self, argument):
+        return self.type(argument)
+
     def _argument_has_valid_value(self, argument):
         pass
 
@@ -36,6 +46,7 @@ class TwoToNineArgumentType(FactoryArgumentType):
         super().__init__(int, GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG)
     
     def _argument_has_valid_value(self, argument):
+        print(type(argument), argument)
         return argument >= 2 and argument <= 9
     
 class GridOptionArgumentType(FactoryArgumentType):
@@ -43,7 +54,7 @@ class GridOptionArgumentType(FactoryArgumentType):
         super().__init__(str, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG)
 
     def _argument_has_valid_value(self, argument):
-        options: self.get_options()
+        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         return options.has_option(argument)
 
     def supports_options_display(self) -> bool:

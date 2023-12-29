@@ -2,7 +2,7 @@ from .Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
 from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
 from .RectangularGrid import ListBasedGrid
-from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType
+from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions
 
@@ -18,6 +18,37 @@ GRID_ARGUMENT_SEPARATOR = ":"
 
 class GridFactory:
     def create_grid(self, argument: str) -> Grid:
+        components = self._compute_argument_components(argument)
+        if self._are_argument_components_valid(components):
+            return self._create_grid_with_valid_arguments_from_components_in_string_form(components)
+        else:
+            raise InvalidFactoryArgumentException()
+
+    def _compute_argument_components(self, argument: str) -> List[str]:
+        return argument.split(GRID_ARGUMENT_SEPARATOR)
+
+    def _are_argument_components_valid(self, components: List[str]) -> bool:
+        argument_types = self.get_argument_types()
+        print(components, "!!!!!!!!!!!!!!!!!!!!")
+        if len(argument_types) == 0:
+            return len(components) == 1 and components[0] == ""
+        if len(components) != len(argument_types):
+            return False
+        print("checking argument types")
+        for index in range(len(components)):
+            if not argument_types[index].does_argument_match_type(components[index]):
+                return False
+        return True
+    
+    def _create_grid_with_valid_arguments_from_components_in_string_form(self, components: List[str]) -> Grid:
+        converted_components = self._convert_arguments(components)
+        return self.create_grid_with_valid_argument_from_components(converted_components)
+
+    def _convert_arguments(self, components: List[str]) -> List[object]:
+        argument_types = self.get_argument_types()
+        return [argument_types[index].convert_argument(components[index]) for index in range(len(argument_types))]
+
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         pass
 
     def get_name(self) -> str:
@@ -33,8 +64,8 @@ class GridFactory:
         return []
 
 class SquareRecursiveDivisionGridFactory(GridFactory):
-    def create_grid(self, argument: str) -> Grid:
-        argument = int(argument)
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        argument = components[0]
         return SquareRecursiveDivisionGrid(argument)
 
     def get_name(self) -> str:
@@ -48,24 +79,23 @@ class SquareRecursiveDivisionGridFactory(GridFactory):
 
 
 class AlphabetGridFactory(GridFactory):
-    def create_grid(self, argument: str) -> Grid:
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         return ListBasedGrid(ALPHABET, ALPHABET)
 
     def get_name(self) -> str:
         return ALPHABET_GRID_NAME
     
-class DoubleAlphabetGridFactory:
-    def create_grid(self, argument: str) -> Grid:
+class DoubleAlphabetGridFactory(GridFactory):
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         return ListBasedGrid(DOUBLE_ALPHABET, DOUBLE_ALPHABET)
 
     def get_name(self) -> str:
         return DOUBLE_ALPHABET_GRID_NAME
 
-class RecursivelyDivisibleGridCombinationGridFactory:
-    def create_grid(self, argument: str) -> Grid:
-        options = argument.split(GRID_ARGUMENT_SEPARATOR)
-        primary = create_grid_from_options(options[0]) 
-        secondary = create_grid_from_options(options[1])
+class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        primary = create_grid_from_options(components[0]) 
+        secondary = create_grid_from_options(components[1])
         combination = RecursivelyDivisibleGridCombination(primary, secondary)
         return combination
 
