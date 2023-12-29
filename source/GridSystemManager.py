@@ -40,16 +40,14 @@ class GridSystemManager:
         return self.display
 
     def refresh(self):
+        self.hide()
         if self.grid and self.display:
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
             self.refresh_display(self.grid, rectangle)
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
-        else:
-            self.hide()
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
-        self.display.hide()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
         self.display.show()
