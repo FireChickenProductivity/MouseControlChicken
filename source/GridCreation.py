@@ -57,7 +57,6 @@ class ArgumentBuilder:
             self.handle_argument_type(argument_types[self.argument_index])
 
     def handle_argument_type(self, argument_type: FactoryArgumentType):
-        self.argument_index += 1
         if argument_type.supports_options_display():
             self.handle_obtaining_argument_with_options_display(argument_type)
         else:
@@ -79,7 +78,7 @@ class ArgumentBuilder:
             self.argument_index += 1
             self.arguments.append(str(argument))
             self.obtain_next_argument_from_user()
-        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_cancellation_callback_and_tag_names(
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
             f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument>",
             handle_argument,
             actions.user.mouse_control_chicken_cancel_grid_creation,
@@ -106,7 +105,7 @@ class Actions:
         def handle_accepting_dictation_input(dictation_input: str):
             actions.user.mouse_control_chicken_set_current_grid_name(dictation_input)
             actions.user.mouse_control_chicken_start_grid_factory_selection()
-        actions.user.mouse_control_chicken_show_dictation_input_display_with_title_acceptance_callback_and_cancellation_callback(
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_and_cancellation_callback(
             "Choose Grid Name: say choose <grid name>",
             handle_accepting_dictation_input,
             actions.user.mouse_control_chicken_cancel_grid_creation

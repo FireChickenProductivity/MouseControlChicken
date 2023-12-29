@@ -79,14 +79,14 @@ class Actions:
         '''Disables the mouse control chicken grid creation argument type tag'''
         remove_tags_from_context(grid_creation_argument_type_context)
 
-    def mouse_control_chicken_enable_dictation_input_display_tag(secondary_tags: List[str] = []):
-        '''Enables the mouse control chicken dictation input display tag and secondary tag'''
+    def mouse_control_chicken_enable_dictation_input_dialogue_tag(secondary_tags: List[str] = []):
+        '''Enables the mouse control chicken dictation input dialogue tag and secondary tag'''
         tags = [DICTATION_INPUT_TAG]
         if secondary_tags: tags.extend(secondary_tags)
         assign_tags_to_context(grid_creation_argument_type_context, tags)
     
-    def mouse_control_chicken_disable_dictation_input_display_tag():
-        '''Disables the mouse control chicken dictation input display tag'''
+    def mouse_control_chicken_disable_dictation_input_dialogue_tag():
+        '''Disables the mouse control chicken dictation input dialogue tag'''
         remove_tags_from_context(grid_creation_argument_type_context)
     
 def assign_tag_to_context(context, tag):
