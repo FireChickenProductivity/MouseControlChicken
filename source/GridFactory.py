@@ -29,12 +29,10 @@ class GridFactory:
 
     def _are_argument_components_valid(self, components: List[str]) -> bool:
         argument_types = self.get_argument_types()
-        print(components, "!!!!!!!!!!!!!!!!!!!!")
         if len(argument_types) == 0:
             return len(components) == 1 and components[0] == ""
         if len(components) != len(argument_types):
             return False
-        print("checking argument types")
         for index in range(len(components)):
             if not argument_types[index].does_argument_match_type(components[index]):
                 return False

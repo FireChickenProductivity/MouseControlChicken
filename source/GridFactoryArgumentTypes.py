@@ -20,7 +20,6 @@ class FactoryArgumentType:
             converted_value = self.convert_argument(argument)
         except:
             return False
-        print('checking the value')
         return self._argument_has_valid_value(converted_value)
     
     def convert_argument(self, argument):
@@ -46,7 +45,6 @@ class TwoToNineArgumentType(FactoryArgumentType):
         super().__init__(int, GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG)
     
     def _argument_has_valid_value(self, argument):
-        print(type(argument), argument)
         return argument >= 2 and argument <= 9
     
 class GridOptionArgumentType(FactoryArgumentType):
