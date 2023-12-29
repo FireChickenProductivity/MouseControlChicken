@@ -35,7 +35,7 @@ class FactoryArgumentType:
     def get_tags(self) -> List[str]:
         return [self.get_tag(), ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG]
 
-    def supports_options_display(self) -> bool:
+    def supports_options_dialogue(self) -> bool:
         return False
 
     def get_options(self) -> List[str]:
@@ -57,7 +57,7 @@ class GridOptionArgumentType(FactoryArgumentType):
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         return options.has_option(argument)
 
-    def supports_options_display(self) -> bool:
+    def supports_options_dialogue(self) -> bool:
         return True
 
     def get_options(self) -> List[str]:

@@ -1,7 +1,7 @@
 from talon import Module, actions, imgui
 from typing import List, Callable
 
-class OptionsDisplayInformation:
+class OptionsDialogueInformation:
     def __init__(self, title: str, options: List[str]):
         self.title = title
         self.options = options
@@ -28,7 +28,7 @@ class OptionsDisplayInformation:
         if self.page_number > 1: self.page_number -= 1
         self.compute_page()
     
-    def display_on(self, gui: imgui.GUI):
+    def show_on(self, gui: imgui.GUI):
         gui.text(self.title)
         gui.line()
         for index, option in enumerate(self.page): gui.text(f'{index + 1}: {option}')
@@ -41,42 +41,42 @@ class OptionsDisplayInformation:
 
 
 
-information: OptionsDisplayInformation = None
+information: OptionsDialogueInformation = None
 callback = None
 @imgui.open(y = 0)
 def gui(gui: imgui.GUI):
-    if information: information.display_on(gui)
+    if information: information.show_on(gui)
 
 module = Module()
 @module.action_class
 class Actions:
-    def mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options: List[str], title: str, new_callback: Callable[[str], None], tag: str = ""):
+    def mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options: List[str], title: str, new_callback: Callable[[str], None], tag: str = ""):
         '''Shows options for mouse control chicken'''
-        actions.user.mouse_control_chicken_hide_options_display()
+        actions.user.mouse_control_chicken_hide_options_dialogue()
         global information
-        information = OptionsDisplayInformation(title, options)
+        information = OptionsDialogueInformation(title, options)
         global callback
         callback = new_callback
-        actions.user.mouse_control_chicken_enable_options_display_tag(tag)
+        actions.user.mouse_control_chicken_enable_options_dialogue_tag(tag)
         gui.show()
     
-    def mouse_control_chicken_hide_options_display():
-        '''Hides the options display for mouse control chicken'''
-        actions.user.mouse_control_chicken_disable_options_display_tag()
+    def mouse_control_chicken_hide_options_dialogue():
+        '''Hides the options dialogue for mouse control chicken'''
+        actions.user.mouse_control_chicken_disable_options_dialogue_tag()
         if gui.showing: gui.hide()
         global callback
         callback = None
     
-    def mouse_control_chicken_choose_option_from_display(number: int):
-        '''Chooses the option from the mouse controlled chicken options display'''
+    def mouse_control_chicken_choose_option_from_dialogue(number: int):
+        '''Chooses the option from the mouse controlled chicken options dialogue'''
         if callback and information:
             option_text: str = information.get_item_on_page_from_number(number)
             callback(option_text)
     
-    def mouse_control_chicken_advance_options_display_page():
-        '''Advances the display page for the mouse control chicken display options'''
+    def mouse_control_chicken_advance_options_dialogue_page():
+        '''Advances the page for the mouse control chicken options dialogue'''
         information.advance_page()
 
-    def mouse_control_chicken_return_to_previous_options_display_page():
-        '''Returns the display page to the previous page for the mouse control chicken display options'''
+    def mouse_control_chicken_return_to_previous_options_dialogue_page():
+        '''Returns the page to the previous page for the mouse control chicken options dialogue'''
         information.go_to_previous_page()

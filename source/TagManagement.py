@@ -37,7 +37,7 @@ ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG = 'user.' + ARGUMENT_INPUT_THROUGH_DI
 module.tag(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG_NAME, desc = 'Tag for enabling argument input through dictation input for mouse control chicken')
 
 grid_open_context = Context()
-options_display_context = Context()
+options_dialogue_context = Context()
 grid_creation_context = Context()
 grid_creation_argument_type_context = Context()
 
@@ -53,15 +53,15 @@ class Actions:
         '''Disables commands for working with the active mouse control chicken grid'''
         remove_tags_from_context(grid_open_context)
 
-    def mouse_control_chicken_enable_options_display_tag(tag: str = ""):
-        '''Enables the specified options display tag'''
+    def mouse_control_chicken_enable_options_dialogue_tag(tag: str = ""):
+        '''Enables the specified options dialogue tag'''
         tags = [GRID_OPTIONS_TAG]
         if tag: tags.append(tag)
-        assign_tags_to_context(options_display_context, tags)
+        assign_tags_to_context(options_dialogue_context, tags)
     
-    def mouse_control_chicken_disable_options_display_tag():
-        '''Disables the specified options display tag'''
-        remove_tags_from_context(options_display_context)
+    def mouse_control_chicken_disable_options_dialogue_tag():
+        '''Disables the specified options dialogue tag'''
+        remove_tags_from_context(options_dialogue_context)
 
     def mouse_control_chicken_enable_grid_creation_tag():
         '''Enables the mouse control chicken grid creation tag'''

@@ -57,23 +57,23 @@ class ArgumentBuilder:
             self.handle_argument_type(argument_types[self.argument_index])
 
     def handle_argument_type(self, argument_type: FactoryArgumentType):
-        if argument_type.supports_options_display():
-            self.handle_obtaining_argument_with_options_display(argument_type)
+        if argument_type.supports_options_dialogue():
+            self.handle_obtaining_argument_with_options_dialogue(argument_type)
         else:
-            self.handle_obtaining_argument_without_options_display(argument_type)
+            self.handle_obtaining_argument_without_options_dialogue(argument_type)
         
-    def handle_obtaining_argument_with_options_display(self, argument_type: FactoryArgumentType):
+    def handle_obtaining_argument_with_options_dialogue(self, argument_type: FactoryArgumentType):
         def handle_choice(choice: str):
             self.argument_index += 1
             self.arguments.append(choice)
             self.obtain_next_argument_from_user()
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
             argument_type.get_options(),
             f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument number>",
             handle_choice
         )
 
-    def handle_obtaining_argument_without_options_display(self, argument_type: FactoryArgumentType):
+    def handle_obtaining_argument_without_options_dialogue(self, argument_type: FactoryArgumentType):
         def handle_argument(argument):
             self.argument_index += 1
             self.arguments.append(str(argument))
@@ -115,9 +115,9 @@ class Actions:
         """Shows the dialogue for selecting a mouse control chicken grid factory to use to create the current grid"""
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_factory_name(choice)
-            actions.user.mouse_control_chicken_hide_options_display()
+            actions.user.mouse_control_chicken_hide_options_dialogue()
             actions.user.mouse_control_chicken_start_grid_argument_selection()
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
             actions.user.mouse_control_chicken_get_grid_factory_options(),
             "Choose Grid Type: say choose <grid type number>",
             handle_choice
@@ -134,9 +134,9 @@ class Actions:
         """Shows the dialogue for selecting the default display name for the current grid"""
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_default_display_name(choice)
-            actions.user.mouse_control_chicken_hide_options_display()
+            actions.user.mouse_control_chicken_hide_options_dialogue()
             actions.user.mouse_control_chicken_finish_creating_new_grid()
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
             compute_display_options_names_given_grid(current_grid.compute_grid()),
             "Choose Default Display: say choose <display number>",
             handle_choice

@@ -104,7 +104,7 @@ class Actions:
         '''Shows the mouse control chicken grid options'''
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         names = [name for name in options.get_option_names()]
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
 
     def mouse_control_chicken_show_display_options():
         '''Shows the mouse control chicken display options for the active grid'''
@@ -224,7 +224,7 @@ class Actions:
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
     options_text = compute_display_options_names_given_grid(grid)
-    actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, title, callback)
+    actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
