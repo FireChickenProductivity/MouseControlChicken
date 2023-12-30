@@ -1,5 +1,7 @@
 from .OptionsDialogue import OptionsDialogueInformation
-from talon import Module, actions, imgui
+from ..TagManagement import DICTATION_INPUT_WITH_OPTIONS_TAG, PAGE_ADJUSTMENT_TAG
+from ..ContextUtilities import create_context_matches_single_tag_string
+from talon import Module, actions, imgui, Context
 from typing import Callable, List
 
 title = None
@@ -86,14 +88,6 @@ class Actions:
         global dictation_input
         dictation_input = text
     
-    def mouse_control_chicken_advance_dictation_input_dialogue_page():
-        '''Advances the page of the mouse control chicken dictation input dialogue'''
-        if options_information: options_information.advance_page()
-    
-    def mouse_control_chicken_return_to_previous_dictation_input_dialogue_page():
-        '''Returns to the previous page of the mouse control chicken dictation input dialogue'''
-        if options_information: options_information.go_to_previous_page()
-    
     def mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_tag_names_and_options(
             new_title: str, 
             new_acceptance_callback: Callable[[str], None], 
@@ -108,7 +102,7 @@ class Actions:
             new_title, 
             lambda number_text: new_acceptance_callback(options_information.get_item_on_page_from_number(int(number_text))), 
             new_cancellation_callback, 
-            tag_names
+            tag_names + [PAGE_ADJUSTMENT_TAG, DICTATION_INPUT_WITH_OPTIONS_TAG]
         )
 
 def erase_dictation_input_data():
@@ -130,3 +124,17 @@ def erase_options_information():
 def mouse_control_chicken_dictation_input(m) -> str:
     '''Dictation input given to a mouse control chicken dialogue'''
     return m.text
+
+context = Context()
+context.matches = create_context_matches_single_tag_string(DICTATION_INPUT_WITH_OPTIONS_TAG)
+@context.action_class("user")
+class UserActions:
+    def mouse_control_chicken_advance_options_dialogue_page():
+        '''Advances the page for the mouse control chicken options dialogue'''
+        global options_information
+        options_information.advance_page()
+    
+    def mouse_control_chicken_return_to_previous_options_dialogue_page():
+        '''Returns the page to the previous page for the mouse control chicken options dialogue'''
+        global options_information
+        options_information.go_to_previous_page()
