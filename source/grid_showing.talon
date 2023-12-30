@@ -8,6 +8,9 @@ meet <user.mouse_control_chicken_coordinates>:
 tap <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_click_position(mouse_control_chicken_coordinates)
 
+pierce <user.mouse_control_chicken_coordinates>:
+    user.mouse_control_chicken_double_click_position(mouse_control_chicken_coordinates)
+
 brush <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_right_click_position(mouse_control_chicken_coordinates)
 
