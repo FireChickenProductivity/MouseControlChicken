@@ -119,10 +119,11 @@ class Actions:
             actions.user.mouse_control_chicken_set_current_grid_factory_name(choice)
             actions.user.mouse_control_chicken_hide_options_dialogue()
             actions.user.mouse_control_chicken_start_grid_argument_selection()
-        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
-            actions.user.mouse_control_chicken_get_grid_factory_options(),
-            "Choose Grid Type: say choose <grid type number>",
-            handle_choice
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
+            "Choose Grid Factory: say choose <grid factory number>",
+            handle_choice,
+            actions.user.mouse_control_chicken_cancel_grid_creation,
+            actions.user.mouse_control_chicken_get_grid_factory_options()
         )
 
     def mouse_control_chicken_start_grid_argument_selection():
