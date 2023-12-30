@@ -117,7 +117,6 @@ class Actions:
         """Shows the dialogue for selecting a mouse control chicken grid factory to use to create the current grid"""
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_factory_name(choice)
-            actions.user.mouse_control_chicken_hide_options_dialogue()
             actions.user.mouse_control_chicken_start_grid_argument_selection()
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
             "Choose Grid Factory: say choose <grid factory number>",
@@ -137,12 +136,12 @@ class Actions:
         """Shows the dialogue for selecting the default display name for the current grid"""
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_default_display_name(choice)
-            actions.user.mouse_control_chicken_hide_options_dialogue()
             actions.user.mouse_control_chicken_finish_creating_new_grid()
-        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
-            compute_display_options_names_given_grid(current_grid.compute_grid()),
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
             "Choose Default Display: say choose <display number>",
-            handle_choice
+            handle_choice,
+            actions.user.mouse_control_chicken_cancel_grid_creation,
+            compute_display_options_names_given_grid(current_grid.compute_grid())
         )
 
     def mouse_control_chicken_set_current_grid_name(name: str):
