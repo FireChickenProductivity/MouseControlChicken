@@ -67,11 +67,18 @@ class ArgumentBuilder:
             self.argument_index += 1
             self.arguments.append(choice)
             self.obtain_next_argument_from_user()
-        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
-            argument_type.get_options(),
+        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_tag_names_and_options(
             f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument number>",
-            handle_choice
+            handle_choice,
+            actions.user.mouse_control_chicken_cancel_grid_creation,
+            argument_type.get_tags(),
+            argument_type.get_options()
         )
+        # actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
+        #     argument_type.get_options(),
+        #     f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument number>",
+        #     handle_choice
+        # )
 
     def handle_obtaining_argument_without_options_dialogue(self, argument_type: FactoryArgumentType):
         def handle_argument(argument):
