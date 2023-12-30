@@ -3,6 +3,7 @@ from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from .RectangleUtilities import compute_average, compute_rectangle_corners
 from .SettingsMediator import settings_mediator
+from typing import Callable, Generator
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
@@ -27,34 +28,52 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
 
     def _add_horizontal_coordinates_to_frame(self, vertical: int):
-        is_after_first_coordinate = False
-        last_absolute_coordinate = None
-        too_close_threshold = None
-        for horizontal_coordinate in self.grid.get_horizontal_coordinates():
-            horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
-            if is_after_first_coordinate and abs(horizontal - last_absolute_coordinate) <= too_close_threshold:
-                continue
-            text = Text(horizontal, vertical, horizontal_coordinate)
-            self.canvas.insert_text(text)
-            last_absolute_coordinate = horizontal
-            if not is_after_first_coordinate:
-                is_after_first_coordinate = True
-                too_close_threshold = compute_background_horizontal_rectangle_size(horizontal_coordinate, settings_mediator.get_text_size())
+        self._add_coordinates_to_frame(
+            vertical, 
+            self.grid.get_horizontal_coordinates(), 
+            self.grid.compute_absolute_horizontal_from_horizontal_coordinates, 
+            compute_background_horizontal_rectangle_size, 
+            is_horizontal=True
+        )
+
         
     def _add_vertical_coordinates_to_frame(self, horizontal: int):
+        self._add_coordinates_to_frame(
+            horizontal, 
+            self.grid.get_vertical_coordinates(), 
+            self.grid.compute_absolute_vertical_from_from_vertical_coordinates, 
+            lambda coordinate, text_size: compute_background_vertical_rectangle_size(text_size), 
+            is_horizontal=False
+        )
+            
+    def _add_coordinates_to_frame(
+            self, 
+            constant_coordinate: int, 
+            coordinates: Generator, 
+            compute_absolute_coordinate_from_coordinate: Callable[[str], int], 
+            compute_background_rectangle_size_in_dimension: Callable[[str, int], int],
+            *,
+            is_horizontal: bool
+        ):
         is_after_first_coordinate = False
         last_absolute_coordinate = None
         too_close_threshold = None
-        for vertical_coordinate in self.grid.get_vertical_coordinates():
-            vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
-            if is_after_first_coordinate and abs(vertical - last_absolute_coordinate) <= too_close_threshold:
+        for coordinate in coordinates:
+            absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
+            if is_after_first_coordinate and abs(absolute_coordinate - last_absolute_coordinate) <= too_close_threshold:
                 continue
-            text = Text(horizontal, vertical, vertical_coordinate)
+            if is_horizontal:
+                horizontal = absolute_coordinate
+                vertical = constant_coordinate
+            else:
+                horizontal = constant_coordinate
+                vertical = absolute_coordinate
+            text = Text(horizontal, vertical, coordinate)
             self.canvas.insert_text(text)
-            last_absolute_coordinate = vertical
+            last_absolute_coordinate = absolute_coordinate
             if not is_after_first_coordinate:
                 is_after_first_coordinate = True
-                too_close_threshold = compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
+                too_close_threshold = compute_background_rectangle_size_in_dimension(coordinate, settings_mediator.get_text_size())
 
     def _should_show_crisscross(self) -> bool:
         return settings_mediator.get_frame_grid_should_show_crisscross()
