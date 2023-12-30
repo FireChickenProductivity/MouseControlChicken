@@ -96,14 +96,19 @@ class Actions:
             options: List[str]
         ):
         '''Shows the dictation input dialogue for mouse control chicken with the specified options'''
-        global options_information
-        options_information = OptionsDialogueInformation("Options:", options)
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
             new_title, 
-            lambda number_text: new_acceptance_callback(options_information.get_item_on_page_from_number(int(number_text))), 
+            lambda number_text: new_acceptance_callback(get_option_from_number_text(number_text)), 
             new_cancellation_callback, 
             tag_names + [PAGE_ADJUSTMENT_TAG, DICTATION_INPUT_WITH_OPTIONS_TAG]
         )
+        global options_information
+        options_information = OptionsDialogueInformation("Options:", options)
+
+def get_option_from_number_text(number_text: str):
+    global options_information
+    option = options_information.get_item_on_page_from_number(int(number_text))
+    return option
 
 def erase_dictation_input_data():
     global dictation_input
