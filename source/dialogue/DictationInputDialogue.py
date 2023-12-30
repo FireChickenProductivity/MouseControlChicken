@@ -72,9 +72,14 @@ class Actions:
     def mouse_control_chicken_accept_dictation_input():
         '''Accepts the current dictation input for mouse control chicken'''
         global acceptance_callback
-        acceptance_callback(dictation_input)
+        global dictation_input
+        global options_information
+        callback = acceptance_callback
+        input = dictation_input
+        if options_information: input = options_information.get_item_on_page_from_number(int(input))
         actions.user.mouse_control_chicken_hide_dictation_input_dialogue()
         erase_dictation_input_data()
+        callback(input)
 
     def mouse_control_chicken_cancel_dictation_input():
         '''Cancels taking dictation input for mouse control chicken'''
@@ -98,17 +103,12 @@ class Actions:
         '''Shows the dictation input dialogue for mouse control chicken with the specified options'''
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
             new_title, 
-            lambda number_text: new_acceptance_callback(get_option_from_number_text(number_text)), 
+            new_acceptance_callback, 
             new_cancellation_callback, 
             tag_names + [PAGE_ADJUSTMENT_TAG, DICTATION_INPUT_WITH_OPTIONS_TAG]
         )
         global options_information
         options_information = OptionsDialogueInformation("Options:", options)
-
-def get_option_from_number_text(number_text: str):
-    global options_information
-    option = options_information.get_item_on_page_from_number(int(number_text))
-    return option
 
 def erase_dictation_input_data():
     global dictation_input
