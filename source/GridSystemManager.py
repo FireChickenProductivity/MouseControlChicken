@@ -133,6 +133,11 @@ class Actions:
         '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         actions.mouse_click()
+
+    def mouse_control_chicken_double_click_position(coordinates: str):
+        '''Double clicks the specified position on the current mouse control chicken grid'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        double_click()
     
     def mouse_control_chicken_right_click_position(coordinates: str):
         '''Clicks the specified position on the current mouse control chicken grid'''
@@ -179,6 +184,15 @@ class Actions:
             position = get_current_position_on_narrow_able_grid()
             position.go()
             actions.mouse_click()
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        
+    def mouse_control_chicken_double_click_current_position_on_narrow_able_grid():
+        '''Double clicks the current position on the current mouse control chicken grid'''
+        if manager_has_narrow_able_grid():
+            position = get_current_position_on_narrow_able_grid()
+            position.go()
+            double_click()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
@@ -247,6 +261,10 @@ def drag_from_position():
 def end_drag_at_position():
     actions.sleep(0.5)
     actions.user.mouse_drag_end()
+
+def double_click():
+    actions.mouse_click()
+    actions.mouse_click()
 
 def setup():
     global manager

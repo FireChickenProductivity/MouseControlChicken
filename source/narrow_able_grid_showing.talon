@@ -11,6 +11,11 @@ reset:
     user.mouse_control_chicken_click_current_position_on_narrow_able_grid()
 tap here: user.mouse_control_chicken_click_current_position_on_narrow_able_grid()
 
+<user.mouse_control_chicken_coordinates> pierce:
+    user.mouse_control_chicken_narrow_grid(mouse_control_chicken_coordinates)
+    user.mouse_control_chicken_double_click_current_position_on_narrow_able_grid()
+pierce here: user.mouse_control_chicken_double_click_current_position_on_narrow_able_grid()
+
 <user.mouse_control_chicken_coordinates> brush:
     user.mouse_control_chicken_narrow_grid(mouse_control_chicken_coordinates)
     user.mouse_control_chicken_right_click_current_position_on_narrow_able_grid()
