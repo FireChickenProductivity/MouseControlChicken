@@ -3,7 +3,7 @@ from .Display import Display
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .DisplayOptionsComputer import DisplayOptionComputer
+from .DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
@@ -40,16 +40,14 @@ class GridSystemManager:
         return self.display
 
     def refresh(self):
+        self.hide()
         if self.grid and self.display:
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
             self.refresh_display(self.grid, rectangle)
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
-        else:
-            self.hide()
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
-        self.display.hide()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
         self.display.show()
@@ -87,9 +85,8 @@ class Actions:
         current_option = name
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
-        print(option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument())
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
-        display_options = DisplayOptionComputer().compute_display_options(grid)
+        display_options = compute_display_options_given_grid(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
         global manager
         manager.prepare_for_grid_switch()
@@ -99,7 +96,7 @@ class Actions:
     def mouse_control_chicken_choose_display_from_options(name: str):
         '''Changes the active mouse control chicken grid display based on the name of the option'''
         global manager
-        display_options = DisplayOptionComputer().compute_display_options(manager.get_grid())
+        display_options = compute_display_options_given_grid(manager.get_grid())
         display = display_options.create_display_from_option(name)
         manager.set_display(display)
 
@@ -107,7 +104,7 @@ class Actions:
         '''Shows the mouse control chicken grid options'''
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         names = [name for name in options.get_option_names()]
-        actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
 
     def mouse_control_chicken_show_display_options():
         '''Shows the mouse control chicken display options for the active grid'''
@@ -226,9 +223,8 @@ class Actions:
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
-    display_options = DisplayOptionComputer().compute_display_options(grid)
-    options_text = [option for option in display_options.get_names()]
-    actions.user.mouse_control_chicken_show_options_display_with_options_title_callback_and_tag(options_text, title, callback)
+    options_text = compute_display_options_names_given_grid(grid)
+    actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
 
 def get_position_on_grid(coordinates: str) -> MousePosition:
     grid = manager.get_grid()
