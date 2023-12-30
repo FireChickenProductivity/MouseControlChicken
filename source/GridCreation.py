@@ -74,11 +74,6 @@ class ArgumentBuilder:
             argument_type.get_tags(),
             argument_type.get_options()
         )
-        # actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
-        #     argument_type.get_options(),
-        #     f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument number>",
-        #     handle_choice
-        # )
 
     def handle_obtaining_argument_without_options_dialogue(self, argument_type: FactoryArgumentType):
         def handle_argument(argument):
