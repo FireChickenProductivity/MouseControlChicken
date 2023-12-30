@@ -1,4 +1,4 @@
-from talon import canvas
+from talon import canvas, ui
 from talon.skia import Paint, Rect
 from talon.types.point import Point2d
 from .Grid import Rectangle
@@ -114,6 +114,12 @@ class Canvas:
 
     def setup(self, rectangle: Rectangle):
         self.hide()
+        screens = ui.screens()
+        talon_rectangle = Rect(rectangle.left, rectangle.top, rectangle.right - rectangle.left, rectangle.bottom - rectangle.top)
+        for screen in screens:
+            if screen.rect == talon_rectangle:
+                self.canvas = canvas.Canvas.from_screen(screen)
+                return 
         self.canvas = canvas.Canvas(0, 0, rectangle.right - rectangle.left, rectangle.bottom - rectangle.top)
         self.canvas.move(rectangle.left, rectangle.top)
        
@@ -153,13 +159,3 @@ class Canvas:
     
     def update_text_options(self, options: CanvasElementOptions):
         self.text_options.update(options)
-
-# experiment = Canvas()
-# experiment.insert_text(Text(50, 50, 'St'))
-# experiment.insert_text(Text(100, 70, 'ab'))
-# experiment.insert_line(Line(10, 10, 30, 30))
-# experiment.insert_line(Line(60, 60, 100, 80))
-# # experiment.update_line_options(CanvasElementOptions(2, "00FF00"))
-# # experiment.update_text_options(CanvasElementOptions(40, "10FF40"))
-# experiment.setup(Rectangle(0, 1000, 0, 1000))
-# experiment.show()
