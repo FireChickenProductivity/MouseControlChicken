@@ -1,6 +1,6 @@
 from .Display import FrameDisplay
 from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
-from .Canvas import Text, Line
+from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from .RectangleUtilities import compute_average, compute_rectangle_corners
 from .SettingsMediator import settings_mediator
 
@@ -27,16 +27,34 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
 
     def _add_horizontal_coordinates_to_frame(self, vertical: int):
+        is_after_first_coordinate = False
+        last_absolute_coordinate = None
+        too_close_threshold = None
         for horizontal_coordinate in self.grid.get_horizontal_coordinates():
             horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
+            if is_after_first_coordinate and abs(horizontal - last_absolute_coordinate) <= too_close_threshold:
+                continue
             text = Text(horizontal, vertical, horizontal_coordinate)
             self.canvas.insert_text(text)
+            last_absolute_coordinate = horizontal
+            if not is_after_first_coordinate:
+                is_after_first_coordinate = True
+                too_close_threshold = compute_background_horizontal_rectangle_size(horizontal_coordinate, settings_mediator.get_text_size())
         
     def _add_vertical_coordinates_to_frame(self, horizontal: int):
+        is_after_first_coordinate = False
+        last_absolute_coordinate = None
+        too_close_threshold = None
         for vertical_coordinate in self.grid.get_vertical_coordinates():
             vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
+            if is_after_first_coordinate and abs(vertical - last_absolute_coordinate) <= too_close_threshold:
+                continue
             text = Text(horizontal, vertical, vertical_coordinate)
             self.canvas.insert_text(text)
+            last_absolute_coordinate = vertical
+            if not is_after_first_coordinate:
+                is_after_first_coordinate = True
+                too_close_threshold = compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
 
     def _should_show_crisscross(self) -> bool:
         return settings_mediator.get_frame_grid_should_show_crisscross()
