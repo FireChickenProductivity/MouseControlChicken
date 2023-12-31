@@ -1,8 +1,8 @@
 from talon import canvas, ui
 from talon.skia import Paint, Rect
 from talon.types.point import Point2d
-from .Grid import Rectangle
-from .SettingsMediator import settings_mediator
+from ..Grid import Rectangle
+from ..SettingsMediator import settings_mediator
 
 def update_canvas_color(canvas, color: str):
     canvas.paint.color = color

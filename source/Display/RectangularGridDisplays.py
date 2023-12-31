@@ -1,9 +1,9 @@
 from .Display import FrameDisplay, PositionDisplay
-from .Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
+from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
-from .RectangleUtilities import compute_average, compute_rectangle_corners
-from .SettingsMediator import settings_mediator
-from .fire_chicken.mouse_position import MousePosition
+from ..RectangleUtilities import compute_average, compute_rectangle_corners
+from ..SettingsMediator import settings_mediator
+from ..fire_chicken.mouse_position import MousePosition
 from typing import Callable, Generator
 
    

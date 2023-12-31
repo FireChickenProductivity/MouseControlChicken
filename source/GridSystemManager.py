@@ -1,9 +1,9 @@
 from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
-from .Display import Display
+from .Display.Display import Display
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
+from .Display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
