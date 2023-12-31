@@ -136,15 +136,19 @@ class RectangularPositionDisplay(PositionDisplay, RectangularGridDisplay):
     def _add_positions(self):
         last_vertical_coordinate = None
         last_horizontal_coordinate = None
+        has_used_horizontal: bool = False
         for horizontal_coordinate in self.grid.get_horizontal_coordinates():
             horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
+            has_used_horizontal = False
             for vertical_coordinate in self.grid.get_vertical_coordinates():
                 vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
                 position = MousePosition(horizontal, vertical)
                 if self._should_include_position(last_horizontal_coordinate, last_vertical_coordinate, position):
                     self._display_text_for_position(horizontal_coordinate, vertical_coordinate, position)
-                    last_horizontal_coordinate = horizontal_coordinate
                     last_vertical_coordinate = vertical_coordinate
+                    has_used_horizontal = True
+            if has_used_horizontal: last_horizontal_coordinate = horizontal_coordinate
+            
     
     def _display_text_for_position(self, horizontal_coordinate: str, vertical_coordinate: str, position: MousePosition):
         text = Text(position.get_horizontal(), position.get_vertical(), horizontal_coordinate + self.grid.get_coordinate_system().get_separator() + vertical_coordinate)
@@ -154,10 +158,20 @@ class RectangularPositionDisplay(PositionDisplay, RectangularGridDisplay):
         return horizontal_coordinate + self.grid.get_coordinate_system().get_separator() + vertical_coordinate
 
     def _should_include_position(self, last_horizontal_coordinate: str, last_vertical_coordinate: str, position: MousePosition) -> bool:
-        if last_horizontal_coordinate is None or last_vertical_coordinate is None: return True
+        if last_horizontal_coordinate is None and last_vertical_coordinate is None: return True
+        if last_horizontal_coordinate is not None:
+            last_horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(last_horizontal_coordinate)
+            if abs(position.get_horizontal() - last_horizontal) <= compute_background_horizontal_rectangle_size(self._compute_text_to_display(last_horizontal_coordinate, last_vertical_coordinate), settings_mediator.get_text_size()):
+                return False
+            
+        if last_vertical_coordinate is not None:
+            last_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(last_vertical_coordinate)
+            if abs(position.get_vertical() - last_vertical) <= compute_background_vertical_rectangle_size(settings_mediator.get_text_size()):
+                return False
         
-        last_horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(last_horizontal_coordinate)
-        last_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(last_vertical_coordinate)
-        text_to_display = self._compute_text_to_display(last_horizontal_coordinate, last_vertical_coordinate)
-        return abs(position.get_horizontal() - last_horizontal) > compute_background_horizontal_rectangle_size(text_to_display, settings_mediator.get_text_size()) \
-            and abs(position.get_vertical() - last_vertical) > compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
+        return True
+        # last_horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(last_horizontal_coordinate)
+        # last_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(last_vertical_coordinate)
+        # text_to_display = self._compute_text_to_display(last_horizontal_coordinate, last_vertical_coordinate)
+        # return abs(position.get_horizontal() - last_horizontal) > compute_background_horizontal_rectangle_size(text_to_display, settings_mediator.get_text_size()) \
+        #     and abs(position.get_vertical() - last_vertical) > compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
