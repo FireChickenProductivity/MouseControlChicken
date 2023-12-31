@@ -76,3 +76,28 @@ class CheckerSkipper(Skipper):
     
 def create_rectangular_checker_skipper(n: int):
     return SkipperComposite([create_rectangular_skipper(), CheckerSkipper(n)])
+
+class SkipperRunner:
+    def __init__(self, Skipper: Skipper):
+        self.skipper = Skipper
+        self.generator = None
+        self.position_creator = None
+        self.on_inclusion = None
+    
+    def set_generator(self, generator):
+        self.generator = generator
+    
+    def set_position_creator(self, position_creator):
+        self.position_creator = position_creator
+    
+    def set_on_inclusion(self, on_inclusion):
+        self.on_inclusion = on_inclusion
+    
+    def run(self):
+        for item in self.generator:
+            position = self.position_creator(item)
+            if self.skipper.should_include_position_with_text(position, item):
+                self.skipper.handle_position_included(position)
+                self.on_inclusion(item, position)
+            else:
+                self.skipper.handle_position_excluded(position)

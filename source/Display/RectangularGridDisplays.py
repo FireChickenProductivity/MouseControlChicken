@@ -1,5 +1,5 @@
 from .Display import FrameDisplay, PositionDisplay
-from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, create_rectangular_skipper
+from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, create_rectangular_skipper, SkipperRunner
 from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -57,17 +57,17 @@ class RectangularGridFrameDisplay(FrameDisplay):
             *,
             is_horizontal: bool
         ):
-        horizontal = None
-        vertical = None
-        for coordinate in coordinates:
+        runner = SkipperRunner(skipper)
+        runner.set_generator(coordinates)
+        def create_position(coordinate, constant_coordinate, is_horizontal):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
-            position = MousePosition(horizontal, vertical)
-            if skipper.should_include_position_with_text(position, coordinate):
-                skipper.handle_position_included(position)
-                self._draw_text_on_canvas(coordinate, horizontal, vertical)
-            else:
-                skipper.handle_position_excluded(position)
+            return MousePosition(horizontal, vertical)
+        runner.set_position_creator(lambda coordinate: create_position(coordinate, constant_coordinate, is_horizontal))
+        def on_inclusion(coordinate, position):
+            self._draw_text_on_canvas(coordinate, position.get_horizontal(), position.get_vertical())
+        runner.set_on_inclusion(on_inclusion)
+        runner.run()
 
     @staticmethod
     def _compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate: int, constant_coordinate: int, *, is_horizontal: bool):
@@ -91,16 +91,20 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_horizontal_lines()
 
     def _add_vertical_lines(self):
-        for horizontal_coordinate in self.grid.get_horizontal_coordinates():
-            horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
-            line = Line(horizontal, self.rectangle.top, horizontal, self.rectangle.bottom)
-            self.canvas.insert_line(line)
+        skipper = HorizontalSkipper()
+        runner = SkipperRunner(skipper)
+        runner.set_generator(self.grid.get_horizontal_coordinates())
+        runner.set_on_inclusion(lambda item, position: self.canvas.insert_line(Line(position.get_horizontal(), self.rectangle.top, position.get_horizontal(), self.rectangle.bottom)))
+        runner.set_position_creator(lambda coordinate: MousePosition(self.grid.compute_absolute_horizontal_from_horizontal_coordinates(coordinate), 0))
+        runner.run()
         
     def _add_horizontal_lines(self):
-        for vertical_coordinate in self.grid.get_vertical_coordinates():
-            vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
-            line = Line(self.rectangle.left, vertical, self.rectangle.right, vertical)
-            self.canvas.insert_line(line)
+        skipper = VerticalSkipper()
+        runner = SkipperRunner(skipper)
+        runner.set_generator(self.grid.get_vertical_coordinates())
+        runner.set_on_inclusion(lambda item, position: self.canvas.insert_line(Line(self.rectangle.left, position.get_vertical(), self.rectangle.right, position.get_vertical())))
+        runner.set_position_creator(lambda coordinate: MousePosition(0, self.grid.compute_absolute_vertical_from_from_vertical_coordinates(coordinate)))
+        runner.run()
     
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
