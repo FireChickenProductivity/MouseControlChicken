@@ -151,11 +151,11 @@ class RectangularPositionDisplay(PositionDisplay):
             
     
     def _display_text_for_position(self, horizontal_coordinate: str, vertical_coordinate: str, position: MousePosition):
-        text = Text(position.get_horizontal(), position.get_vertical(), horizontal_coordinate + self.grid.get_coordinate_system().get_separator() + vertical_coordinate)
+        text = Text(position.get_horizontal(), position.get_vertical(), self._compute_text_to_display(horizontal_coordinate, vertical_coordinate))
         self.canvas.insert_text(text)
 
     def _compute_text_to_display(self, horizontal_coordinate: str, vertical_coordinate: str) -> str:
-        return horizontal_coordinate + self.grid.get_coordinate_system().get_separator() + vertical_coordinate
+        return vertical_coordinate + self.grid.get_coordinate_system().get_separator() + horizontal_coordinate
 
     def _should_include_position(self, last_horizontal_coordinate: str, last_vertical_coordinate: str, position: MousePosition) -> bool:
         if last_horizontal_coordinate is None and last_vertical_coordinate is None: return True
