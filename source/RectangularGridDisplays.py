@@ -65,18 +65,26 @@ class RectangularGridFrameDisplay(FrameDisplay):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             if is_after_first_coordinate and abs(absolute_coordinate - last_absolute_coordinate) <= too_close_threshold:
                 continue
-            if is_horizontal:
-                horizontal = absolute_coordinate
-                vertical = constant_coordinate
-            else:
-                horizontal = constant_coordinate
-                vertical = absolute_coordinate
-            text = Text(horizontal, vertical, coordinate)
-            self.canvas.insert_text(text)
+            horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
+            self._draw_text_on_canvas(coordinate, horizontal, vertical)
             last_absolute_coordinate = absolute_coordinate
             if not is_after_first_coordinate:
                 is_after_first_coordinate = True
                 too_close_threshold = compute_background_rectangle_size_in_dimension(coordinate, settings_mediator.get_text_size())
+            
+    @staticmethod
+    def _compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate: int, constant_coordinate: int, *, is_horizontal: bool):
+        if is_horizontal:
+            horizontal = absolute_coordinate
+            vertical = constant_coordinate
+        else:
+            horizontal = constant_coordinate
+            vertical = absolute_coordinate
+        return horizontal, vertical
+
+    def _draw_text_on_canvas(self, text: str, horizontal: int, vertical: int):
+        text = Text(horizontal, vertical, text)
+        self.canvas.insert_text(text)
 
     def _should_show_crisscross(self) -> bool:
         return settings_mediator.get_frame_grid_should_show_crisscross()
