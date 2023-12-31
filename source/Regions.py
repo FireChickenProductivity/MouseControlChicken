@@ -1,6 +1,6 @@
 from .fire_chicken.mouse_position import MousePosition
 from typing import List, Generator
-from .Display.Canvas import Line, Canvas
+from .display.Canvas import Line, Canvas
 from .MousePositionUtilities import compute_mouse_position_average
 
 class MousePositionLine:
