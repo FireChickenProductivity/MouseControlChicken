@@ -1,12 +1,11 @@
 from .Display import FrameDisplay, PositionDisplay
+from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, create_rectangular_skipper
 from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
 from ..SettingsMediator import settings_mediator
 from ..fire_chicken.mouse_position import MousePosition
 from typing import Callable, Generator
-
-   
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
@@ -35,7 +34,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
             vertical, 
             self.grid.get_horizontal_coordinates(), 
             self.grid.compute_absolute_horizontal_from_horizontal_coordinates, 
-            compute_background_horizontal_rectangle_size, 
+            HorizontalSkipper(), 
             is_horizontal=True
         )
 
@@ -45,7 +44,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
             horizontal, 
             self.grid.get_vertical_coordinates(), 
             self.grid.compute_absolute_vertical_from_from_vertical_coordinates, 
-            lambda coordinate, text_size: compute_background_vertical_rectangle_size(text_size), 
+            VerticalSkipper(),
             is_horizontal=False
         )
             
@@ -54,24 +53,22 @@ class RectangularGridFrameDisplay(FrameDisplay):
             constant_coordinate: int, 
             coordinates: Generator, 
             compute_absolute_coordinate_from_coordinate: Callable[[str], int], 
-            compute_background_rectangle_size_in_dimension: Callable[[str, int], int],
+            skipper: Skipper,
             *,
             is_horizontal: bool
         ):
-        is_after_first_coordinate = False
-        last_absolute_coordinate = None
-        too_close_threshold = None
+        horizontal = None
+        vertical = None
         for coordinate in coordinates:
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
-            if is_after_first_coordinate and abs(absolute_coordinate - last_absolute_coordinate) <= too_close_threshold:
-                continue
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
-            self._draw_text_on_canvas(coordinate, horizontal, vertical)
-            last_absolute_coordinate = absolute_coordinate
-            if not is_after_first_coordinate:
-                is_after_first_coordinate = True
-                too_close_threshold = compute_background_rectangle_size_in_dimension(coordinate, settings_mediator.get_text_size())
-            
+            position = MousePosition(horizontal, vertical)
+            if skipper.should_include_position_with_text(position, coordinate):
+                skipper.handle_position_included(position)
+                self._draw_text_on_canvas(coordinate, horizontal, vertical)
+            else:
+                skipper.handle_position_excluded(position)
+
     @staticmethod
     def _compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate: int, constant_coordinate: int, *, is_horizontal: bool):
         if is_horizontal:

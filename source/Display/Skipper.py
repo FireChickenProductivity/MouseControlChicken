@@ -8,12 +8,6 @@ class Skipper:
     def should_include_position_with_text(self, position: MousePosition, text: str) -> bool:
         pass
 
-    def update_last_horizontal(self, horizontal: int):
-        pass
-
-    def update_last_vertical(self, vertical: int):
-        pass
-
     def handle_position_included(self, position: MousePosition):
         pass
 
@@ -31,14 +25,6 @@ class SkipperComposite(Skipper):
                 return False
         return True
 
-    def update_last_horizontal(self, horizontal: int):
-        for skipper in self.skippers:
-            skipper.update_last_horizontal(horizontal)
-
-    def update_last_vertical(self, vertical: int):
-        for skipper in self.skippers:
-            skipper.update_last_vertical(vertical)
-
     def handle_position_included(self, position: MousePosition):
         for skipper in self.skippers:
             skipper.handle_position_included(position)
@@ -55,8 +41,8 @@ class HorizontalSkipper(Skipper):
         return self.last_horizontal is None or \
             abs(position.get_horizontal() - self.last_horizontal) >= compute_background_horizontal_rectangle_size(text, settings_mediator.get_text_size())
 
-    def update_last_horizontal(self, horizontal: int):
-        self.last_horizontal = horizontal
+    def handle_position_included(self, position: MousePosition):
+        self.last_horizontal = position.get_horizontal()
 
 class VerticalSkipper(Skipper):
     def __init__(self):
@@ -66,8 +52,8 @@ class VerticalSkipper(Skipper):
         return self.last_vertical is None or \
             abs(position.get_vertical() - self.last_vertical) >= compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
 
-    def update_last_vertical(self, vertical: int):
-        self.last_vertical = vertical
+    def handle_position_included(self, position: MousePosition):
+        self.last_vertical = position.get_vertical()
 
 def create_rectangular_skipper():
     composite = SkipperComposite([HorizontalSkipper(), VerticalSkipper()])
