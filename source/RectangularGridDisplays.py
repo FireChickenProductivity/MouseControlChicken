@@ -6,13 +6,9 @@ from .SettingsMediator import settings_mediator
 from .fire_chicken.mouse_position import MousePosition
 from typing import Callable, Generator
 
-class RectangularGridDisplay:
-    @staticmethod
-    def supports_grid(grid: Grid) -> bool:
-        primary_grid = compute_primary_grid(grid)
-        return isinstance(primary_grid, RectangularGrid)
+   
 
-class RectangularGridFrameDisplay(FrameDisplay, RectangularGridDisplay):
+class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
         super().__init__()
         self.grid: RectangularGrid = None
@@ -100,6 +96,10 @@ class RectangularGridFrameDisplay(FrameDisplay, RectangularGridDisplay):
             vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
             line = Line(self.rectangle.left, vertical, self.rectangle.right, vertical)
             self.canvas.insert_line(line)
+    
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_rectangular_grid(grid)
 
 class DoubleFrameDisplay(RectangularGridFrameDisplay):
     def set_rectangle(self, rectangle: Rectangle):
@@ -119,7 +119,7 @@ class QuadrupleFrameDisplay(DoubleFrameDisplay):
         for corner in coroners:
             self._add_middle_frame(corner)
         
-class RectangularPositionDisplay(PositionDisplay, RectangularGridDisplay):
+class RectangularPositionDisplay(PositionDisplay):
     """For every horizontal and vertical coordinate combination, show the absolute position of the cursor."""
     def __init__(self):
         super().__init__()
@@ -163,15 +163,16 @@ class RectangularPositionDisplay(PositionDisplay, RectangularGridDisplay):
             last_horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(last_horizontal_coordinate)
             if abs(position.get_horizontal() - last_horizontal) <= compute_background_horizontal_rectangle_size(self._compute_text_to_display(last_horizontal_coordinate, last_vertical_coordinate), settings_mediator.get_text_size()):
                 return False
-            
         if last_vertical_coordinate is not None:
             last_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(last_vertical_coordinate)
             if abs(position.get_vertical() - last_vertical) <= compute_background_vertical_rectangle_size(settings_mediator.get_text_size()):
                 return False
-        
         return True
-        # last_horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(last_horizontal_coordinate)
-        # last_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(last_vertical_coordinate)
-        # text_to_display = self._compute_text_to_display(last_horizontal_coordinate, last_vertical_coordinate)
-        # return abs(position.get_horizontal() - last_horizontal) > compute_background_horizontal_rectangle_size(text_to_display, settings_mediator.get_text_size()) \
-        #     and abs(position.get_vertical() - last_vertical) > compute_background_vertical_rectangle_size(settings_mediator.get_text_size())
+    
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_rectangular_grid(grid)
+    
+def is_rectangular_grid(grid: Grid) -> bool:
+    primary_grid = compute_primary_grid(grid)
+    return isinstance(primary_grid, RectangularGrid)
