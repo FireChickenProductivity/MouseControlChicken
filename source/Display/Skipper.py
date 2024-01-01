@@ -54,10 +54,6 @@ class VerticalSkipper(Skipper):
 
     def handle_position_included(self, position: MousePosition):
         self.last_vertical = position.get_vertical()
-
-def create_rectangular_skipper():
-    composite = SkipperComposite([HorizontalSkipper(), VerticalSkipper()])
-    return composite
     
 class CheckerSkipper(Skipper):
     """A checker skipper skips every nth position"""
@@ -73,9 +69,6 @@ class CheckerSkipper(Skipper):
 
     def handle_position_excluded(self, position: MousePosition):
         self.count += 1
-    
-def create_rectangular_checker_skipper(n: int):
-    return SkipperComposite([create_rectangular_skipper(), CheckerSkipper(n)])
 
 class SkipperRunner:
     def __init__(self, Skipper: Skipper):
@@ -101,3 +94,58 @@ class SkipperRunner:
                 self.on_inclusion(item, position)
             else:
                 self.skipper.handle_position_excluded(position)
+
+class SingleNestedSkipperRunner:
+    def __init__(self, outer_skipper: Skipper, inner_skipper: Skipper):
+        self.outer_skipper = outer_skipper
+        self.inner_skipper = inner_skipper
+        self.outer_generator = None
+        self.inner_generator_creation_function = None
+        self.outer_value_creator = None
+        self.inner_position_creator = None
+        self.outer_position_creator = None
+        self.on_inclusion = None
+    
+    def set_outer_generator(self, outer_generator):
+        self.outer_generator = outer_generator
+    
+    def set_inner_generator_creation_function(self, inner_generator_creation_function):
+        """The inner generator creation function returns a generator"""
+        self.inner_generator_creation_function = inner_generator_creation_function
+    
+    def set_outer_value_creator(self, outer_value_creator):
+        """The outer value creator receives the outer item as an argument and returns a value"""
+        self.outer_value_creator = outer_value_creator
+    
+    def set_inner_position_creator(self, inner_position_creator):
+        """The inner position creator receives the inner item and the outer value as arguments and returns a MousePosition"""
+        self.inner_position_creator = inner_position_creator
+    
+    def set_outer_position_creator(self, outer_position_creator):
+        """The outer position creator receives the outer item and the outer value as arguments and returns a MousePosition"""
+        self.outer_position_creator = outer_position_creator
+      
+    def set_on_inclusion(self, on_inclusion):
+        """The on inclusion function receives the outer item, the inner item, and the inner position as arguments"""
+        self.on_inclusion = on_inclusion
+    
+    def run(self):
+        for outer_item in self.outer_generator:
+            outer_value = self.outer_value_creator(outer_item)
+            outer_position = self.outer_position_creator(outer_item, outer_value)
+            if self.outer_skipper.should_include_position_with_text(outer_position, outer_item):
+                self.outer_skipper.handle_position_included(outer_position)
+                self.handle_inner_loop(outer_item, outer_value)
+                print('included!', outer_item, outer_value, outer_position)
+            else:
+                self.outer_skipper.handle_position_excluded(outer_position)
+            
+    def handle_inner_loop(self, outer_item, outer_value):
+        for inner_item in self.inner_generator_creation_function():
+            inner_position = self.inner_position_creator(inner_item, outer_value)
+            if self.inner_skipper.should_include_position_with_text(inner_position, inner_item):
+                self.inner_skipper.handle_position_included(inner_position)
+                self.on_inclusion(outer_item, inner_item, inner_position)
+            else:
+                self.inner_skipper.handle_position_excluded(inner_position)
+    

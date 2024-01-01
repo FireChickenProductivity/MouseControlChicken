@@ -1,5 +1,5 @@
 from .Display import FrameDisplay, PositionDisplay
-from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, create_rectangular_skipper, SkipperRunner
+from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner
 from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -143,20 +143,30 @@ class RectangularPositionDisplay(PositionDisplay):
         self._add_positions()
     
     def _add_positions(self):
-        last_vertical_coordinate = None
-        last_horizontal_coordinate = None
-        has_used_horizontal: bool = False
-        for horizontal_coordinate in self.grid.get_horizontal_coordinates():
-            horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
-            has_used_horizontal = False
-            for vertical_coordinate in self.grid.get_vertical_coordinates():
-                vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
-                position = MousePosition(horizontal, vertical)
-                if self._should_include_position(last_horizontal_coordinate, last_vertical_coordinate, position):
-                    self._display_text_for_position(horizontal_coordinate, vertical_coordinate, position)
-                    last_vertical_coordinate = vertical_coordinate
-                    has_used_horizontal = True
-            if has_used_horizontal: last_horizontal_coordinate = horizontal_coordinate
+        runner = SingleNestedSkipperRunner(VerticalSkipper(), HorizontalSkipper())
+        runner.set_outer_generator(self.grid.get_vertical_coordinates())
+        runner.set_inner_generator_creation_function(self.grid.get_horizontal_coordinates)
+        runner.set_outer_value_creator(lambda coordinate: self.grid.compute_absolute_vertical_from_from_vertical_coordinates(coordinate))
+        runner.set_outer_position_creator(lambda coordinate, vertical: MousePosition(0, vertical))
+        runner.set_inner_position_creator(
+            lambda horizontal_coordinate, vertical: MousePosition(self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate), vertical)
+            )
+        runner.set_on_inclusion(lambda outer_item, inner_item, position: self._display_text_for_position(inner_item, outer_item, position))
+        runner.run()
+        # last_vertical_coordinate = None
+        # last_horizontal_coordinate = None
+        # has_used_horizontal: bool = False
+        # for horizontal_coordinate in self.grid.get_horizontal_coordinates():
+        #     horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
+        #     has_used_horizontal = False
+        #     for vertical_coordinate in self.grid.get_vertical_coordinates():
+        #         vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
+        #         position = MousePosition(horizontal, vertical)
+        #         if self._should_include_position(last_horizontal_coordinate, last_vertical_coordinate, position):
+        #             self._display_text_for_position(horizontal_coordinate, vertical_coordinate, position)
+        #             last_vertical_coordinate = vertical_coordinate
+        #             has_used_horizontal = True
+        #     if has_used_horizontal: last_horizontal_coordinate = horizontal_coordinate
             
     
     def _display_text_for_position(self, horizontal_coordinate: str, vertical_coordinate: str, position: MousePosition):
