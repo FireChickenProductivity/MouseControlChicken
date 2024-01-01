@@ -104,6 +104,7 @@ class SingleNestedSkipperRunner:
         self.outer_value_creator = None
         self.inner_position_creator = None
         self.outer_position_creator = None
+        self.text_creator = lambda outer_item, inner_item: outer_item + inner_item
         self.on_inclusion = None
     
     def set_outer_generator(self, outer_generator):
@@ -128,6 +129,10 @@ class SingleNestedSkipperRunner:
     def set_on_inclusion(self, on_inclusion):
         """The on inclusion function receives the outer item, the inner item, and the inner position as arguments"""
         self.on_inclusion = on_inclusion
+
+    def set_text_creator(self, text_creator):
+        """The text creator receives the outer item and the inner item as arguments and returns the corresponding text"""
+        self.text_creator = text_creator
     
     def run(self):
         for outer_item in self.outer_generator:
@@ -142,7 +147,8 @@ class SingleNestedSkipperRunner:
     def handle_inner_loop(self, outer_item, outer_value):
         for inner_item in self.inner_generator_creation_function():
             inner_position = self.inner_position_creator(inner_item, outer_value)
-            if self.inner_skipper.should_include_position_with_text(inner_position, inner_item):
+            text = self.text_creator(outer_item, inner_item)
+            if self.inner_skipper.should_include_position_with_text(inner_position, text):
                 self.inner_skipper.handle_position_included(inner_position)
                 self.on_inclusion(outer_item, inner_item, inner_position)
             else:
