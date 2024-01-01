@@ -1,8 +1,8 @@
 from talon import canvas, ui
 from talon.skia import Paint, Rect
 from talon.types.point import Point2d
-from .Grid import Rectangle
-from .SettingsMediator import settings_mediator
+from ..Grid import Rectangle
+from ..SettingsMediator import settings_mediator
 
 def update_canvas_color(canvas, color: str):
     canvas.paint.color = color
@@ -83,13 +83,16 @@ def compute_transparency_in_hexadecimal(transparency) -> str:
 
 def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     vertical = compute_text_vertical(canvas, text)
-    width = len(text.text)*text_size/1.5
-    original_background_rectangle = compute_background_rectangle_for_text(canvas, text)
-    height = vertical - text.y
-    height = original_background_rectangle.height*2
-    height = text_size*1.5
+    width = compute_background_horizontal_rectangle_size(text.text, text_size)
+    height = compute_background_vertical_rectangle_size(text_size)
     text_background_rectangle = Rect(text.x - width/2, vertical - text_size, width, height)
     canvas.draw_rect(text_background_rectangle)
+
+def compute_background_horizontal_rectangle_size(text: str, text_size):
+    return round(len(text)*text_size/1.5)
+
+def compute_background_vertical_rectangle_size(text_size):
+    return round(text_size*1.5)
 
 def draw_canvas_text(canvas, text: Text):
     vertical = compute_text_vertical(canvas, text)

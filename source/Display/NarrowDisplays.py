@@ -1,7 +1,7 @@
 from .Display import Display
-from .Grid import Grid, Rectangle, RecursiveDivisionGrid
+from ..Grid import Grid, Rectangle, RecursiveDivisionGrid
 from .UniversalDisplays import UniversalPositionDisplay
-from .Regions import draw_linear_region_on_canvas, draw_linear_region_on_canvas_with_lines_converted_to_half_lines_around_midpoint
+from ..Regions import draw_linear_region_on_canvas, draw_linear_region_on_canvas_with_lines_converted_to_half_lines_around_midpoint
 
 class NarrowDisplay(Display):
     def __init__(self):

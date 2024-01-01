@@ -17,6 +17,9 @@ class InputCoordinateSystem:
     def compute_coordinate_list(self, coordinates: str) -> List[str]:
         coordinate_list = coordinates.split(self.separator)
         return coordinate_list
+    
+    def get_separator(self) -> str:
+        return self.separator
 
 class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
     def __init__(self, system: InputCoordinateSystem, separator: str = " "):
