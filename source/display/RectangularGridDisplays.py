@@ -172,7 +172,7 @@ class RectangularPositionDisplay(PositionDisplay):
     
 class RectangularCheckerDisplay(RectangularPositionDisplay):
     def _create_skipper_runner(self) -> SingleNestedSkipperRunner:
-        inner_skipper = SkipperComposite([CheckerSkipper(2), HorizontalSkipper()])
+        inner_skipper = SkipperComposite([CheckerSkipper(3), HorizontalSkipper()])
         runner = SingleNestedSkipperRunner(VerticalSkipper(), inner_skipper)
         return runner
 
