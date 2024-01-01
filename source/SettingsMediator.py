@@ -101,6 +101,15 @@ module.setting(
     desc = 'Determines whether or not mouse control chicken frame grids should show crisscross lines by default.'
 )
 
+default_checker_frequency_setting_name = 'mouse_control_chicken_default_checker_frequency'
+default_checker_frequency = 'user.' + default_checker_frequency_setting_name
+module.setting(
+    default_checker_frequency_setting_name,
+    type = int,
+    default = 3,
+    desc = 'The default checker frequency used by Mouse Control Chicken. Every nth position is shown on a checker display where n is the frequency.'
+)
+
 class SettingsMediator:
     def __init__(self):
         self.callbacks = []
@@ -118,6 +127,7 @@ class SettingsMediator:
         self.current_screen_number = settings.get(default_current_screen_number)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
+        self.checker_frequency = settings.get(default_checker_frequency)
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -152,6 +162,9 @@ class SettingsMediator:
 
     def get_frame_grid_should_show_crisscross(self) -> bool:
         return self.frame_grid_should_show_crisscross
+
+    def get_checker_frequency(self) -> int:
+        return self.checker_frequency
 
     def set_text_size(self, size: int):
         self.text_size = size
@@ -191,6 +204,10 @@ class SettingsMediator:
 
     def set_frame_grid_should_show_crisscross(self, should_show: bool):
         self.frame_grid_should_show_crisscross = should_show
+        self._handle_change()
+
+    def set_checker_frequency(self, frequency: int):
+        self.checker_frequency = frequency
         self._handle_change()
 
     def register_on_change_callback(self, callback):

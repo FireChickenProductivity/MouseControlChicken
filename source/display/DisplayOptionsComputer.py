@@ -5,7 +5,8 @@ from .NarrowDisplays import *
 from ..Grid import Grid
 from typing import List
 
-display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay]
+display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
+                 RectangularCheckerDisplay]
 
 class DisplayOption:
     def __init__(self, display_type: type):

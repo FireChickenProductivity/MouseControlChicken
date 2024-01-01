@@ -59,10 +59,13 @@ class CheckerSkipper(Skipper):
     """A checker skipper skips every nth position"""
     def __init__(self, n: int):
         self.n = n
-        self.count = 0
+        self.count = self.compute_inclusion_value()
 
     def should_include_position_with_text(self, position: MousePosition, text: str) -> bool:
-        return self.count == self.n - 1
+        return self.count == self.compute_inclusion_value()
+    
+    def compute_inclusion_value(self):
+        return self.n - 1
 
     def handle_position_included(self, position: MousePosition):
         self.count = 0
