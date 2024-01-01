@@ -136,7 +136,6 @@ class SingleNestedSkipperRunner:
             if self.outer_skipper.should_include_position_with_text(outer_position, outer_item):
                 self.outer_skipper.handle_position_included(outer_position)
                 self.handle_inner_loop(outer_item, outer_value)
-                print('included!', outer_item, outer_value, outer_position)
             else:
                 self.outer_skipper.handle_position_excluded(outer_position)
             
