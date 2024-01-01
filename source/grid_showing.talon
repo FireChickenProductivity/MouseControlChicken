@@ -25,3 +25,4 @@ drop <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_end_drag_at_position(mouse_control_chicken_coordinates)
 
 chicken crisscross: user.mouse_control_chicken_toggle_frame_display_crisscross()
+chicken checker [frequency] <number_small>: user.mouse_control_chicken_set_checker_frequency(number_small)

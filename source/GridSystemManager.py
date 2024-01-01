@@ -235,6 +235,10 @@ class Actions:
         '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
         settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
 
+    def mouse_control_chicken_set_checker_frequency(frequency: int):
+        '''Sets the mouse control chicken checker frequency'''
+        settings_mediator.set_checker_frequency(frequency)
+
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
     options_text = compute_display_options_names_given_grid(grid)
