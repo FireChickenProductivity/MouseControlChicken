@@ -1,5 +1,5 @@
 from .Display import FrameDisplay, PositionDisplay
-from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner
+from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -143,7 +143,7 @@ class RectangularPositionDisplay(PositionDisplay):
         self._add_positions()
     
     def _add_positions(self):
-        runner = SingleNestedSkipperRunner(VerticalSkipper(), HorizontalSkipper())
+        runner = self._create_skipper_runner()
         runner.set_outer_generator(self.grid.get_vertical_coordinates())
         runner.set_inner_generator_creation_function(self.grid.get_horizontal_coordinates)
         runner.set_outer_value_creator(lambda coordinate: self.grid.compute_absolute_vertical_from_from_vertical_coordinates(coordinate))
@@ -162,10 +162,20 @@ class RectangularPositionDisplay(PositionDisplay):
     def _compute_text_to_display(self, horizontal_coordinate: str, vertical_coordinate: str) -> str:
         return vertical_coordinate + self.grid.get_coordinate_system().get_separator() + horizontal_coordinate
 
+    def _create_skipper_runner(self) -> SingleNestedSkipperRunner:
+        runner = SingleNestedSkipperRunner(VerticalSkipper(), HorizontalSkipper())
+        return runner
+
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
         return is_rectangular_grid(grid)
     
+class RectangularCheckerDisplay(RectangularPositionDisplay):
+    def _create_skipper_runner(self) -> SingleNestedSkipperRunner:
+        inner_skipper = SkipperComposite([CheckerSkipper(2), HorizontalSkipper()])
+        runner = SingleNestedSkipperRunner(VerticalSkipper(), inner_skipper)
+        return runner
+
 def is_rectangular_grid(grid: Grid) -> bool:
     primary_grid = compute_primary_grid(grid)
     return isinstance(primary_grid, RectangularGrid)
