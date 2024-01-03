@@ -230,18 +230,6 @@ class Actions:
             position.go()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
-        
-    def mouse_control_chicken_toggle_frame_display_crisscross():
-        '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
-        settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
-
-    def mouse_control_chicken_set_checker_frequency(frequency: int):
-        '''Sets the mouse control chicken checker frequency'''
-        settings_mediator.set_checker_frequency(frequency)
-
-    def mouse_control_chicken_refresh():
-        '''Refreshes the mouse control chicken grid and reloads settings from their defaults'''
-        settings_mediator.restore_default_settings()
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()

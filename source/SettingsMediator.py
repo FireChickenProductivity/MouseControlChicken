@@ -252,7 +252,7 @@ settings():
     user.mouse_control_chicken_default_current_screen_number = 0
     #This determines how far from the frame the text is in a frame grid display.
     user.mouse_control_chicken_default_frame_grid_offset = 10
-    user.mouse_control_chicken_default_frame_grid_should_show_crisscross = False
+    user.mouse_control_chicken_default_frame_grid_should_show_crisscross = false
     #Every nth position is shown on a checker display where n is the frequency.
     user.mouse_control_chicken_default_checker_frequency = 3
 """
@@ -260,3 +260,17 @@ settings():
     )
 
 app.register('ready', load_default_settings)
+
+@module.action_class
+class Actions:
+    def mouse_control_chicken_toggle_frame_display_crisscross():
+        '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
+        settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
+
+    def mouse_control_chicken_set_checker_frequency(frequency: int):
+        '''Sets the mouse control chicken checker frequency'''
+        settings_mediator.set_checker_frequency(frequency)
+
+    def mouse_control_chicken_refresh():
+        '''Refreshes the mouse control chicken grid and reloads settings from their defaults'''
+        settings_mediator.restore_default_settings()
