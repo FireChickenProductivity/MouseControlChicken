@@ -17,12 +17,12 @@ def compute_output_directory():
 
 app.register('ready', initialize)
 
-def mouse_control_chicken_guarantee_data_directory_exists():
+def guarantee_data_directory_exists():
     '''Creates the mouse control chicken data directory if it does not exist'''
     if not os.path.exists(OUTPUT_DIRECTORY):
         os.makedirs(OUTPUT_DIRECTORY)
 
-def mouse_control_chicken_guarantee_grid_options_file_initialized():
+def guarantee_grid_options_file_initialized():
     '''If the grid options file does not exist, this initializes it with defaults'''
     if not os.path.exists(GRID_OPTIONS_PATH):
         options = GridOptions([
@@ -32,9 +32,9 @@ def mouse_control_chicken_guarantee_grid_options_file_initialized():
             GridOption('alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'alphabet:one to nine'),
             GridOption('double alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'double alphabet:one to nine')
             ])
-        mouse_control_chicken_write_grid_options_file(options)
+        write_grid_options_file(options)
 
-def mouse_control_chicken_write_grid_options_file(options: GridOptions):
+def write_grid_options_file(options: GridOptions):
     '''Stores the mouse control chicken grid options in the file'''
     with open(GRID_OPTIONS_PATH, "w", newline = '') as file:
         file_writer = writer(file)
@@ -48,7 +48,7 @@ def write_text_to_file_if_uninitialized(path: str, text: str):
         with open(path, "w") as file:
             file.write(text)
 
-def mouse_control_chicken_read_grid_options() -> GridOptions:
+def read_grid_options() -> GridOptions:
     '''Obtains the mouse control chicken grid options from the file'''
     options = []
     with open(GRID_OPTIONS_PATH, "r", newline = '') as file:
@@ -59,21 +59,21 @@ def mouse_control_chicken_read_grid_options() -> GridOptions:
                 options.append(option)
     return GridOptions(options)
     
-def mouse_control_chicken_update_option_default_display(option_name: str, display_name: str):
+def update_option_default_display(option_name: str, display_name: str):
     '''Updates the default display option for the given grid option'''
-    options = mouse_control_chicken_read_grid_options()
+    options = read_grid_options()
     option = options.get_option(option_name)
     new_option = GridOption(option.get_name(), option.get_factory_name(), display_name, option.get_argument())
     new_options = [new_option if option_name == new_option.get_name() else options.get_option(option_name) for option_name in options.get_option_names()]
-    mouse_control_chicken_write_grid_options_file(GridOptions(new_options))
+    write_grid_options_file(GridOptions(new_options))
 
-def mouse_control_chicken_write_grid_option(option: GridOption):
+def write_grid_option(option: GridOption):
     '''Stores the mouse control chicken grid option in the file'''
     with open(GRID_OPTIONS_PATH, "a") as file:
         file_writer = writer(file)
         file_writer.writerow([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
     
-def mouse_control_chicken_get_grid_options_file_path() -> str:
+def get_grid_options_file_path() -> str:
     '''Returns the path to the mouse control chicken grid options file'''
     return GRID_OPTIONS_PATH
 

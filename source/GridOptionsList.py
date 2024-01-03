@@ -17,15 +17,15 @@ GRID_OPTIONS_PATH = None
 options: GridOptions = None
 def update_options(name, flags):
     global options
-    options = mouse_control_chicken_read_grid_options()
+    options = read_grid_options()
     option_list = {option:option for option in options.get_option_names()}
     context.lists[LIST_NAME_WITH_PREFIX] = option_list
 
 def on_ready():
     global GRID_OPTIONS_PATH
-    GRID_OPTIONS_PATH = mouse_control_chicken_get_grid_options_file_path()
-    mouse_control_chicken_guarantee_data_directory_exists()
-    mouse_control_chicken_guarantee_grid_options_file_initialized()
+    GRID_OPTIONS_PATH = get_grid_options_file_path()
+    guarantee_data_directory_exists()
+    guarantee_grid_options_file_initialized()
     fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")
 
