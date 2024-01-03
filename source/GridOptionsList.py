@@ -1,4 +1,4 @@
-from talon import Module, fs, actions, Context, app
+from talon import Module, fs, Context, app
 from .GridOptions import GridOptions
 from .file_management.FileUtilities import *
 
@@ -17,15 +17,19 @@ GRID_OPTIONS_PATH = None
 options: GridOptions = None
 def update_options(name, flags):
     global options
-    options = read_grid_options()
+    options = read_grid_options_from_path(GRID_OPTIONS_PATH)
     option_list = {option:option for option in options.get_option_names()}
     context.lists[LIST_NAME_WITH_PREFIX] = option_list
 
-def guarantee_grid_options_file_initialized():
+def guarantee_grid_options_file_initialized_at_path(path: str):
     '''If the grid options file does not exist, this initializes it with defaults'''
     options = create_default_grid_options()
-    grid_options_path = compute_path_within_output_directory("GridOptions.csv")
-    guarantee_csv_file_is_initialized(grid_options_path, convert_grid_options_to_rows(options))
+    guarantee_csv_file_is_initialized(path, convert_grid_options_to_rows(options))
+
+def write_grid_option(option: GridOption):
+    '''Stores the mouse control chicken grid option in the file'''
+    row = convert_grid_option_to_row(option)
+    append_row_to_csv_file(GRID_OPTIONS_PATH, row)
 
 def create_grid_option_rows() -> List[List[str]]:
     default_options = create_default_grid_options()
@@ -51,11 +55,29 @@ def convert_grid_options_to_rows(options: GridOptions) -> List[List[str]]:
 def convert_grid_option_to_row(option: GridOption) -> List[List[str]]:
     return [[option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()]]
 
+def read_grid_options_from_path(path: str) -> GridOptions:
+    '''Obtains the mouse control chicken grid options from the file'''
+    options = []
+    rows = read_rows_from_csv_file(path)
+    for entry in rows:
+        if len(entry) == 4:
+            option = GridOption(*entry)
+            options.append(option)
+    return GridOptions(options)
+    
+def update_option_default_display(option_name: str, display_name: str):
+    '''Updates the default display option for the given grid option'''
+    options = read_grid_options_from_path(GRID_OPTIONS_PATH)
+    option = options.get_option(option_name)
+    new_option = GridOption(option.get_name(), option.get_factory_name(), display_name, option.get_argument())
+    new_options = [new_option if option_name == new_option.get_name() else options.get_option(option_name) for option_name in options.get_option_names()]
+    write_grid_options_file(GridOptions(new_options))
+
 def on_ready():
     global GRID_OPTIONS_PATH
-    GRID_OPTIONS_PATH = get_grid_options_file_path()
+    GRID_OPTIONS_PATH = compute_path_within_output_directory("GridOptions.csv")
     guarantee_data_directory_exists()
-    guarantee_grid_options_file_initialized()
+    guarantee_grid_options_file_initialized_at_path(GRID_OPTIONS_PATH)
     fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")
 

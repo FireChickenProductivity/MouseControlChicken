@@ -46,38 +46,27 @@ def write_csv_file(path: str, rows: List[List[str]]):
         for row in rows:
             file_writer.writerow(row)
 
+def append_row_to_csv_file(path: str, row: List[str]):
+    '''Appends the given row to the csv file at the given path'''
+    with open(path, "a") as file:
+        file_writer = writer(file)
+        file_writer.writerow(row)
+
+def read_rows_from_csv_file(path: str) -> List[List[str]]:
+    '''Obtains the rows from the csv file at the given path'''
+    rows = []
+    with open(path, "r", newline = '') as file:
+        file_reader = reader(file)
+        for row in file_reader:
+            if len(row) > 0:
+                rows.append(row)
+    return rows
+
 def write_text_to_file_if_uninitialized(path: str, text: str):
     '''Writes the given text to the file at the given path if the file does not exist'''
     if not os.path.exists(path):
         with open(path, "w") as file:
             file.write(text)
-
-def read_grid_options() -> GridOptions:
-    '''Obtains the mouse control chicken grid options from the file'''
-    options = []
-    with open(GRID_OPTIONS_PATH, "r", newline = '') as file:
-        file_reader = reader(file)
-        for entry in file_reader:
-            if len(entry) == 4:
-                option = GridOption(*entry)
-                options.append(option)
-    return GridOptions(options)
     
-def update_option_default_display(option_name: str, display_name: str):
-    '''Updates the default display option for the given grid option'''
-    options = read_grid_options()
-    option = options.get_option(option_name)
-    new_option = GridOption(option.get_name(), option.get_factory_name(), display_name, option.get_argument())
-    new_options = [new_option if option_name == new_option.get_name() else options.get_option(option_name) for option_name in options.get_option_names()]
-    write_grid_options_file(GridOptions(new_options))
 
-def write_grid_option(option: GridOption):
-    '''Stores the mouse control chicken grid option in the file'''
-    with open(GRID_OPTIONS_PATH, "a") as file:
-        file_writer = writer(file)
-        file_writer.writerow([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
-    
-def get_grid_options_file_path() -> str:
-    '''Returns the path to the mouse control chicken grid options file'''
-    return GRID_OPTIONS_PATH
 
