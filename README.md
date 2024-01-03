@@ -30,3 +30,21 @@ chicken refresh: Refreshes the mouse grid and reloads the active settings from t
 
 ### Grid Showing Commands
 
+meet (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid.
+
+tap (mouse_control_chicken_coordinates): Left clicks specified position on the grid.
+
+pierce (mouse_control_chicken_coordinates): Double left clicks the specified position on the grid.
+
+brush (mouse_control_chicken_coordinates): Right clicks the specified position on the grid.
+
+(mouse_control_chicken_coordinates) slide (mouse_control_chicken_coordinates): Moves the cursor to the first specified position on the grid, starts dragging, moves to the second specified position on the grid, and stops dragging.
+
+hold (mouse_control_chicken_coordinates): Starts dragging at the specified position on the grid.
+
+drop (mouse_control_chicken_coordinates): Stops dragging at the specified position on the grid.
+
+chicken crisscross: Toggles showing cross crossing lines on the display for rectangular grids.
+
+chicken checker frequency (number_small): This determines how frequently to show a position on a checker display. Every nth position will be shown where n is the frequency.
+
