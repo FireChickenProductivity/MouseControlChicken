@@ -48,3 +48,9 @@ chicken crisscross: Toggles showing cross crossing lines on the display for rect
 
 chicken checker frequency (number_small): This determines how frequently to show a position on a checker display. Every nth position will be shown where n is the frequency.
 
+### Narrowing Grid Showing Commands
+
+If the active grid showing operates by narrowing around dictated coordinates, the following becomes available (The standard grid showing commands are still available and work the way they usually do but do not narrow the grid):
+
+trace (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and shows the grid narrowed around that position.
+
