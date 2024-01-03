@@ -52,5 +52,8 @@ chicken checker frequency (number_small): This determines how frequently to show
 
 If the active grid showing operates by narrowing around dictated coordinates, the following becomes available (The standard grid showing commands are still available and work the way they usually do but do not narrow the grid):
 
-trace (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and shows the grid narrowed around that position.
+trace (mouse_control_chicken_coordinates): Narrows the grid and display around the specified position. Dictating mouse control chicken coordinates after dictating trace will narrow the grid and display around the specified position until the grid is re-expanded.
 
+(mouse_control_chicken_coordinates) (mouse control chicken grid action, such as tap, brush, etc): Narrows the grid and display around the specified position, performs the specified action, and then re-expands the grid and display.
+
+(mouse control chicken grid action) here: Performs the specified action using the middle of the grid as the position and then re-expands the grid and display.
