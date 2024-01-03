@@ -239,6 +239,10 @@ class Actions:
         '''Sets the mouse control chicken checker frequency'''
         settings_mediator.set_checker_frequency(frequency)
 
+    def mouse_control_chicken_refresh():
+        '''Refreshes the mouse control chicken grid and reloads settings from their defaults'''
+        settings_mediator.restore_default_settings()
+
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
     options_text = compute_display_options_names_given_grid(grid)

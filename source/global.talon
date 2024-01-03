@@ -19,3 +19,5 @@ chicken screen <number_small>:
     user.mouse_control_chicken_use_screen(number_small)
     user.mouse_control_chicken_set_rectangle_manager_to_screen()
 chicken (window|dough|when): user.mouse_control_chicken_set_rectangle_manager_to_window()
+
+chicken refresh: user.mouse_control_chicken_refresh()
