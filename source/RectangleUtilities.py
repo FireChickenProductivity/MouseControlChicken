@@ -36,7 +36,7 @@ class LineDivider:
     
     def _compute_division_size(self) -> None:
         self.division_size = math.ceil(self.ending - self.start)/(self.number_of_divisors + 1)
-        if self.start + int(self.division_size*self.number_of_divisors) > self.ending: 
+        if self.start + int(self.division_size*self.number_of_divisors) > self.ending and self.division_size > 0: 
             self.number_of_divisors = math.floor((self.ending - self.start)/(self.division_size))
 
     def compute_divisor_position(self, number: int) -> int:
