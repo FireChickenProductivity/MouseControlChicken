@@ -1,5 +1,5 @@
 from ..GridOptions import GridOptions, GridOption
-from talon import Module, actions, app
+from talon import actions, app
 import os
 from csv import reader, writer
 
