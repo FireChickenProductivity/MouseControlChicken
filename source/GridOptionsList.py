@@ -66,7 +66,7 @@ def convert_grid_options_to_rows(options: GridOptions) -> List[List[str]]:
     return option_rows
 
 def convert_grid_option_to_row(option: GridOption) -> List[List[str]]:
-    return [[option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()]]
+    return [option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()]
 
 def read_grid_options_from_path(path: str) -> GridOptions:
     '''Obtains the mouse control chicken grid options from the file'''
@@ -81,7 +81,6 @@ def read_grid_options_from_path(path: str) -> GridOptions:
 def on_ready():
     global GRID_OPTIONS_PATH
     GRID_OPTIONS_PATH = compute_path_within_output_directory("GridOptions.csv")
-    guarantee_data_directory_exists()
     guarantee_grid_options_file_initialized_at_path(GRID_OPTIONS_PATH)
     fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")

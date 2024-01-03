@@ -7,6 +7,7 @@ OUTPUT_DIRECTORY = None
 def initialize():
     global OUTPUT_DIRECTORY
     OUTPUT_DIRECTORY = compute_output_directory()
+    guarantee_data_directory_exists()
 
 def compute_output_directory():
     return os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
@@ -35,7 +36,7 @@ def write_csv_file(path: str, rows: List[List[str]]):
 
 def append_row_to_csv_file(path: str, row: List[str]):
     '''Appends the given row to the csv file at the given path'''
-    with open(path, "a") as file:
+    with open(path, "a", newline = '') as file:
         file_writer = writer(file)
         file_writer.writerow(row)
 
