@@ -3,7 +3,7 @@ from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
 from .display.DisplayOptionsComputer import compute_display_options_names_given_grid
-from .FileUtilities import mouse_control_chicken_write_grid_option
+from .GridOptionsList import write_grid_option
 from talon import Module, actions
 
 class CurrentGrid:
@@ -168,7 +168,7 @@ class Actions:
         """Finishes creating a new mouse control chicken grid"""
         actions.user.mouse_control_chicken_disable_grid_creation_tag()
         global current_grid
-        mouse_control_chicken_write_grid_option(current_grid.compute_grid_option())
+        write_grid_option(current_grid.compute_grid_option())
         current_grid = None
 
     def mouse_control_chicken_cancel_grid_creation():

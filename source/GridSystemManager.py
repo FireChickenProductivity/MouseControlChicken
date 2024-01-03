@@ -5,7 +5,7 @@ from .RectangleManagement import RectangleManager, ScreenRectangleManager, Curre
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
-from .FileUtilities import mouse_control_chicken_update_option_default_display
+from .GridOptionsList import update_option_default_display
 from talon import Module, actions, app
 
 class GridSystemManager:
@@ -112,7 +112,7 @@ class Actions:
 
     def mouse_control_chicken_show_default_display_options():
         '''Shows options for the new default grid for the active mouse control chicken grid'''
-        show_display_options("Default Display Options", lambda display_name: mouse_control_chicken_update_option_default_display(current_option, display_name))
+        show_display_options("Default Display Options", lambda display_name: update_option_default_display(current_option, display_name))
 
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
