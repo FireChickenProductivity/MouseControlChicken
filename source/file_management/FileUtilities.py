@@ -2,6 +2,7 @@ from ..GridOptions import GridOptions, GridOption
 from talon import actions, app
 import os
 from csv import reader, writer
+from typing import List
 
 OUTPUT_DIRECTORY = None
 GRID_OPTIONS_PATH = None
@@ -15,6 +16,9 @@ def initialize():
 def compute_output_directory():
     return os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
 
+def compute_path_within_output_directory(file_name: str):
+    return os.path.join(OUTPUT_DIRECTORY, file_name)
+
 app.register('ready', initialize)
 
 def guarantee_data_directory_exists():
@@ -22,25 +26,25 @@ def guarantee_data_directory_exists():
     if not os.path.exists(OUTPUT_DIRECTORY):
         os.makedirs(OUTPUT_DIRECTORY)
 
-def guarantee_grid_options_file_initialized():
-    '''If the grid options file does not exist, this initializes it with defaults'''
-    if not os.path.exists(GRID_OPTIONS_PATH):
-        options = GridOptions([
-            GridOption('one to nine', 'Square Recursive Division Grid', 'DoubleNarrow', '3'),
-            GridOption('alphabet', 'Alphabet', 'RectangularGridFrame', ''),
-            GridOption('double alphabet', 'Double Alphabet', 'RectangularGridFrame', ''),
-            GridOption('alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'alphabet:one to nine'),
-            GridOption('double alphabet numbers', 'Recursively Divisible Combination', 'UniversalPosition', 'double alphabet:one to nine')
-            ])
-        write_grid_options_file(options)
-
 def write_grid_options_file(options: GridOptions):
     '''Stores the mouse control chicken grid options in the file'''
-    with open(GRID_OPTIONS_PATH, "w", newline = '') as file:
+    option_rows = []
+    for name in options.get_option_names():
+        option = options.get_option(name)
+        option_rows.append([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
+    write_csv_file(GRID_OPTIONS_PATH, option_rows)
+
+def guarantee_csv_file_is_initialized(path: str, rows: List[List[str]]):
+    '''If the csv file does not exist, this initializes it with the given rows'''
+    if not os.path.exists(path):
+        write_csv_file(path, rows)
+
+def write_csv_file(path: str, rows: List[List[str]]):
+    '''Writes the given rows to the csv file at the given path'''
+    with open(path, "w", newline = '') as file:
         file_writer = writer(file)
-        for name in options.get_option_names():
-            option = options.get_option(name)
-            file_writer.writerow([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
+        for row in rows:
+            file_writer.writerow(row)
 
 def write_text_to_file_if_uninitialized(path: str, text: str):
     '''Writes the given text to the file at the given path if the file does not exist'''
