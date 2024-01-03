@@ -5,7 +5,7 @@ from .RectangleManagement import RectangleManager, ScreenRectangleManager, Curre
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
-from .FileUtilities import mouse_control_chicken_update_option_default_display
+from .file_management.FileUtilities import mouse_control_chicken_update_option_default_display
 from talon import Module, actions, app
 
 class GridSystemManager:

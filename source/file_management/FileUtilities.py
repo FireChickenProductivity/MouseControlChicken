@@ -1,22 +1,27 @@
-from .GridOptions import GridOptions, GridOption
+from ..GridOptions import GridOptions, GridOption
 from talon import Module, actions, app
 import os
 from csv import reader, writer
 
 OUTPUT_DIRECTORY = None
 GRID_OPTIONS_PATH = None
-def initialize_paths():
+creation_registration_stack = []
+def initialize():
     global OUTPUT_DIRECTORY, GRID_OPTIONS_PATH
-    OUTPUT_DIRECTORY = os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
+    OUTPUT_DIRECTORY = compute_output_directory()
     GRID_OPTIONS_PATH = os.path.join(OUTPUT_DIRECTORY, "GridOptions.csv")
+    global creation_registration_stack
 
-app.register('ready', initialize_paths)
+def compute_output_directory():
+    return os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
+
+app.register('ready', initialize)
 
 def mouse_control_chicken_guarantee_data_directory_exists():
     '''Creates the mouse control chicken data directory if it does not exist'''
     if not os.path.exists(OUTPUT_DIRECTORY):
         os.makedirs(OUTPUT_DIRECTORY)
-    
+
 def mouse_control_chicken_guarantee_grid_options_file_initialized():
     '''If the grid options file does not exist, this initializes it with defaults'''
     if not os.path.exists(GRID_OPTIONS_PATH):
@@ -36,6 +41,12 @@ def mouse_control_chicken_write_grid_options_file(options: GridOptions):
         for name in options.get_option_names():
             option = options.get_option(name)
             file_writer.writerow([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
+
+def write_text_to_file_if_uninitialized(path: str, text: str):
+    '''Writes the given text to the file at the given path if the file does not exist'''
+    if not os.path.exists(path):
+        with open(path, "w") as file:
+            file.write(text)
 
 def mouse_control_chicken_read_grid_options() -> GridOptions:
     '''Obtains the mouse control chicken grid options from the file'''
@@ -65,3 +76,4 @@ def mouse_control_chicken_write_grid_option(option: GridOption):
 def mouse_control_chicken_get_grid_options_file_path() -> str:
     '''Returns the path to the mouse control chicken grid options file'''
     return GRID_OPTIONS_PATH
+

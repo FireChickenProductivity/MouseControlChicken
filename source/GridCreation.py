@@ -3,7 +3,7 @@ from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
 from .display.DisplayOptionsComputer import compute_display_options_names_given_grid
-from .FileUtilities import mouse_control_chicken_write_grid_option
+from .file_management.FileUtilities import mouse_control_chicken_write_grid_option
 from talon import Module, actions
 
 class CurrentGrid:

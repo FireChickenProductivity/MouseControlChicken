@@ -1,6 +1,6 @@
 from talon import Module, fs, actions, Context, app
 from .GridOptions import GridOptions
-from .FileUtilities import *
+from .file_management.FileUtilities import *
 
 module = Module()
 context = Context()
