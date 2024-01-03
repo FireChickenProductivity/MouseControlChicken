@@ -1,38 +1,25 @@
-from ..GridOptions import GridOptions, GridOption
 from talon import actions, app
 import os
 from csv import reader, writer
 from typing import List
 
 OUTPUT_DIRECTORY = None
-GRID_OPTIONS_PATH = None
-creation_registration_stack = []
 def initialize():
-    global OUTPUT_DIRECTORY, GRID_OPTIONS_PATH
+    global OUTPUT_DIRECTORY
     OUTPUT_DIRECTORY = compute_output_directory()
-    GRID_OPTIONS_PATH = os.path.join(OUTPUT_DIRECTORY, "GridOptions.csv")
-    global creation_registration_stack
 
 def compute_output_directory():
     return os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
 
+app.register('ready', initialize)
+
 def compute_path_within_output_directory(file_name: str):
     return os.path.join(OUTPUT_DIRECTORY, file_name)
-
-app.register('ready', initialize)
 
 def guarantee_data_directory_exists():
     '''Creates the mouse control chicken data directory if it does not exist'''
     if not os.path.exists(OUTPUT_DIRECTORY):
         os.makedirs(OUTPUT_DIRECTORY)
-
-def write_grid_options_file(options: GridOptions):
-    '''Stores the mouse control chicken grid options in the file'''
-    option_rows = []
-    for name in options.get_option_names():
-        option = options.get_option(name)
-        option_rows.append([option.get_name(), option.get_factory_name(), option.get_default_display_option(), option.get_argument()])
-    write_csv_file(GRID_OPTIONS_PATH, option_rows)
 
 def guarantee_csv_file_is_initialized(path: str, rows: List[List[str]]):
     '''If the csv file does not exist, this initializes it with the given rows'''

@@ -1,5 +1,5 @@
 from talon import Module, fs, Context, app
-from .GridOptions import GridOptions
+from .GridOptions import GridOptions, GridOption
 from .file_management.FileUtilities import *
 
 module = Module()
@@ -26,12 +26,25 @@ def guarantee_grid_options_file_initialized_at_path(path: str):
     options = create_default_grid_options()
     guarantee_csv_file_is_initialized(path, convert_grid_options_to_rows(options))
 
+def update_option_default_display(option_name: str, display_name: str):
+    '''Updates the default display option for the given grid option'''
+    options = read_grid_options_from_path(GRID_OPTIONS_PATH)
+    option = options.get_option(option_name)
+    new_option = GridOption(option.get_name(), option.get_factory_name(), display_name, option.get_argument())
+    new_options = [new_option if option_name == new_option.get_name() else options.get_option(option_name) for option_name in options.get_option_names()]
+    write_grid_options_file_at_path(GRID_OPTIONS_PATH, GridOptions(new_options))
+
+def write_grid_options_file_at_path(path: str, options: GridOptions):
+    '''Stores the mouse control chicken grid options in the file'''
+    option_rows = convert_grid_options_to_rows(options)
+    write_csv_file(path, option_rows)
+
 def write_grid_option(option: GridOption):
     '''Stores the mouse control chicken grid option in the file'''
     row = convert_grid_option_to_row(option)
     append_row_to_csv_file(GRID_OPTIONS_PATH, row)
 
-def create_grid_option_rows() -> List[List[str]]:
+def create_default_grid_option_rows() -> List[List[str]]:
     default_options = create_default_grid_options()
     option_rows = convert_grid_options_to_rows(default_options)
     return option_rows
@@ -64,14 +77,6 @@ def read_grid_options_from_path(path: str) -> GridOptions:
             option = GridOption(*entry)
             options.append(option)
     return GridOptions(options)
-    
-def update_option_default_display(option_name: str, display_name: str):
-    '''Updates the default display option for the given grid option'''
-    options = read_grid_options_from_path(GRID_OPTIONS_PATH)
-    option = options.get_option(option_name)
-    new_option = GridOption(option.get_name(), option.get_factory_name(), display_name, option.get_argument())
-    new_options = [new_option if option_name == new_option.get_name() else options.get_option(option_name) for option_name in options.get_option_names()]
-    write_grid_options_file(GridOptions(new_options))
 
 def on_ready():
     global GRID_OPTIONS_PATH
