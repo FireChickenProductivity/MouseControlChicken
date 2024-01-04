@@ -8,7 +8,7 @@ class Callback:
     
     def handle_un_registration(self):
         if self.un_registration_callback_function:
-            self.un_registration_callback_function(self)
+            self.un_registration_callback_function()
 
 class NoArgumentCallback(Callback):
     def call(self, *args):
