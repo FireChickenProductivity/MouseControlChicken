@@ -76,3 +76,27 @@ A single alphabet grid offering the primary grid system of the alphabet numbers 
 A double alphabet grid offering the primary grid system of the double alphabet numbers grid but without the secondary grid.
 
 ### Display Options
+The display options available depend on the active grid.
+
+#### Universal Display Options
+
+UniversalPosition: Displays every position on the grid's primary coordinate system. This takes into account little information about the specifics of the grid and is generally a bad option.
+
+#### Rectangular Grid Display Options
+Rectangular displays take into account the size of the rectangle the grid is created around and consequently only coordinates if not too close to each other.
+
+RectangularGridFrame: Displays a frame around the grid. This shows the horizontal coordinates on the left and right of the frame and the vertical coordinates on the top and bottom of the frame.
+
+DoubleFrame: A RectangularGridFrame that also shows the horizontal and vertical coordinates in the middle of the grid.
+
+QuadrupleFrame: A RectangularGridFrame that essentially creates a DoubleFrame for each quadrant of the grid. It shows the vertical coordinates in the middle of the left and right halves of the grid and the horizontal coordinates in the middle of the top and bottom halves of the grid in addition to showing the coordinates in the middle of the grid.
+
+RectangularPosition: Displays every position on the grid's primary coordinate system if the grid is big enough. The advantage of this over the UniversalPosition is that it only shows positions that are far enough apart.
+
+RectangularChecker: Displays every nth position on the grid's primary coordinate system that is far enough apart to display where n is the checker frequency. 
+
+#### Narrow Grid Display Options
+
+Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.
+
+DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
