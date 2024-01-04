@@ -120,5 +120,27 @@ Narrow: Draws every region on the grid's primary coordinate system and shows the
 
 DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
 
+### Creating Custom Grids
+
+The grid creation process can be initiated with the "chicken create grid" command. The process initially asks for a name for the grid. You should provide a unique name. The process next asks you to choose the type of grid. 
+
+Square Recursive Division Grid is what the one to nine grid uses. You can pick a number between 2 and 9 for the division factor. The resulting grid will divide the base rectangle into the square of the division factor. 
+
+Alphabet is a clone of the alphabet grid.
+
+Double Alphabet is a clone of the double alphabet grid.
+
+Recursively Divisible Combination let you put one grade inside another such as how the alphabet numbers grid has the alphabet grad as the primary and the one to nine as the secondary. Having a square recursive division grid as the primary is currently not supported.
+
+Cloning an existing grade can be useful if you want multiple options for the same grid that have different default displays.
+
+After you pick the grid type, the process will ask you to provide any needed grid arguments.
+
+Next, the process will ask you to choose the default display.
+
+The grid creation process does not currently make sure that your input makes sense. Providing input that this document explains is not a valid option may have unexpected results.
+
+During the process, choose enumerated options with the corresponding number.
+
 ## Settings
 Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.
