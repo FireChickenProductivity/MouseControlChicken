@@ -58,6 +58,25 @@ trace (mouse_control_chicken_coordinates): Narrows the grid and display around t
 
 (mouse control chicken grid action) here: Performs the specified action using the middle of the grid as the position and then re-expands the grid and display.
 
+### Dialogue Options Commands
+
+options (hide or close or off): Hides the options dialogue.
+
+page next: Displays the next page of options if one is available.
+
+page last: Displays the previous page of options if one is available.
+
+choose (option number): Chooses the option with the specified number.
+
+### Dictation Input Commands
+Dictation input is available for some dialogues.
+
+choose (option): Sets the dictation and put to the dictated option. Depending upon the specific dialogue, the option could be arbitrary dictation or limited.
+
+accept: Accepts the dictation input and closes the dialogue.
+
+reject: Cancels the dialogue.
+
 ### Default Grid Options
 
 #### double alphabet numbers
