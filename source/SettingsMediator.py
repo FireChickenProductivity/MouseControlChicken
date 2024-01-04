@@ -46,7 +46,7 @@ default_line_width = create_setting(
     module,
     'default_line_width',
     setting_type = int,
-    default = 2,
+    default = 1,
     desc = 'The default line width used by Mouse Control Chicken'
 ) 
 
@@ -82,7 +82,7 @@ default_main_transparency = create_setting(
     module,
     'default_main_transparency',
     setting_type = float,
-    default = 0.3,
+    default = 0,
     desc = 'The default main transparency used by Mouse Control Chicken'
 ) 
 
@@ -243,11 +243,11 @@ settings():
     user.mouse_control_chicken_default_grid_option = "double alphabet numbers"
     user.mouse_control_chicken_default_text_size = 10
     user.mouse_control_chicken_default_text_color = "66ff00"
-    user.mouse_control_chicken_default_line_width = 2
+    user.mouse_control_chicken_default_line_width = 1
     user.mouse_control_chicken_default_line_color = "FF0000"
     user.mouse_control_chicken_default_background_transparency = 0.50
     user.mouse_control_chicken_default_background_color = "000000"
-    user.mouse_control_chicken_default_main_transparency = 0.3
+    user.mouse_control_chicken_default_main_transparency = 0
     #This determines the default screen that the grid will be shown on.
     user.mouse_control_chicken_default_current_screen_number = 0
     #This determines how far from the frame the text is in a frame grid display.
