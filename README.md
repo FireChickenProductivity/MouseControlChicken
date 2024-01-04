@@ -158,3 +158,12 @@ Grids might not work properly if you try to make them around a very very tiny re
 Updating any of the python files in this project might require restarting talon for mouse control chicken to work properly.
 
 After updating a python file in this project, sometimes an old display would still be visible but could not be hidden. In the unlikely event that an old display gets stuck like that during normal use, please report the issue and explain as much as you can about what you did before that happened. 
+
+## Inspiration
+The project was inspired by the following repositories:
+
+https://github.com/tararoys/modified_full_mouse_grid
+
+https://github.com/tararoys/dense-mouse-grid/tree/dense_mouse_grid_2
+
+In particular, I was inspired by the idea of an alphabet based grid.
