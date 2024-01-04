@@ -1,5 +1,6 @@
 from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
+from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
@@ -265,6 +266,11 @@ def double_click():
 def setup():
     global manager
     manager = GridSystemManager()
-    settings_mediator.register_on_change_callback(manager.refresh)
+    register_on_change_callback()
+
+def register_on_change_callback():
+    callback = NoArgumentCallback(manager.refresh, manager.hide)
+    callback_name = "manager_refresh"
+    settings_mediator.register_on_change_callback(callback_name, callback)
 
 app.register("ready", setup)

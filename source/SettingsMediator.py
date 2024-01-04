@@ -1,5 +1,6 @@
 from talon import Module, settings, app
 from .file_management.FileUtilities import write_text_to_file_if_uninitialized, compute_path_within_output_directory
+from .Callbacks import CallbackManager, Callback
 
 module = Module()
 
@@ -123,7 +124,7 @@ default_checker_frequency = create_setting(
 
 class SettingsMediator:
     def __init__(self):
-        self.callbacks = []
+        self.callback_manager = CallbackManager()
         self.restore_default_settings()
     
     def restore_default_settings(self):
@@ -221,11 +222,11 @@ class SettingsMediator:
         self.checker_frequency = frequency
         self._handle_change()
 
-    def register_on_change_callback(self, callback):
-        self.callbacks.append(callback)
+    def register_on_change_callback(self, name: str, callback: Callback):
+        self.callback_manager.register_callback(name, callback)
     
     def _handle_change(self):
-        for callback in self.callbacks: callback()
+        self.callback_manager.call_callbacks()
 
 settings_mediator = SettingsMediator()
 def load_default_settings():
