@@ -57,3 +57,22 @@ trace (mouse_control_chicken_coordinates): Narrows the grid and display around t
 (mouse_control_chicken_coordinates) (mouse control chicken grid action, such as tap, brush, etc): Narrows the grid and display around the specified position, performs the specified action, and then re-expands the grid and display.
 
 (mouse control chicken grid action) here: Performs the specified action using the middle of the grid as the position and then re-expands the grid and display.
+
+### Default Grid Options
+
+#### double alphabet numbers
+Offers a primary 52 by 52 grid with a secondary recursively narrowable 1-9 grid around each position. The primary grid coordinates are based on uppercase and lower case letters in the english alphabet. Lowercase letters are referred to with the user.letter capture's phonetic alphabet. Uppercase letters are referred to with the user.mouse_control_chicken_uppercase_letter talon list generated within the data directory in the uppercase_letters.talon-list file. A position on the primary grid is dictated with the letter corresponding to the vertical followed by the letter corresponding to the horizontal. Positions on the primary grid may be utilized without referencing the secondary. Numbers between 1 and 9 can optionally be used at the end of the position for more fine grained mouse control equivalent to utilizing a one to nine grid around the position on the primary grid.
+
+#### one to nine
+Divides the screen into 9 squares. 1 is the top left square. 2 is the top middle square. 3 is the top right square. 4 is the middle left square. 5 is the middle square. 6 is the middle right square. 7 is the bottom left square. 8 is the bottom middle square. 9 is the bottom right square. Positions can be referred to with a sequence of numbers between 1 and 9. The resulting position is determined by taking the square given by the first number, dividing it into 9 squares like before, and then picking the square specified by the second number. The process repeats until all the numbers are used. The final position is the middle of the last square chosen.
+
+#### alphabet numbers
+Works the same as the double alphabet numbers grid but only offers the lower case letters on the primary grid.
+
+#### alphabet
+A single alphabet grid offering the primary grid system of the alphabet numbers grid but without the secondary grid. 
+
+#### double alphabet
+A double alphabet grid offering the primary grid system of the double alphabet numbers grid but without the secondary grid.
+
+### Display Options
