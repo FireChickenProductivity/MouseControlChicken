@@ -100,3 +100,6 @@ RectangularChecker: Displays every nth position on the grid's primary coordinate
 Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.
 
 DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
+
+## Settings
+Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.
