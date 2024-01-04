@@ -151,6 +151,15 @@ During the process, choose an enumerated option with the corresponding number.
 ## Settings
 Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.
 
+## Dependencies
+The project depends upon the following from the community repository:
+
+user.letter capture
+
+user.mouse_drag action
+
+user.mouse_drag_end action
+
 ## Known Issues
 
 Grids might not work properly if you try to make them around a very very tiny rectangle that has fewer pixels than the grid has coordinates in a dimension.
