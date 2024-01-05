@@ -112,13 +112,23 @@ Rectangular displays take into account the size of the rectangle the grid is cre
 
 RectangularGridFrame: Displays a frame around the grid. This shows the horizontal coordinates on the left and right of the frame and the vertical coordinates on the top and bottom of the frame.
 
+![Frame Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/eb10f598-93df-4156-af0f-4637b2c5b4e9)
+
 DoubleFrame: A RectangularGridFrame that also shows the horizontal and vertical coordinates in the middle of the grid.
+
+![Double Frame](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/33f9f86e-c153-48a9-b9c6-fe57f7905ef4)
 
 QuadrupleFrame: A RectangularGridFrame that essentially creates a DoubleFrame for each quadrant of the grid. It shows the vertical coordinates in the middle of the left and right halves of the grid and the horizontal coordinates in the middle of the top and bottom halves of the grid in addition to showing the coordinates in the middle of the grid.
 
+![Quadruple Frame](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/4ebc56e8-c776-4925-8b30-5db002cdacd7)
+
 RectangularPosition: Displays every position on the grid's primary coordinate system if the grid is big enough. The advantage of this over the UniversalPosition display is that it only shows positions that are far enough apart.
 
+![Rectangular Position Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/fc1bde11-801b-4435-943c-aeca4afe1912)
+
 RectangularChecker: Displays every nth position on the grid's primary coordinate system that is far enough apart to display where n is the checker frequency. 
+
+![Rectangular Checker Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/f6d291ea-e559-4f3d-a83b-a07389f25e87)
 
 #### Narrow Grid Display Options
 
