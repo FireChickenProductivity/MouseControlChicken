@@ -134,7 +134,11 @@ RectangularChecker: Displays every nth position on the grid's primary coordinate
 
 Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.
 
+![Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/53959b6f-3f30-4bc4-a3ce-fdb5d4a8c6e7)
+
 DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
+
+![Double Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/ce99a1b5-2327-4102-88dd-40ba5e47fc8d)
 
 ### Creating Custom Grids
 
