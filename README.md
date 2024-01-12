@@ -176,11 +176,13 @@ user.mouse_drag_end action
 
 ## Known Issues
 
-Grids might not work properly if you try to make them around a very very tiny rectangle that has fewer pixels than the grid has coordinates in a dimension.
+Grids might not work properly if you try to make them around a very very tiny rectangle that has fewer pixels than the grid has coordinates in a dimension. Fixing this is planned but not a high priority right now.
 
 Updating any of the python files in this project might require restarting talon for mouse control chicken to work properly.
 
-After updating a python file in this project, sometimes an old display would still be visible but could not be hidden. In the unlikely event that an old display gets stuck like that during normal use, please report the issue and explain as much as you can about what you did before that happened. 
+A few features may not work on a fresh installation until after talon is restarted, but I should be able to fix this.
+
+After updating a python file in this project, sometimes an old display would still be visible but could not be hidden. This issue has not been encountered since a recent improvement. In the unlikely event that an old display gets stuck like that during normal use, please report the issue and explain as much as you can about what you did before that happened. 
 
 ## Inspiration
 The project was inspired by the following repositories:
