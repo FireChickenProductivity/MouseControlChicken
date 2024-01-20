@@ -155,6 +155,16 @@ class Actions:
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         end_drag_at_position()
 
+    def mouse_control_chicken_scroll_up_at_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls up'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_scroll(-settings_mediator.get_scroll_amount())
+    
+    def mouse_control_chicken_scroll_down_at_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls down'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.mouse_scroll(settings_mediator.get_scroll_amount())
+
     def mouse_control_chicken_set_rectangle_manager_to_window():
         '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
         rectangle_manager = CurrentWindowRectangleManager()
