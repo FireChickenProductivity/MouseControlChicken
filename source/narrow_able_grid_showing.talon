@@ -35,3 +35,13 @@ drop here: user.mouse_control_chicken_end_drag_at_current_position_on_narrow_abl
     user.mouse_control_chicken_narrow_grid(mouse_control_chicken_coordinates)
     user.mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid()
 meet here: user.mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid()
+
+<user.mouse_control_chicken_coordinates> twist:
+    user.mouse_control_chicken_narrow_grid(mouse_control_chicken_coordinates)
+    user.mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid()
+twist here: user.mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid()
+
+<user.mouse_control_chicken_coordinates> roll:
+    user.mouse_control_chicken_narrow_grid(mouse_control_chicken_coordinates)
+    user.mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid()
+roll here: user.mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid()

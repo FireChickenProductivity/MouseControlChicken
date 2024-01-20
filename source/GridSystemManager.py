@@ -158,12 +158,12 @@ class Actions:
     def mouse_control_chicken_scroll_up_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls up'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
-        actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
+        scroll_up()
     
     def mouse_control_chicken_scroll_down_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls down'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
-        actions.mouse_scroll(settings_mediator.get_scrolling_amount())
+        scroll_down()
 
     def mouse_control_chicken_set_rectangle_manager_to_window():
         '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
@@ -241,6 +241,24 @@ class Actions:
             position.go()
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        
+    def mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid():
+        '''Scrolls up at the current position on the current mouse control chicken narrow able grid'''
+        if manager_has_narrow_able_grid():
+            position = get_current_position_on_narrow_able_grid()
+            position.go()
+            scroll_up()
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        
+    def mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid():
+        '''Scrolls down at the current position on the current mouse control chicken narrow able grid'''
+        if manager_has_narrow_able_grid():
+            position = get_current_position_on_narrow_able_grid()
+            position.go()
+            scroll_down()
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
@@ -272,6 +290,12 @@ def end_drag_at_position():
 def double_click():
     actions.mouse_click()
     actions.mouse_click()
+
+def scroll_up():
+    actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
+
+def scroll_down():
+    actions.mouse_scroll(settings_mediator.get_scrolling_amount())
 
 def setup():
     global manager
