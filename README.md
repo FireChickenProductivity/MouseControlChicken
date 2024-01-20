@@ -193,7 +193,7 @@ The project was inspired by the following repositories:
 
 https://github.com/tararoys/modified_full_mouse_grid
 
-https://github.com/tararoys/dense-mouse-grid/tree/dense_mouse_grid_2
+https://github.com/tararoys/dense-mouse-grid
 
 In particular, I was inspired by the idea of an alphabet based grid.
 
