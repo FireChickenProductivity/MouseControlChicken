@@ -197,7 +197,7 @@ https://github.com/tararoys/dense-mouse-grid
 
 In particular, I was inspired by the idea of an alphabet based grid.
 
-The community repository (https://github.com/FireChickenProductivity) mouse grid influenced my default color scheme.
+The community repository (https://github.com/talonhub/community) mouse grid influenced my default color scheme.
 
 ## Credit
 I used GitHub Copilot on this project. It did an astonishingly good job of offering useful code completions that mimicked my coding style. Without Copilot, I would not have been able to develop Mouse Control Chicken so quickly without wearing out my voice. If you have to program a lot of Talon Voice customization in python, I highly recommend using Copilot to make your life easier.
