@@ -50,6 +50,10 @@ hold (mouse_control_chicken_coordinates): Starts dragging at the specified posit
 
 drop (mouse_control_chicken_coordinates): Stops dragging at the specified position on the grid.
 
+twist (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls up.
+
+roll (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls down.
+
 chicken crisscross: Toggles showing cross crossing lines on the display for rectangular frame grids.
 
 chicken checker frequency (number_small): This determines how frequently to show a position on a checker display. Every nth position will be shown where n is the frequency.

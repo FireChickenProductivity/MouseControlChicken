@@ -122,6 +122,14 @@ default_checker_frequency = create_setting(
     'The default checker frequency used by Mouse Control Chicken. Every nth position is shown on a checker display where n is the frequency.'
 )
 
+scrolling_amount = create_setting(
+    module,
+    'scrolling_amount',
+    int,
+    600,
+    'The amount that mouse control chicken standard scrolling commands will scroll.'
+)
+
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
@@ -177,6 +185,9 @@ class SettingsMediator:
 
     def get_checker_frequency(self) -> int:
         return self.checker_frequency
+
+    def get_scrolling_amount(self) -> int:
+        return settings.get(scrolling_amount)
 
     def set_text_size(self, size: int):
         self.text_size = size
@@ -256,6 +267,7 @@ settings():
     user.mouse_control_chicken_default_frame_grid_should_show_crisscross = false
     #Every nth position is shown on a checker display where n is the frequency.
     user.mouse_control_chicken_default_checker_frequency = 3
+    user.mouse_control_chicken_scrolling_amount = 600
 """
 
     )
