@@ -28,6 +28,7 @@ class DisplayManager:
     def hide(self):
         self.hide_temporarily()
         self.is_showing = False
+        self.cancel_flicker_job()
     
     def show(self):
         if self.display: 
