@@ -37,6 +37,7 @@ class DisplayManager:
     
     def show_temporarily(self):
         if self.display: self.display.show()
+        print('showing temporarily')
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.display.set_grid(grid)
@@ -49,25 +50,33 @@ class DisplayManager:
         else:
             self.show()
 
+    def cancel_flicker_job(self):
+        if self.flicker_job:
+            cron.cancel(self.flicker_job)
+            self.flicker_job = None
+
     def flicker_show(self):
         self.show_temporarily()
-        self.flicker_job = cron.after(f'{self.flicker_showtime}ms', lambda: self.flicker_hide())
+        self.cancel_flicker_job()
+        self.flicker_job = cron.after(f'{self.flicker_show_time}ms', self.flicker_hide)
+        print(f'Showing temporarily for {self.flicker_show_time}ms')
 
     def flicker_hide(self):
         self.hide_temporarily()
-        self.flicker_job = cron.after(f'{self.flicker_hide_time}ms', lambda: self.flicker_show())
+        self.cancel_flicker_job()
+        self.flicker_job = cron.after(f'{self.flicker_hide_time}ms', self.flicker_show)
+        print(f'Hiding temporarily for {self.flicker_hide_time}ms', self.flicker_job)
 
     def start_flickering(self, showtime: int, hidetime: int):
         self.flicker_show_time = showtime
         self.flicker_hide_time = hidetime
-        if self.flicker_job:
-            self.flicker_job.cancel()
+        self.cancel_flicker_job
         self.flicker_show()
         self.is_flickering = True
     
     def stop_flickering(self):      
         if self.flicker_job:
-            self.flicker_job.cancel()
+            self.cancel_flicker_job()
             self.flicker_job = None
         self.is_flickering = False
         
