@@ -1,4 +1,5 @@
 from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
+from .GridOptionsList import options #This is imported to make the options list get computed before the system manager is constructed
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
