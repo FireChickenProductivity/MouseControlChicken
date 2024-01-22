@@ -1,5 +1,4 @@
 from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
-from .GridOptionsList import options #This is imported to make the options list get computed before the system manager is constructed
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
@@ -8,12 +7,13 @@ from .GridOptions import GridOptions
 from .display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
+from .DisplayManagement import DisplayManager
 from talon import Module, actions, app
 
 class GridSystemManager:
     def __init__(self):
         self.grid: Grid = None
-        self.display: Display = None
+        self.display_manager: DisplayManager = DisplayManager()
         self.rectangle_manager: RectangleManager = ScreenRectangleManager()
         self.should_load_default_grid_next: bool = True
     
@@ -27,8 +27,7 @@ class GridSystemManager:
         return self.should_load_default_grid_next and self.grid
 
     def set_display(self, display: Display):
-        if self.display: self.display.hide()
-        self.display = display
+        self.display_manager.set_display(display)
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
@@ -39,27 +38,22 @@ class GridSystemManager:
         return self.grid
 
     def get_display(self) -> Display:
-        return self.display
+        return self.display_manager.get_display()
 
     def refresh(self):
         self.hide()
-        if self.grid and self.display:
+        if self.grid and self.display_manager.has_display():
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
-            self.refresh_display(self.grid, rectangle)
+            self.display_manager.refresh_display(self.grid, rectangle)
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
-
-    def refresh_display(self, grid: Grid, rectangle: Rectangle):
-        self.display.set_grid(grid)
-        self.display.set_rectangle(rectangle)
-        self.display.show()
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
         self.set_grid(None)
     
     def hide(self):
-        if self.display: self.display.hide()
+        self.display_manager.hide()
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):

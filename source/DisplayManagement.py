@@ -1,4 +1,5 @@
 from .display.Display import Display
+from .Grid import Grid, Rectangle
 from talon import cron
 
 class DisplayManager:
@@ -13,6 +14,9 @@ class DisplayManager:
     
     def get_display(self) -> Display:
         return self.display
+
+    def has_display(self) -> bool:
+        return self.display is not None
     
     def hide(self):
         if self.display: self.display.hide()
@@ -22,13 +26,17 @@ class DisplayManager:
         if self.display: 
             self.display.show()
             self.is_showing = True
+
+    def refresh_display(self, grid: Grid, rectangle: Rectangle):
+        self.display.set_grid(grid)
+        self.display.set_rectangle(rectangle)
+        self.display.show()
     
     def toggle(self):
         if self.is_showing:
             self.hide()
         else:
             self.show()
-
 
     def flicker_show(self, showtime: int, hidetime: int):
         self.show()
