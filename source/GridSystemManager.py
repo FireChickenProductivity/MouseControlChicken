@@ -46,6 +46,7 @@ class GridSystemManager:
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
             self.display_manager.refresh_display(self.grid, rectangle)
+            self.display_manager.show()
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
 
     def prepare_for_grid_switch(self):

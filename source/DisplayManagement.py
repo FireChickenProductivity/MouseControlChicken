@@ -12,6 +12,8 @@ class DisplayManager:
         self.flicker_hide_time: int = None
         self.is_flicker_showing: bool = False
         self.secondary_flicker_job = None
+        self.grid: Grid = None
+        self.rectangle: Rectangle = None
     
     def set_display(self, display: Display):
         self.hide()
@@ -44,7 +46,8 @@ class DisplayManager:
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
-        self.display.show()
+        self.grid = grid
+        self.rectangle = rectangle
     
     def toggle(self):
         if self.is_showing:
@@ -60,6 +63,7 @@ class DisplayManager:
             self.secondary_flicker_job = None
 
     def flicker_show(self):
+        self.refresh_display(self.grid, self.rectangle)
         self.show_temporarily()
         self.is_flicker_showing = True
         self.secondary_flicker_job = cron.after(f'{self.flicker_show_time}ms', self.flicker_hide)
