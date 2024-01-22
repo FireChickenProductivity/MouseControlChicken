@@ -32,3 +32,5 @@ roll <user.mouse_control_chicken_coordinates>:
 
 chicken crisscross: user.mouse_control_chicken_toggle_frame_display_crisscross()
 chicken checker [frequency] <number_small>: user.mouse_control_chicken_set_checker_frequency(number_small)
+chicken flicker: user.mouse_control_chicken_flicker_display()
+chicken stop (flicker|flickering): user.mouse_control_chicken_stop_flickering_display()

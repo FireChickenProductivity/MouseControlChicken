@@ -60,6 +60,15 @@ class GridSystemManager:
         if not self.grid and self.should_load_default_grid_next:
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
         self.refresh()
+    
+    def flicker_display(self):
+        if settings_mediator.get_flickering_enabled():
+            show_time = settings_mediator.get_flickering_show_time()
+            hide_time = settings_mediator.get_flickering_hide_time()
+            self.display_manager.start_flickering(show_time, hide_time)
+
+    def stop_flickering_display(self):
+        self.display_manager.stop_flickering()
         
 manager: GridSystemManager = None
 current_option: str = None
@@ -119,6 +128,16 @@ class Actions:
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+
+    def mouse_control_chicken_flicker_display():
+        '''Flickers the mouse control chicken display'''
+        global manager
+        manager.flicker_display()
+    
+    def mouse_control_chicken_stop_flickering_display():
+        '''Stops flickering the mouse control chicken display'''
+        global manager
+        manager.stop_flickering_display()
     
     def mouse_control_chicken_move_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid'''

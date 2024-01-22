@@ -15,6 +15,35 @@ def create_setting(module: Module, name: str, setting_type, default, desc: str):
     )
     return setting
 
+class SettingCreator:
+    def __init__(self, module: Module):
+        self.module = module
+    
+    def compute_setting_name_with_prefix(self, name: str) -> str:
+        return 'mouse_control_chicken_' + name
+
+    def compute_setting_string(self, name: str) -> str:
+        return 'user.' + self.compute_setting_name_with_prefix(name)
+    
+    def create_bool_setting(self, name: str, default: bool, desc: str):
+        self.module.setting(
+            self.compute_setting_name_with_prefix(name),
+            type = bool,
+            default = default,
+            desc = desc
+        )
+        return self.compute_setting_string(name)
+    
+    def create_int_setting(self, name: str, default: int, desc: str):
+        self.module.setting(
+            self.compute_setting_name_with_prefix(name),
+            type = int,
+            default = default,
+            desc = desc
+        )
+        return self.compute_setting_string(name)
+setting_creator = SettingCreator(module)
+
 default_grid_option_setting_name = 'default_grid_option'
 default_grid_option = create_setting(
     module,
@@ -130,6 +159,24 @@ scrolling_amount = create_setting(
     'The amount that mouse control chicken standard scrolling commands will scroll.'
 )
 
+flickering_enabled = setting_creator.create_bool_setting(
+    'flickering_enabled',
+    False,
+    'Whether or not mouse control chicken flickering is enabled.'
+)
+
+flickering_show_time = setting_creator.create_int_setting(
+    'flickering_show_time',
+    5000,
+    'The amount of time that mouse control chicken flickering will show a display for before hiding it in milliseconds.'
+)
+
+flickering_hide_time = setting_creator.create_int_setting(
+    'flickering_hide_time',
+    2000,
+    'The amount of time that mouse control chicken flickering will hide a display for before showing it in milliseconds.'   
+)
+
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
@@ -148,6 +195,9 @@ class SettingsMediator:
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self.checker_frequency = settings.get(default_checker_frequency)
+        self.flickering_enabled = settings.get(flickering_enabled)
+        self.flickering_show_time = settings.get(flickering_show_time)
+        self.flickering_hide_time = settings.get(flickering_hide_time)
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -188,6 +238,15 @@ class SettingsMediator:
 
     def get_scrolling_amount(self) -> int:
         return settings.get(scrolling_amount)
+
+    def get_flickering_enabled(self) -> bool:
+        return self.flickering_enabled
+
+    def get_flickering_show_time(self) -> int:
+        return self.flickering_show_time
+
+    def get_flickering_hide_time(self) -> int:
+        return self.flickering_hide_time
 
     def set_text_size(self, size: int):
         self.text_size = size
@@ -268,6 +327,9 @@ settings():
     #Every nth position is shown on a checker display where n is the frequency.
     user.mouse_control_chicken_default_checker_frequency = 3
     user.mouse_control_chicken_scrolling_amount = 600
+    user.mouse_control_chicken_flickering_enabled = false
+    user.mouse_control_chicken_flickering_show_time = 5000
+    user.mouse_control_chicken_flickering_hide_time = 2000
 """
 
     )
