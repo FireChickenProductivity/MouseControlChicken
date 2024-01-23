@@ -186,24 +186,6 @@ def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()
     return grid and grid.supports_narrowing()
 
-def drag_from_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag(0)
-
-def end_drag_at_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag_end()
-
-def double_click():
-    actions.mouse_click()
-    actions.mouse_click()
-
-def scroll_up():
-    actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
-
-def scroll_down():
-    actions.mouse_scroll(settings_mediator.get_scrolling_amount())
-
 def setup():
     global manager
     manager = GridSystemManager()
