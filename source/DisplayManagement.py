@@ -41,6 +41,12 @@ class Flickerer:
     def is_flickering(self):
         return self.flickering
 
+    def toggle_flickering(self, show_time: int, hide_time: int):
+        if self.is_flickering():
+            self.stop_flickering()
+        else:
+            self.start_flickering(show_time, hide_time)
+
 class DisplayManager:
     def __init__(self):
         self.display: Display = None
@@ -93,10 +99,5 @@ class DisplayManager:
         self.refresh_display(self.grid, self.rectangle)
         self.show_temporarily()
 
-    def start_flickering(self, showtime: int, hidetime: int):
-        self.flickerer.start_flickering(showtime, hidetime)
-    
-    def stop_flickering(self):      
-        self.flickerer.stop_flickering()
-        
-    
+    def toggle_flickering(self, show_time: int, hide_time: int):
+        self.flickerer.toggle_flickering(show_time, hide_time)
