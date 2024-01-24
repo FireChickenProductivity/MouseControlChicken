@@ -23,14 +23,20 @@ class Flickerer:
         self.flicker_show_time = None
         self.flicker_hide_time = None
         self.secondary_flicker_job_handler = JobHandler()
+        self.flicker_showing = False
     
     def cancel_flicker_job(self):
         self.flicker_job_handler.cancel_job()
         self.secondary_flicker_job_handler.cancel_job()
     
+    def flicker_hide(self):
+        self.flicker_showing = False
+        self.hide_function()    
+
     def flicker_show(self):
         self.show_function()
-        hide_job = cron.after(f'{self.flicker_show_time}ms', self.hide_function) 
+        self.flicker_showing = True
+        hide_job = cron.after(f'{self.flicker_show_time}ms', self.flicker_hide) 
         self.secondary_flicker_job_handler.set_job(hide_job)
 
     def start_flickering(self, showtime: int, hidetime: int):
@@ -57,6 +63,9 @@ class Flickerer:
             self.stop_flickering()
         else:
             self.start_flickering(show_time, hide_time)
+    
+    def is_flicker_showing(self) -> bool:
+        return self.flicker_showing
 
 class DisplayManager:
     def __init__(self):
@@ -112,3 +121,6 @@ class DisplayManager:
 
     def toggle_flickering(self, show_time: int, hide_time: int):
         self.flickerer.toggle_flickering(show_time, hide_time)
+        if not self.flickerer.is_flicker_showing():
+            self.refresh_display(self.grid, self.rectangle)
+            self.show()
