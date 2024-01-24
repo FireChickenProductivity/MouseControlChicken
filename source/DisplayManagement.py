@@ -2,6 +2,18 @@ from .display.Display import Display
 from .Grid import Grid, Rectangle
 from talon import cron
 
+class JobHandler:
+    def __init__(self):
+        self.job = None
+    
+    def set_job(self, job):
+        self.job = job
+    
+    def cancel_job(self):
+        if self.job:
+            cron.cancel(self.job)
+            self.job = None
+
 class Flickerer:
     def __init__(self, show_function, hide_function):
         self.show_function = show_function
