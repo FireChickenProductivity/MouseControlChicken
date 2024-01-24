@@ -18,22 +18,20 @@ class Flickerer:
     def __init__(self, show_function, hide_function):
         self.show_function = show_function
         self.hide_function = hide_function
-        self.flicker_job = None
+        self.flicker_job_handler = JobHandler()
         self.flickering = False
         self.flicker_show_time = None
         self.flicker_hide_time = None
-        self.secondary_flicker_job = None
+        self.secondary_flicker_job_handler = JobHandler()
     
     def cancel_flicker_job(self):
-        if self.flicker_job:
-            cron.cancel(self.flicker_job)
-            self.flicker_job = None
-            cron.cancel(self.secondary_flicker_job)
-            self.secondary_flicker_job = None
+        self.flicker_job_handler.cancel_job()
+        self.secondary_flicker_job_handler.cancel_job()
     
     def flicker_show(self):
         self.show_function()
-        self.secondary_flicker_job = cron.after(f'{self.flicker_show_time}ms', self.hide_function) 
+        hide_job = cron.after(f'{self.flicker_show_time}ms', self.hide_function) 
+        self.secondary_flicker_job_handler.set_job(hide_job)
 
     def start_flickering(self, showtime: int, hidetime: int):
         self.cancel_flicker_job()
@@ -41,7 +39,8 @@ class Flickerer:
         self.flicker_hide_time = hidetime
         self.flicker_show()
         self.flickering = True
-        self.flicker_job = cron.interval(f'{self.flicker_show_time + self.flicker_hide_time}ms', self.flicker_show)
+        flicker_job = cron.interval(f'{self.flicker_show_time + self.flicker_hide_time}ms', self.flicker_show)
+        self.flicker_job_handler.set_job(flicker_job)
 
     def restart_flickering(self):
         self.start_flickering(self.flicker_show_time, self.flicker_hide_time)
