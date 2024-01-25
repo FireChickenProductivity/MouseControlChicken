@@ -115,12 +115,15 @@ class DisplayManager:
         else:
             self.show()
 
-    def flicker_show(self):
+    def refresh_display_using_previous_values(self):
         self.refresh_display(self.grid, self.rectangle)
+
+    def flicker_show(self):
+        self.refresh_display_using_previous_values()
         self.show_temporarily()
 
     def toggle_flickering(self, show_time: int, hide_time: int):
         self.flickerer.toggle_flickering(show_time, hide_time)
         if not self.flickerer.is_flicker_showing():
-            self.refresh_display(self.grid, self.rectangle)
+            self.refresh_display_using_previous_values()
             self.show()
