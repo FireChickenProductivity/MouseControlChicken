@@ -1,123 +1,86 @@
 from talon import Module, settings, app
 from .SettingsFileManagement import create_settings_file
-from .SettingsCreation import create_setting, SettingCreator
+from .SettingsCreation import SettingCreator
 from .Callbacks import CallbackManager, Callback
 
 module = Module()
 
 setting_creator = SettingCreator(module)
 
-default_grid_option_setting_name = 'default_grid_option'
-default_grid_option = create_setting(
-    module,
+default_grid_option = setting_creator.create_str_setting(
     'default_grid_option',
-    setting_type = str,
     default = "double alphabet numbers",
     desc = 'The default grid option used by Mouse Control Chicken',
 )
 
-default_text_size_setting_name = 'default_text_size'
-default_text_size = create_setting(
-    module,
+default_text_size = setting_creator.create_int_setting(
     'default_text_size',
-    setting_type = int,
     default = 10,
     desc = 'The default text size used by Mouse Control Chicken'
 ) 
 
-default_text_color_setting_name = 'default_text_color'
-default_text_color = create_setting(
-    module,
+default_text_color = setting_creator.create_str_setting(
     'default_text_color',
-    setting_type = str,
     default = "66ff00",
     desc = 'The default text color used by Mouse Control Chicken'
 ) 
 
-default_line_width_setting_name = 'default_line_width'
-default_line_width = create_setting(
-    module,
+default_line_width = setting_creator.create_int_setting(
     'default_line_width',
-    setting_type = int,
     default = 1,
     desc = 'The default line width used by Mouse Control Chicken'
 ) 
 
-default_line_color_setting_name = 'default_line_color'
-default_line_color = create_setting(
-    module,
+default_line_color = setting_creator.create_str_setting(
     'default_line_color',
-    setting_type = str,
     default = "FF0000",
     desc = 'The default line color used by Mouse Control Chicken'
 ) 
 
-default_background_transparency_setting_name = 'default_background_transparency'
-default_background_transparency = create_setting(
-    module,
+default_background_transparency = setting_creator.create_float_setting(
     'default_background_transparency',
-    setting_type = float,
     default = 0.50,
     desc = 'The default background transparency used by Mouse Control Chicken'
 )  
 
-default_background_color_setting_name = 'default_background_color'
-default_background_color = create_setting(
-    module,
+default_background_color = setting_creator.create_str_setting(
     'default_background_color',
-    setting_type = str,
     default = "000000",
     desc = "The default background color used by Mouse Control Chicken"
 )
 
-default_main_transparency_setting_name = 'default_main_transparency'
-default_main_transparency = create_setting(
-    module,
+default_main_transparency = setting_creator.create_float_setting(
     'default_main_transparency',
-    setting_type = float,
     default = 0,
     desc = 'The default main transparency used by Mouse Control Chicken'
 ) 
 
-default_current_screen_number_setting_name = 'default_current_screen_number'
-default_current_screen_number = create_setting(
-    module,
+default_current_screen_number = setting_creator.create_int_setting(
     'default_current_screen_number',
-    setting_type = int,
     default = 0,
     desc = 'The default screen number used by Mouse Control Chicken'
 ) 
 
-default_frame_grid_offset_setting_name = 'default_frame_grid_offset'
-default_frame_grid_offset = create_setting(
-    module,
+default_frame_grid_offset = setting_creator.create_int_setting(
     'default_frame_grid_offset',
-    setting_type = int,
     default = 10,
     desc = 'The default frame grid offset used by Mouse Control Chicken. Determines how far from the frame the text is in a frame grid display.'
 )
 
-default_frame_grid_should_show_crisscross_setting_name = 'default_frame_grid_should_show_crisscross'
-default_frame_grid_should_show_crisscross = create_setting(
-    module,
+default_frame_grid_should_show_crisscross = setting_creator.create_bool_setting(
     'default_frame_grid_should_show_crisscross',
-    setting_type = bool,
     default = False,
     desc = 'Determines whether or not mouse control chicken frame grids should show crisscross lines by default.'
 )
 
-default_checker_frequency = create_setting(
-    module,
+default_checker_frequency = setting_creator.create_int_setting(
     'default_checker_frequency',
-    int,
     3,
     'The default checker frequency used by Mouse Control Chicken. Every nth position is shown on a checker display where n is the frequency.'
 )
 
-scrolling_amount = create_setting(
-    module,
+scrolling_amount = setting_creator.create_int_setting(
     'scrolling_amount',
-    int,
     600,
     'The amount that mouse control chicken standard scrolling commands will scroll.'
 )
@@ -266,9 +229,6 @@ def load_default_settings():
     global settings_mediator
     settings_mediator.restore_default_settings()
     create_settings_file()
-
-
-
 app.register('ready', load_default_settings)
 
 @module.action_class
