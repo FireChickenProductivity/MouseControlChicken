@@ -7,12 +7,13 @@ from .GridOptions import GridOptions
 from .display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
+from .DisplayManagement import DisplayManager
 from talon import Module, actions, app
 
 class GridSystemManager:
     def __init__(self):
         self.grid: Grid = None
-        self.display: Display = None
+        self.display_manager: DisplayManager = DisplayManager()
         self.rectangle_manager: RectangleManager = ScreenRectangleManager()
         self.should_load_default_grid_next: bool = True
     
@@ -26,8 +27,7 @@ class GridSystemManager:
         return self.should_load_default_grid_next and self.grid
 
     def set_display(self, display: Display):
-        if self.display: self.display.hide()
-        self.display = display
+        self.display_manager.set_display(display)
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
@@ -38,33 +38,35 @@ class GridSystemManager:
         return self.grid
 
     def get_display(self) -> Display:
-        return self.display
+        return self.display_manager.get_display()
 
     def refresh(self):
         self.hide()
-        if self.grid and self.display:
+        if self.grid and self.display_manager.has_display():
             rectangle = self.rectangle_manager.compute_rectangle()
             self.grid.make_around(rectangle)
-            self.refresh_display(self.grid, rectangle)
+            self.display_manager.refresh_display(self.grid, rectangle)
+            self.display_manager.show()
             actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
-
-    def refresh_display(self, grid: Grid, rectangle: Rectangle):
-        self.display.set_grid(grid)
-        self.display.set_rectangle(rectangle)
-        self.display.show()
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
         self.set_grid(None)
     
     def hide(self):
-        if self.display: self.display.hide()
+        self.display_manager.hide()
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
         if not self.grid and self.should_load_default_grid_next:
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
         self.refresh()
+    
+    def toggle_flicker_display(self):
+        if settings_mediator.get_flickering_enabled():
+            show_time = settings_mediator.get_flickering_show_time()
+            hide_time = settings_mediator.get_flickering_hide_time()
+            self.display_manager.toggle_flickering(show_time, hide_time)
         
 manager: GridSystemManager = None
 current_option: str = None
@@ -124,6 +126,11 @@ class Actions:
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+
+    def mouse_control_chicken_toggle_flicker_display():
+        '''Toggles flickering the mouse control chicken display'''
+        global manager
+        manager.toggle_flicker_display()
     
     def mouse_control_chicken_move_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid'''
@@ -178,24 +185,6 @@ def show_display_options(title: str, callback):
 def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()
     return grid and grid.supports_narrowing()
-
-def drag_from_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag(0)
-
-def end_drag_at_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag_end()
-
-def double_click():
-    actions.mouse_click()
-    actions.mouse_click()
-
-def scroll_up():
-    actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
-
-def scroll_down():
-    actions.mouse_scroll(settings_mediator.get_scrolling_amount())
 
 def setup():
     global manager
