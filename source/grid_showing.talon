@@ -2,10 +2,10 @@ tag: user.mouse_control_chicken_showing
 mode: user.mouse_control_chicken_narrow_able_grid_mode
 mode: Command
 -
-meet <user.mouse_control_chicken_coordinates>: 
+(meet|place) <user.mouse_control_chicken_coordinates>: 
     user.mouse_control_chicken_move_to_position(mouse_control_chicken_coordinates)
 
-tap <user.mouse_control_chicken_coordinates>:
+(tap|wave|hand|paw) <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_click_position(mouse_control_chicken_coordinates)
 
 pierce <user.mouse_control_chicken_coordinates>:
