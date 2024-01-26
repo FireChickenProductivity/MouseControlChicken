@@ -106,7 +106,14 @@ flickering_hide_time = setting_creator.create_int_setting(
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
+        self.initialize()
+        
+    def initialize(self):
         self.restore_default_settings()
+        self.initialize_persistent_settings()
+    
+    def initialize_persistent_settings(self):
+       self.current_screen_number = settings.get(default_current_screen_number)
     
     def restore_default_settings(self):
         self.default_grid_option = settings.get(default_grid_option)
@@ -117,7 +124,6 @@ class SettingsMediator:
         self.background_transparency = settings.get(default_background_transparency)
         self.background_color = settings.get(default_background_color)
         self.main_transparency = settings.get(default_main_transparency)
-        self.current_screen_number = settings.get(default_current_screen_number)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self.checker_frequency = settings.get(default_checker_frequency)
@@ -227,7 +233,7 @@ class SettingsMediator:
 settings_mediator = SettingsMediator()
 def load_default_settings():
     global settings_mediator
-    settings_mediator.restore_default_settings()
+    settings_mediator.initialize()
     create_settings_file()
 app.register('ready', load_default_settings)
 
