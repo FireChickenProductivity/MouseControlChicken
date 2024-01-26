@@ -4,7 +4,7 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .display.DisplayOptionsComputer import compute_display_options_given_grid, compute_display_options_names_given_grid
+from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
