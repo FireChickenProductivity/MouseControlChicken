@@ -35,13 +35,9 @@ class DisplayOptions:
     def create_display_from_option(self, name: str):
         return self.options[name].instantiate()
 
-class DisplayOptionComputer:
-    def compute_display_options(self, grid: Grid) -> DisplayOptions:
-        options = DisplayOptions([DisplayOption(display_type) for display_type in display_types if display_type.supports_grid(grid)])
-        return options
-
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
-    return DisplayOptionComputer().compute_display_options(grid)
+    options = DisplayOptions([DisplayOption(display_type) for display_type in display_types if display_type.supports_grid(grid)])
+    return options
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)

@@ -2,7 +2,7 @@ from .Grid import Grid
 from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
-from .display.DisplayOptionsComputer import compute_display_options_names_given_grid
+from .display.DisplayOptionsComputations import compute_display_options_names_given_grid
 from .GridOptionsList import write_grid_option
 from talon import Module, actions
 

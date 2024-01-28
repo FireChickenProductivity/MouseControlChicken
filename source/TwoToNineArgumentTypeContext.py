@@ -9,21 +9,21 @@ two_to_nine_context.matches = create_context_matches_single_tag_string(GRID_CREA
 @two_to_nine_context.capture(CAPTURE_NAME, rule = "two|three|four|five|six|seven|eight|nine")
 def mouse_control_chicken_grid_factory_argument(m) -> str:
     number_text = m[0]
+    result: str = ""
     if number_text == "two":
-        return "2"
+        result = "2"
     elif number_text == "three":
-        return "3"
+        result = "3"
     elif number_text == "four":
-        return "4"
+        result = "4"
     elif number_text == "five":
-        return "5"
+        result = "5"
     elif number_text == "six":
-        return "6"
+        result = "6"
     elif number_text == "seven":
-        return "7"
+        result = "7"
     elif number_text == "eight":
-        return "8"
+        result = "8"
     elif number_text == "nine":
-        return "9"
-    else:
-        return ""
+        result = "9"
+    return result
