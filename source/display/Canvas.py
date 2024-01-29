@@ -1,3 +1,4 @@
+import math
 from talon import canvas, ui
 from talon.skia import Paint, Rect
 from talon.types.point import Point2d
@@ -90,10 +91,10 @@ def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     canvas.draw_rect(text_background_rectangle)
 
 def compute_background_horizontal_rectangle_size(text: str, text_size):
-    return max(round(len(text)*text_size), 10)
+    return max(math.ceil(len(text)*text_size), 10)
 
 def compute_background_vertical_rectangle_size(text_size):
-    return max(round(text_size*1.5), 15)
+    return max(math.ceil(text_size*1.5), 15)
 
 def draw_canvas_text(canvas, text: Text):
     vertical = compute_text_vertical(canvas, text)
