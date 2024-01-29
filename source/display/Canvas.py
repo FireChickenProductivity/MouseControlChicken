@@ -4,6 +4,10 @@ from talon.skia import Paint, Rect
 from ..Grid import Rectangle
 from ..SettingsMediator import settings_mediator
 
+MINIMUM_BACKGROUND_RECTANGLE_HORIZONTAL_SIZE = 10
+MINIMUM_BACKGROUND_RECTANGLE_VERTICAL_SIZE = 15
+MINIMUM_BACKGROUND_RECTANGLE_VERTICAL_ADJUSTMENT = 10
+
 def update_canvas_color(canvas, color: str):
     canvas.paint.color = color
 
@@ -85,15 +89,15 @@ def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     vertical = compute_text_vertical(canvas, text)
     width = compute_background_horizontal_rectangle_size(text.text, text_size)
     height = compute_background_vertical_rectangle_size(text_size)
-    vertical_adjustment = max(text_size, 10)
+    vertical_adjustment = max(text_size, MINIMUM_BACKGROUND_RECTANGLE_VERTICAL_ADJUSTMENT)
     text_background_rectangle = Rect(text.x - width/2, vertical - vertical_adjustment, width, height)
     canvas.draw_rect(text_background_rectangle)
 
 def compute_background_horizontal_rectangle_size(text: str, text_size):
-    return max(math.ceil(len(text)*text_size), 10)
+    return max(math.ceil(len(text)*text_size), MINIMUM_BACKGROUND_RECTANGLE_HORIZONTAL_SIZE)
 
 def compute_background_vertical_rectangle_size(text_size):
-    return max(math.ceil(text_size*1.5), 15)
+    return max(math.ceil(text_size*1.5), MINIMUM_BACKGROUND_RECTANGLE_VERTICAL_SIZE)
 
 def draw_canvas_text(canvas, text: Text):
     vertical = compute_text_vertical(canvas, text)
