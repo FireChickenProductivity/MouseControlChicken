@@ -89,7 +89,7 @@ def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     canvas.draw_rect(text_background_rectangle)
 
 def compute_background_horizontal_rectangle_size(text: str, text_size):
-    return round(len(text)*text_size/1.5)
+    return round(len(text)*text_size)
 
 def compute_background_vertical_rectangle_size(text_size):
     return round(text_size*1.5)
