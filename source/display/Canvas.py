@@ -85,14 +85,15 @@ def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
     vertical = compute_text_vertical(canvas, text)
     width = compute_background_horizontal_rectangle_size(text.text, text_size)
     height = compute_background_vertical_rectangle_size(text_size)
-    text_background_rectangle = Rect(text.x - width/2, vertical - text_size, width, height)
+    vertical_adjustment = max(text_size, 10)
+    text_background_rectangle = Rect(text.x - width/2, vertical - vertical_adjustment, width, height)
     canvas.draw_rect(text_background_rectangle)
 
 def compute_background_horizontal_rectangle_size(text: str, text_size):
-    return round(len(text)*text_size)
+    return max(round(len(text)*text_size), 10)
 
 def compute_background_vertical_rectangle_size(text_size):
-    return round(text_size*1.5)
+    return max(round(text_size*1.5), 15)
 
 def draw_canvas_text(canvas, text: Text):
     vertical = compute_text_vertical(canvas, text)
