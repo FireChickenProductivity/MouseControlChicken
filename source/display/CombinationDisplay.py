@@ -14,21 +14,34 @@ class CombinationDisplay(Display):
         self.primary_display.set_rectangle(rectangle)
         self.rectangle = rectangle
     
+    def _setup_secondary_display_sub_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
+        primary = grids[index]
+        secondary = grids[index + 1]
+        sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
+        sub_display = self.secondary_display_creation_functions[index]()
+        sub_display.set_rectangle(sub_rectangle)
+        sub_display.set_grid(secondary)
+        self.secondary_displays.append(sub_display)
+
+    def _setup_secondary_displays(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
+        for coordinate in grids[0].get_coordinate_system().get_coordinates():
+            self._setup_secondary_display_sub_grid(grids, index, coordinate)
+
+    def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
+        grids = compute_sub_grids(grid)
+        self.set_rectangle(self.rectangle)
+        for index in range(len(grids) - 1):
+            self._setup_secondary_displays(grids, index)
+
+    def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
+        self.secondary_displays = []
+        if self.rectangle:
+            self._setup_secondary_displays_with_rectangle(grid)
+                
     def set_grid(self, grid: RecursivelyDivisibleGridCombination):
         self.grid = grid
         self.hide()
-        grids = compute_sub_grids(grid)
-        self.secondary_displays = []
         self.primary_display.set_grid(grid)
-        if self.rectangle:
-            self.set_rectangle(self.rectangle)
-            for index, sub_grid in enumerate(grids):
-                if sub_grid.is_combination():
-                    for coordinate in sub_grid.get_coordinate_system().get_coordinates():
-                        sub_rectangle = sub_grid.compute_sub_rectangle_for(coordinate)
-                        sub_display = self.secondary_display_creation_functions[index]()
-                        sub_display.set_rectangle(sub_rectangle)
-                        self.secondary_displays.append(sub_display)
 
     def show(self):
         self.primary_display.show()
