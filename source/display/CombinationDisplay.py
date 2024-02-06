@@ -1,4 +1,4 @@
-from source.Grid import Grid
+from ..Grid import Grid
 from .Display import Display
 from ..Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
 from typing import List, Callable
@@ -24,13 +24,13 @@ class CombinationDisplay(Display):
         self.secondary_displays.append(sub_display)
 
     def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
-        for coordinate in grids[0].get_coordinate_system().get_coordinates():
+        for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():
             self._setup_secondary_display_for_coordinate(grids, index, coordinate)
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         grids = compute_sub_grids(grid)
         self.set_rectangle(self.rectangle)
-        for index in range(len(grids) - 1):
+        for index in range(len(grids) - 2):
             self._setup_secondary_displays_for_grid(grids, index)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
@@ -42,14 +42,15 @@ class CombinationDisplay(Display):
         self.grid = grid
         self.hide()
         self.primary_display.set_grid(grid)
-        self._setup_secondary_displays()
+        self._setup_secondary_displays(grid)
 
     def show(self):
         self.primary_display.show()
         for display in self.secondary_displays:
             display.show()
 
-    def hide(self):
+    def hide(self): 
+        print('apparently hiding', self.primary_display, self.secondary_displays)
         self.primary_display.hide()
         for display in self.secondary_displays:
             display.hide()
