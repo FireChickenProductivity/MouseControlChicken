@@ -22,6 +22,7 @@ class CombinationDisplay(Display):
         sub_display.set_rectangle(sub_rectangle)
         sub_display.set_grid(secondary)
         self.secondary_displays.append(sub_display)
+        print('setting up beam')
 
     def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
         for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():
@@ -30,7 +31,7 @@ class CombinationDisplay(Display):
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         grids = compute_sub_grids(grid)
         self.set_rectangle(self.rectangle)
-        for index in range(len(grids) - 2):
+        for index in range(len(self.secondary_display_creation_functions)):
             self._setup_secondary_displays_for_grid(grids, index)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
