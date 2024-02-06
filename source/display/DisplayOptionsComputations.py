@@ -1,8 +1,9 @@
 from .Display import *
 from .UniversalDisplays import *
 from .RectangularGridDisplays import *
+from .CombinationDisplay import CombinationDisplay
 from .NarrowDisplays import *
-from ..Grid import Grid
+from ..Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
 from typing import List
 
 display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
@@ -24,6 +25,27 @@ class DisplayOption:
     def __str__(self) -> str:
         return self.get_name()
 
+class CombinationDisplayOption:
+    def __init__(self, display_types: List[type]):
+        self.display_types = display_types
+    
+    def instantiate(self) -> CombinationDisplay:
+        primary = self.display_types[0]
+        secondary = self.display_types[1:]
+        return CombinationDisplay(primary, secondary)
+
+    def get_displays(self):
+        return self.display_types
+
+    def get_name(self):
+        return ":".join([display_type.get_name() for display_type in self.display_types])
+
+    def __repr__(self) -> str:
+        return self.__str__()
+
+    def __str__(self) -> str:
+        return self.get_name()
+
 class DisplayOptions:
     def __init__(self, options: List[DisplayOption]):
         self.options = {}
@@ -34,9 +56,23 @@ class DisplayOptions:
     
     def create_display_from_option(self, name: str):
         return self.options[name].instantiate()
+    
+def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
+    options = DisplayOptions([DisplayOption(display_type) for display_type in display_types if display_type.supports_grid(grid)])
+    return options
+
+def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGridCombination) -> DisplayOptions:
+    '''This function will return all possible valid combinations of displays for the grid.
+        A valid combination of displays has at most the number of sub grids as the number of displays with each display being valid for
+        the corresponding sub grid.'''
+    options = []
+    sub_grids = compute_sub_grids(grid)
+    for sub_grid in sub_grids:
+        pass
+            
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
-    options = DisplayOptions([DisplayOption(display_type) for display_type in display_types if display_type.supports_grid(grid)])
+    options = compute_display_options_given_singular_grid(grid)
     return options
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
