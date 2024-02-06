@@ -18,11 +18,13 @@ class CombinationDisplay(Display):
         primary = grids[index]
         secondary = grids[index + 1]
         sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
+        print('sub_rectangle', sub_rectangle)
+        print('secondary', secondary)
         sub_display = self.secondary_display_creation_functions[index]()
-        sub_display.set_rectangle(sub_rectangle)
         sub_display.set_grid(secondary)
+        sub_display.set_rectangle(sub_rectangle)
         self.secondary_displays.append(sub_display)
-        print('setting up beam')
+        print('completed appending')
 
     def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
         for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():
@@ -42,7 +44,8 @@ class CombinationDisplay(Display):
     def set_grid(self, grid: RecursivelyDivisibleGridCombination):
         self.grid = grid
         self.hide()
-        self.primary_display.set_grid(grid)
+        self.primary_display.set_grid(grid.get_primary_grid())
+        self.primary_display.set_rectangle(self.rectangle)
         self._setup_secondary_displays(grid)
 
     def show(self):
@@ -51,7 +54,6 @@ class CombinationDisplay(Display):
             display.show()
 
     def hide(self): 
-        print('apparently hiding', self.primary_display, self.secondary_displays)
         self.primary_display.hide()
         for display in self.secondary_displays:
             display.hide()
