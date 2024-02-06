@@ -58,9 +58,16 @@ class CombinationDisplay(Display):
         self.primary_display.refresh()
         for display in self.secondary_displays:
             display.refresh()
-        
-    @staticmethod
-    def supports_grid(grid: Grid) -> bool:
-        return grid.is_combination()
-        
     
+    def _displays_support_corresponding_sub_grid(self, grid: RecursivelyDivisibleGridCombination) -> bool:
+        return self.primary_display.supports_grid(grid) and \
+            all([display.supports_grid(sub_grid) for display, sub_grid in zip(self.secondary_displays, compute_sub_grids(grid)[1:])])
+    
+    def supports_grid(self, grid: Grid) -> bool:
+        return grid.is_combination() and self._displays_support_corresponding_sub_grid(grid)
+        
+    def get_name(self) -> str:
+        name = self.primary_display.get_name()
+        for display in self.secondary_displays:
+            name += ":" + display.get_name()
+        return name
