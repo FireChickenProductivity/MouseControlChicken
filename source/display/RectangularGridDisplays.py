@@ -138,8 +138,8 @@ class RectangularPositionDisplay(PositionDisplay):
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
     
-    def set_rectangle(self, rectangle: Rectangle):
-        self._perform_pre_drawing_setup_given_new_rectangle(rectangle)
+    def draw_on(self, canvas: Canvas):
+        self.canvas = canvas
         self._add_positions()
     
     def _add_positions(self):
