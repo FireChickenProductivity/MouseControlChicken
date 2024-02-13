@@ -5,34 +5,18 @@ DISPLAY_CLASS_NAME_POSTFIX = "Display"
 
 class Display:
     def __init__(self):
-        self.canvas: Canvas = None
         self.rectangle: Rectangle = None
+        self.grid: Grid = None
         
     def set_grid(self, grid: Grid): 
         self.grid = grid
-        self.hide()
-        if self.rectangle:
-            self.set_rectangle(self.rectangle)
 
-    def set_rectangle(self, rectangle: Rectangle): pass
-    
-    def _perform_pre_drawing_setup_given_new_rectangle(self, rectangle: Rectangle):
-        self.canvas = Canvas()
-        self.canvas.setup(rectangle)
+    def set_rectangle(self, rectangle: Rectangle): 
         self.rectangle = rectangle
-
-    def show(self):
-        if self.canvas:
-            self.canvas.show()
-
-    def hide(self):
-        if self.canvas:
-            self.canvas.hide()
-
-    def refresh(self):
-        if self.canvas:
-            self.canvas.refresh()
-
+    
+    def draw_on(self, canvas: Canvas):
+        pass
+    
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
         return True
