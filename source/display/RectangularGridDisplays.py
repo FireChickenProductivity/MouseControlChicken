@@ -1,7 +1,7 @@
 from .Display import FrameDisplay, PositionDisplay
 from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from ..Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
-from .Canvas import Text, Line, compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
+from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
 from ..SettingsMediator import settings_mediator
 from ..fire_chicken.mouse_position import MousePosition
@@ -16,8 +16,8 @@ class RectangularGridFrameDisplay(FrameDisplay):
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
 
-    def set_rectangle(self, rectangle: Rectangle):
-        self._perform_pre_drawing_setup_given_new_rectangle(rectangle)
+    def draw_on(self, canvas: Canvas):
+        self.canvas = canvas
         self._add_main_frame()
         if self._should_show_crisscross():
             self._add_crisscross()
@@ -111,9 +111,9 @@ class RectangularGridFrameDisplay(FrameDisplay):
         return is_rectangular_grid(grid)
 
 class DoubleFrameDisplay(RectangularGridFrameDisplay):
-    def set_rectangle(self, rectangle: Rectangle):
-        super().set_rectangle(rectangle)
-        self._add_middle_frame(rectangle)
+    def draw_on(self, canvas: Canvas):
+        super().draw_on(canvas)
+        self._add_middle_frame(self.rectangle)
     
     def _add_middle_frame(self, rectangle: Rectangle):
         middle_vertical = round(compute_average(rectangle.bottom, rectangle.top))
@@ -122,10 +122,10 @@ class DoubleFrameDisplay(RectangularGridFrameDisplay):
         self._add_vertical_coordinates_to_frame(middle_horizontal)
     
 class QuadrupleFrameDisplay(DoubleFrameDisplay):
-    def set_rectangle(self, rectangle: Rectangle):
-        super().set_rectangle(rectangle)
-        coroners = compute_rectangle_corners(rectangle)
-        for corner in coroners:
+    def draw_on(self, canvas: Canvas):
+        super().draw_on(canvas)
+        coroners = compute_rectangle_corners(self.rectangle)
+        for corner in coroners: 
             self._add_middle_frame(corner)
         
 class RectangularPositionDisplay(PositionDisplay):
@@ -138,8 +138,8 @@ class RectangularPositionDisplay(PositionDisplay):
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
     
-    def set_rectangle(self, rectangle: Rectangle):
-        self._perform_pre_drawing_setup_given_new_rectangle(rectangle)
+    def draw_on(self, canvas: Canvas):
+        self.canvas = canvas
         self._add_positions()
     
     def _add_positions(self):
