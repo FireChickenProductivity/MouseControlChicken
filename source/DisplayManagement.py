@@ -108,14 +108,16 @@ class DisplayManager:
     def reset_canvas(self):
         self.canvas = Canvas()
 
+    def refresh_canvas(self, rectangle: Rectangle):
+        self.reset_canvas()
+        self.canvas.setup(rectangle)
+        self.display.draw_on(self.canvas)
+
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.hide()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
-        if grid and rectangle:
-            self.reset_canvas()
-            self.canvas.setup(rectangle)
-            self.display.draw_on(self.canvas)
+        if grid and rectangle: self.refresh_canvas(rectangle)
         self.grid = grid
         self.rectangle = rectangle
     
