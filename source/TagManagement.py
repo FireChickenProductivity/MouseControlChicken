@@ -1,6 +1,6 @@
 from talon import Module, Context
 from typing import List
-from .Grid import Grid
+from .grid.Grid import Grid
 
 module = Module()
 

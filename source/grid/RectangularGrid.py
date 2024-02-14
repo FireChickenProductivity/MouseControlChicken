@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RectangularGrid
 from typing import List, Generator
-from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine
+from ..fire_chicken.mouse_position import MousePosition
+from ..RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine
 
 class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order

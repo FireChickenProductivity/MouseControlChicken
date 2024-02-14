@@ -1,4 +1,4 @@
-from .Grid import Grid
+from .grid.Grid import Grid
 from .GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType

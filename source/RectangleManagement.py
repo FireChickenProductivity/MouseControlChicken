@@ -1,4 +1,4 @@
-from .Grid import Rectangle
+from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
 from talon import ui, Module
 

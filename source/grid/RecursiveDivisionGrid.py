@@ -1,8 +1,8 @@
 from .Grid import Rectangle, RecursiveDivisionGrid
 from typing import Generator, Tuple
-from .fire_chicken.mouse_position import MousePosition
-from .RectangleUtilities import LineDivider, compute_average, OneDimensionalLine, compute_rectangle_from_line_dividers
-from .Regions import LinearRegion, MousePositionLine
+from ..fire_chicken.mouse_position import MousePosition
+from ..RectangleUtilities import LineDivider, compute_average, OneDimensionalLine, compute_rectangle_from_line_dividers
+from ..Regions import LinearRegion, MousePositionLine
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     def __init__(self, division_factor: int, separator: str = " "):
