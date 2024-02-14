@@ -1,4 +1,4 @@
-from .Grid import Rectangle
+from .grid.Grid import Rectangle
 from .fire_chicken.mouse_position import MousePosition
 import math
 from typing import Tuple

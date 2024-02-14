@@ -1,4 +1,4 @@
-from .Grid import Grid
+from .grid.Grid import Grid
 from typing import List
 from talon import Module, actions
 

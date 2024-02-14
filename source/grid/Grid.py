@@ -1,6 +1,6 @@
-from .fire_chicken.mouse_position import MousePosition
+from ..fire_chicken.mouse_position import MousePosition
 from typing import Generator, List
-from .InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem, DisjointUnionCoordinateSystem
+from ..InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem, DisjointUnionCoordinateSystem
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''

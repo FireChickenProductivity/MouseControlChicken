@@ -1,6 +1,6 @@
 from .Canvas import Canvas
 from .Display import PositionDisplay
-from ..Grid import Grid
+from ..grid.Grid import Grid
 from .Canvas import Text
 
 class UniversalPositionDisplay(PositionDisplay):

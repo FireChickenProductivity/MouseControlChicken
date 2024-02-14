@@ -1,6 +1,6 @@
 from .display.Display import Display
 from .display.Canvas import Canvas
-from .Grid import Grid, Rectangle
+from .grid.Grid import Grid, Rectangle
 from talon import cron
 
 class JobHandler:
