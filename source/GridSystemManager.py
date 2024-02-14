@@ -40,6 +40,10 @@ class GridSystemManager:
     def get_display(self) -> Display:
         return self.display_manager.get_display()
 
+    def refresh_display(self, grid: Grid, rectangle: Rectangle):
+        self.display_manager.refresh_display(grid, rectangle)
+        self.display_manager.show()
+
     def refresh(self):
         self.hide()
         if self.grid and self.display_manager.has_display():
