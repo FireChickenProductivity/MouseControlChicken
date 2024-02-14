@@ -1,7 +1,7 @@
-from .Grid import Grid, RecursivelyDivisibleGridCombination
+from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
-from .RecursiveDivisionGrid import SquareRecursiveDivisionGrid
-from .RectangularGrid import ListBasedGrid
+from .grid.RecursiveDivisionGrid import SquareRecursiveDivisionGrid
+from .grid.RectangularGrid import ListBasedGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions

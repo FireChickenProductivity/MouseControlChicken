@@ -1,4 +1,4 @@
-from .Grid import Grid, Rectangle, RecursivelyDivisibleGrid
+from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
