@@ -114,7 +114,7 @@ class DisplayManager:
         self.display.draw_on(self.canvas)
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
-        self.hide()
+        self.hide_temporarily()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
         if grid and rectangle: self.refresh_canvas(rectangle)
@@ -130,7 +130,7 @@ class DisplayManager:
     def refresh_display_using_previous_values(self):
         self.refresh_display(self.grid, self.rectangle)
 
-    def flicker_show(self):
+    def flicker_show(self):     
         self.refresh_display_using_previous_values()
         self.show_temporarily()
 
