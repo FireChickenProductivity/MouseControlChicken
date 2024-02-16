@@ -3,6 +3,28 @@ from typing import Generator, Tuple
 from ..fire_chicken.mouse_position import MousePosition
 from ..RectangleUtilities import LineDivider, compute_average, OneDimensionalLine, compute_rectangle_from_line_dividers
 from ..Regions import LinearRegion, MousePositionLine
+from typing import List
+
+class RectangularDivisionAmounts:
+    def __init__(self, horizontal: int, vertical: int):
+        self.horizontal = horizontal
+        self.vertical = vertical
+
+class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
+    def __init__(self, division_amounts: Tuple[int, int], input_coordinate_list: List[str], separator: str = " "):
+        self.number_of_horizontal_divisions: int = division_amounts[0]
+        self.number_of_vertical_divisions: int = division_amounts[1]
+        self.separator: str = separator
+        self.horizontal_divider: LineDivider = None
+        self.vertical_divider: LineDivider = None
+        self.rectangle: Rectangle = None
+        self.build_coordinate_system()
+
+    def make_around(self, rectangle: Rectangle) -> None: 
+        self.rectangle = rectangle
+        self.reset_grid()
+
+    
 
 class SquareRecursiveDivisionGrid(RecursiveDivisionGrid):
     def __init__(self, division_factor: int, separator: str = " "):
