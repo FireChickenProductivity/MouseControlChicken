@@ -1,6 +1,6 @@
 from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
-from .grid.RecursiveDivisionGrid import SquareRecursiveDivisionGrid
+from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
 from .grid.RectangularGrid import ListBasedGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, InvalidFactoryArgumentException
 from typing import List
@@ -63,8 +63,9 @@ class GridFactory:
 
 class SquareRecursiveDivisionGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
-        argument = components[0]
-        return SquareRecursiveDivisionGrid(argument)
+        argument = int(components[0])
+        input_coordinate_list = [str(index + 1) for index in range(argument**2)]
+        return RectangularRecursiveDivisionGrid(RectangularDivisionAmounts(argument, argument), input_coordinate_list)
 
     def get_name(self) -> str:
         return "Square Recursive Division Grid"
