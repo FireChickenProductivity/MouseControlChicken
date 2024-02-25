@@ -18,7 +18,12 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.horizontal_divider: LineDivider = None
         self.vertical_divider: LineDivider = None
         self.rectangle: Rectangle = None
+        self.build_options_from_input_coordinate_list(input_coordinate_list)
         self.build_coordinate_system()
+
+    def build_options_from_input_coordinate_list(self, input_coordinate_list: List[str]) -> None:
+        self.input_coordinate_list = input_coordinate_list
+        self.option_numbering = {str(index + 1): option for index, option in enumerate(input_coordinate_list)}
 
     def make_around(self, rectangle: Rectangle) -> None: 
         self.rectangle = rectangle
@@ -65,7 +70,7 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
                 yield region
 
     def get_narrowing_options(self) -> Generator:
-        for input_coordinate in self.input_coordinate_list: yield input_coordinate 
+        for input_coordinate in self.option_numbering.keys(): yield input_coordinate 
     
     def _compute_dividers_for_coordinates(self, grid_coordinates: str) -> Tuple[LineDivider, LineDivider]:
         coordinates = self._compute_coordinates(grid_coordinates)
