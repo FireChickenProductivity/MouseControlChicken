@@ -40,7 +40,6 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
         subrectangle = compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))
-        print("subrectangle: ", subrectangle, "main rectangle: ", self.rectangle, "grid_coordinates", grid_coordinates)
         return subrectangle
 
     def compute_current_position(self) -> MousePosition: 
