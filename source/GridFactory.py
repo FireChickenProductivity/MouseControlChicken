@@ -76,6 +76,22 @@ class SquareRecursiveDivisionGridFactory(GridFactory):
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [TwoToNineArgumentType()]
 
+class RectangularRecursiveDivisionGridFactory(GridFactory):
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        print("components", components)
+        horizontal = int(components[0])
+        vertical = int(components[1])
+        input_coordinate_list = [str(index + 1) for index in range(horizontal * vertical)]
+        return RectangularRecursiveDivisionGrid(RectangularDivisionAmounts(horizontal, vertical), input_coordinate_list)
+
+    def get_name(self) -> str:
+        return "Rectangular Recursive Division Grid"
+    
+    def get_arguments_description(self) -> str:
+        return "Two integers. The first integer is the number of horizontal divisions. The second integer is the number of vertical divisions. "
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [TwoToNineArgumentType(), TwoToNineArgumentType()]
 
 class AlphabetGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
@@ -107,7 +123,7 @@ class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [GridOptionArgumentType(), GridOptionArgumentType()]
 
-options = [SquareRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
+options = [SquareRecursiveDivisionGridFactory(), RectangularRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
 
 class GridFactoryOptions:
     def __init__(self, options: List[GridFactory]):
