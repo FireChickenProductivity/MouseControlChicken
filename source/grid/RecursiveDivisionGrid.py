@@ -39,7 +39,9 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
         self.horizontal_divider, self.vertical_divider = self._compute_dividers_for_coordinates(grid_coordinates)
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
-        return compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))
+        subrectangle = compute_rectangle_from_line_dividers(*self._compute_dividers_for_coordinates(grid_coordinates))
+        print("subrectangle: ", subrectangle, "main rectangle: ", self.rectangle, "grid_coordinates", grid_coordinates)
+        return subrectangle
 
     def compute_current_position(self) -> MousePosition: 
         position = self._compute_position_from_dividers(self.horizontal_divider, self.vertical_divider)
@@ -84,8 +86,8 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
 
     def _compute_dividers_for_coordinate(self, grid_coordinate: str, horizontal_divider: LineDivider, vertical_divider: LineDivider) -> Tuple[LineDivider, LineDivider]:
         horizontal, vertical = self._compute_grid_position_from_coordinate(grid_coordinate)
-        horizontal_divider = self._compute_sub_divider(horizontal_divider, horizontal, self.horizontal_division_factor)
-        vertical_divider = self._compute_sub_divider(vertical_divider, vertical, self.vertical_division_factor)
+        horizontal_divider = self._compute_sub_divider(horizontal_divider, horizontal, self._compute_number_of_horizontal_divisions())
+        vertical_divider = self._compute_sub_divider(vertical_divider, vertical, self._compute_number_of_vertical_divisions())
         return horizontal_divider, vertical_divider
     
     def _compute_grid_position_from_coordinate(self, grid_coordinate: str) -> Tuple[int, int]:

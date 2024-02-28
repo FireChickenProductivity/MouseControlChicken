@@ -9,6 +9,12 @@ class Rectangle:
         self.bottom = bottom
         self.left = left
         self.right = right
+    
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f"Rectangle(top: {self.top}, bottom: {self.bottom}, left: {self.left}, right: {self.right})"
 
 class CoordinatesNotSupportedException(Exception): pass
 
