@@ -78,7 +78,6 @@ class SquareRecursiveDivisionGridFactory(GridFactory):
 
 class RectangularRecursiveDivisionGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
-        print("components", components)
         horizontal = int(components[0])
         vertical = int(components[1])
         input_coordinate_list = [str(index + 1) for index in range(horizontal * vertical)]
