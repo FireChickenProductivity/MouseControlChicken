@@ -91,10 +91,10 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
     
     def _compute_grid_position_from_coordinate(self, grid_coordinate: str) -> Tuple[int, int]:
         target: int = int(grid_coordinate)
-        if target % self.horizontal_division_factor == 0: vertical = int(target/self.horizontal_division_factor)
-        else: vertical = (target//self.horizontal_division_factor) + 1
-        horizontal: int = (target % self.vertical_division_factor)
-        if horizontal == 0: horizontal = self.vertical_division_factor
+        if target % self.vertical_division_factor == 0: vertical = int(target/self.vertical_division_factor)
+        else: vertical = (target//self.vertical_division_factor) + 1
+        horizontal: int = (target % self.horizontal_division_factor)
+        if horizontal == 0: horizontal = self.horizontal_division_factor
         return horizontal, vertical
 
     def _compute_sub_divider(self, divider: LineDivider, split_number: int, number_of_divisions) -> LineDivider:
