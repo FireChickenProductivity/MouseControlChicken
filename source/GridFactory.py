@@ -2,7 +2,7 @@ from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
 from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
 from .grid.RectangularGrid import ListBasedGrid
-from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, InvalidFactoryArgumentException
+from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions
 
@@ -90,7 +90,7 @@ class RectangularRecursiveDivisionGridFactory(GridFactory):
         return "Two integers. The first integer is the number of horizontal divisions. The second integer is the number of vertical divisions. "
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
-        return [TwoToNineArgumentType(), TwoToNineArgumentType()]
+        return [PositiveIntegerArgumentType(), PositiveIntegerArgumentType()]
 
 class AlphabetGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:

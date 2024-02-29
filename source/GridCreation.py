@@ -57,6 +57,7 @@ class ArgumentBuilder:
             self.handle_argument_type(argument_types[self.argument_index])
 
     def handle_argument_type(self, argument_type: FactoryArgumentType):
+        print(argument_type)
         if argument_type.supports_options_dialogue():
             self.handle_obtaining_argument_with_options_dialogue(argument_type)
         else:
