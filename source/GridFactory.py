@@ -2,6 +2,7 @@ from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptions import GridOptions
 from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
 from .grid.RectangularGrid import ListBasedGrid
+from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions
@@ -109,6 +110,8 @@ class DoubleAlphabetGridFactory(GridFactory):
 class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         primary = create_grid_from_options(components[0]) 
+        if primary.supports_narrowing():
+            primary = SingleLayerFromRecursiveGridGrid(primary)
         secondary = create_grid_from_options(components[1])
         combination = RecursivelyDivisibleGridCombination(primary, secondary)
         return combination
