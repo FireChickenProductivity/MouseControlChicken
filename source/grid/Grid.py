@@ -38,6 +38,9 @@ class Grid:
     def supports_narrowing(self) -> bool:
         return False
 
+    def is_wrapper(self) -> bool:
+        return False
+
     def _compute_coordinates(self, grid_coordinates: str) -> List:
         if len(self.separator) == 0: 
             return grid_coordinates
