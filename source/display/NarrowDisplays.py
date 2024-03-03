@@ -1,6 +1,6 @@
 from .Display import Display
 from .Canvas import Canvas
-from ..grid.Grid import Grid, Rectangle, RecursiveDivisionGrid
+from ..grid.Grid import Grid, Rectangle, RecursiveDivisionGrid, compute_primary_grid
 from .UniversalDisplays import UniversalPositionDisplay
 from ..Regions import draw_linear_region_on_canvas, draw_linear_region_on_canvas_with_lines_converted_to_half_lines_around_midpoint
 
@@ -11,8 +11,9 @@ class NarrowDisplay(Display):
         self.position_display: UniversalPositionDisplay = UniversalPositionDisplay()
     
     def set_grid(self, grid: RecursiveDivisionGrid):
-        super().set_grid(grid)
-        self.position_display.set_grid(grid)
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
+        self.position_display.set_grid(primary_grid)
     
     def set_rectangle(self, rectangle: Rectangle):
         super().set_rectangle(rectangle)
@@ -27,7 +28,8 @@ class NarrowDisplay(Display):
             draw_linear_region_on_canvas(canvas, region)
         
     def supports_grid(grid: Grid) -> bool:
-        return isinstance(grid, RecursiveDivisionGrid)
+        primary_grid = compute_primary_grid(grid)
+        return isinstance(primary_grid, RecursiveDivisionGrid)
 
 class DoubleNarrowDisplay(NarrowDisplay):
     def draw_on(self, canvas):

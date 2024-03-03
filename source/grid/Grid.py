@@ -152,8 +152,13 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 def compute_primary_grid(grid: Grid):
     return compute_sub_grids(grid)[0]
 
+def compute_actual_grid(grid: Grid):
+    if grid.is_wrapper():
+        return grid.get_wrapped_grid()
+    return grid
+
 def compute_sub_grids(grid: Grid) -> List[Grid]:
     if grid.is_combination():
         return compute_sub_grids(grid.get_primary_grid()) + compute_sub_grids(grid.get_secondary_grid())
     else:
-        return [grid]
+        return [compute_actual_grid(grid)]
