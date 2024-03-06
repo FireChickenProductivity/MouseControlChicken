@@ -1,6 +1,6 @@
-from ..Grid import Grid
+from ..grid.Grid import Grid
 from .Display import Display
-from ..Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
+from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
 from typing import List, Callable
 
 class CombinationDisplay(Display):
@@ -11,11 +11,7 @@ class CombinationDisplay(Display):
         self.secondary_displays = []
     
     def set_rectangle(self, rectangle: Rectangle):
-        self.primary_display.set_rectangle(rectangle)
         self.rectangle = rectangle
-        if self.grid and self.secondary_display_creation_functions:
-            self._setup_secondary_displays(self.grid)
-        print(self.grid)
     
     def _setup_secondary_display_for_coordinate(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
         primary = grids[index]
@@ -30,6 +26,7 @@ class CombinationDisplay(Display):
         #Might need to maintain a sub grid for each secondary display
         sub_display.set_grid(secondary)
         sub_display.set_rectangle(sub_rectangle)
+        sub_display.draw_on(self.canvas)
         self.secondary_displays.append(sub_display)
         # print('completed appending')
 
@@ -49,11 +46,14 @@ class CombinationDisplay(Display):
                 
     def set_grid(self, grid: RecursivelyDivisibleGridCombination):
         self.grid = grid
-        self.hide()
-        self.primary_display.set_grid(grid.get_primary_grid())
-        
-
     
+    def draw_on(self, canvas):
+        self.primary_display.set_grid(self.grid)
+        self.primary_display.set_rectangle(self.rectangle)
+        self.primary_display.draw_on(canvas)
+        self.canvas = canvas
+        self._setup_secondary_displays(self.grid)
+
     def _displays_support_corresponding_sub_grid(self, grid: RecursivelyDivisibleGridCombination) -> bool:
         return self.primary_display.supports_grid(grid) and \
             all([display.supports_grid(sub_grid) for display, sub_grid in zip(self.secondary_displays, compute_sub_grids(grid)[1:])])
