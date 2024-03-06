@@ -9,6 +9,12 @@ class Rectangle:
         self.bottom = bottom
         self.left = left
         self.right = right
+    
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f"Rectangle(top: {self.top}, bottom: {self.bottom}, left: {self.left}, right: {self.right})"
 
 class CoordinatesNotSupportedException(Exception): pass
 
@@ -30,6 +36,9 @@ class Grid:
         return False
 
     def supports_narrowing(self) -> bool:
+        return False
+
+    def is_wrapper(self) -> bool:
         return False
 
     def _compute_coordinates(self, grid_coordinates: str) -> List:
@@ -143,8 +152,13 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 def compute_primary_grid(grid: Grid):
     return compute_sub_grids(grid)[0]
 
+def compute_actual_grid(grid: Grid):
+    if grid.is_wrapper():
+        return grid.get_wrapped_grid()
+    return grid
+
 def compute_sub_grids(grid: Grid) -> List[Grid]:
     if grid.is_combination():
         return compute_sub_grids(grid.get_primary_grid()) + compute_sub_grids(grid.get_secondary_grid())
     else:
-        return [grid]
+        return [compute_actual_grid(grid)]

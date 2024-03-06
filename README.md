@@ -152,11 +152,13 @@ The grid creation process can be initiated with the "chicken create grid" comman
 
 Square Recursive Division Grid is what the one to nine grid uses. You can pick a number between 2 and 9 for the division factor. The resulting grid will divide the base rectangle into the square of the division factor. 
 
+Rectangular Recursive Division Grid is like the square recursive division grid but allows you to pick a division factor for the horizontal and vertical directions separately. You can pick division factors of less 1 to 99, but dividing the screen into more than 99 squares will divide the screen further than the current coordinate dictation capture currently supports and is not recommended.
+
 Alphabet is a clone of the alphabet grid.
 
 Double Alphabet is a clone of the double alphabet grid.
 
-Recursively Divisible Combination let you put one grid inside another such as how the alphabet numbers grid has the alphabet grid as the primary and the one to nine as the secondary. Having a square recursive division grid as the primary is currently not supported.
+Recursively Divisible Combination let you put one grid inside another such as how the alphabet numbers grid has the alphabet grid as the primary and the one to nine as the secondary. Having a square or rectangular recursive division grid as the primary will have the recursive aspect removed so that it only provides the top level of the grid.
 
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
 
