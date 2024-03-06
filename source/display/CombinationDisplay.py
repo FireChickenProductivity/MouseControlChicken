@@ -53,20 +53,6 @@ class CombinationDisplay(Display):
         self.primary_display.set_grid(grid.get_primary_grid())
         
 
-    def show(self):
-        self.primary_display.show()
-        for display in self.secondary_displays:
-            display.show()
-
-    def hide(self): 
-        self.primary_display.hide()
-        for display in self.secondary_displays:
-            display.hide()
-        
-    def refresh(self):
-        self.primary_display.refresh()
-        for display in self.secondary_displays:
-            display.refresh()
     
     def _displays_support_corresponding_sub_grid(self, grid: RecursivelyDivisibleGridCombination) -> bool:
         return self.primary_display.supports_grid(grid) and \
