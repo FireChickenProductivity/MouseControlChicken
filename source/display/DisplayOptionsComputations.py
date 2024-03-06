@@ -3,7 +3,7 @@ from .UniversalDisplays import *
 from .RectangularGridDisplays import *
 from .CombinationDisplay import CombinationDisplay
 from .NarrowDisplays import *
-from ..Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
+from ..grid.Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
 from typing import List
 
 display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,

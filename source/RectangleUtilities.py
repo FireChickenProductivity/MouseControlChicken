@@ -1,4 +1,4 @@
-from .Grid import Rectangle
+from .grid.Grid import Rectangle
 from .fire_chicken.mouse_position import MousePosition
 import math
 from typing import Tuple
@@ -46,6 +46,8 @@ class LineDivider:
         return position
 
     def compute_split(self, number: int) -> OneDimensionalLine:
+        if self.number_of_divisors == 0 and number == 1: 
+            return OneDimensionalLine(self.start, self.ending)
         if self.number_of_divisors + 1 < number or number < 1: 
             raise IndexError(f"Attempt to access nonexistent divisor split number {number} with number of divisors {self.number_of_divisors}")
         if number == 1: 

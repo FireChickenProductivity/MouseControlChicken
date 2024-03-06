@@ -1,6 +1,6 @@
 from talon import Module, Context
 from typing import List
-from .Grid import Grid
+from .grid.Grid import Grid
 
 module = Module()
 
@@ -23,6 +23,10 @@ module.tag(GRID_CREATION_TAG_NAME, desc = 'Tag for enabling mouse control chicke
 GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_two_to_nine'
 GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG = 'user.' + GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME
 module.tag(GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG_NAME, desc = 'Tag for setting the current argument type to two to nine for mouse control chicken grid creation')
+
+GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_positive_integer'
+GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG = 'user.' + GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME
+module.tag(GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME, desc = 'Tag for setting the current argument type to positive integer for mouse control chicken grid creation')
 
 GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_grid_option'
 GRID_CREATION_ARGUMENT_GRID_OPTION_TAG = 'user.' + GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME

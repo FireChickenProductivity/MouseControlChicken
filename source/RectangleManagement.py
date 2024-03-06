@@ -1,4 +1,4 @@
-from .Grid import Rectangle
+from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
 from talon import ui, Module
 
@@ -16,8 +16,11 @@ class ScreenRectangleManager(RectangleManager):
 class CurrentWindowRectangleManager(RectangleManager):
     def compute_rectangle(self) -> Rectangle:
         window = ui.active_window()
-        talon_rectangle = window.rect
-        rectangle = convert_talon_rectangle_to_rectangle(talon_rectangle)
+        try:
+            talon_rectangle = window.rect
+            rectangle = convert_talon_rectangle_to_rectangle(talon_rectangle)
+        except:
+            rectangle = ScreenRectangleManager().compute_rectangle()
         return rectangle
 
 

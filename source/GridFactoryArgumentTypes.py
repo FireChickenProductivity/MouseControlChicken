@@ -1,4 +1,5 @@
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG
+from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
+, GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
 from .dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
 from .ContextUtilities import create_context_matches_single_tag_string
 from .GridOptions import GridOptions
@@ -46,6 +47,13 @@ class TwoToNineArgumentType(FactoryArgumentType):
     
     def _argument_has_valid_value(self, argument):
         return argument >= 2 and argument <= 9
+    
+class PositiveIntegerArgumentType(FactoryArgumentType):
+    def __init__(self):
+        super().__init__(int, GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG)
+    
+    def _argument_has_valid_value(self, argument):
+        return argument > 0
     
 class GridOptionArgumentType(FactoryArgumentType):
     def __init__(self):

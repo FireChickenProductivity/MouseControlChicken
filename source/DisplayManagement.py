@@ -1,5 +1,6 @@
 from .display.Display import Display
-from .Grid import Grid, Rectangle
+from .display.Canvas import Canvas
+from .grid.Grid import Grid, Rectangle
 from talon import cron
 
 class JobHandler:
@@ -74,6 +75,7 @@ class DisplayManager:
         self.grid: Grid = None
         self.rectangle: Rectangle = None
         self.flickerer: Flickerer = Flickerer(self.flicker_show, self.hide_temporarily)
+        self.canvas: Canvas = Canvas()
     
     def set_display(self, display: Display):
         self.hide()
@@ -98,14 +100,24 @@ class DisplayManager:
                 self.flickerer.restart_flickering()
         
     def hide_temporarily(self):
-        if self.display: self.display.hide()
+        if self.display: self.canvas.hide()
     
     def show_temporarily(self):
-        if self.display: self.display.show()
+        if self.display: self.canvas.show()
+
+    def reset_canvas(self):
+        self.canvas = Canvas()
+
+    def refresh_canvas(self, rectangle: Rectangle):
+        self.reset_canvas()
+        self.canvas.setup(rectangle)
+        self.display.draw_on(self.canvas)
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
+        self.hide_temporarily()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
+        if grid and rectangle: self.refresh_canvas(rectangle)
         self.grid = grid
         self.rectangle = rectangle
     
@@ -118,7 +130,7 @@ class DisplayManager:
     def refresh_display_using_previous_values(self):
         self.refresh_display(self.grid, self.rectangle)
 
-    def flicker_show(self):
+    def flicker_show(self):     
         self.refresh_display_using_previous_values()
         self.show_temporarily()
 

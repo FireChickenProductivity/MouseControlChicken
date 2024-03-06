@@ -49,6 +49,9 @@ class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
             tail = new_tail
         return head, tail
 
+    def get_infinitely_repeated_system(self) -> InputCoordinateSystem:
+        return self.system
+
 class DisjointUnionCoordinateSystem(InputCoordinateSystem):
     def __init__(self, systems: List[InputCoordinateSystem], separator: str = " "):
         self.systems = systems

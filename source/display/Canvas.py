@@ -1,7 +1,7 @@
 import math
 from talon import canvas, ui
 from talon.skia import Paint, Rect
-from ..Grid import Rectangle
+from ..grid.Grid import Rectangle
 from ..SettingsMediator import settings_mediator
 
 MINIMUM_BACKGROUND_RECTANGLE_HORIZONTAL_SIZE = 10
