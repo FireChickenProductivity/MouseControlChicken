@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RectangularGrid
 from typing import List, Generator
 from ..fire_chicken.mouse_position import MousePosition
-from ..RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine
+from ..RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine, compute_average
 
 class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order
@@ -32,8 +32,14 @@ class ListBasedGrid(RectangularGrid):
         first_vertical_split = self.vertical_divider.compute_split(vertical_divider_position)
         second_horizontal_split = self.horizontal_divider.compute_split(horizontal_divider_position + 1)
         second_vertical_split = self.vertical_divider.compute_split(vertical_divider_position + 1)
-        combined_horizontal_split = OneDimensionalLine(first_horizontal_split.start, second_horizontal_split.ending)
-        combined_vertical_split = OneDimensionalLine(first_vertical_split.start, second_vertical_split.ending)
+        combined_horizontal_split = OneDimensionalLine(
+            compute_average(first_horizontal_split.start, first_horizontal_split.ending),
+            compute_average(second_horizontal_split.start, second_horizontal_split.ending)
+            )
+        combined_vertical_split = OneDimensionalLine(
+            compute_average(first_vertical_split.start, first_vertical_split.ending),
+            compute_average(second_vertical_split.start, second_vertical_split.ending)
+            )
         rectangle = compute_rectangle_from_line_splits(combined_horizontal_split, combined_vertical_split)
         return rectangle
 
