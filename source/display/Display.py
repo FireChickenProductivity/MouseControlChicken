@@ -41,10 +41,10 @@ class Display:
         self.rectangle = rectangle
     
     def draw_on(self, canvas: Canvas):
-        self.draw_on_canvas_given_boundaries_touching(canvas, BoundariesTouching(True, True, True, True))
-
-    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
         pass
+
+    def is_boundary_acknowledging(self) -> bool:
+        return False
     
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
@@ -56,7 +56,17 @@ class Display:
         name: str = instance.__class__.__name__[:-len(DISPLAY_CLASS_NAME_POSTFIX)]
         return name
 
-class FrameDisplay(Display): 
+class BoundaryAcknowledgingDisplay(Display):
+    def draw_on(self, canvas: Canvas):
+        self.draw_on_canvas_given_boundaries_touching(canvas, BoundariesTouching(True, True, True, True))
+
+    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
+        pass
+
+    def is_boundary_acknowledging(self) -> bool:
+        return True
+
+class FrameDisplay(BoundaryAcknowledgingDisplay): 
     '''Displays a grid around a rectangle showing the coordinates of the grid'''
     pass
 

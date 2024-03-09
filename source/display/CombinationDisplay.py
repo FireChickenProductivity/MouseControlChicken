@@ -26,8 +26,11 @@ class CombinationDisplay(Display):
         #Might need to maintain a sub grid for each secondary display
         sub_display.set_grid(secondary)
         sub_display.set_rectangle(sub_rectangle)
-        boundaries_touching = compute_boundaries_touching(sub_rectangle, primary.get_rectangle())
-        sub_display.draw_on_canvas_given_boundaries_touching(self.canvas, boundaries_touching)
+        if sub_display.is_boundary_acknowledging():
+            boundaries_touching = compute_boundaries_touching(sub_rectangle, primary.get_rectangle())
+            sub_display.draw_on_canvas_given_boundaries_touching(self.canvas, boundaries_touching)
+        else:
+            sub_display.draw_on(self.canvas)
         self.secondary_displays.append(sub_display)
         # print('completed appending')
 
