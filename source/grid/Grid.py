@@ -111,11 +111,13 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         self.secondary_coordinate_system = secondary.get_coordinate_system()
         self.coordinate_system = DisjointUnionCoordinateSystem([
             self.primary_coordinate_system,
+            self.secondary_coordinate_system,
             SequentialCombinationCoordinateSystem([
                 self.primary_coordinate_system,
                 self.secondary_coordinate_system
             ])
         ])
+        self.secondary_persistent_coordinates: str = None
     
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary_coordinate_system
@@ -124,17 +126,37 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         return self.secondary_coordinate_system
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
+        if self._coordinates_correspond_to_secondary(grid_coordinates):
+            rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
+            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle)
+        else:
+            position = self._compute_absolute_position_from_valid_coordinates_using_head_and_tail(grid_coordinates)
+        return position
+
+    def _coordinates_correspond_to_secondary(self, grid_coordinates: str) -> bool:
+        return self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
+            and not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
+            and self.secondary_persistent_coordinates is not None
+
+    def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle) -> MousePosition:
+        self.secondary.make_around(rectangle)
+        position = self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
+        return position
+
+    def _compute_absolute_position_from_valid_coordinates_using_head_and_tail(self, grid_coordinates: str) -> MousePosition:
         head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
         if tail:
             rectangle = self.primary.compute_sub_rectangle_for(head)
-            self.secondary.make_around(rectangle)
-            position = self.secondary.compute_absolute_position_from_valid_coordinates(tail)
+            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(tail, rectangle)
         else:
             position = self.primary.compute_absolute_position_from_valid_coordinates(head)
         return position
 
     def make_around(self, rectangle: Rectangle) -> None:
         self.primary.make_around(rectangle)
+    
+    def persist_secondary_at(self, grid_coordinates: str) -> None:
+        self.secondary_persistent_coordinates = grid_coordinates
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
         head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
