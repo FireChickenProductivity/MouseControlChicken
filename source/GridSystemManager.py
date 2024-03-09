@@ -179,6 +179,11 @@ class Actions:
     def mouse_control_chicken_is_using_narrow_able_grid() -> bool:
         '''Returns whether the current mouse control chicken grid is narrow able'''
         return manager_has_narrow_able_grid()
+    
+    def mouse_control_chicken_handle_action_using_coordinates(coordinates: str) -> None:
+        '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
+        grid = manager.get_grid()
+        grid.handle_using_coordinates_with_mouse_command(coordinates)
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
