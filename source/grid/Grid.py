@@ -130,7 +130,6 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         if self._coordinates_correspond_to_secondary(grid_coordinates):
-            print("!!!!!!!!!!secondary", self.secondary_persistent_coordinates)
             rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle)
         else:
