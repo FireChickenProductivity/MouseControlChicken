@@ -113,10 +113,10 @@ class RectangularGridFrameDisplay(FrameDisplay):
         return is_rectangular_grid(grid)
 
 class DoubleFrameDisplay(RectangularGridFrameDisplay):
-    def draw_on(self, canvas: Canvas):
-        super().draw_on(canvas)
+    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
+        super().draw_on_canvas_given_boundaries_touching(canvas, boundaries_touching)
         self._add_middle_frame(self.rectangle)
-    
+
     def _add_middle_frame(self, rectangle: Rectangle):
         middle_vertical = round(compute_average(rectangle.bottom, rectangle.top))
         self._add_horizontal_coordinates_to_frame(middle_vertical)
@@ -124,8 +124,8 @@ class DoubleFrameDisplay(RectangularGridFrameDisplay):
         self._add_vertical_coordinates_to_frame(middle_horizontal)
     
 class QuadrupleFrameDisplay(DoubleFrameDisplay):
-    def draw_on(self, canvas: Canvas):
-        super().draw_on(canvas)
+    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
+        super().draw_on_canvas_given_boundaries_touching(canvas, boundaries_touching)
         coroners = compute_rectangle_corners(self.rectangle)
         for corner in coroners: 
             self._add_middle_frame(corner)
