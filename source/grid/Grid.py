@@ -32,6 +32,9 @@ class Grid:
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.coordinate_system
 
+    def get_rectangle(self) -> Rectangle:
+        return self.rectangle
+
     def is_combination(self) -> bool:
         return False
 

@@ -1,4 +1,4 @@
-from .Display import FrameDisplay, PositionDisplay
+from .Display import FrameDisplay, PositionDisplay, BoundariesTouching
 from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from ..grid.Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
 from .Canvas import Text, Line, Canvas
@@ -16,18 +16,20 @@ class RectangularGridFrameDisplay(FrameDisplay):
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
 
-    def draw_on(self, canvas: Canvas):
+    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
         self.canvas = canvas
-        self._add_main_frame()
+        self._add_main_frame(boundaries_touching)
         if self._should_show_crisscross():
             self._add_crisscross()
     
-    def _add_main_frame(self):
+    def _add_main_frame(self, boundaries_touching: BoundariesTouching):
         frame_offset = settings_mediator.get_frame_grid_offset()
         self._add_horizontal_coordinates_to_frame(self.rectangle.top + frame_offset)
-        self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset)
+        if boundaries_touching.is_touching_bottom_boundary():
+            self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset)
         self._add_vertical_coordinates_to_frame(self.rectangle.left + frame_offset)
-        self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
+        if boundaries_touching.is_touching_right_boundary():
+            self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
 
     def _add_horizontal_coordinates_to_frame(self, vertical: int):
         self._add_coordinates_to_frame(

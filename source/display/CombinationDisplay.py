@@ -1,5 +1,5 @@
 from ..grid.Grid import Grid
-from .Display import Display
+from .Display import Display, BoundariesTouching, compute_boundaries_touching
 from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
 from typing import List, Callable
 
@@ -26,7 +26,8 @@ class CombinationDisplay(Display):
         #Might need to maintain a sub grid for each secondary display
         sub_display.set_grid(secondary)
         sub_display.set_rectangle(sub_rectangle)
-        sub_display.draw_on(self.canvas)
+        boundaries_touching = compute_boundaries_touching(sub_rectangle, primary.get_rectangle())
+        sub_display.draw_on_canvas_given_boundaries_touching(self.canvas, boundaries_touching)
         self.secondary_displays.append(sub_display)
         # print('completed appending')
 
