@@ -28,6 +28,26 @@ class DisplayOption:
     def __str__(self) -> str:
         return self.get_name()
 
+class PartialCombinationDisplayOption:
+    def __init__(self, display_type: type, index: int):
+        self.display_type = display_type
+        self.index = index
+    
+    def get_type(self):
+        return self.display_type
+
+    def get_name(self):
+        return f"{self.index + 1}|self.display_type.get_name()"
+    
+    def get_index(self):
+        return self.index
+
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+    def __str__(self) -> str:
+        return self.get_name()
+        
 class CombinationDisplayOption:
     def __init__(self, display_types: List[type]):
         self.display_types = display_types
@@ -36,6 +56,12 @@ class CombinationDisplayOption:
         primary = self.display_types[0]()
         secondary = self.display_types[1:]
         return CombinationDisplay(primary, secondary)
+    
+    def set_display(self, display: Display, index: int):
+        self.display_types[index] = display
+    
+    def receive_partial_combination_display_option(self, option: PartialCombinationDisplayOption):
+        self.set_display(option.get_type(), option.get_index())
 
     def get_types(self):
         return self.display_types
