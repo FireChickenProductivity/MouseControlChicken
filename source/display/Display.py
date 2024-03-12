@@ -56,6 +56,9 @@ class Display:
         name: str = instance.__class__.__name__[:-len(DISPLAY_CLASS_NAME_POSTFIX)]
         return name
 
+class EmptyDisplay(Display):
+    pass
+
 class BoundaryAcknowledgingDisplay(Display):
     def draw_on(self, canvas: Canvas):
         self.draw_on_canvas_given_boundaries_touching(canvas, BoundariesTouching(True, True, True, True))

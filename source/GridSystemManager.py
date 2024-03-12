@@ -103,7 +103,7 @@ class Actions:
         '''Changes the active mouse control chicken grid display based on the name of the option'''
         global manager
         display_options = compute_display_options_given_grid(manager.get_grid())
-        display = display_options.create_display_from_option(name)
+        display = display_options.create_display_from_option(name, current_display=manager.get_display())
         manager.set_display(display)
 
     def mouse_control_chicken_show_grid_options():

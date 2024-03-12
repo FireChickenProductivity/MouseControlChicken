@@ -22,13 +22,17 @@ class DisplayOption:
     def get_name(self):
         return self.display_type.get_name()
 
+    def is_partial_combination_option(self) -> bool:
+        return False
+
     def __repr__(self) -> str:
         return self.__str__()
     
     def __str__(self) -> str:
         return self.get_name()
 
-class PartialCombinationDisplayOption:
+class PartialCombinationDisplayOption(DisplayOption):
+    SEPARATOR = "|"
     def __init__(self, display_type: type, index: int):
         self.display_type = display_type
         self.index = index
@@ -37,7 +41,10 @@ class PartialCombinationDisplayOption:
         return self.display_type
 
     def get_name(self):
-        return f"{self.index + 1}|self.display_type.get_name()"
+        return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}self.display_type.get_name()"
+
+    def is_partial_combination_option(self) -> bool:
+        return True
     
     def get_index(self):
         return self.index
@@ -76,15 +83,39 @@ class CombinationDisplayOption:
         return self.get_name()
 
 class DisplayOptions:
-    def __init__(self, options: List[DisplayOption]):
+    def __init__(self, options: List[DisplayOption], *, is_for_combination_grid: bool = False):
         self.options = {}
         for option in options: self.options[option.get_name()] = option
+        self.is_for_combination_grid = is_for_combination_grid
 
     def get_names(self) -> List[str]:
         return self.options.keys()
     
-    def create_display_from_option(self, name: str):
-        return self.options[name].instantiate()
+    def create_display_from_option(self, name: str, current_display: Display = None) -> Display:
+        if self.is_for_combination_grid:
+            self.create_combination_display_from_option(name, current_display)
+        else:
+            return self.options[name].instantiate()
+
+    def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
+        partial_option = self.compute_partial_option_from_name(name)
+        sub_displays = []
+        if current_display:
+            sub_displays = current_display.get_name().split()
+        else:
+            sub_displays = [EmptyDisplay()]*partial_option.get_index()
+        combination = CombinationDisplayOption(sub_displays)
+        combination.receive_partial_combination_display_option(partial_option)
+        return combination.instantiate()
+
+    def compute_partial_option_from_name(self, name: str) -> PartialCombinationDisplayOption:
+        if PartialCombinationDisplayOption.SEPARATOR in name:
+            order_number, display_name = name.split(PartialCombinationDisplayOption.SEPARATOR)
+        else:
+            order_number = 1
+            display_name = name
+        normalized_option_name = str(order_number) + PartialCombinationDisplayOption.SEPARATOR + display_name
+        return self.options[normalized_option_name]
 
 def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
     types = [display_type for display_type in display_types if display_type.supports_grid(grid)]
@@ -96,24 +127,15 @@ def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
     return options
 
 def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGridCombination) -> DisplayOptions:
-    '''This function will return all possible valid combinations of displays for the grid.
-        A valid combination of displays has at most the number of sub grids as the number of displays with each display being valid for
-        the corresponding sub grid.'''
+    '''This will return the partial display options for every sub grid.'''
     options = []
     sub_grids = compute_sub_grids(grid)
-    for sub_grid in sub_grids:
-        types_for_sub_grid = compute_display_option_types_given_singular_grid(sub_grid)
-        previous_level_options = options[:]
-        if previous_level_options:
-            for option in previous_level_options:
-                for display_type in types_for_sub_grid:
-                    new_option = CombinationDisplayOption(option.get_types() + [display_type])
-                    options.append(new_option)
-        else:
-            for display_type in types_for_sub_grid:
-                new_option = CombinationDisplayOption([display_type])
-                options.append(new_option)
-    return DisplayOptions(options)
+    for index, sub_grid in enumerate(sub_grids):
+        options += [
+            PartialCombinationDisplayOption(display_type, index) 
+            for display_type in compute_display_option_types_given_singular_grid(sub_grid)
+        ]
+    return DisplayOptions(options, is_for_combination_grid=True)
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     if grid.is_combination():
