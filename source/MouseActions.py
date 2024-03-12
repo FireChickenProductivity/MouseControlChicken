@@ -5,6 +5,11 @@ from .fire_chicken.mouse_position import MousePosition
 module = Module()
 @module.action_class
 class Actions:
+    def mouse_control_chicken_move_only_to_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken grid and handle that as a complete action'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
+
     def mouse_control_chicken_click_position(coordinates: str):
         '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
