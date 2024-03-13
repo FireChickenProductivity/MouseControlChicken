@@ -41,7 +41,7 @@ class PartialCombinationDisplayOption(DisplayOption):
         return self.display_type
 
     def get_name(self):
-        return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}self.display_type.get_name()"
+        return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}{self.display_type.get_name()}"
 
     def is_partial_combination_option(self) -> bool:
         return True
@@ -65,7 +65,12 @@ class CombinationDisplayOption:
         return CombinationDisplay(primary, secondary)
     
     def set_display(self, display: Display, index: int):
-        self.display_types[index] = display
+        if index < len(self.display_types):
+            self.display_types[index] = display
+        elif index == len(self.display_types):
+            self.display_types.append(display)
+        else:
+            raise ValueError(f"Index {index} is too large for Combination Display Option display types {self.display_types}")
     
     def receive_partial_combination_display_option(self, option: PartialCombinationDisplayOption):
         self.set_display(option.get_type(), option.get_index())
@@ -87,15 +92,17 @@ class DisplayOptions:
         self.options = {}
         for option in options: self.options[option.get_name()] = option
         self.is_for_combination_grid = is_for_combination_grid
+        print(self.options)
 
     def get_names(self) -> List[str]:
         return self.options.keys()
     
     def create_display_from_option(self, name: str, current_display: Display = None) -> Display:
         if self.is_for_combination_grid:
-            self.create_combination_display_from_option(name, current_display)
+            display = self.create_combination_display_from_option(name, current_display)
         else:
-            return self.options[name].instantiate()
+            display = self.options[name].instantiate()
+        return display
 
     def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
         partial_option = self.compute_partial_option_from_name(name)
@@ -103,7 +110,7 @@ class DisplayOptions:
         if current_display:
             sub_displays = current_display.get_name().split()
         else:
-            sub_displays = [EmptyDisplay()]*partial_option.get_index()
+            sub_displays = [EmptyDisplay()]*(partial_option.get_index() + 1)
         combination = CombinationDisplayOption(sub_displays)
         combination.receive_partial_combination_display_option(partial_option)
         return combination.instantiate()
