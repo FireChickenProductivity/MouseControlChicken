@@ -1,12 +1,12 @@
 from ..grid.Grid import Grid
-from .Display import Display, BoundariesTouching, compute_boundaries_touching
+from .Display import Display, compute_boundaries_touching
 from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
-from typing import List, Callable
+from typing import List, Type
 
 class CombinationDisplay(Display):
-    def __init__(self, primary_display: Display, secondary_display_creation_functions: List[Callable[[], Display]]):
+    def __init__(self, primary_display: Display, secondary_display_types: List[Type]):
         self.primary_display = primary_display
-        self.secondary_display_creation_functions = secondary_display_creation_functions
+        self.secondary_display_types = secondary_display_types
         self.rectangle: Rectangle = None
         self.secondary_displays = []
     
@@ -21,7 +21,7 @@ class CombinationDisplay(Display):
         # print('sub_rectangle', sub_rectangle)
         # print('secondary', secondary)
         # print('primary', primary)
-        sub_display = self.secondary_display_creation_functions[index]()
+        sub_display = self.secondary_display_types[index]()
         #Big problem is the secondary does not exist around any rectangles at this point probably
         #Might need to maintain a sub grid for each secondary display
         sub_display.set_grid(secondary)
@@ -40,7 +40,7 @@ class CombinationDisplay(Display):
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         grids = compute_sub_grids(grid)
-        for index in range(len(self.secondary_display_creation_functions)):
+        for index in range(len(self.secondary_display_types)):
             self._setup_secondary_displays_for_grid(grids, index)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
@@ -67,6 +67,6 @@ class CombinationDisplay(Display):
         
     def get_name(self) -> str:
         name = self.primary_display.get_name()
-        for display in self.secondary_displays:
-            name += ":" + display.get_name()
+        for display_type in self.secondary_display_types:
+            name += ":" + display_type.get_name()
         return name
