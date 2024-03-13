@@ -6,8 +6,14 @@ from .NarrowDisplays import *
 from ..grid.Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
 from typing import List
 
-display_types = [RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
+display_types = [EmptyDisplay, RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
                  RectangularCheckerDisplay]
+
+def obtain_display_type_from_name(name: str) -> type:
+    for display_type in display_types:
+        if display_type.get_name() == name:
+            return display_type
+    raise ValueError(f"Could not find display type with name {name} in {[display_type.get_name() for display_type in display_types]}")
 
 class DisplayOption:
     def __init__(self, display_type: type):
@@ -92,7 +98,6 @@ class DisplayOptions:
         self.options = {}
         for option in options: self.options[option.get_name()] = option
         self.is_for_combination_grid = is_for_combination_grid
-        print(self.options)
 
     def get_names(self) -> List[str]:
         return self.options.keys()
@@ -106,11 +111,12 @@ class DisplayOptions:
 
     def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
         partial_option = self.compute_partial_option_from_name(name)
-        sub_displays = []
+        sub_display_names = []
         if current_display:
-            sub_displays = current_display.get_name().split()
+            sub_display_names = current_display.get_name().split(":")
         else:
-            sub_displays = [EmptyDisplay()]*(partial_option.get_index() + 1)
+            sub_display_names = ["Empty"]*(partial_option.get_index() + 1)
+        sub_displays = [obtain_display_type_from_name(displayname) for displayname in sub_display_names]
         combination = CombinationDisplayOption(sub_displays)
         combination.receive_partial_combination_display_option(partial_option)
         return combination.instantiate()
