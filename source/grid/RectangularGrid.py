@@ -84,6 +84,9 @@ class ListBasedGrid(RectangularGrid):
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
         return self._compute_coordinates(grid_coordinates)[index]
 
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return False
+
 def create_ordering_dictionary(list: List):
     ordering = {}
     for index, element in enumerate(list):

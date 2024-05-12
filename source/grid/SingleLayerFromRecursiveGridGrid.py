@@ -25,3 +25,6 @@ class SingleLayerFromRecursiveGridGrid(RecursivelyDivisibleGrid):
 
     def get_wrapped_grid(self) -> RecursivelyDivisibleGrid:
         return self.recursive_grid
+
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return self.recursive_grid.has_nonoverlapping_sub_rectangles()

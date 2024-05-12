@@ -151,7 +151,7 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
     return DisplayOptions(options, is_for_combination_grid=True)
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
-    if grid.is_combination():
+    if grid.is_combination() and grid.has_nonoverlapping_sub_rectangles():
         return compute_combination_display_options_given_grid(grid)
     else:
         return compute_display_options_given_singular_grid(grid)
