@@ -5,8 +5,8 @@ from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid, compute_display_options_separated_by_index_for_grid, \
-    compute_display_option_names_given_options, DISPLAY_NAME_SEPARATOR
+    should_compute_combination_display_options_for_grid
+from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
@@ -197,29 +197,6 @@ def show_display_options(title: str, callback):
         show_combination_display_options(title, callback, grid)                
     else:
         show_singular_display_options(title, callback, grid)
-
-def show_combination_display_options(title: str, callback, grid: Grid, index: int = 0, combination_display_name: str = ""):
-    options = compute_display_options_separated_by_index_for_grid(grid)
-    if index >= len(options):
-        callback(combination_display_name)
-    else:
-        options_text = [option.get_display_name() for option in options[index]]
-        print('options_text', options_text)
-        def update_combination_display_name(name: str):
-            nonlocal combination_display_name
-            if combination_display_name:
-                combination_display_name += DISPLAY_NAME_SEPARATOR
-            combination_display_name += name
-            show_combination_display_options(title, callback, grid, index + 1, combination_display_name)
-        if len(options_text) == 1:
-            update_combination_display_name(options_text[0])
-        else:
-            actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
-            str(index + 1) + "|" + title,
-            update_combination_display_name,
-            lambda: None,
-            options_text,
-            )
 
 def show_singular_display_options(title: str, callback, grid: Grid):
     options_text = compute_display_options_names_given_grid(grid)
