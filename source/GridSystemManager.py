@@ -202,6 +202,7 @@ def show_combination_display_options(title: str, callback, grid: Grid, index: in
     options = compute_display_options_separated_by_index_for_grid(grid)
     if index >= len(options):
         callback(combination_display_name)
+        actions.user.mouse_control_chicken_hide_options_dialogue()
     else:
         options_text = [option.get_display_name() for option in options[index]]
         print('options_text', options_text)

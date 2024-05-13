@@ -123,10 +123,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
             ])
         ])
         self.secondary_persistent_coordinates: str = None
-        print('self.primary', self.primary)
-        print('self.secondary', self.secondary)
-        print('self.primary_coordinate_system', self.primary_coordinate_system)
-        print('self.secondary_coordinate_system', self.secondary_coordinate_system)
+        #print('self.primary', self.primary)
+        #print('self.secondary', self.secondary)
+        #print('self.primary_coordinate_system', self.primary_coordinate_system)
+        #print('self.secondary_coordinate_system', self.secondary_coordinate_system)
     
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary_coordinate_system
@@ -135,10 +135,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         return self.secondary_coordinate_system
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
-        print('validgrid_coordinates', grid_coordinates)
-        print('self', self)
+        #print('validgrid_coordinates', grid_coordinates)
+        #print('self', self)
         if self._coordinates_correspond_to_secondary(grid_coordinates):
-            print('validself.secondary_persistent_coordinates', self.secondary_persistent_coordinates)
+            #print('validself.secondary_persistent_coordinates', self.secondary_persistent_coordinates)
             rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle)
         else:
@@ -152,23 +152,23 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 
     def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle) -> MousePosition:
         self.secondary.make_around(rectangle)
-        print('self', self)
-        print('secondarygrid_coordinates', grid_coordinates)
+        #print('self', self)
+        #print('secondarygrid_coordinates', grid_coordinates)
         position = self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
         return position
 
     def _compute_absolute_position_from_valid_coordinates_using_head_and_tail(self, grid_coordinates: str) -> MousePosition:
         head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
-        print('self', self)
-        print('headandtailgrid_coordinates', grid_coordinates)
-        print('head', head)
-        print('tail', tail)
+        #print('self', self)
+        #print('headandtailgrid_coordinates', grid_coordinates)
+        #print('head', head)
+        #print('tail', tail)
         if tail:
-            print('tail present')
+            #print('tail present')
             rectangle = self.primary.compute_sub_rectangle_for(head)
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(tail, rectangle)
         else:
-            print('head only')
+            #print('head only')
             position = self.primary.compute_absolute_position_from_valid_coordinates(head)
         return position
 
@@ -193,10 +193,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
         head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
-        print('self', self)
-        print('head', head)
-        print('tail', tail)
-        print('subgrid_coordinates', grid_coordinates)
+        #print('self', self)
+        #print('head', head)
+        #print('tail', tail)
+        #print('subgrid_coordinates', grid_coordinates)
         primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
         self.secondary.make_around(primary_sub_rectangle)
         rectangle = self.secondary.compute_sub_rectangle_for(tail)
