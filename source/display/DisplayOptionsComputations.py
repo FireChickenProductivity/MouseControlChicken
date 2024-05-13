@@ -6,6 +6,9 @@ from .NarrowDisplays import *
 from ..grid.Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
 from typing import List
 
+class CombinationDisplayNotSupportedException(Exception):
+    pass
+
 display_types = [EmptyDisplay, RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
                  RectangularCheckerDisplay]
 
@@ -165,12 +168,28 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
         ]
     return DisplayOptions(options, is_for_combination_grid=True)
 
+def separate_combination_display_options_by_index(options: List[PartialCombinationDisplayOption]) -> List[List[PartialCombinationDisplayOption]]:
+    separated = []
+    for option in options:
+        index = option.get_index()
+        while len(separated) <= index:
+            separated.append([])
+        separated[index].append(option)
+    return separated
+
+def compute_display_options_separated_by_index_for_grid(grid: RecursivelyDivisibleGridCombination) -> List[List[PartialCombinationDisplayOption]]:
+    if not should_compute_combination_display_options_for_grid(grid):
+        raise CombinationDisplayNotSupportedException(str(grid))
+    options = compute_combination_display_options_given_grid(grid)
+    return separate_combination_display_options_by_index(options)
+
+def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
+    return grid.is_combination() and grid.has_nonoverlapping_sub_rectangles()
+
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
-    if grid.is_combination() and grid.has_nonoverlapping_sub_rectangles():
-        print('combination')
+    if should_compute_combination_display_options_for_grid(grid):
         return compute_combination_display_options_given_grid(grid)
     else:
-        print('singular')
         return compute_display_options_given_singular_grid(grid)
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
