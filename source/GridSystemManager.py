@@ -116,7 +116,11 @@ class Actions:
 
     def mouse_control_chicken_show_display_options():
         '''Shows the mouse control chicken display options for the active grid'''
-        show_display_options("Display Options", actions.user.mouse_control_chicken_choose_display_from_options)
+        show_singular_display_options(
+        "Display Options",
+        actions.user.mouse_control_chicken_choose_display_from_options,
+        grid=manager.get_grid()
+        )
 
     def mouse_control_chicken_show_default_display_options():
         '''Shows options for the new default grid for the active mouse control chicken grid'''
