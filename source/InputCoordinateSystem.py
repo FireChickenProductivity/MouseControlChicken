@@ -68,9 +68,12 @@ class DisjointUnionCoordinateSystem(InputCoordinateSystem):
         return False
 
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
+        biggest_matching_coordinates = ("", coordinates)
         for system in self.systems:
             if system.do_coordinates_start_belong_to_system(coordinates): 
-                return system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+                head, tail = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+                if len(head) > len(biggest_matching_coordinates[0]): biggest_matching_coordinates = (head, tail)
+        return biggest_matching_coordinates
             
     def get_primary_coordinates(self) -> Generator:
         for system in self.systems:
