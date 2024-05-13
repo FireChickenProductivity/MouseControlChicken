@@ -202,7 +202,6 @@ def show_combination_display_options(title: str, callback, grid: Grid, index: in
     options = compute_display_options_separated_by_index_for_grid(grid)
     if index >= len(options):
         callback(combination_display_name)
-        actions.user.mouse_control_chicken_hide_options_dialogue()
     else:
         options_text = [option.get_display_name() for option in options[index]]
         print('options_text', options_text)
@@ -215,10 +214,11 @@ def show_combination_display_options(title: str, callback, grid: Grid, index: in
         if len(options_text) == 1:
             update_combination_display_name(options_text[0])
         else:
-            actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
-            options_text,
+            actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
             str(index + 1) + "|" + title,
-            update_combination_display_name
+            update_combination_display_name,
+            lambda: None,
+            options_text,
             )
 
 def show_singular_display_options(title: str, callback, grid: Grid):
