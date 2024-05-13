@@ -5,7 +5,8 @@ from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid, compute_display_options_separated_by_index_for_grid, compute_display_option_names_given_options
+    should_compute_combination_display_options_for_grid, compute_display_options_separated_by_index_for_grid, \
+    compute_display_option_names_given_options, DISPLAY_NAME_SEPARATOR
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
@@ -189,21 +190,35 @@ class Actions:
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
     if should_compute_combination_display_options_for_grid(grid):
-        options = compute_display_options_separated_by_index_for_grid(grid)
-        combination_display_name = ""
-        for index in range(len(options)):
-            options_text = compute_display_option_names_given_options(options[index])
-            def update_combination_display_name(name: str):
-                nonlocal combination_display_name
-                if combination_display_name:
-                    combination_display_name += ":"
-                combination_display_name += name
-            actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, update_combination_display_name) 
-        callback(combination_display_name)
-                
+        show_combination_display_options(title, callback, grid)                
     else:
-        options_text = compute_display_options_names_given_grid(grid)
-        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
+        show_singular_display_options(title, callback, grid)
+
+def show_combination_display_options(title: str, callback, grid: Grid, index: int = 0, combination_display_name: str = ""):
+    options = compute_display_options_separated_by_index_for_grid(grid)
+    if index >= len(options):
+        callback(combination_display_name)
+    else:
+        options_text = [option.get_display_name() for option in options[index]]
+        print('options_text', options_text)
+        def update_combination_display_name(name: str):
+            nonlocal combination_display_name
+            if combination_display_name:
+                combination_display_name += DISPLAY_NAME_SEPARATOR
+            combination_display_name += name
+            show_combination_display_options(title, callback, grid, index + 1, combination_display_name)
+        if len(options_text) == 1:
+            update_combination_display_name(options_text[0])
+        else:
+            actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
+            options_text,
+            str(index   ) + "|" + title,
+            update_combination_display_name
+            )
+
+def show_singular_display_options(title: str, callback, grid: Grid):
+    options_text = compute_display_options_names_given_grid(grid)
+    actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
 
 def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()

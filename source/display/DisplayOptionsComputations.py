@@ -57,6 +57,9 @@ class PartialCombinationDisplayOption(DisplayOption):
     def get_name(self):
         return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}{self.display_type.get_name()}"
 
+    def get_display_name(self):
+        return self.display_type.get_name()
+
     def is_partial_combination_option(self) -> bool:
         return True
     
@@ -168,9 +171,10 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
         ]
     return DisplayOptions(options, is_for_combination_grid=True)
 
-def separate_combination_display_options_by_index(options: List[PartialCombinationDisplayOption]) -> List[List[PartialCombinationDisplayOption]]:
+def separate_combination_display_options_by_index(options: DisplayOptions) -> List[List[PartialCombinationDisplayOption]]:
     separated = []
-    for option in options:
+    for name in options.get_names():
+        option = options.compute_partial_option_from_name(name)
         index = option.get_index()
         while len(separated) <= index:
             separated.append([])
