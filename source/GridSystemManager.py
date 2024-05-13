@@ -7,6 +7,7 @@ from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
+from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
@@ -194,7 +195,7 @@ class Actions:
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
     if should_compute_combination_display_options_for_grid(grid):
-        show_combination_display_options(title, callback, grid)                
+        show_combination_display_options(DialogueOptions(callback, title), grid)                
     else:
         show_singular_display_options(title, callback, grid)
 
