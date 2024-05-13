@@ -192,9 +192,12 @@ def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     else:
         return compute_display_options_given_singular_grid(grid)
 
+def compute_display_option_names_given_options(options: DisplayOptions) -> List[str]:
+    return [option for option in options.get_names()]
+
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)
-    options_text = [option for option in display_options.get_names()]
+    options_text = compute_display_option_names_given_options(display_options)
     return options_text
 
 def create_display_given_name_and_grid(name: str, grid: Grid) -> Display:

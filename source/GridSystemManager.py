@@ -4,7 +4,8 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid
+from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
+    should_compute_combination_display_options_for_grid, compute_display_options_separated_by_index_for_grid, compute_display_option_names_given_options
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
@@ -187,8 +188,22 @@ class Actions:
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
-    options_text = compute_display_options_names_given_grid(grid)
-    actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
+    if should_compute_combination_display_options_for_grid(grid):
+        options = compute_display_options_separated_by_index_for_grid(grid)
+        combination_display_name = ""
+        for index in range(len(options)):
+            options_text = compute_display_option_names_given_options(options[index])
+            def update_combination_display_name(name: str):
+                nonlocal combination_display_name
+                if combination_display_name:
+                    combination_display_name += ":"
+                combination_display_name += name
+            actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, update_combination_display_name) 
+        callback(combination_display_name)
+                
+    else:
+        options_text = compute_display_options_names_given_grid(grid)
+        actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
 
 def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()
