@@ -15,6 +15,11 @@ def obtain_display_type_from_name(name: str) -> type:
             return display_type
     raise ValueError(f"Could not find display type with name {name} in {[display_type.get_name() for display_type in display_types]}")
 
+DISPLAY_NAME_SEPARATOR = ":"
+
+def is_combination_option_display_name(name: str) -> bool:
+    return DISPLAY_NAME_SEPARATOR in name
+
 class DisplayOption:
     def __init__(self, display_type: type):
         self.display_type = display_type
@@ -110,16 +115,26 @@ class DisplayOptions:
         return display
 
     def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
+        if is_combination_option_display_name(name):
+            return self.create_combination_display_option_from_name(name).instantiate()
         partial_option = self.compute_partial_option_from_name(name)
         sub_display_names = []
         if current_display:
-            sub_display_names = current_display.get_name().split(":")
+            sub_display_names = current_display.get_name().split(DISPLAY_NAME_SEPARATOR)
         else:
             sub_display_names = ["Empty"]*(partial_option.get_index() + 1)
-        sub_displays = [obtain_display_type_from_name(displayname) for displayname in sub_display_names]
-        combination = CombinationDisplayOption(sub_displays)
+        combination = self.create_combination_display_option_from_sub_displays(sub_display_names)
         combination.receive_partial_combination_display_option(partial_option)
         return combination.instantiate()
+
+    def create_combination_display_option_from_name(self, name: str) -> CombinationDisplay:
+        sub_display_names = name.split(DISPLAY_NAME_SEPARATOR)
+        return self.create_combination_display_option_from_sub_displays(sub_display_names)
+
+    def create_combination_display_option_from_sub_displays(self, sub_display_names: List[str]) -> CombinationDisplay:
+        sub_displays = [obtain_display_type_from_name(displayname) for displayname in sub_display_names]
+        combination = CombinationDisplayOption(sub_displays)
+        return combination
 
     def compute_partial_option_from_name(self, name: str) -> PartialCombinationDisplayOption:
         if PartialCombinationDisplayOption.SEPARATOR in name:
@@ -152,8 +167,10 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     if grid.is_combination() and grid.has_nonoverlapping_sub_rectangles():
+        print('combination')
         return compute_combination_display_options_given_grid(grid)
     else:
+        print('singular')
         return compute_display_options_given_singular_grid(grid)
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
