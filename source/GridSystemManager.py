@@ -217,7 +217,7 @@ def show_combination_display_options(title: str, callback, grid: Grid, index: in
         else:
             actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(
             options_text,
-            str(index   ) + "|" + title,
+            str(index + 1) + "|" + title,
             update_combination_display_name
             )
 
