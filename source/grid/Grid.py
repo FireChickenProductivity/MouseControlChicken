@@ -151,6 +151,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         return position
 
     def _coordinates_correspond_to_secondary(self, grid_coordinates: str) -> bool:
+        print(self, "do these correspond to secondary?", grid_coordinates)
+        print('self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)', self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates))
+        print('and not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)', not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates))
+        print('self.secondary_persistent_coordinates is not None', self.secondary_persistent_coordinates is not None)
         return self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
             and not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
             and self.secondary_persistent_coordinates is not None
@@ -208,7 +212,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         print('head', head)
         print('tail', tail)
         print('subgrid_coordinates', grid_coordinates)
-        primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
+        if self._coordinates_correspond_to_secondary(grid_coordinates):
+            primary_sub_rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
+        else:
+            primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
         self.secondary.make_around(primary_sub_rectangle)
         rectangle = self.secondary.compute_sub_rectangle_for(tail)
         return rectangle
