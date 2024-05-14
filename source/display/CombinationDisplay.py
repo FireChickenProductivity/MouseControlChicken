@@ -18,12 +18,7 @@ class CombinationDisplay(Display):
         secondary = grids[index + 1]
         sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
         secondary.make_around(sub_rectangle)
-        # print('sub_rectangle', sub_rectangle)
-        # print('secondary', secondary)
-        # print('primary', primary)
         sub_display = self.secondary_display_types[index]()
-        #Big problem is the secondary does not exist around any rectangles at this point probably
-        #Might need to maintain a sub grid for each secondary display
         sub_display.set_grid(secondary)
         sub_display.set_rectangle(sub_rectangle)
         if sub_display.is_boundary_acknowledging():
@@ -32,7 +27,6 @@ class CombinationDisplay(Display):
         else:
             sub_display.draw_on(self.canvas)
         self.secondary_displays.append(sub_display)
-        # print('completed appending')
 
     def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
         for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():

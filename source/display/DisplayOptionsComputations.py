@@ -164,7 +164,6 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
     '''This will return the partial display options for every sub grid.'''
     options = []
     sub_grids = compute_sub_grids(grid)
-    print(sub_grids)
     for index, sub_grid in enumerate(sub_grids):
         options += [
             PartialCombinationDisplayOption(display_type, index) 
