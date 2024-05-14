@@ -189,11 +189,17 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def persist_secondary_at(self, grid_coordinates: str) -> None:
         if self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
             self.secondary_persistent_coordinates = grid_coordinates
+            self.persists_secondary_for_primary_grid_at(grid_coordinates)
         elif self._coordinates_belong_to_system_and_not_secondary(grid_coordinates):
             head, _ = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
             self.secondary_persistent_coordinates = head
+            self.persists_secondary_for_primary_grid_at(head)
         elif not self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
             raise CoordinatesNotSupportedException()
+        
+    def persists_secondary_for_primary_grid_at(self, grid_coordinates: str) -> bool:
+        if self.primary.is_combination():
+            self.primary.persist_secondary_at(grid_coordinates)
     
     def _coordinates_belong_to_system_and_not_secondary(self, grid_coordinates: str) -> bool:
         return self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates) and not \
