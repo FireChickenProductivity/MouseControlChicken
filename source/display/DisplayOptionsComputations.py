@@ -152,6 +152,8 @@ class DisplayOptions:
         return self.options[normalized_option_name]
 
 def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
+    if grid.is_wrapper():
+        grid = grid.get_wrapped_grid()
     types = [display_type for display_type in display_types if display_type.supports_grid(grid)]
     return types
 
