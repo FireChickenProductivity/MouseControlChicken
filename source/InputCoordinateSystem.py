@@ -123,8 +123,10 @@ class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
         return self.does_single_coordinate_belong_to_system(coordinate_list[0])
 
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
-        coordinate_list = self.compute_coordinate_list(coordinates)
-        return coordinate_list[0], self.separator.join(coordinate_list[1:])
+        if self.do_coordinates_start_belong_to_system(coordinates):
+            coordinate_list = self.compute_coordinate_list(coordinates)
+            return coordinate_list[0], self.separator.join(coordinate_list[1:])
+        return "", coordinates
 
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         pass
