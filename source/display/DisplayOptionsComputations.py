@@ -164,11 +164,14 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
     '''This will return the partial display options for every sub grid.'''
     options = []
     sub_grids = compute_sub_grids(grid)
+    print(sub_grids)
     for index, sub_grid in enumerate(sub_grids):
         options += [
             PartialCombinationDisplayOption(display_type, index) 
             for display_type in compute_display_option_types_given_singular_grid(sub_grid)
         ]
+        if not should_consider_sub_grids_after_grid(sub_grid):
+            break
     return DisplayOptions(options, is_for_combination_grid=True)
 
 def separate_combination_display_options_by_index(options: DisplayOptions) -> List[List[PartialCombinationDisplayOption]]:
@@ -187,8 +190,11 @@ def compute_display_options_separated_by_index_for_grid(grid: RecursivelyDivisib
     options = compute_combination_display_options_given_grid(grid)
     return separate_combination_display_options_by_index(options)
 
+def should_consider_sub_grids_after_grid(grid: Grid) -> bool:
+    return grid.has_nonoverlapping_sub_rectangles()
+
 def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
-    return grid.is_combination() and grid.has_nonoverlapping_sub_rectangles()
+    return grid.is_combination() and should_consider_sub_grids_after_grid(grid)
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     if should_compute_combination_display_options_for_grid(grid):
