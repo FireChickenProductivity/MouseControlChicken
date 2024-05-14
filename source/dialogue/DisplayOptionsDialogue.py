@@ -2,7 +2,6 @@ from talon import actions
 from ..display.DisplayOptionsComputations import compute_display_options_separated_by_index_for_grid, DISPLAY_NAME_SEPARATOR
 from ..grid.Grid import Grid
 from .DialogueOptions import DialogueOptions
-from typing import List
 
 def show_combination_display_options(
     dialogue_options: DialogueOptions,
