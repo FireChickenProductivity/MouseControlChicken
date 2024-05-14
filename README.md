@@ -38,7 +38,7 @@ chicken refresh: Refreshes the mouse grid and reloads the active settings from t
 
 meet (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid.
 
-tap (mouse_control_chicken_coordinates): Left clicks s1pecified position on the grid.
+tap (mouse_control_chicken_coordinates): Left clicks the specified position on the grid.
 
 pierce (mouse_control_chicken_coordinates): Double left clicks the specified position on the grid.
 
