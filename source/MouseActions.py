@@ -5,40 +5,52 @@ from .fire_chicken.mouse_position import MousePosition
 module = Module()
 @module.action_class
 class Actions:
+    def mouse_control_chicken_move_only_to_position(coordinates: str):
+        '''Moves the mouse to the specified position on the current mouse control chicken grid and handle that as a complete action'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
+
     def mouse_control_chicken_click_position(coordinates: str):
         '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         actions.mouse_click()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
     def mouse_control_chicken_double_click_position(coordinates: str):
         '''Double clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         double_click()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
     def mouse_control_chicken_right_click_position(coordinates: str):
         '''Clicks the specified position on the current mouse control chicken grid'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         actions.mouse_click(1)
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
     def mouse_control_chicken_drag_from_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and starts dragging'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         drag_from_position()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
     def mouse_control_chicken_end_drag_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and stops dragging'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         end_drag_at_position()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
     def mouse_control_chicken_scroll_up_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls up'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         scroll_up()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
     def mouse_control_chicken_scroll_down_at_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls down'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
         scroll_down()
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
     def mouse_control_chicken_click_current_position_on_narrow_able_grid():
         '''Clicks the current position on the current mouse control chicken grid'''

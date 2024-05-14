@@ -68,9 +68,12 @@ class DisjointUnionCoordinateSystem(InputCoordinateSystem):
         return False
 
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
+        biggest_matching_coordinates = ("", coordinates)
         for system in self.systems:
             if system.do_coordinates_start_belong_to_system(coordinates): 
-                return system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+                head, tail = system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(coordinates)
+                if len(head) > len(biggest_matching_coordinates[0]): biggest_matching_coordinates = (head, tail)
+        return biggest_matching_coordinates
             
     def get_primary_coordinates(self) -> Generator:
         for system in self.systems:
@@ -120,8 +123,10 @@ class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
         return self.does_single_coordinate_belong_to_system(coordinate_list[0])
 
     def split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(self, coordinates: str) -> Tuple[str]:
-        coordinate_list = self.compute_coordinate_list(coordinates)
-        return coordinate_list[0], self.separator.join(coordinate_list[1:])
+        if self.do_coordinates_start_belong_to_system(coordinates):
+            coordinate_list = self.compute_coordinate_list(coordinates)
+            return coordinate_list[0], self.separator.join(coordinate_list[1:])
+        return "", coordinates
 
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         pass

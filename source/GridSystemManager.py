@@ -4,7 +4,10 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
-from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid
+from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
+    should_compute_combination_display_options_for_grid
+from .dialogue.DisplayOptionsDialogue import show_combination_display_options
+from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
@@ -103,7 +106,7 @@ class Actions:
         '''Changes the active mouse control chicken grid display based on the name of the option'''
         global manager
         display_options = compute_display_options_given_grid(manager.get_grid())
-        display = display_options.create_display_from_option(name)
+        display = display_options.create_display_from_option(name, current_display=manager.get_display())
         manager.set_display(display)
 
     def mouse_control_chicken_show_grid_options():
@@ -114,7 +117,11 @@ class Actions:
 
     def mouse_control_chicken_show_display_options():
         '''Shows the mouse control chicken display options for the active grid'''
-        show_display_options("Display Options", actions.user.mouse_control_chicken_choose_display_from_options)
+        show_singular_display_options(
+        "Display Options",
+        actions.user.mouse_control_chicken_choose_display_from_options,
+        grid=manager.get_grid()
+        )
 
     def mouse_control_chicken_show_default_display_options():
         '''Shows options for the new default grid for the active mouse control chicken grid'''
@@ -179,9 +186,20 @@ class Actions:
     def mouse_control_chicken_is_using_narrow_able_grid() -> bool:
         '''Returns whether the current mouse control chicken grid is narrow able'''
         return manager_has_narrow_able_grid()
+    
+    def mouse_control_chicken_handle_action_using_coordinates(coordinates: str) -> None:
+        '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
+        grid = manager.get_grid()
+        grid.handle_using_coordinates_with_mouse_command(coordinates)
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
+    if should_compute_combination_display_options_for_grid(grid):
+        show_combination_display_options(DialogueOptions(callback, title), grid)                
+    else:
+        show_singular_display_options(title, callback, grid)
+
+def show_singular_display_options(title: str, callback, grid: Grid):
     options_text = compute_display_options_names_given_grid(grid)
     actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options_text, title, callback)
 

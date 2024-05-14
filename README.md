@@ -22,7 +22,7 @@ chicken choose grid: Opens a dialogue showing options for the grid. An option ca
 
 chicken choose display: Opens a dialogue showing options for the display for the active grid. An option can be chosen by dictating "choose (option number)".
 
-chicken choose default display: Opens a dialogue showing options for the default display for the active grid. An option can be chosen by dictating "choose (option number)".
+chicken choose default display: Opens a dialogue showing options for the default display for the active grid. An option can be chosen by dictating "choose (option number)". For a grid combination, you choose the default display for every sub grid that can be displayed.
 
 chicken screen next: Makes the active mouse grid around the next screen. The word screen is optional.
 
@@ -38,7 +38,7 @@ chicken refresh: Refreshes the mouse grid and reloads the active settings from t
 
 meet (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid.
 
-tap (mouse_control_chicken_coordinates): Left clicks s1pecified position on the grid.
+tap (mouse_control_chicken_coordinates): Left clicks the specified position on the grid.
 
 pierce (mouse_control_chicken_coordinates): Double left clicks the specified position on the grid.
 
@@ -158,7 +158,7 @@ Alphabet is a clone of the alphabet grid.
 
 Double Alphabet is a clone of the double alphabet grid.
 
-Recursively Divisible Combination let you put one grid inside another such as how the alphabet numbers grid has the alphabet grid as the primary and the one to nine as the secondary. Having a square or rectangular recursive division grid as the primary will have the recursive aspect removed so that it only provides the top level of the grid.
+Recursively Divisible Combination let you put one grid inside another such as how the alphabet numbers grid has the alphabet grid as the primary and the one to nine as the secondary. Having a square or rectangular recursive division grid as the primary will have the recursive aspect removed so that it only provides the top level of the grid. Currently, only one combination can be put inside a combination.
 
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
 
@@ -189,8 +189,6 @@ Grids might not work properly if you try to make them around a very very tiny re
 Updating any of the python files in this project might require restarting talon for mouse control chicken to work properly.
 
 A few features may not work on a fresh installation until after talon is restarted, but I should be able to fix this.
-
-After updating a python file in this project, sometimes an old display would still be visible but could not be hidden. This issue has not been encountered since a recent improvement. In the unlikely event that an old display gets stuck like that during normal use, please report the issue and explain as much as you can about what you did before that happened. 
 
 ## Inspiration
 The project was inspired by the following repositories:

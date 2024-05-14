@@ -111,6 +111,9 @@ class RectangularRecursiveDivisionGrid(RecursiveDivisionGrid):
     def _compute_number_of_divisions(self, factor: int):
         return factor - 1
 
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return True
+
 def compute_region_from_left_and_top_lines(horizontal_split: OneDimensionalLine, vertical_split: OneDimensionalLine) -> Generator:
     left = horizontal_split.start
     right = horizontal_split.ending

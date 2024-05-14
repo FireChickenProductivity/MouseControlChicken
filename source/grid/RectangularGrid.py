@@ -1,7 +1,7 @@
 from .Grid import Rectangle, RectangularGrid
 from typing import List, Generator
 from ..fire_chicken.mouse_position import MousePosition
-from ..RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine
+from ..RectangleUtilities import LineDivider, compute_rectangle_from_line_splits, OneDimensionalLine, compute_average
 
 class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order
@@ -83,6 +83,9 @@ class ListBasedGrid(RectangularGrid):
     
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
         return self._compute_coordinates(grid_coordinates)[index]
+
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return False
 
 def create_ordering_dictionary(list: List):
     ordering = {}

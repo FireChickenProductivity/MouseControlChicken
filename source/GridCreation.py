@@ -4,6 +4,9 @@ from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
 from .display.DisplayOptionsComputations import compute_display_options_names_given_grid
 from .GridOptionsList import write_grid_option
+from .dialogue.DisplayOptionsDialogue import show_combination_display_options
+from .dialogue.DialogueOptions import DialogueOptions
+from .display.DisplayOptionsComputations import should_compute_combination_display_options_for_grid
 from talon import Module, actions
 
 class CurrentGrid:
@@ -137,12 +140,22 @@ class Actions:
         def handle_choice(choice: str):
             actions.user.mouse_control_chicken_set_current_grid_default_display_name(choice)
             actions.user.mouse_control_chicken_finish_creating_new_grid()
-        actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
-            "Choose Default Display: say choose <display number>",
+        grid = current_grid.compute_grid()
+        if should_compute_combination_display_options_for_grid(grid):
+            options = DialogueOptions(
             handle_choice,
-            actions.user.mouse_control_chicken_cancel_grid_creation,
-            compute_display_options_names_given_grid(current_grid.compute_grid())
-        )
+            "Choose Default Display: say choose <display number>",
+            actions.user.mouse_control_chicken_cancel_grid_creation
+            )
+            show_combination_display_options(options, grid)
+        else:
+            actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
+                "Choose Default Display: say choose <display number>",
+                handle_choice,
+                actions.user.mouse_control_chicken_cancel_grid_creation,
+                compute_display_options_names_given_grid(grid)
+            )
+
 
     def mouse_control_chicken_set_current_grid_name(name: str):
         """Sets the name of the current mouse control chicken grid under construction"""
