@@ -1,6 +1,5 @@
 tag: user.mouse_control_chicken_showing
-#mode: user.mouse_control_chicken_narrow_able_grid_mode
-#mode: Command
+mode: user.mouse_control_chicken_narrow_able_grid_mode
 mode: command
 -
 meet <user.mouse_control_chicken_coordinates>: 
