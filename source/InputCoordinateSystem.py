@@ -149,7 +149,7 @@ class SimpleNumericCoordinateSystem(SingleCoordinateCoordinateSystem):
         self.separator = separator
     
     def get_primary_coordinates(self) -> Generator:
-        for coordinate in range(self.minimum, self.maximum): yield str(coordinate)
+        for coordinate in range(self.minimum, self.maximum + 1): yield str(coordinate)
     
     def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
         return coordinate.isdigit() and self.number_is_in_range(int(coordinate))
