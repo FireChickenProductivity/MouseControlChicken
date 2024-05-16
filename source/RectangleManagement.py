@@ -35,7 +35,7 @@ class CurrentWindowRectangleManager(RectangleManager):
         return rectangle
 
 class WindowTrackingRectangleManager(RectangleManager):
-    def __init__(self, sensitive_focus_switching: bool = False):
+    def __init__(self, sensitive_focus_switching: bool = True):
         super().__init__()
         self.current_window_rectangle_manager = CurrentWindowRectangleManager()
         self.registration_targets = ['win_focus']
@@ -46,8 +46,8 @@ class WindowTrackingRectangleManager(RectangleManager):
         self.last_window_rectangle = None
     
     def update_rectangle(self, cause, window):
-        new_rectangle = convert_talon_rectangle_to_rectangle(window.rect)
-        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle) and (window.title != 'Talon Canvas'):
+        new_rectangle = self.current_window_rectangle_manager.compute_rectangle()
+        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
             self.call_callback()
 
     def compute_rectangle(self) -> Rectangle:
