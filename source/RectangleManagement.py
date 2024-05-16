@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui, cron
+from talon import ui, Module, ui
 
 class RectangleManager:
     def __init__(self):
@@ -40,21 +40,15 @@ class WindowTrackingRectangleManager(RectangleManager):
         self.current_window_rectangle_manager = CurrentWindowRectangleManager()
         self.registration_targets = ['win_focus']
         if sensitive_focus_switching:
-            self.registration_targets.extend(['win_move, win_resize'])
+            self.registration_targets.extend(['win_move', 'win_resize'])
         for target in self.registration_targets:
             ui.register(target, lambda window: self.update_rectangle(target, window))
         self.last_window_rectangle = None
-        self.update_job = None
     
     def update_rectangle(self, cause, window):
         new_rectangle = convert_talon_rectangle_to_rectangle(window.rect)
         if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle) and (window.title != 'Talon Canvas'):
-            if self.update_job:
-                cron.cancel(self.update_job)
-            self.update_job = cron.after('1s', self.call_callback)
-        elif window and self.last_window_rectangle and new_rectangle == self.last_window_rectangle:
-            cron.cancel(self.update_job)
-            self.update_job = None
+            self.call_callback()
 
     def compute_rectangle(self) -> Rectangle:
         self.last_window_rectangle = self.current_window_rectangle_manager.compute_rectangle()
