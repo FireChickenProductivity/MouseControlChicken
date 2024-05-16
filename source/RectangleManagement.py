@@ -1,8 +1,17 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module
+from talon import ui, Module, ui, app
 
 class RectangleManager:
+    def __init__(self):
+        self.callback = None
+        
+    def set_callback(self, callback):
+        self.callback = callback
+    
+    def call_callback(self):
+        if self.callback: self.callback()
+
     def compute_rectangle(self) -> Rectangle: pass
 
 class ScreenRectangleManager(RectangleManager):
@@ -23,6 +32,11 @@ class CurrentWindowRectangleManager(RectangleManager):
             rectangle = ScreenRectangleManager().compute_rectangle()
         return rectangle
 
+class WindowTrackingRectangleManager(RectangleManager):
+    def compute_rectangle(self) -> Rectangle:
+        global current_window_rectangle
+        return current_window_rectangle
+window_tracking_rectangle_manager = WindowTrackingRectangleManager()
 
 def convert_talon_rectangle_to_rectangle(talon_rectangle):
     return Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
@@ -53,3 +67,15 @@ def compute_corrected_screen_number(screen_number: int) -> int:
     if screen_number >= len(screens): screen_number = 0
     if screen_number < 0: screen_number = len(screens) - 1
     return screen_number
+
+
+current_window_rectangle = CurrentWindowRectangleManager().compute_rectangle()
+def on_win_focus(window):
+    global current_window_rectangle
+    current_window_rectangle = CurrentWindowRectangleManager().compute_rectangle()
+    window_tracking_rectangle_manager.call_callback()
+
+def on_ready():
+    ui.register('win_focus', on_win_focus)
+
+app.register('ready', on_ready)
