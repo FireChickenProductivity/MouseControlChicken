@@ -12,6 +12,8 @@ class RectangleManager:
     def call_callback(self):
         if self.callback: self.callback()
 
+    def deactivate(self): pass
+
     def compute_rectangle(self) -> Rectangle: pass
 
 class ScreenRectangleManager(RectangleManager):
@@ -33,11 +35,21 @@ class CurrentWindowRectangleManager(RectangleManager):
         return rectangle
 
 class WindowTrackingRectangleManager(RectangleManager):
-    def compute_rectangle(self) -> Rectangle:
-        global current_window_rectangle
-        return current_window_rectangle
-window_tracking_rectangle_manager = WindowTrackingRectangleManager()
+    def __init__(self):
+        super().__init__()
+        self.current_window_rectangle_manager = CurrentWindowRectangleManager()
+        ui.register('win_focus', self.update_rectangle)
+    
+    def update_rectangle(self, window):
+        self.call_callback()
+        print('updating window', window)
 
+    def compute_rectangle(self) -> Rectangle:
+        return self.current_window_rectangle_manager.compute_rectangle()
+
+    def deactivate(self):
+        ui.unregister('win_focus', self.update_rectangle)
+        
 def convert_talon_rectangle_to_rectangle(talon_rectangle):
     return Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
 
@@ -67,15 +79,3 @@ def compute_corrected_screen_number(screen_number: int) -> int:
     if screen_number >= len(screens): screen_number = 0
     if screen_number < 0: screen_number = len(screens) - 1
     return screen_number
-
-
-current_window_rectangle = CurrentWindowRectangleManager().compute_rectangle()
-def on_win_focus(window):
-    global current_window_rectangle
-    current_window_rectangle = CurrentWindowRectangleManager().compute_rectangle()
-    window_tracking_rectangle_manager.call_callback()
-
-def on_ready():
-    ui.register('win_focus', on_win_focus)
-
-app.register('ready', on_ready)

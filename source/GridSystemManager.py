@@ -2,7 +2,7 @@ from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
-from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager, window_tracking_rectangle_manager
+from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager, WindowTrackingRectangleManager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
@@ -34,6 +34,8 @@ class GridSystemManager:
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
+        if self.rectangle_manager:
+            self.rectangle_manager.deactivate()
         self.rectangle_manager = rectangle_manager
         self.rectangle_manager.set_callback(self.refresh)
         self.refresh()
@@ -161,7 +163,7 @@ class Actions:
     def mouse_control_chicken_set_rectangle_manager_to_follow_window():
         '''Has mouse control chicken have the active rectangle follow the active window'''
         global manager
-        manager.set_rectangle_manager(window_tracking_rectangle_manager)
+        manager.set_rectangle_manager(WindowTrackingRectangleManager())
 
     def mouse_control_chicken_narrow_grid(coordinates: str):
         '''Narrows the current mouse control chicken grid using the specified coordinates'''
