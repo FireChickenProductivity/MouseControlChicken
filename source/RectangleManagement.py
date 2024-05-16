@@ -35,10 +35,12 @@ class CurrentWindowRectangleManager(RectangleManager):
         return rectangle
 
 class WindowTrackingRectangleManager(RectangleManager):
-    def __init__(self):
+    def __init__(self, sensitive_focus_switching: bool = False):
         super().__init__()
         self.current_window_rectangle_manager = CurrentWindowRectangleManager()
-        self.registration_targets = ['win_focus', 'win_resize']
+        self.registration_targets = ['win_focus']
+        if sensitive_focus_switching:
+            self.registration_targets += ['win_move, win_resize']
         for target in self.registration_targets:
             ui.register(target, lambda window: self.update_rectangle(target, window))
         self.last_window_rectangle = None
@@ -46,7 +48,7 @@ class WindowTrackingRectangleManager(RectangleManager):
     
     def update_rectangle(self, cause, window):
         new_rectangle = convert_talon_rectangle_to_rectangle(window.rect)
-        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle) and window.title != 'Talon Canvas':
+        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle) and (window.title != 'Talon Canvas'):
             print('updating window', cause, window, self.last_window_rectangle, new_rectangle)
             if self.update_job:
                 cron.cancel(self.update_job)
