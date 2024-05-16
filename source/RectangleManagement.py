@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui
+from talon import ui, Module, ui, cron
 
 class RectangleManager:
     def __init__(self):
@@ -38,17 +38,31 @@ class WindowTrackingRectangleManager(RectangleManager):
     def __init__(self):
         super().__init__()
         self.current_window_rectangle_manager = CurrentWindowRectangleManager()
-        ui.register('win_focus', self.update_rectangle)
+        self.registration_targets = ['win_focus', 'win_resize']
+        for target in self.registration_targets:
+            ui.register(target, lambda window: self.update_rectangle(target, window))
+        self.last_window_rectangle = None
+        self.update_job = None
     
-    def update_rectangle(self, window):
-        self.call_callback()
-        print('updating window', window)
+    def update_rectangle(self, cause, window):
+        new_rectangle = convert_talon_rectangle_to_rectangle(window.rect)
+        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle) and window.title != 'Talon Canvas':
+            print('updating window', cause, window, self.last_window_rectangle, new_rectangle)
+            if self.update_job:
+                cron.cancel(self.update_job)
+            self.update_job = cron.after('1s', self.call_callback)
+        elif window and self.last_window_rectangle and new_rectangle == self.last_window_rectangle:
+            cron.cancel(self.update_job)
+            self.update_job = None
+            print('canceling')
 
     def compute_rectangle(self) -> Rectangle:
+        self.last_window_rectangle = self.current_window_rectangle_manager.compute_rectangle()
         return self.current_window_rectangle_manager.compute_rectangle()
 
     def deactivate(self):
-        ui.unregister('win_focus', self.update_rectangle)
+        for target in self.registration_targets:
+            ui.unregister(target, self.update_rectangle)
         
 def convert_talon_rectangle_to_rectangle(talon_rectangle):
     return Rectangle(talon_rectangle.y, talon_rectangle.y + talon_rectangle.height, talon_rectangle.x, talon_rectangle.x + talon_rectangle.width)
