@@ -66,6 +66,7 @@ class ScreenTrackingRectangleManager(RectangleManager):
         self.window_tracker = WindowTrackingRectangleManager(sensitive_focus_switching=True)
         self.window_tracker.set_callback(self.update_rectangle)
         self.last_rectangle = ScreenRectangleManager().compute_rectangle()
+        self.update_rectangle()
     
     def update_rectangle(self):
         window = ui.active_window()
