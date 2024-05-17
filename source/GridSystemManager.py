@@ -150,25 +150,10 @@ class Actions:
         position: MousePosition = actions.user.mouse_control_chicken_get_position_on_grid(coordinates)
         position.go()
     
-    def mouse_control_chicken_set_rectangle_manager_to_window():
-        '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
-        rectangle_manager = CurrentWindowRectangleManager()
-        manager.set_rectangle_manager(rectangle_manager)
-
-    def mouse_control_chicken_set_rectangle_manager_to_screen():
-        '''Has mouse control chicken manage the active rectangle using the screen rectangle manager'''
-        rectangle_manager = ScreenRectangleManager()
-        manager.set_rectangle_manager(rectangle_manager)
-    
-    def mouse_control_chicken_set_rectangle_manager_to_follow_window():
-        '''Has mouse control chicken have the active rectangle follow the active window'''
+    def mouse_controlled_chicken_set_rectangle_manager(rectangle_manager: RectangleManager):
+        '''Sets the current rectangle manager for the mouse controlled chicken'''
         global manager
-        manager.set_rectangle_manager(WindowTrackingRectangleManager())
-    
-    def mouse_control_chicken_set_rectangle_manager_to_follow_screen():
-        '''Has mouse control chicken have the active rectangle follow the active screen'''
-        global manager
-        manager.set_rectangle_manager(ScreenTrackingRectangleManager())
+        manager.set_rectangle_manager(rectangle_manager)
 
     def mouse_control_chicken_narrow_grid(coordinates: str):
         '''Narrows the current mouse control chicken grid using the specified coordinates'''

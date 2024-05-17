@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui
+from talon import ui, Module, ui, actions
 
 class RectangleManager:
     def __init__(self):
@@ -44,10 +44,11 @@ class WindowTrackingRectangleManager(RectangleManager):
         for target in self.registration_targets:
             ui.register(target, lambda window: self.update_rectangle(target, window))
         self.last_window_rectangle = None
+        self.active = True
     
     def update_rectangle(self, cause, window):
         new_rectangle = self.current_window_rectangle_manager.compute_rectangle()
-        if window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
+        if self.active and window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
             self.call_callback()
 
     def compute_rectangle(self) -> Rectangle:
@@ -55,6 +56,7 @@ class WindowTrackingRectangleManager(RectangleManager):
         return self.current_window_rectangle_manager.compute_rectangle()
 
     def deactivate(self):
+        self.active = False
         for target in self.registration_targets:
             ui.unregister(target, self.update_rectangle)
 
@@ -99,6 +101,24 @@ class Actions:
         '''Updates the mouse control chicken grid screen to the specified one'''
         new_screen_number = compute_corrected_screen_number(screen_number - 1)
         settings_mediator.set_current_screen_number(new_screen_number)
+    
+    def mouse_control_chicken_set_rectangle_manager_to_window():
+        '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
+        rectangle_manager = CurrentWindowRectangleManager()
+        actions.user.mouse_controlled_chicken_set_rectangle_manager(rectangle_manager)
+
+    def mouse_control_chicken_set_rectangle_manager_to_screen():
+        '''Has mouse control chicken manage the active rectangle using the screen rectangle manager'''
+        rectangle_manager = ScreenRectangleManager()
+        actions.user.mouse_controlled_chicken_set_rectangle_manager(rectangle_manager)
+    
+    def mouse_control_chicken_set_rectangle_manager_to_follow_window():
+        '''Has mouse control chicken have the active rectangle follow the active window'''
+        actions.user.mouse_controlled_chicken_set_rectangle_manager(WindowTrackingRectangleManager())
+    
+    def mouse_control_chicken_set_rectangle_manager_to_follow_screen():
+        '''Has mouse control chicken have the active rectangle follow the active screen'''
+        actions.user.mouse_controlled_chicken_set_rectangle_manager(ScreenTrackingRectangleManager())
 
 def add_amount_to_screen_number(amount: int):
     screen_number = settings_mediator.get_current_screen_number() + amount
