@@ -32,6 +32,10 @@ chicken screen (number): Makes the active mouse grid around the specified screen
 
 chicken (window|dough|when): Makes the active mouse grid around the active window.
 
+chicken follow (window|dough|when): Makes the active mouse grid around the active window and remakes it around the window as it moves.
+
+chicken follow screen: Makes the active mouse grid around the screen containing the active window and remix it around the screen if the active window moves to a different screen.
+
 chicken refresh: Refreshes the mouse grid and reloads the active settings from their defaults.
 
 ### Grid Showing Commands
