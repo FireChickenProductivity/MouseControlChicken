@@ -48,7 +48,7 @@ class WindowTrackingRectangleManager(RectangleManager):
     
     def update_rectangle(self, cause, window):
         new_rectangle = self.current_window_rectangle_manager.compute_rectangle()
-        if self.active and window and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
+        if self.active and window == ui.active_window() and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
             self.call_callback()
 
     def compute_rectangle(self) -> Rectangle:
