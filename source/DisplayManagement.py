@@ -98,7 +98,10 @@ class DisplayManager:
             self.is_showing = True
             if self.flickerer.is_flickering():
                 self.flickerer.restart_flickering()
-        
+    
+    def prepare_to_show(self):
+        self.is_showing = True
+
     def hide_temporarily(self):
         if self.display: self.canvas.hide()
     
@@ -139,3 +142,6 @@ class DisplayManager:
         if not self.flickerer.is_flicker_showing():
             self.refresh_display_using_previous_values()
             self.show()
+        
+    def is_currently_showing(self) -> bool:
+        return self.is_showing

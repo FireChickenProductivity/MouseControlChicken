@@ -51,12 +51,13 @@ class GridSystemManager:
         self.display_manager.show()
 
     def refresh(self):
-        self.hide()
-        if self.grid and self.display_manager.has_display():
-            rectangle = self.rectangle_manager.compute_rectangle()
-            self.grid.make_around(rectangle)
-            self.refresh_display(self.grid, rectangle)
-            actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
+        if self.display_manager.is_currently_showing():
+            self.hide()
+            if self.grid and self.display_manager.has_display():
+                rectangle = self.rectangle_manager.compute_rectangle()
+                self.grid.make_around(rectangle)
+                self.refresh_display(self.grid, rectangle)
+                actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
@@ -69,6 +70,7 @@ class GridSystemManager:
     def show(self):
         if not self.grid and self.should_load_default_grid_next:
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
+        self.display_manager.prepare_to_show()
         self.refresh()
     
     def toggle_flicker_display(self):
