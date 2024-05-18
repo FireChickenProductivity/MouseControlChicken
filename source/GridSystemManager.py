@@ -17,7 +17,8 @@ class GridSystemManager:
     def __init__(self):
         self.grid: Grid = None
         self.display_manager: DisplayManager = DisplayManager()
-        self.rectangle_manager: RectangleManager = create_default_rectangle_manager()
+        self.rectangle_manager: RectangleManager = None
+        self._update_rectangle_manager(create_default_rectangle_manager())
         print('rectangle_manager', self.rectangle_manager)
         self.should_load_default_grid_next: bool = True
     
@@ -35,12 +36,15 @@ class GridSystemManager:
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
+        self._update_rectangle_manager(rectangle_manager)
+        self.refresh()
+    
+    def _update_rectangle_manager(self, rectangle_manager: RectangleManager):
         if self.rectangle_manager:
             self.rectangle_manager.deactivate()
         self.rectangle_manager = rectangle_manager
         self.rectangle_manager.set_callback(self.refresh)
-        self.refresh()
-    
+
     def get_grid(self) -> Grid:
         return self.grid
 
