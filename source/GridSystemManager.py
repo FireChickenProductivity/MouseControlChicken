@@ -2,7 +2,7 @@ from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
-from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
+from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager, WindowTrackingRectangleManager, ScreenTrackingRectangleManager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
@@ -34,7 +34,10 @@ class GridSystemManager:
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
+        if self.rectangle_manager:
+            self.rectangle_manager.deactivate()
         self.rectangle_manager = rectangle_manager
+        self.rectangle_manager.set_callback(self.refresh)
         self.refresh()
     
     def get_grid(self) -> Grid:
@@ -48,12 +51,13 @@ class GridSystemManager:
         self.display_manager.show()
 
     def refresh(self):
-        self.hide()
-        if self.grid and self.display_manager.has_display():
-            rectangle = self.rectangle_manager.compute_rectangle()
-            self.grid.make_around(rectangle)
-            self.refresh_display(self.grid, rectangle)
-            actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
+        if self.display_manager.is_currently_showing():
+            self.hide()
+            if self.grid and self.display_manager.has_display():
+                rectangle = self.rectangle_manager.compute_rectangle()
+                self.grid.make_around(rectangle)
+                self.refresh_display(self.grid, rectangle)
+                actions.user.mouse_control_chicken_enable_grid_showing_tags(self.grid)
 
     def prepare_for_grid_switch(self):
         self.set_display(None)
@@ -66,6 +70,7 @@ class GridSystemManager:
     def show(self):
         if not self.grid and self.should_load_default_grid_next:
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
+        self.display_manager.prepare_to_show()
         self.refresh()
     
     def toggle_flicker_display(self):
@@ -147,14 +152,9 @@ class Actions:
         position: MousePosition = actions.user.mouse_control_chicken_get_position_on_grid(coordinates)
         position.go()
     
-    def mouse_control_chicken_set_rectangle_manager_to_window():
-        '''Has mouse control chicken manage the active rectangle using the window rectangle manager'''
-        rectangle_manager = CurrentWindowRectangleManager()
-        manager.set_rectangle_manager(rectangle_manager)
-
-    def mouse_control_chicken_set_rectangle_manager_to_screen():
-        '''Has mouse control chicken manage the active rectangle using the screen rectangle manager'''
-        rectangle_manager = ScreenRectangleManager()
+    def mouse_controlled_chicken_set_rectangle_manager(rectangle_manager: RectangleManager):
+        '''Sets the current rectangle manager for the mouse controlled chicken'''
+        global manager
         manager.set_rectangle_manager(rectangle_manager)
 
     def mouse_control_chicken_narrow_grid(coordinates: str):

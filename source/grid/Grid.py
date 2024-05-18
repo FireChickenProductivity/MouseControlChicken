@@ -15,6 +15,9 @@ class Rectangle:
 
     def __str__(self):
         return f"Rectangle(top: {self.top}, bottom: {self.bottom}, left: {self.left}, right: {self.right})"
+    
+    def __eq__(self, other):
+        return self.top == other.top and self.bottom == other.bottom and self.left == other.left and self.right == other.right
 
 class CoordinatesNotSupportedException(Exception): pass
 
