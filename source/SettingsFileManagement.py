@@ -26,6 +26,7 @@ settings():
     user.mouse_control_chicken_flickering_enabled = false
     user.mouse_control_chicken_flickering_show_time = 5000
     user.mouse_control_chicken_flickering_hide_time = 2000
+    user.mouse_control_chicken_default_rectangle_manager = 'screen'
 """
 
     )
