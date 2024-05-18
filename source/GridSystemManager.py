@@ -2,7 +2,7 @@ from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
-from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager, WindowTrackingRectangleManager, ScreenTrackingRectangleManager
+from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
