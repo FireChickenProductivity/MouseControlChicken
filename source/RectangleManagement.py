@@ -131,3 +131,16 @@ def compute_corrected_screen_number(screen_number: int) -> int:
     if screen_number >= len(screens): screen_number = 0
     if screen_number < 0: screen_number = len(screens) - 1
     return screen_number
+
+def create_default_rectangle_manager():
+    default_rectangle_manager_setting = settings_mediator.get_default_rectangle_manager()
+    if default_rectangle_manager_setting == 'window':
+        return CurrentWindowRectangleManager()
+    elif default_rectangle_manager_setting == 'screen':
+        return ScreenRectangleManager()
+    elif default_rectangle_manager_setting == 'follow window':
+        return WindowTrackingRectangleManager()
+    elif default_rectangle_manager_setting == 'follow screen':
+        return ScreenTrackingRectangleManager()
+    else:
+        raise ValueError(f'Unknown default rectangle manager setting: {default_rectangle_manager_setting}')
