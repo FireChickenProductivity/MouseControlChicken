@@ -177,6 +177,8 @@ During the process, choose an enumerated option with the corresponding number.
 ## Settings
 Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.
 
+user.mouse_control_chicken_default_rectangle_manager is a string setting that determines the default strategy for deciding what to draw the grid around. The options correspond to the commands for setting the rectangle manager and are "window", "screen", "follow window", and "follow screen". "screen" will be used if you provide an invalid value.
+
 ## Dependencies
 The project depends upon the following from the community repository:
 
