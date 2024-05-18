@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui, actions
+from talon import ui, Module, ui, actions, app
 
 class RectangleManager:
     def __init__(self):
@@ -131,3 +131,18 @@ def compute_corrected_screen_number(screen_number: int) -> int:
     if screen_number >= len(screens): screen_number = 0
     if screen_number < 0: screen_number = len(screens) - 1
     return screen_number
+
+def create_default_rectangle_manager():
+    default_rectangle_manager_setting = settings_mediator.get_default_rectangle_manager()
+    result = ScreenRectangleManager()
+    if default_rectangle_manager_setting == 'window':
+        result = CurrentWindowRectangleManager()
+    elif default_rectangle_manager_setting == 'screen':
+        result = ScreenRectangleManager()
+    elif default_rectangle_manager_setting == 'follow window':
+        result = WindowTrackingRectangleManager()
+    elif default_rectangle_manager_setting == 'follow screen':
+        result = ScreenTrackingRectangleManager()
+    else:
+        app.notify(f'Unknown default rectangle manager setting: {default_rectangle_manager_setting}')
+    return result

@@ -103,6 +103,13 @@ flickering_hide_time = setting_creator.create_int_setting(
     'The amount of time that mouse control chicken flickering will hide a display for before showing it in milliseconds.'   
 )
 
+default_rectangle_manager = setting_creator.create_str_setting(
+    'default_rectangle_manager',
+    'screen',
+    'The default rectangle manager used by Mouse Control Chicken. Determines what to draw the grid around.'
+)
+
+
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
@@ -130,6 +137,7 @@ class SettingsMediator:
         self.flickering_enabled = settings.get(flickering_enabled)
         self.flickering_show_time = settings.get(flickering_show_time)
         self.flickering_hide_time = settings.get(flickering_hide_time)
+        self.default_rectangle_manager = settings.get(default_rectangle_manager)
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -179,6 +187,9 @@ class SettingsMediator:
 
     def get_flickering_hide_time(self) -> int:
         return self.flickering_hide_time
+
+    def get_default_rectangle_manager(self) -> str:
+        return self.default_rectangle_manager
 
     def set_text_size(self, size: int):
         self.text_size = size

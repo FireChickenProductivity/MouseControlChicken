@@ -2,7 +2,7 @@ from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
-from .RectangleManagement import RectangleManager, ScreenRectangleManager, CurrentWindowRectangleManager, WindowTrackingRectangleManager, ScreenTrackingRectangleManager
+from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
@@ -17,7 +17,8 @@ class GridSystemManager:
     def __init__(self):
         self.grid: Grid = None
         self.display_manager: DisplayManager = DisplayManager()
-        self.rectangle_manager: RectangleManager = ScreenRectangleManager()
+        self.rectangle_manager: RectangleManager = None
+        self._update_rectangle_manager(create_default_rectangle_manager())
         self.should_load_default_grid_next: bool = True
     
     def set_grid(self, grid: Grid):
@@ -34,12 +35,15 @@ class GridSystemManager:
         self.refresh()
 
     def set_rectangle_manager(self, rectangle_manager: RectangleManager):
+        self._update_rectangle_manager(rectangle_manager)
+        self.refresh()
+    
+    def _update_rectangle_manager(self, rectangle_manager: RectangleManager):
         if self.rectangle_manager:
             self.rectangle_manager.deactivate()
         self.rectangle_manager = rectangle_manager
         self.rectangle_manager.set_callback(self.refresh)
-        self.refresh()
-    
+
     def get_grid(self) -> Grid:
         return self.grid
 
@@ -88,10 +92,6 @@ class Actions:
     def mouse_control_chicken_make_grid_around_screen():
         '''Makes the mouse control chicken grid form around a screen'''
         manager.set_rectangle_manager(ScreenRectangleManager())
-    
-    def mouse_control_chicken_make_grid_around_window():
-        '''Makes the mouse control chicken grid form around the current window'''
-        manager.set_rectangle_manager(CurrentWindowRectangleManager())
     
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
