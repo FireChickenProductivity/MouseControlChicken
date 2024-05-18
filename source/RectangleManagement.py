@@ -134,14 +134,15 @@ def compute_corrected_screen_number(screen_number: int) -> int:
 
 def create_default_rectangle_manager():
     default_rectangle_manager_setting = settings_mediator.get_default_rectangle_manager()
+    result = ScreenRectangleManager()
     if default_rectangle_manager_setting == 'window':
-        return CurrentWindowRectangleManager()
+        result = CurrentWindowRectangleManager()
     elif default_rectangle_manager_setting == 'screen':
-        return ScreenRectangleManager()
+        result = ScreenRectangleManager()
     elif default_rectangle_manager_setting == 'follow window':
-        return WindowTrackingRectangleManager()
+        result = WindowTrackingRectangleManager()
     elif default_rectangle_manager_setting == 'follow screen':
-        return ScreenTrackingRectangleManager()
+        result = ScreenTrackingRectangleManager()
     else:
         app.notify(f'Unknown default rectangle manager setting: {default_rectangle_manager_setting}')
-        return ScreenRectangleManager()
+    return result
