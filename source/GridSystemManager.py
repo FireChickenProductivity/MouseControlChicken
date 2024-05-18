@@ -19,7 +19,6 @@ class GridSystemManager:
         self.display_manager: DisplayManager = DisplayManager()
         self.rectangle_manager: RectangleManager = None
         self._update_rectangle_manager(create_default_rectangle_manager())
-        print('rectangle_manager', self.rectangle_manager)
         self.should_load_default_grid_next: bool = True
     
     def set_grid(self, grid: Grid):
