@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui, actions
+from talon import ui, Module, ui, actions, app
 
 class RectangleManager:
     def __init__(self):
@@ -143,4 +143,5 @@ def create_default_rectangle_manager():
     elif default_rectangle_manager_setting == 'follow screen':
         return ScreenTrackingRectangleManager()
     else:
-        raise ValueError(f'Unknown default rectangle manager setting: {default_rectangle_manager_setting}')
+        app.notify(f'Unknown default rectangle manager setting: {default_rectangle_manager_setting}')
+        return ScreenRectangleManager()
