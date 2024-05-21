@@ -125,6 +125,7 @@ class SettingsMediator:
     def restore_transparency_settings(self):
         self.background_transparency = settings.get(default_background_transparency)
         self.main_transparency = settings.get(default_main_transparency)
+        print('restore_transparency_settings', 'restore_transparency_settings')
 
     def restore_default_settings(self):
         self.default_grid_option = settings.get(default_grid_option)
@@ -141,6 +142,7 @@ class SettingsMediator:
         self.flickering_hide_time = settings.get(flickering_hide_time)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
         self.restore_transparency_settings()
+        print('restore_default_settings', 'restore_default_settings')
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -228,7 +230,6 @@ class SettingsMediator:
         self.main_transparency = main_transparency
         print('background_transparency', self.background_transparency)
         print('main_transparency', self.main_transparency)
-        self._handle_change()
 
     def set_current_screen_number(self, number: int):
         self.current_screen_number = number

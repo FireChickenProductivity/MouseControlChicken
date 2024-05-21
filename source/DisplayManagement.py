@@ -71,7 +71,7 @@ class Flickerer:
 
 def flicker_transparency():
     def compute_new_transparency_value(transparency):
-        return 1
+        return 0.75
     background_transparency = settings_mediator.get_background_transparency()
     main_transparency = settings_mediator.get_main_transparency()
     settings_mediator.update_transparencies(compute_new_transparency_value(background_transparency), compute_new_transparency_value(main_transparency))
@@ -96,7 +96,7 @@ class DisplayManager:
         self.grid: Grid = None
         self.rectangle: Rectangle = None
         self.flickerer: Flickerer = Flickerer(self.flicker_show, self.hide_temporarily)
-        self.transparency_flickerer: Flickerer = Flickerer(settings_mediator.restore_transparency_settings, flicker_transparency)
+        self.transparency_flickerer: Flickerer = Flickerer(self.transparency_flicker_hide, self.transparency_flicker_show)
         self.flickerer_manager: FlickererManager = FlickererManager([self.flickerer, self.transparency_flickerer])
         self.canvas: Canvas = Canvas()
     
@@ -158,6 +158,14 @@ class DisplayManager:
     def flicker_show(self):     
         self.refresh_display_using_previous_values()
         self.show_temporarily()
+
+    def transparency_flicker_show(self):
+        flicker_transparency()
+        self.flicker_show()
+    
+    def transparency_flicker_hide(self):
+        settings_mediator.restore_transparency_settings()
+        self.flicker_show()
 
     def toggle_flickering(self, show_time: int, hide_time: int):
         self.flickerer.toggle_flickering(show_time, hide_time)
