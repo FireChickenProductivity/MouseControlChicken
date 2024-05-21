@@ -122,15 +122,17 @@ class SettingsMediator:
     def initialize_persistent_settings(self):
        self.current_screen_number = settings.get(default_current_screen_number)
     
+    def restore_transparency_settings(self):
+        self.background_transparency = settings.get(default_background_transparency)
+        self.main_transparency = settings.get(default_main_transparency)
+
     def restore_default_settings(self):
         self.default_grid_option = settings.get(default_grid_option)
         self.text_size = settings.get(default_text_size)
         self.text_color = settings.get(default_text_color)
         self.line_width = settings.get(default_line_width)
         self.line_color = settings.get(default_line_color)
-        self.background_transparency = settings.get(default_background_transparency)
         self.background_color = settings.get(default_background_color)
-        self.main_transparency = settings.get(default_main_transparency)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self.checker_frequency = settings.get(default_checker_frequency)
@@ -138,6 +140,7 @@ class SettingsMediator:
         self.flickering_show_time = settings.get(flickering_show_time)
         self.flickering_hide_time = settings.get(flickering_hide_time)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
+        self.restore_transparency_settings()
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -162,6 +165,7 @@ class SettingsMediator:
         return self.background_color
 
     def get_main_transparency(self) -> float:
+        print('self.main_transparency', self.main_transparency)
         return self.main_transparency
 
     def get_current_screen_number(self) -> int:
@@ -217,6 +221,13 @@ class SettingsMediator:
 
     def set_main_transparency(self, transparency: float):
         self.main_transparency = transparency
+        self._handle_change()
+
+    def update_transparencies(self, background_transparency: float, main_transparency: float):
+        self.background_transparency = background_transparency
+        self.main_transparency = main_transparency
+        print('background_transparency', self.background_transparency)
+        print('main_transparency', self.main_transparency)
         self._handle_change()
 
     def set_current_screen_number(self, number: int):

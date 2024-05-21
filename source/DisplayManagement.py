@@ -1,6 +1,7 @@
 from .display.Display import Display
 from .display.Canvas import Canvas
 from .grid.Grid import Grid, Rectangle
+from .SettingsMediator import settings_mediator
 from talon import cron
 
 class JobHandler:
@@ -68,6 +69,26 @@ class Flickerer:
     def is_flicker_showing(self) -> bool:
         return self.flicker_showing
 
+def flicker_transparency():
+    def compute_new_transparency_value(transparency):
+        return 1
+    background_transparency = settings_mediator.get_background_transparency()
+    main_transparency = settings_mediator.get_main_transparency()
+    settings_mediator.update_transparencies(compute_new_transparency_value(background_transparency), compute_new_transparency_value(main_transparency))
+
+class FlickererManager:
+    def __init__(self, flickerers):
+        self.flickerers = flickerers
+    
+    def cancel_all_flicker_jobs(self):
+        for flickerer in self.flickerers:
+            flickerer.cancel_flicker_job()
+        
+    def restart_any_flickering(self):
+        for flickerer in self.flickerers:
+            if flickerer.is_flickering():
+                flickerer.restart_flickering()
+
 class DisplayManager:
     def __init__(self):
         self.display: Display = None
@@ -75,6 +96,8 @@ class DisplayManager:
         self.grid: Grid = None
         self.rectangle: Rectangle = None
         self.flickerer: Flickerer = Flickerer(self.flicker_show, self.hide_temporarily)
+        self.transparency_flickerer: Flickerer = Flickerer(settings_mediator.restore_transparency_settings, flicker_transparency)
+        self.flickerer_manager: FlickererManager = FlickererManager([self.flickerer, self.transparency_flickerer])
         self.canvas: Canvas = Canvas()
     
     def set_display(self, display: Display):
@@ -90,14 +113,13 @@ class DisplayManager:
     def hide(self):
         self.hide_temporarily()
         self.is_showing = False
-        self.flickerer.cancel_flicker_job()
+        self.flickerer_manager.cancel_all_flicker_jobs()
     
     def show(self):
         if self.display: 
             self.show_temporarily()
             self.is_showing = True
-            if self.flickerer.is_flickering():
-                self.flickerer.restart_flickering()
+            self.flickerer_manager.restart_any_flickering()
     
     def prepare_to_show(self):
         self.is_showing = True
@@ -142,6 +164,13 @@ class DisplayManager:
         if not self.flickerer.is_flicker_showing():
             self.refresh_display_using_previous_values()
             self.show()
-        
+    
+    def toggle_transparency_flickering(self, show_time: int, hide_time: int):
+        self.transparency_flickerer.toggle_flickering(show_time, hide_time)
+        if not self.transparency_flickerer.is_flicker_showing():
+            settings_mediator.restore_transparency_settings()
+            self.refresh_display_using_previous_values()
+            self.show()
+
     def is_currently_showing(self) -> bool:
         return self.is_showing
