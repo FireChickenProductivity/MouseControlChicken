@@ -83,7 +83,12 @@ class FlickererManager:
     def cancel_all_flicker_jobs(self):
         for flickerer in self.flickerers:
             flickerer.cancel_flicker_job()
-        
+
+    def stop_all_flickering_except(self, exception_flickerer):
+        for flickerer in self.flickerers:
+            if flickerer != exception_flickerer:
+                flickerer.stop_flickering()
+
     def restart_any_flickering(self):
         for flickerer in self.flickerers:
             if flickerer.is_flickering():
@@ -168,14 +173,18 @@ class DisplayManager:
         self.flicker_show()
 
     def toggle_flickering(self, show_time: int, hide_time: int):
+        was_flicker_showing = self.flickerer.is_flicker_showing()
+        self.flickerer_manager.stop_all_flickering_except(self.flickerer)
         self.flickerer.toggle_flickering(show_time, hide_time)
-        if not self.flickerer.is_flicker_showing():
+        if was_flicker_showing:
             self.refresh_display_using_previous_values()
             self.show()
     
     def toggle_transparency_flickering(self, show_time: int, hide_time: int):
+        was_flicker_showing = self.transparency_flickerer.is_flicker_showing()
+        self.flickerer_manager.stop_all_flickering_except(self.transparency_flickerer)
         self.transparency_flickerer.toggle_flickering(show_time, hide_time)
-        if not self.transparency_flickerer.is_flicker_showing():
+        if was_flicker_showing:
             settings_mediator.restore_transparency_settings()
             self.refresh_display_using_previous_values()
             self.show()
