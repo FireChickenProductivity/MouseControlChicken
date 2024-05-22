@@ -40,6 +40,12 @@ class ReverseCoordinateDoublingGrid(Grid):
     def compute_secondary_sub_rectangle_given_main_rectangle(self, rectangle: Rectangle) -> Rectangle:
         pass
 
+    def get_primary_grid(self) -> Grid:
+        return self.primary
+
+    def get_secondary_grid(self) -> Grid:
+        return self.secondary
+
 def compute_rectangle_length_middle(rectangle: Rectangle) -> MousePosition:
     return rectangle.left + (rectangle.right - rectangle.left) / 2
 
