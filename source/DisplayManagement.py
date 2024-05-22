@@ -148,12 +148,6 @@ class DisplayManager:
         self.grid = grid
         self.rectangle = rectangle
     
-    def toggle(self):
-        if self.is_showing:
-            self.hide()
-        else:
-            self.show()
-
     def refresh_display_using_previous_values(self):
         self.refresh_display(self.grid, self.rectangle)
 
