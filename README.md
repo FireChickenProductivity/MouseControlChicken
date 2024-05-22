@@ -62,6 +62,8 @@ chicken crisscross: Toggles showing cross crossing lines on the display for rect
 
 chicken flicker: Toggles having the display flicker if the setting user.mouse_control_chicken_flickering_enabled is true. This causes the display to alternate between showing and not showing. user.mouse_control_chicken_flickering_show_time determines how long the display shows in milliseconds and user.mouse_control_chicken_flickering_hide_time determines how long the display hides in milliseconds. 
 
+chicken flicker transparency: Toggles having the display alternate between the primary and alternate transparency settings. This can be useful for switching between having high and low transparency to balance between making it easy to see what is behind the grid and making it easy to see the grid itself.
+
 chicken checker frequency (number_small): This determines how frequently to show a position on a checker display. Every nth position will be shown where n is the frequency.
 
 ### Narrowing Grid Showing Commands
