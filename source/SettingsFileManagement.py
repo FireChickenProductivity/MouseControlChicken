@@ -27,6 +27,10 @@ settings():
     user.mouse_control_chicken_flickering_show_time = 5000
     user.mouse_control_chicken_flickering_hide_time = 2000
     user.mouse_control_chicken_default_rectangle_manager = 'screen'
+    user.mouse_control_chicken_default_alternate_background_transparency = 0.75
+    user.mouse_control_chicken_default_alternate_main_transparency = 0.66
+    user.mouse_control_chicken_transparency_flickering_show_time = 5000
+    user.mouse_control_chicken_transparency_flickering_hide_time = 2000
 """
 
     )

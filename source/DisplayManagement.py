@@ -71,13 +71,6 @@ class Flickerer:
     def is_flicker_showing(self) -> bool:
         return self.flicker_showing
 
-def flicker_transparency():
-    def compute_new_transparency_value(transparency):
-        return 0.75
-    background_transparency = settings_mediator.get_background_transparency()
-    main_transparency = settings_mediator.get_main_transparency()
-    settings_mediator.update_transparencies(compute_new_transparency_value(background_transparency), compute_new_transparency_value(main_transparency))
-
 class FlickererManager:
     def __init__(self, flickerers):
         self.flickerers = flickerers
@@ -158,7 +151,7 @@ class DisplayManager:
         self.show_temporarily()
 
     def transparency_flicker_show(self):
-        flicker_transparency()
+        settings_mediator.rotate_transparency_settings_to_alternates()
         self.flicker_show()
     
     def transparency_flicker_hide(self):

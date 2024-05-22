@@ -85,8 +85,8 @@ class GridSystemManager:
 
     def toggle_transparency_flicker(self):
         if settings_mediator.get_flickering_enabled():
-            show_time = settings_mediator.get_flickering_show_time()
-            hide_time = settings_mediator.get_flickering_hide_time()
+            show_time = settings_mediator.get_transparency_flickering_show_time()
+            hide_time = settings_mediator.get_transparency_flickering_hide_time()
             self.display_manager.toggle_transparency_flickering(show_time, hide_time)
         
 manager: GridSystemManager = None
