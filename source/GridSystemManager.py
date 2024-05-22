@@ -192,19 +192,9 @@ class Actions:
         grid = manager.get_grid()
         coordinates, prefixes = obtain_coordinates_and_prefixes(coordinates)
         if REVERSE_COORDINATES_PREFIX in prefixes:
-            position = actions.user.mouse_control_chicken_get_reversed_coordinates_position_on_grid(coordinates)
+            position = get_reversed_coordinates_position_on_grid(coordinates)
         else:
             position = grid.compute_absolute_position_from(coordinates)
-        return position
-
-    def mouse_control_chicken_get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition:
-        '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''
-        grid = manager.get_grid()
-        position = None
-        if grid.supports_reversed_coordinates():
-            position = grid.compute_absolute_position_from_reversed(coordinates)
-        elif grid.supports_narrowing():
-            position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid(grid)
         return position
 
     def mouse_control_chicken_is_using_narrow_able_grid() -> bool:
@@ -215,6 +205,30 @@ class Actions:
         '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
         grid = manager.get_grid()
         grid.handle_using_coordinates_with_mouse_command(coordinates)
+
+    def mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates: str) -> None:
+        '''Prepares for an reverse coordinate action'''
+        coordinates, _ = obtain_coordinates_and_prefixes(coordinates)
+        grid = manager.get_grid()
+        if grid.supports_narrowing():
+            actions.user.mouse_control_chicken_narrow_grid(coordinates)
+        
+    def mouse_control_chicken_handle_reverse_coordinate_action_cleanup() -> None:
+        '''Handles a reverse coordinate action using the specified coordinates'''
+        grid = manager.get_grid()
+        if grid.supports_narrowing():
+            actions.user.mouse_control_chicken_reset_narrow_able_grid()
+            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+
+def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition:
+        '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''
+        grid = manager.get_grid()
+        position = None
+        if grid.supports_reversed_coordinates():
+            position = grid.compute_absolute_position_from_reversed(coordinates)
+        elif grid.supports_narrowing():
+            position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid(grid)
+        return position
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
