@@ -71,12 +71,10 @@ class TextManager:
         self.add_text_to_canvas(canvas)
     
     def add_background_rectangles_to_canvas(self, canvas):
-        print('settings_mediator.get_background_transparency()', settings_mediator.get_background_transparency())
         update_canvas_color(canvas, settings_mediator.get_background_color() + compute_transparency_in_hexadecimal(settings_mediator.get_background_transparency()))
         for text in self.elements: draw_background_rectangle_for_text(canvas, text, self.options.size)
     
     def add_text_to_canvas(self, canvas):
-        print('settings_mediator.get_main_transparency()', settings_mediator.get_main_transparency())
         update_canvas_color(canvas, self.options.color + compute_transparency_in_hexadecimal(settings_mediator.get_main_transparency()))
         update_canvas_text_size(canvas, self.options.size)
         for text in self.elements: draw_canvas_text(canvas, text)
@@ -85,9 +83,6 @@ def compute_transparency_in_hexadecimal(transparency) -> str:
     transparency_amount = 0xFF*(1 - transparency)
     hexadecimal = hex(round(transparency_amount))
     result = hexadecimal[2:4]
-    print('compute_transparency_in_hexadecimal', result, transparency)
-    print('transparency_amount', transparency_amount)
-    print('hexadecimal', hexadecimal)
     return result
 
 def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):

@@ -135,11 +135,8 @@ class DisplayManager:
     def show_temporarily(self):
         if self.display: self.canvas.show()
 
-    def reset_canvas(self):
-        self.canvas = Canvas()
-
     def refresh_canvas(self, rectangle: Rectangle):
-        self.reset_canvas()
+        self.canvas = Canvas()
         self.canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
 
