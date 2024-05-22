@@ -17,9 +17,10 @@ class JobHandler:
             self.job = None
 
 class Flickerer:
-    def __init__(self, show_function, hide_function):
+    def __init__(self, show_function, hide_function, cleanup_function=None):
         self.show_function = show_function
         self.hide_function = hide_function
+        self.cleanup_function = cleanup_function
         self.flicker_job_handler = JobHandler()
         self.flickering = False
         self.flicker_show_time = None
@@ -56,6 +57,7 @@ class Flickerer:
     def stop_flickering(self):
         self.cancel_flicker_job()
         self.flickering = False
+        if self.cleanup_function: self.cleanup_function()
 
     def is_flickering(self):
         return self.flickering
@@ -101,7 +103,7 @@ class DisplayManager:
         self.grid: Grid = None
         self.rectangle: Rectangle = None
         self.flickerer: Flickerer = Flickerer(self.flicker_show, self.hide_temporarily)
-        self.transparency_flickerer: Flickerer = Flickerer(self.transparency_flicker_hide, self.transparency_flicker_show)
+        self.transparency_flickerer: Flickerer = Flickerer(self.transparency_flicker_hide, self.transparency_flicker_show, settings_mediator.restore_transparency_settings)
         self.flickerer_manager: FlickererManager = FlickererManager([self.flickerer, self.transparency_flickerer])
         self.canvas: Canvas = Canvas()
     
@@ -164,19 +166,16 @@ class DisplayManager:
         self.flicker_show()
 
     def toggle_flickering(self, show_time: int, hide_time: int):
-        was_flickering = self.flickerer.is_flickering()
-        self.flickerer_manager.stop_all_flickering_except(self.flickerer)
-        self.flickerer.toggle_flickering(show_time, hide_time)
-        if was_flickering:
-            self.refresh_display_using_previous_values()
-            self.show()
+        self._toggle_flickering_for_flickerer(self.flickerer, show_time, hide_time)
     
     def toggle_transparency_flickering(self, show_time: int, hide_time: int):
-        was_flickering = self.transparency_flickerer.is_flickering()
-        self.flickerer_manager.stop_all_flickering_except(self.transparency_flickerer)
-        self.transparency_flickerer.toggle_flickering(show_time, hide_time)
+        self._toggle_flickering_for_flickerer(self.transparency_flickerer, show_time, hide_time)
+        
+    def _toggle_flickering_for_flickerer(self, flickerer: Flickerer, show_time: int, hide_time: int):
+        was_flickering = flickerer.is_flickering()
+        self.flickerer_manager.stop_all_flickering_except(flickerer)
+        flickerer.toggle_flickering(show_time, hide_time)
         if was_flickering:
-            settings_mediator.restore_transparency_settings()
             self.refresh_display_using_previous_values()
             self.show()
 
