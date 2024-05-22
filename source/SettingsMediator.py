@@ -43,6 +43,12 @@ default_background_transparency = setting_creator.create_float_setting(
     desc = 'The default background transparency used by Mouse Control Chicken'
 )  
 
+default_alternate_background_transparency = setting_creator.create_float_setting(
+    'default_alternate_background_transparency',
+    default = 0.75,
+    desc = 'The default alternate background transparency used by Mouse Control Chicken when flickering to the alternate transparency setting'
+)
+
 default_background_color = setting_creator.create_str_setting(
     'default_background_color',
     default = "000000",
@@ -54,6 +60,12 @@ default_main_transparency = setting_creator.create_float_setting(
     default = 0,
     desc = 'The default main transparency used by Mouse Control Chicken'
 ) 
+
+default_alternate_main_transparency = setting_creator.create_float_setting(
+    'default_alternate_main_transparency',
+    default = 0.66,
+    desc= 'The default alternate main transparency used by Mouse Control Chicken when flickering to the alternate transparency setting'
+)
 
 default_current_screen_number = setting_creator.create_int_setting(
     'default_current_screen_number',
@@ -103,6 +115,18 @@ flickering_hide_time = setting_creator.create_int_setting(
     'The amount of time that mouse control chicken flickering will hide a display for before showing it in milliseconds.'   
 )
 
+transparency_flickering_show_time = setting_creator.create_int_setting(
+    'transparency_flickering_show_time',
+    5000,
+    'The amount of time that mouse control chicken transparency flickering will show a display with default transparency settings before alternating in milliseconds.'
+)
+
+transparency_flickering_hide_time = setting_creator.create_int_setting(
+    'transparency_flickering_hide_time',
+    2000,
+    'The amount of time that mouse control chicken transparency flickering will hide a display with alternate transparency settings before alternating in milliseconds.'
+)
+
 default_rectangle_manager = setting_creator.create_str_setting(
     'default_rectangle_manager',
     'screen',
@@ -122,22 +146,32 @@ class SettingsMediator:
     def initialize_persistent_settings(self):
        self.current_screen_number = settings.get(default_current_screen_number)
     
+    def restore_transparency_settings(self):
+        self.background_transparency = settings.get(default_background_transparency)
+        self.main_transparency = settings.get(default_main_transparency)
+
+    def initialize_flicker_time_settings(self):
+        self.flickering_show_time = settings.get(flickering_show_time)
+        self.flickering_hide_time = settings.get(flickering_hide_time)
+        self.transparency_flickering_show_time = settings.get(transparency_flickering_show_time)
+        self.transparency_flickering_hide_time = settings.get(transparency_flickering_hide_time)
+
     def restore_default_settings(self):
         self.default_grid_option = settings.get(default_grid_option)
         self.text_size = settings.get(default_text_size)
         self.text_color = settings.get(default_text_color)
         self.line_width = settings.get(default_line_width)
         self.line_color = settings.get(default_line_color)
-        self.background_transparency = settings.get(default_background_transparency)
         self.background_color = settings.get(default_background_color)
-        self.main_transparency = settings.get(default_main_transparency)
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self.checker_frequency = settings.get(default_checker_frequency)
         self.flickering_enabled = settings.get(flickering_enabled)
-        self.flickering_show_time = settings.get(flickering_show_time)
-        self.flickering_hide_time = settings.get(flickering_hide_time)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
+        self.alternate_background_transparency = settings.get(default_alternate_background_transparency)
+        self.alternate_main_transparency = settings.get(default_alternate_main_transparency)
+        self.initialize_flicker_time_settings()
+        self.restore_transparency_settings()
         self._handle_change()
 
     def get_default_grid_option(self) -> str:
@@ -188,8 +222,18 @@ class SettingsMediator:
     def get_flickering_hide_time(self) -> int:
         return self.flickering_hide_time
 
+    def get_transparency_flickering_show_time(self) -> int:
+        return self.transparency_flickering_show_time
+    
+    def get_transparency_flickering_hide_time(self) -> int:
+        return self.transparency_flickering_hide_time
+
     def get_default_rectangle_manager(self) -> str:
         return self.default_rectangle_manager
+    
+    def rotate_transparency_settings_to_alternates(self):
+        self.background_transparency = self.alternate_background_transparency
+        self.main_transparency = self.alternate_main_transparency
 
     def set_text_size(self, size: int):
         self.text_size = size
@@ -218,6 +262,10 @@ class SettingsMediator:
     def set_main_transparency(self, transparency: float):
         self.main_transparency = transparency
         self._handle_change()
+
+    def update_transparencies(self, background_transparency: float, main_transparency: float):
+        self.background_transparency = background_transparency
+        self.main_transparency = main_transparency
 
     def set_current_screen_number(self, number: int):
         self.current_screen_number = number

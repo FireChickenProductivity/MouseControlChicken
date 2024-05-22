@@ -82,6 +82,12 @@ class GridSystemManager:
             show_time = settings_mediator.get_flickering_show_time()
             hide_time = settings_mediator.get_flickering_hide_time()
             self.display_manager.toggle_flickering(show_time, hide_time)
+
+    def toggle_transparency_flicker(self):
+        if settings_mediator.get_flickering_enabled():
+            show_time = settings_mediator.get_transparency_flickering_show_time()
+            hide_time = settings_mediator.get_transparency_flickering_hide_time()
+            self.display_manager.toggle_transparency_flickering(show_time, hide_time)
         
 manager: GridSystemManager = None
 current_option: str = None
@@ -89,10 +95,6 @@ current_option: str = None
 module = Module()
 @module.action_class
 class Actions:
-    def mouse_control_chicken_make_grid_around_screen():
-        '''Makes the mouse control chicken grid form around a screen'''
-        manager.set_rectangle_manager(ScreenRectangleManager())
-    
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
         global current_option
@@ -146,6 +148,11 @@ class Actions:
         '''Toggles flickering the mouse control chicken display'''
         global manager
         manager.toggle_flicker_display()
+
+    def mouse_control_chicken_toggle_transparency_flicker():
+        '''Toggles transparency flickering the mouse control chicken display'''
+        global manager
+        manager.toggle_transparency_flicker()
     
     def mouse_control_chicken_move_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid'''
