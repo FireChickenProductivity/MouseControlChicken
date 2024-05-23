@@ -3,6 +3,7 @@ from .GridOptions import GridOptions
 from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
 from .grid.RectangularGrid import ListBasedGrid
 from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
+from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions
@@ -11,6 +12,7 @@ ONE_TO_NINE_GRID_NAME = "one to nine division"
 ALPHABET_GRID_NAME = "Alphabet"
 DOUBLE_ALPHABET_GRID_NAME = "Double Alphabet"
 RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination"
+HORIZONTAL_DOUBLING_GRID_NAME = "Horizontal Doubling"
 
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
 DOUBLE_ALPHABET = ALPHABET + ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ]
@@ -124,8 +126,22 @@ class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [GridOptionArgumentType(), GridOptionArgumentType()]
+    
+class HorizontalDoublingGridFactory(GridFactory):
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        primary = create_grid_from_options(components[0])
+        return ReverseCoordinateHorizontalDoublingGrid(primary)
+    
+    def get_name(self) -> str:
+        return HORIZONTAL_DOUBLING_GRID_NAME
 
-options = [SquareRecursiveDivisionGridFactory(), RectangularRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory()]
+    def get_arguments_description(self) -> str:
+        return "(grid option)"
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [GridOptionArgumentType()]
+
+options = [SquareRecursiveDivisionGridFactory(), RectangularRecursiveDivisionGridFactory(), AlphabetGridFactory(), DoubleAlphabetGridFactory(), RecursivelyDivisibleGridCombinationGridFactory(), HorizontalDoublingGridFactory()]
 
 class GridFactoryOptions:
     def __init__(self, options: List[GridFactory]):
