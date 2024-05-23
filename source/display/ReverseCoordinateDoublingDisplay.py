@@ -1,6 +1,5 @@
 from .Display import Display
 from copy import deepcopy
-from ..grid.Grid import Rectangle
 from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
 from .Canvas import Canvas
 
