@@ -204,7 +204,6 @@ class Actions:
     def mouse_control_chicken_handle_action_using_coordinates(coordinates: str) -> None:
         '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
         grid = manager.get_grid()
-        print('coordinates', coordinates)
         grid.handle_using_coordinates_with_mouse_command(coordinates)
 
     def mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates: str) -> None:
