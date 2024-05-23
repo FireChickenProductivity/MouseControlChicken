@@ -112,6 +112,7 @@ class Actions:
         manager.prepare_for_grid_switch()
         manager.set_display(display)
         manager.set_grid(grid)
+        manager.show()
     
     def mouse_control_chicken_choose_display_from_options(name: str):
         '''Changes the active mouse control chicken grid display based on the name of the option'''
