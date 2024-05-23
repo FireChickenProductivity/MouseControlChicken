@@ -25,13 +25,12 @@ class ReverseCoordinateDoublingGrid(Grid):
         return True
     
     def compute_absolute_position_from_reversed(self, grid_coordinates: str) -> MousePosition:
-        print('compute_absolute_position_from_reversed')
         if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
             return self.compute_absolute_position_from_valid_reversed_coordinates(grid_coordinates)
         raise CoordinatesNotSupportedException()
     
     def compute_absolute_position_from_valid_reversed_coordinates(self, grid_coordinates: str) -> MousePosition:
-        self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
+        return self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
 
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         return self.primary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
