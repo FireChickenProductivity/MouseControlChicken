@@ -1,4 +1,5 @@
 from .Grid import Grid, Rectangle, CoordinatesNotSupportedException, obtain_relevant_coordinate_system_from
+from ..CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, obtain_coordinates_and_prefixes
 from ..fire_chicken.mouse_position import MousePosition
 from copy import deepcopy
 
@@ -46,6 +47,13 @@ class ReverseCoordinateDoublingGrid(Grid):
 
     def get_secondary_grid(self) -> Grid:
         return self.secondary
+
+    def handle_using_coordinates_with_mouse_command(self, grid_coordinates: str) -> None:
+        coordinates, prefixes = obtain_coordinates_and_prefixes(grid_coordinates)
+        if REVERSE_COORDINATES_PREFIX in prefixes:
+            self.secondary.handle_using_coordinates_with_mouse_command(coordinates)
+        else:
+            self.primary.handle_using_coordinates_with_mouse_command(coordinates)
 
 def compute_rectangle_length_middle(rectangle: Rectangle) -> MousePosition:
     return rectangle.left + (rectangle.right - rectangle.left) / 2
