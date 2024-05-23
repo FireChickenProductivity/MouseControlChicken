@@ -43,6 +43,9 @@ class Grid:
 
     def supports_narrowing(self) -> bool:
         return False
+    
+    def supports_reversed_coordinates(self) -> bool:
+        return False
 
     def is_wrapper(self) -> bool:
         return False

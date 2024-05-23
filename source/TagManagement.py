@@ -12,6 +12,10 @@ NARROW_ABLE_GRID_SHOWING_TAG_NAME = 'mouse_control_chicken_narrow_able_showing'
 NARROW_ABLE_GRID_SHOWING_TAG = 'user.' + NARROW_ABLE_GRID_SHOWING_TAG_NAME
 module.tag(NARROW_ABLE_GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse control chicken commands for working with the active narrow able grid')
 
+REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG_NAME = 'mouse_control_chicken_reverse_coordinates_supporting_showing'
+REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG = 'user.' + REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG_NAME
+module.tag(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG_NAME, desc = 'Tag for enabling mouse control chicken commands for working with a reverse coordinates supporting grid')
+
 GRID_OPTIONS_TAG_NAME = 'mouse_control_chicken_options_showing'
 GRID_OPTIONS_TAG = 'user.' + GRID_OPTIONS_TAG_NAME
 module.tag(GRID_OPTIONS_TAG_NAME, desc = 'Tag for enabling choosing between mouse control chicken grid options')
@@ -59,6 +63,7 @@ class Actions:
         '''Enables commands for working with the active mouse control chicken grid'''
         tags = [GRID_SHOWING_TAG]
         if grid.supports_narrowing(): tags.append(NARROW_ABLE_GRID_SHOWING_TAG)
+        if grid.supports_reversed_coordinates() or grid.supports_narrowing(): tags.append(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG)
         assign_tags_to_context(grid_open_context, tags)
     
     def mouse_control_chicken_disable_grid_showing_tags():
