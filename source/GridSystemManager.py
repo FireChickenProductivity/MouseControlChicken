@@ -228,7 +228,7 @@ def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition
         if grid.supports_reversed_coordinates():
             position = grid.compute_absolute_position_from_reversed(coordinates)
         elif grid.supports_narrowing():
-            position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid(grid)
+            position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
         return position
 
 def show_display_options(title: str, callback):
