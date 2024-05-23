@@ -5,6 +5,7 @@ from copy import deepcopy
 class ReverseCoordinateDoublingGrid(Grid):
     def __init__(self, grid: Grid):
         self.primary = grid
+        self.coordinate_system = self.primary.get_coordinate_system()
         self.secondary = deepcopy(grid)
 
     def make_around(self, rectangle: Rectangle) -> None:
@@ -14,9 +15,6 @@ class ReverseCoordinateDoublingGrid(Grid):
         self.secondary.make_around(self.secondary_rectangle)
         self.rectangle = rectangle
     
-    def get_coordinate_system(self):
-        return self.primary.get_coordinate_system()
-
     def get_primary_rectangle(self) -> Rectangle:
         return self.primary_rectangle
 
