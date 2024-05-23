@@ -70,7 +70,11 @@ class ScreenTrackingRectangleManager(RectangleManager):
     
     def update_rectangle(self):
         window = ui.active_window()
-        window_rectangle = window.rect
+        window_rectangle = None
+        try:
+            window_rectangle = window.rect
+        except:
+            window_rectangle = ScreenRectangleManager().compute_rectangle()
         screen_rectangle = ui.screen_containing(*window_rectangle.center).rect
         new_rectangle = convert_talon_rectangle_to_rectangle(screen_rectangle)
         if not self.last_rectangle or new_rectangle != self.last_rectangle:
