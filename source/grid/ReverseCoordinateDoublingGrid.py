@@ -24,6 +24,12 @@ class ReverseCoordinateDoublingGrid(Grid):
 
     def supports_reversed_coordinates(self) -> bool:
         return True
+
+    def is_combination(self) -> bool:
+        return self.primary.is_combination()
+    
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return self.primary.is_combination() and self.primary.has_nonoverlapping_sub_rectangles()
     
     def compute_absolute_position_from_reversed(self, grid_coordinates: str) -> MousePosition:
         if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
