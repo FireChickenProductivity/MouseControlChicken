@@ -73,10 +73,10 @@ class ScreenTrackingRectangleManager(RectangleManager):
         window_rectangle = None
         try:
             window_rectangle = window.rect
+            screen_rectangle = ui.screen_containing(*window_rectangle.center).rect
+            new_rectangle = convert_talon_rectangle_to_rectangle(screen_rectangle)
         except:
-            window_rectangle = ScreenRectangleManager().compute_rectangle()
-        screen_rectangle = ui.screen_containing(*window_rectangle.center).rect
-        new_rectangle = convert_talon_rectangle_to_rectangle(screen_rectangle)
+            new_rectangle = ScreenRectangleManager().compute_rectangle()
         if not self.last_rectangle or new_rectangle != self.last_rectangle:
             self.last_rectangle = new_rectangle
             self.call_callback()
