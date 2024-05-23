@@ -3,20 +3,45 @@ from .UniversalDisplays import *
 from .RectangularGridDisplays import *
 from .CombinationDisplay import CombinationDisplay
 from .NarrowDisplays import *
+from .ReverseCoordinateDoublingDisplay import ReverseCoordinateDoublingDisplay
 from ..grid.Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
-from typing import List
+from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
+from typing import List, Tuple, Type
 
 class CombinationDisplayNotSupportedException(Exception):
     pass
 
-display_types = [EmptyDisplay, RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
+DISPLAY_TYPES = [EmptyDisplay, RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
                  RectangularCheckerDisplay]
+DISPLAY_WRAPPER_TYPES = [ReverseCoordinateDoublingDisplay]
 
-def obtain_display_type_from_name(name: str) -> type:
-    for display_type in display_types:
+def obtain_wrapper_and_wrapped_type_from(name: str) -> Tuple[Type, Type]:
+    for wrapper_type in DISPLAY_WRAPPER_TYPES:
+        typename = wrapper_type.__class__.__name__
+        wrapped_name_start = typename + "("
+        if name.startswith(wrapped_name_start) and name.endswith(")"):
+            return wrapper_type, obtain_display_type_from_name(name[len(wrapped_name_start):-1])
+        
+def is_wrapped_name(name: str) -> bool:
+    return "(" in name and name.endswith(")")
+
+def obtain_wrap_type(name: str):
+    wrapper_type, wrapped_type = obtain_wrapper_and_wrapped_type_from(name)
+    return wrapper_type(wrapped_type)
+
+def obtain_simple_display_type_from_name(name: str) -> Type:
+    for display_type in DISPLAY_TYPES:
         if display_type.get_name() == name:
             return display_type
-    raise ValueError(f"Could not find display type with name {name} in {[display_type.get_name() for display_type in display_types]}")
+    raise ValueError(f"Could not find display type with name {name} in {[display_type.get_name() for display_type in DISPLAY_TYPES]}")
+    
+def obtain_display_type_from_name(name: str) -> type:
+    display_type = None
+    if is_wrapped_name(name):
+        display_type = obtain_wrap_type(name)
+    else:
+        display_type = obtain_simple_display_type_from_name(name)
+    return display_type
 
 DISPLAY_NAME_SEPARATOR = ":"
 
@@ -39,6 +64,29 @@ class DisplayOption:
     def is_partial_combination_option(self) -> bool:
         return False
 
+    def __repr__(self) -> str:
+        return self.__str__()
+    
+    def __str__(self) -> str:
+        return self.get_name()
+
+class WrappingDisplayOption():
+    def __init__(self, wrapping_type: Type, wrapped_option: DisplayOption):
+        self.wrapping_type = wrapping_type
+        self.wrapped_option = wrapped_option
+    
+    def instantiate(self) -> Display:
+        return self.wrapping_type(self.wrapped_option.instantiate())
+    
+    def get_type(self):
+        return type(self.instantiate())
+    
+    def get_name(self):
+        return self.instantiate().get_name()
+
+    def is_partial_combination_option(self) -> bool:
+        return False
+    
     def __repr__(self) -> str:
         return self.__str__()
     
@@ -151,13 +199,20 @@ class DisplayOptions:
         normalized_option_name = str(order_number) + PartialCombinationDisplayOption.SEPARATOR + display_name
         return self.options[normalized_option_name]
 
+    def get_option_with_name(self, name: str) -> DisplayOption:
+        return self.options[name]
+
 def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
     if grid.is_wrapper():
         grid = grid.get_wrapped_grid()
-    types = [display_type for display_type in display_types if display_type.supports_grid(grid)]
+    types = [display_type for display_type in DISPLAY_TYPES if display_type.supports_grid(grid)]
     return types
 
 def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
+    if grid.supports_reversed_coordinates():
+        primary_options = compute_display_options_given_singular_grid(grid.get_primary_grid())
+        return DisplayOptions([WrappingDisplayOption(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name))
+                               for name in primary_options.get_names()])
     types = compute_display_option_types_given_singular_grid(grid)
     options = DisplayOptions([DisplayOption(display_type) for display_type in types])
     return options
@@ -198,10 +253,12 @@ def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
     return grid.is_combination() and should_consider_sub_grids_after_grid(grid)
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
+    options = None
     if should_compute_combination_display_options_for_grid(grid):
-        return compute_combination_display_options_given_grid(grid)
+        options = compute_combination_display_options_given_grid(grid)
     else:
-        return compute_display_options_given_singular_grid(grid)
+        options = compute_display_options_given_singular_grid(grid)
+    return options
 
 def compute_display_option_names_given_options(options: DisplayOptions) -> List[str]:
     return [option for option in options.get_names()]
