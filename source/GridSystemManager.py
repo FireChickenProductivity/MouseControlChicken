@@ -11,11 +11,8 @@ from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
+from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
-from typing import List
-
-REVERSE_COORDINATES_PREFIX = "reverse"
-PREFIX_POSTFIX = ':'
 
 class GridSystemManager:
     def __init__(self):
@@ -207,6 +204,7 @@ class Actions:
     def mouse_control_chicken_handle_action_using_coordinates(coordinates: str) -> None:
         '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
         grid = manager.get_grid()
+        print('coordinates', coordinates)
         grid.handle_using_coordinates_with_mouse_command(coordinates)
 
     def mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates: str) -> None:
@@ -257,13 +255,6 @@ def register_on_change_callback():
     callback = NoArgumentCallback(manager.refresh, manager.hide)
     callback_name = "manager_refresh"
     settings_mediator.register_on_change_callback(callback_name, callback)
-
-def obtain_coordinates_and_prefixes(coordinates: str) -> (str, List[str]):
-    if ":" in coordinates:
-        prefix_text, actual_coordinates = coordinates.split(PREFIX_POSTFIX, 1)
-        prefixes = prefix_text.split(",")
-        return actual_coordinates, prefixes
-    return coordinates, []
 
 
 app.register("ready", setup)
