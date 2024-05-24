@@ -133,12 +133,10 @@ class WrappingPartialCombinationDisplayOption(PartialCombinationDisplayOption):
         
 class CombinationDisplayOption:
     def __init__(self, display_types: List[type]):
-        print('display_types', display_types)
         self.display_types = display_types
     
     def instantiate(self) -> CombinationDisplay:
         primary = self.display_types[0]()
-        print('primary', type(primary))
         secondary = self.display_types[1:]
         return CombinationDisplay(primary, secondary)
     
@@ -200,7 +198,6 @@ class DisplayOptions:
 
     def create_combination_display_option_from_sub_displays(self, sub_display_names: List[str]) -> CombinationDisplay:
         sub_displays = [obtain_display_type_from_name(displayname) for displayname in sub_display_names]
-        print('sub_displays', sub_displays)
         combination = CombinationDisplayOption(sub_displays)
         return combination
 
@@ -211,7 +208,6 @@ class DisplayOptions:
             order_number = 1
             display_name = name
         normalized_option_name = str(order_number) + PartialCombinationDisplayOption.SEPARATOR + display_name
-        print('self.options', self.options)
         return self.options[normalized_option_name]
 
     def get_option_with_name(self, name: str) -> DisplayOption:
@@ -252,7 +248,6 @@ def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGri
     '''This will return the partial display options for every sub grid.'''
     options = []
     sub_grids = compute_sub_grids(grid)
-    print('sub_grids', sub_grids)
     for index, sub_grid in enumerate(sub_grids):
         new_options = compute_partial_display_options_for_grid(sub_grid, index)
         options.extend(new_options)
@@ -287,10 +282,8 @@ def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     options = None
     if should_compute_combination_display_options_for_grid(grid):
-        print('combination')
         options = compute_combination_display_options_given_grid(grid)
     else:
-        print('singular')
         options = compute_display_options_given_singular_grid(grid)
     return options
 

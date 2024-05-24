@@ -16,7 +16,6 @@ class CombinationDisplay(Display):
     
     def _compute_primary_grids(self, grid: RecursivelyDivisibleGridCombination) -> List[RecursivelyDivisibleGridCombination]:
         if grid.supports_reversed_coordinates() and grid.is_wrapper():
-            print('supports reverse coordinates')
             result = [grid.get_primary_grid(), grid.get_secondary_grid()]
         else:
             result = [grid]
@@ -24,13 +23,9 @@ class CombinationDisplay(Display):
 
     def _setup_secondary_display_for_coordinate(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
         primary_grids = self._compute_primary_grids(grids[0])
-        print('setting up secondary display for coordinate', coordinate)
-        print('primary_grids', primary_grids)
-        print('rectangles', [grid.get_rectangle() for grid in primary_grids])
         secondary = grids[index + 1]
         for primary in primary_grids:
             sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
-            print('sub_rectangle', sub_rectangle)
             secondary.make_around(sub_rectangle)
             sub_display = self.secondary_display_types[index]()
             sub_display.set_grid(secondary)
