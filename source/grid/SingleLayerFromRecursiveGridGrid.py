@@ -10,6 +10,9 @@ class SingleLayerFromRecursiveGridGrid(RecursivelyDivisibleGrid):
 
     def make_around(self, rectangle: Rectangle) -> None:
         return self.recursive_grid.make_around(rectangle)
+
+    def get_rectangle(self) -> Rectangle:
+        return self.recursive_grid.get_rectangle()
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
         return self.recursive_grid.compute_absolute_position_from_valid_coordinates(grid_coordinates)

@@ -82,6 +82,7 @@ class ListBasedGrid(RectangularGrid):
         return self._compute_coordinate_from_index(grid_coordinates, 0)
     
     def _compute_coordinate_from_index(self, grid_coordinates: str, index: int) -> str:
+        print('return self._compute_coordinates', self._compute_coordinates(grid_coordinates))
         return self._compute_coordinates(grid_coordinates)[index]
 
     def has_nonoverlapping_sub_rectangles(self) -> bool:

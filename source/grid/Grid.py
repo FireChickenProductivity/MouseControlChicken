@@ -174,6 +174,9 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def make_around(self, rectangle: Rectangle) -> None:
         self.primary.make_around(rectangle)
     
+    def get_rectangle(self) -> Rectangle:
+        return self.primary.get_rectangle()
+    
     def handle_using_coordinates_with_mouse_command(self, grid_coordinates: str) -> None:
         self.persist_secondary_at(grid_coordinates)
 

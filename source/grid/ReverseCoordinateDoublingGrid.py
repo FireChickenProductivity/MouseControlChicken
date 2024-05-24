@@ -4,10 +4,14 @@ from ..fire_chicken.mouse_position import MousePosition
 from copy import deepcopy
 
 class ReverseCoordinateDoublingGrid(Grid):
-    def __init__(self, grid: Grid):
+    def __init__(self, grid: Grid, secondary: Grid = None):
         self.primary = grid
         self.coordinate_system = obtain_relevant_coordinate_system_from(self.primary)
-        self.secondary = deepcopy(grid)
+        if secondary:
+            self.secondary = secondary
+        else:
+            self.secondary = deepcopy(grid)
+        self.rectangle: Rectangle = None
 
     def make_around(self, rectangle: Rectangle) -> None:
         self.primary_rectangle = self.compute_primary_sub_rectangle_given_main_rectangle(rectangle)
