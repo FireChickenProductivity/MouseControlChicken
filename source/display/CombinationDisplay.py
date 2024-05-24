@@ -16,6 +16,8 @@ class CombinationDisplay(Display):
     
     def _setup_secondary_display_for_coordinate(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
         primary = grids[index]
+        if primary.is_wrapper():
+            primary = primary.get_wrapped_grid()
         secondary = grids[index + 1]
         sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
         secondary.make_around(sub_rectangle)

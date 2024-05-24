@@ -30,7 +30,7 @@ def is_wrapped_name(name: str) -> bool:
 
 def obtain_wrap_type(name: str):
     wrapper_type, wrapped_type = obtain_wrapper_and_wrapped_type_from(name)
-    resulting_type = wrapper_type(wrapped_type)
+    resulting_type = WrappingDisplayType(wrapper_type, wrapped_type)
     return resulting_type
 
 def obtain_simple_display_type_from_name(name: str) -> Type:
@@ -133,10 +133,12 @@ class WrappingPartialCombinationDisplayOption(PartialCombinationDisplayOption):
         
 class CombinationDisplayOption:
     def __init__(self, display_types: List[type]):
+        print('display_types', display_types)
         self.display_types = display_types
     
     def instantiate(self) -> CombinationDisplay:
         primary = self.display_types[0]()
+        print('primary', type(primary))
         secondary = self.display_types[1:]
         return CombinationDisplay(primary, secondary)
     
@@ -198,6 +200,7 @@ class DisplayOptions:
 
     def create_combination_display_option_from_sub_displays(self, sub_display_names: List[str]) -> CombinationDisplay:
         sub_displays = [obtain_display_type_from_name(displayname) for displayname in sub_display_names]
+        print('sub_displays', sub_displays)
         combination = CombinationDisplayOption(sub_displays)
         return combination
 
@@ -223,7 +226,7 @@ def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
 def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
     if grid.supports_reversed_coordinates():
         primary_options = compute_display_options_given_singular_grid(grid.get_primary_grid())
-        return DisplayOptions([WrappingDisplayOption(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name))
+        return DisplayOptions([DisplayOption(WrappingDisplayType(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name).get_type()))
                                for name in primary_options.get_names()])
     types = compute_display_option_types_given_singular_grid(grid)
     options = DisplayOptions([DisplayOption(display_type) for display_type in types])
@@ -231,7 +234,7 @@ def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
 
 def compute_partial_display_options_for_grid_supporting_reversed_coordinates(sub_grid: Grid, index: int) -> List[PartialCombinationDisplayOption]:
     primary_options = compute_display_options_given_singular_grid(sub_grid.get_primary_grid())
-    options = [ WrappingPartialCombinationDisplayOption(WrappingDisplayOption(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name)), index)
+    options = [ PartialCombinationDisplayOption(WrappingDisplayType(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name).get_type()), index)
                     for name in primary_options.get_names()
                     ]
     return options
