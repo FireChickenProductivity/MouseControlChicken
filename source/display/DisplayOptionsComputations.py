@@ -7,6 +7,7 @@ from .ReverseCoordinateDoublingDisplay import ReverseCoordinateDoublingDisplay
 from ..grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from ..grid.GridCalculations import compute_sub_grids
 from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
+from .WrappingDisplayType import WrappingDisplayType
 from typing import List, Tuple, Type
 
 class CombinationDisplayNotSupportedException(Exception):
@@ -29,7 +30,8 @@ def is_wrapped_name(name: str) -> bool:
 
 def obtain_wrap_type(name: str):
     wrapper_type, wrapped_type = obtain_wrapper_and_wrapped_type_from(name)
-    return wrapper_type(wrapped_type)
+    resulting_type = wrapper_type(wrapped_type)
+    return resulting_type
 
 def obtain_simple_display_type_from_name(name: str) -> Type:
     for display_type in DISPLAY_TYPES:
@@ -72,28 +74,9 @@ class DisplayOption:
     def __str__(self) -> str:
         return self.get_name()
 
-class WrappingDisplayOption():
+class WrappingDisplayOption(DisplayOption):
     def __init__(self, wrapping_type: Type, wrapped_option: DisplayOption):
-        self.wrapping_type = wrapping_type
-        self.wrapped_option = wrapped_option
-    
-    def instantiate(self) -> Display:
-        return self.wrapping_type(self.wrapped_option.instantiate())
-    
-    def get_type(self):
-        return type(self.instantiate())
-    
-    def get_name(self):
-        return self.instantiate().get_name()
-
-    def is_partial_combination_option(self) -> bool:
-        return False
-    
-    def __repr__(self) -> str:
-        return self.__str__()
-    
-    def __str__(self) -> str:
-        return self.get_name()
+        super().__init__(WrappingDisplayType(wrapping_type, wrapped_option.get_type()))
 
 class PartialCombinationDisplayOption(DisplayOption):
     SEPARATOR = "|"
