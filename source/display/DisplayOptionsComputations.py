@@ -4,7 +4,8 @@ from .RectangularGridDisplays import *
 from .CombinationDisplay import CombinationDisplay
 from .NarrowDisplays import *
 from .ReverseCoordinateDoublingDisplay import ReverseCoordinateDoublingDisplay
-from ..grid.Grid import Grid, compute_sub_grids, RecursivelyDivisibleGridCombination
+from ..grid.Grid import Grid, RecursivelyDivisibleGridCombination
+from ..grid.GridCalculations import compute_sub_grids
 from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
 from typing import List, Tuple, Type
 
@@ -17,10 +18,11 @@ DISPLAY_WRAPPER_TYPES = [ReverseCoordinateDoublingDisplay]
 
 def obtain_wrapper_and_wrapped_type_from(name: str) -> Tuple[Type, Type]:
     for wrapper_type in DISPLAY_WRAPPER_TYPES:
-        typename = wrapper_type.__class__.__name__
+        typename = wrapper_type(EmptyDisplay).__class__.__name__
         wrapped_name_start = typename + "("
         if name.startswith(wrapped_name_start) and name.endswith(")"):
             return wrapper_type, obtain_display_type_from_name(name[len(wrapped_name_start):-1])
+    raise ValueError(f"Could not find wrapper and wrapped type from name {name}")
         
 def is_wrapped_name(name: str) -> bool:
     return "(" in name and name.endswith(")")
@@ -119,6 +121,32 @@ class PartialCombinationDisplayOption(DisplayOption):
     
     def __str__(self) -> str:
         return self.get_name()
+    
+class WrappingPartialCombinationDisplayOption(PartialCombinationDisplayOption):
+    def __init__(self, wrapping_option: WrappingDisplayOption, index: int):
+        self.wrapping_option = wrapping_option
+        self.index = index
+    
+    def get_type(self):
+        return self.wrapping_option.get_type()
+    
+    def get_name(self):
+        return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}{self.wrapping_option.get_name()}"
+    
+    def get_display_name(self):
+        return self.wrapping_option.get_name()
+    
+    def is_partial_combination_option(self) -> bool:
+        return True
+    
+    def get_index(self):
+        return self.index
+    
+    def __repr__(self):
+        return self.__str__()
+    
+    def __str__(self):
+        return self.get_name()
         
 class CombinationDisplayOption:
     def __init__(self, display_types: List[type]):
@@ -197,6 +225,7 @@ class DisplayOptions:
             order_number = 1
             display_name = name
         normalized_option_name = str(order_number) + PartialCombinationDisplayOption.SEPARATOR + display_name
+        print('self.options', self.options)
         return self.options[normalized_option_name]
 
     def get_option_with_name(self, name: str) -> DisplayOption:
@@ -217,15 +246,30 @@ def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
     options = DisplayOptions([DisplayOption(display_type) for display_type in types])
     return options
 
+def compute_partial_display_options_for_grid_supporting_reversed_coordinates(sub_grid: Grid, index: int) -> List[PartialCombinationDisplayOption]:
+    primary_options = compute_display_options_given_singular_grid(sub_grid.get_primary_grid())
+    options = [ WrappingPartialCombinationDisplayOption(WrappingDisplayOption(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name)), index)
+                    for name in primary_options.get_names()
+                    ]
+    return options
+
+def compute_partial_display_options_for_grid(sub_grid: Grid, index: int) -> List[PartialCombinationDisplayOption]:
+    if sub_grid.supports_reversed_coordinates():
+        options = compute_partial_display_options_for_grid_supporting_reversed_coordinates(sub_grid, index)
+    else:
+        options = [ PartialCombinationDisplayOption(display_type, index) 
+                        for display_type in compute_display_option_types_given_singular_grid(sub_grid)
+        ]
+    return options
+
 def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGridCombination) -> DisplayOptions:
     '''This will return the partial display options for every sub grid.'''
     options = []
     sub_grids = compute_sub_grids(grid)
+    print('sub_grids', sub_grids)
     for index, sub_grid in enumerate(sub_grids):
-        options += [
-            PartialCombinationDisplayOption(display_type, index) 
-            for display_type in compute_display_option_types_given_singular_grid(sub_grid)
-        ]
+        new_options = compute_partial_display_options_for_grid(sub_grid, index)
+        options.extend(new_options)
         if not should_consider_sub_grids_after_grid(sub_grid):
             break
     return DisplayOptions(options, is_for_combination_grid=True)
@@ -247,16 +291,20 @@ def compute_display_options_separated_by_index_for_grid(grid: RecursivelyDivisib
     return separate_combination_display_options_by_index(options)
 
 def should_consider_sub_grids_after_grid(grid: Grid) -> bool:
+    if grid.is_wrapper():
+        grid = grid.get_wrapped_grid()
     return grid.has_nonoverlapping_sub_rectangles()
 
 def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
-    return grid.is_combination() and should_consider_sub_grids_after_grid(grid)
+    return grid.is_combination() and should_consider_sub_grids_after_grid(grid) or (grid.supports_reversed_coordinates() and should_compute_combination_display_options_for_grid(grid.get_primary_grid()))
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     options = None
     if should_compute_combination_display_options_for_grid(grid):
+        print('combination')
         options = compute_combination_display_options_given_grid(grid)
     else:
+        print('singular')
         options = compute_display_options_given_singular_grid(grid)
     return options
 

@@ -1,6 +1,7 @@
 from ..grid.Grid import Grid
 from .Display import Display, compute_boundaries_touching
-from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
+from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle
+from ..grid.GridCalculations import compute_sub_grids
 from typing import List, Type
 
 class CombinationDisplay(Display):
