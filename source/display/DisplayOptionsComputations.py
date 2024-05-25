@@ -185,33 +185,21 @@ class DisplayOptions:
 
 def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
     if grid.is_wrapper():
+        if grid.supports_reversed_coordinates():
+            return [WrappingDisplayType(ReverseCoordinateDoublingDisplay, display_type) for display_type in compute_display_option_types_given_singular_grid(grid.get_primary_grid())]
         grid = grid.get_wrapped_grid()
     types = [display_type for display_type in DISPLAY_TYPES if display_type.supports_grid(grid)]
     return types
 
 def compute_display_options_given_singular_grid(grid: Grid) -> DisplayOptions:
-    if grid.supports_reversed_coordinates():
-        primary_options = compute_display_options_given_singular_grid(grid.get_primary_grid())
-        return DisplayOptions([DisplayOption(WrappingDisplayType(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name).get_type()))
-                               for name in primary_options.get_names()])
     types = compute_display_option_types_given_singular_grid(grid)
     options = DisplayOptions([DisplayOption(display_type) for display_type in types])
     return options
 
-def compute_partial_display_options_for_grid_supporting_reversed_coordinates(sub_grid: Grid, index: int) -> List[PartialCombinationDisplayOption]:
-    primary_options = compute_display_options_given_singular_grid(sub_grid.get_primary_grid())
-    options = [ PartialCombinationDisplayOption(WrappingDisplayType(ReverseCoordinateDoublingDisplay, primary_options.get_option_with_name(name).get_type()), index)
-                    for name in primary_options.get_names()
-                    ]
-    return options
-
 def compute_partial_display_options_for_grid(sub_grid: Grid, index: int) -> List[PartialCombinationDisplayOption]:
-    if sub_grid.supports_reversed_coordinates():
-        options = compute_partial_display_options_for_grid_supporting_reversed_coordinates(sub_grid, index)
-    else:
-        options = [ PartialCombinationDisplayOption(display_type, index) 
-                        for display_type in compute_display_option_types_given_singular_grid(sub_grid)
-        ]
+    options = [ PartialCombinationDisplayOption(display_type, index) 
+                    for display_type in compute_display_option_types_given_singular_grid(sub_grid)
+    ]
     return options
 
 def compute_combination_display_options_given_grid(grid: RecursivelyDivisibleGridCombination) -> DisplayOptions:
