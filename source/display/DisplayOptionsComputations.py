@@ -74,10 +74,6 @@ class DisplayOption:
     def __str__(self) -> str:
         return self.get_name()
 
-class WrappingDisplayOption(DisplayOption):
-    def __init__(self, wrapping_type: Type, wrapped_option: DisplayOption):
-        super().__init__(WrappingDisplayType(wrapping_type, wrapped_option.get_type()))
-
 class PartialCombinationDisplayOption(DisplayOption):
     SEPARATOR = "|"
     def __init__(self, display_type: type, index: int):
@@ -105,32 +101,6 @@ class PartialCombinationDisplayOption(DisplayOption):
     def __str__(self) -> str:
         return self.get_name()
     
-class WrappingPartialCombinationDisplayOption(PartialCombinationDisplayOption):
-    def __init__(self, wrapping_option: WrappingDisplayOption, index: int):
-        self.wrapping_option = wrapping_option
-        self.index = index
-    
-    def get_type(self):
-        return self.wrapping_option.get_type()
-    
-    def get_name(self):
-        return f"{self.index + 1}{PartialCombinationDisplayOption.SEPARATOR}{self.wrapping_option.get_name()}"
-    
-    def get_display_name(self):
-        return self.wrapping_option.get_name()
-    
-    def is_partial_combination_option(self) -> bool:
-        return True
-    
-    def get_index(self):
-        return self.index
-    
-    def __repr__(self):
-        return self.__str__()
-    
-    def __str__(self):
-        return self.get_name()
-        
 class CombinationDisplayOption:
     def __init__(self, display_types: List[type]):
         self.display_types = display_types
