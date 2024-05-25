@@ -68,4 +68,9 @@ def compute_grid_tree(grid: Grid) -> Node:
     else:
         result = Node(grid, [])
     return result
+
+def apply_function_to_grid_tree_nodes(function, tree: Node):
+    function(tree)
+    for child in tree.get_children():
+        apply_function_to_grid_tree_nodes(function, child)
     
