@@ -6,7 +6,6 @@ from .NarrowDisplays import *
 from .ReverseCoordinateDoublingDisplay import ReverseCoordinateDoublingDisplay
 from ..grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from ..grid.GridCalculations import compute_sub_grids
-from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
 from .WrappingDisplayType import WrappingDisplayType
 from typing import List, Tuple, Type
 
