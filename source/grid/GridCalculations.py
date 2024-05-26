@@ -49,8 +49,9 @@ def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
     primary_grid_tree = compute_grid_tree(grid.get_primary_grid())
     if primary_grid_tree.has_children():
         secondary_grid_tree = compute_grid_tree(grid.get_secondary_grid())
-        for tree in [primary_grid_tree, secondary_grid_tree]:
-            children.extend(tree.get_children())
+        # for tree in [primary_grid_tree, secondary_grid_tree]:
+        #     children.extend(tree.get_children())
+        children = [primary_grid_tree, secondary_grid_tree]
     result = Node(
             value,
             children,
@@ -70,9 +71,12 @@ def compute_grid_tree(grid: Grid) -> Node:
         result = Node(grid, [])
     return result
 
-def apply_function_to_grid_tree_nodes(function, tree: Node, depth=0):
-    function(tree, depth)
-    next_depth = depth + 1
+def apply_function_to_grid_tree_nodes(function, tree: Node):
+    function(tree)
     for child in tree.get_children():
-        apply_function_to_grid_tree_nodes(function, child, next_depth)
+        apply_function_to_grid_tree_nodes(function, child)
     
+def apply_function_to_grid_tree_nodes_with_depth_based_state(function, tree: Node, state):
+    state = function(tree, state)
+    for child in tree.get_children():
+        apply_function_to_grid_tree_nodes_with_depth_based_state(function, child, state)

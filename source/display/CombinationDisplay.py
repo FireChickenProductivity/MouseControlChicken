@@ -1,7 +1,7 @@
 from ..grid.Grid import Grid
 from .Display import Display, compute_boundaries_touching
 from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle
-from ..grid.GridCalculations import compute_sub_grids, compute_grid_tree, apply_function_to_grid_tree_nodes, Node
+from ..grid.GridCalculations import compute_sub_grids, compute_grid_tree, apply_function_to_grid_tree_nodes_with_depth_based_state, Node
 from typing import List, Type
 
 class CombinationDisplay(Display):
@@ -38,13 +38,18 @@ class CombinationDisplay(Display):
             self.secondary_displays.append(sub_display)
 
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int):
-        for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
-            if index < len(self.secondary_display_types):
+        tree_has_single_child = tree.has_children() and len(tree.get_children()) == 1
+        if index < len(self.secondary_display_types) and tree_has_single_child:
+            for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
                 self._setup_secondary_display_for_coordinate(tree, index, coordinate)
+        if tree_has_single_child:
+            index += 1
+        return index
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         tree = compute_grid_tree(grid)
-        apply_function_to_grid_tree_nodes(self._setup_secondary_displays_for_tree, tree)
+        index = 0
+        apply_function_to_grid_tree_nodes_with_depth_based_state(self._setup_secondary_displays_for_tree, tree, index)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
         self.secondary_displays = []
