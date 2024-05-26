@@ -14,13 +14,6 @@ class CombinationDisplay(Display):
     def set_rectangle(self, rectangle: Rectangle):
         self.rectangle = rectangle
     
-    def _compute_primary_grids(self, grid: RecursivelyDivisibleGridCombination) -> List[RecursivelyDivisibleGridCombination]:
-        if grid.supports_reversed_coordinates() and grid.is_wrapper():
-            result = [grid.get_primary_grid(), grid.get_secondary_grid()]
-        else:
-            result = [grid]
-        return result
-
     def _setup_secondary_display_for_coordinate(self, tree: Node, index: int, coordinate: str):
         primary = tree.get_value()
         for child in tree.get_children():
