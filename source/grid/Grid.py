@@ -49,6 +49,9 @@ class Grid:
 
     def is_wrapper(self) -> bool:
         return False
+
+    def is_doubling(self) -> bool:
+        return False
     
     def handle_using_coordinates_with_mouse_command(self, grid_coordinates: str) -> None:
         pass
@@ -130,11 +133,6 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         ])
         self.secondary_persistent_coordinates: str = None
     
-    def _obtain_relevant_coordinate_system_from(self, grid: Grid) -> InputCoordinateSystem:
-        if grid.is_combination():
-            return grid.get_combined_coordinate_system()
-        return grid.get_coordinate_system()
-
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary.get_coordinate_system()
     

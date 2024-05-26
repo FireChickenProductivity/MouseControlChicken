@@ -31,6 +31,9 @@ class ReverseCoordinateDoublingGrid(Grid):
 
     def is_wrapper(self) -> bool:
         return True
+
+    def is_doubling(self) -> bool:
+        return True
     
     def get_wrapped_grid(self) -> Grid:
         return self.get_primary_grid()

@@ -184,7 +184,7 @@ class DisplayOptions:
 
 def compute_display_option_types_given_singular_grid(grid: Grid) -> List[type]:
     if grid.is_wrapper():
-        if grid.supports_reversed_coordinates():
+        if grid.is_doubling():
             return [WrappingDisplayType(ReverseCoordinateDoublingDisplay, display_type) for display_type in compute_display_option_types_given_singular_grid(grid.get_primary_grid())]
         grid = grid.get_wrapped_grid()
     types = [display_type for display_type in DISPLAY_TYPES if display_type.supports_grid(grid)]
@@ -234,7 +234,7 @@ def should_consider_sub_grids_after_grid(grid: Grid) -> bool:
     return grid.has_nonoverlapping_sub_rectangles()
 
 def should_compute_combination_display_options_for_grid(grid: Grid) -> bool:
-    return grid.is_combination() and should_consider_sub_grids_after_grid(grid) or (grid.supports_reversed_coordinates() and should_compute_combination_display_options_for_grid(grid.get_primary_grid()))
+    return grid.is_combination() and should_consider_sub_grids_after_grid(grid) or (grid.is_doubling() and should_compute_combination_display_options_for_grid(grid.get_primary_grid()))
 
 def compute_display_options_given_grid(grid: Grid) -> DisplayOptions:
     options = None

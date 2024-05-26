@@ -12,7 +12,7 @@ def compute_reverse_coordinate_doubling_sub_grid_representation(grid: ReverseCoo
 
 def compute_sub_grids_for_wrapper(grid: Grid):
     result = compute_sub_grids(grid.get_wrapped_grid())
-    if grid.supports_reversed_coordinates():
+    if grid.supports_reversed_coordinates() and grid.is_doubling():
         result[0] = compute_reverse_coordinate_doubling_sub_grid_representation(grid)
     return result
 
@@ -49,8 +49,6 @@ def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
     primary_grid_tree = compute_grid_tree(grid.get_primary_grid())
     if primary_grid_tree.has_children():
         secondary_grid_tree = compute_grid_tree(grid.get_secondary_grid())
-        # for tree in [primary_grid_tree, secondary_grid_tree]:
-        #     children.extend(tree.get_children())
         children = [primary_grid_tree, secondary_grid_tree]
     result = Node(
             value,
@@ -63,7 +61,7 @@ def compute_grid_tree(grid: Grid) -> Node:
     if grid.is_combination():
         result = Node(grid.get_primary_grid(), [compute_grid_tree(grid.get_secondary_grid())])
     elif grid.is_wrapper():
-        if grid.supports_reversed_coordinates():
+        if grid.is_doubling():
             result = compute_grid_tree_for_doubling(grid)
         else:
             result = compute_grid_tree(grid.get_wrapped_grid())
