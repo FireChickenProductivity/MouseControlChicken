@@ -1,7 +1,7 @@
 from ..grid.Grid import Grid
 from .Display import Display, compute_boundaries_touching
 from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle
-from ..grid.GridCalculations import compute_sub_grids
+from ..grid.GridCalculations import compute_sub_grids, compute_grid_tree, apply_function_to_grid_tree_nodes, Node
 from typing import List, Type
 
 class CombinationDisplay(Display):
@@ -21,10 +21,10 @@ class CombinationDisplay(Display):
             result = [grid]
         return result
 
-    def _setup_secondary_display_for_coordinate(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
-        primary_grids = self._compute_primary_grids(grids[0])
-        secondary = grids[index + 1]
-        for primary in primary_grids:
+    def _setup_secondary_display_for_coordinate(self, tree: Node, index: int, coordinate: str):
+        primary = tree.get_value()
+        for child in tree.get_children():
+            secondary = child.get_value()
             sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
             secondary.make_around(sub_rectangle)
             sub_display = self.secondary_display_types[index]()
@@ -37,14 +37,14 @@ class CombinationDisplay(Display):
                 sub_display.draw_on(self.canvas)
             self.secondary_displays.append(sub_display)
 
-    def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
-        for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():
-            self._setup_secondary_display_for_coordinate(grids, index, coordinate)
+    def _setup_secondary_displays_for_tree(self, tree: Node, index: int):
+        for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
+            if index < len(self.secondary_display_types):
+                self._setup_secondary_display_for_coordinate(tree, index, coordinate)
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
-        grids = compute_sub_grids(grid)
-        for index in range(len(self.secondary_display_types)):
-            self._setup_secondary_displays_for_grid(grids, index)
+        tree = compute_grid_tree(grid)
+        apply_function_to_grid_tree_nodes(self._setup_secondary_displays_for_tree, tree)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
         self.secondary_displays = []
