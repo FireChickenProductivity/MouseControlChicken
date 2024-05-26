@@ -136,9 +136,6 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary.get_coordinate_system()
     
-    def get_secondary_coordinate_system(self) -> InputCoordinateSystem:
-        return self.secondary_coordinate_system
-    
     def get_combined_coordinate_system(self):
         return self.coordinate_system
     
