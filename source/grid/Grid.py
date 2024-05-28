@@ -126,7 +126,7 @@ class PersistentSecondaryCoordinatesManager:
     def get_secondary_persistent_coordinates(self):
         return self.secondary_persistent_coordinates
     
-class CombinationCoordinateSystemManager(InputCoordinateSystem):
+class CombinationCoordinateSystemManager():
     def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
         self.primary_coordinate_system = obtain_relevant_coordinate_system_from(primary)
         self.secondary_coordinate_system = obtain_relevant_coordinate_system_from(secondary)
