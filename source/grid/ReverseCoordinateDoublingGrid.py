@@ -41,7 +41,7 @@ class ReverseCoordinateDoublingGrid(Grid):
     def compute_absolute_position_from_reversed(self, grid_coordinates: str) -> MousePosition:
         if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
             return self.compute_absolute_position_from_valid_reversed_coordinates(grid_coordinates)
-        raise CoordinatesNotSupportedException()
+        raise CoordinatesNotSupportedException(grid_coordinates)
     
     def compute_absolute_position_from_valid_reversed_coordinates(self, grid_coordinates: str) -> MousePosition:
         return self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
@@ -67,6 +67,11 @@ class ReverseCoordinateDoublingGrid(Grid):
             self.secondary.handle_using_coordinates_with_mouse_command(coordinates)
         else:
             self.primary.handle_using_coordinates_with_mouse_command(coordinates)
+
+    def compute_sub_rectangle_for(self, coordinates: str, are_coordinates_reversed: bool = False) -> Rectangle:
+        if are_coordinates_reversed:
+            return self.secondary.compute_sub_rectangle_for(coordinates)
+        return self.primary.compute_sub_rectangle_for(coordinates)
 
 def compute_rectangle_length_middle(rectangle: Rectangle) -> MousePosition:
     return rectangle.left + (rectangle.right - rectangle.left) / 2

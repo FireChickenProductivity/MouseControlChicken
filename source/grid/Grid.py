@@ -28,7 +28,7 @@ class Grid:
     def compute_absolute_position_from(self, grid_coordinates: str) -> MousePosition: 
         if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
             return self.compute_absolute_position_from_valid_coordinates(grid_coordinates)
-        raise CoordinatesNotSupportedException()
+        raise CoordinatesNotSupportedException(grid_coordinates)
 
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition: pass
 
@@ -204,26 +204,38 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def get_combined_coordinate_system(self):
         return self.coordinate_system
     
-    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
+    def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str, are_coordinates_reversed: bool = False) -> MousePosition:
         if self.coordinate_system_manager.coordinates_correspond_to_secondary(grid_coordinates, self.persistent_coordinates_manager.get_secondary_persistent_coordinates()):
-            rectangle = self.primary.compute_sub_rectangle_for(self.persistent_coordinates_manager.get_secondary_persistent_coordinates())
-            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle)
+            use_reverse_coordinates = self.primary.supports_reversed_coordinates() and are_coordinates_reversed
+            rectangle = obtain_relevant_sub_rectangle_from_grid_at(
+            self.primary,
+            self.persistent_coordinates_manager.get_secondary_persistent_coordinates(),
+            are_coordinates_reversed=use_reverse_coordinates
+            )
+            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle, are_coordinates_reversed)
         else:
-            position = self._compute_absolute_position_from_valid_coordinates_using_head_and_tail(grid_coordinates)
+            position = self._compute_absolute_position_from_valid_coordinates_using_head_and_tail(grid_coordinates, are_coordinates_reversed)
         return position
 
-    def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle) -> MousePosition:
+    def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle, are_coordinates_reversed: bool) -> MousePosition:
         self.secondary.make_around(rectangle)
-        position = self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
+        if are_coordinates_reversed and not self.secondary.supports_reversed_coordinates():
+            position = self.secondary.compute_absolute_position_from_reversed(grid_coordinates)
+        else:
+            position = self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
         return position
 
-    def _compute_absolute_position_from_valid_coordinates_using_head_and_tail(self, grid_coordinates: str) -> MousePosition:
+    def _compute_absolute_position_from_valid_coordinates_using_head_and_tail(self, grid_coordinates: str, are_coordinates_reversed: bool) -> MousePosition:
         head, tail = self.coordinate_system_manager.compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(grid_coordinates)
         if tail:
-            rectangle = self.primary.compute_sub_rectangle_for(head)
-            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(tail, rectangle)
+            use_reverse_coordinates = self.primary.supports_reversed_coordinates() and are_coordinates_reversed
+            rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.primary, head, use_reverse_coordinates)
+            position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(tail, rectangle, are_coordinates_reversed)
         else:
-            position = self.primary.compute_absolute_position_from_valid_coordinates(head)
+            if are_coordinates_reversed and self.primary.supports_reversed_coordinates():
+                position = self.primary.compute_absolute_position_from_reversed(head)
+            else:
+                position = self.primary.compute_absolute_position_from_valid_coordinates(head)
         return position
 
     def make_around(self, rectangle: Rectangle) -> None:
@@ -238,16 +250,22 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def persist_secondary_at(self, grid_coordinates: str) -> None:
         self.persistent_coordinates_manager.persist_secondary_at(grid_coordinates)
     
-    def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
+    def compute_sub_rectangle_for(self, grid_coordinates: str, are_coordinates_reversed: bool = False) -> Rectangle:
         if not self.coordinate_system_manager.do_coordinates_belong_to_system(grid_coordinates):
             raise CoordinatesNotSupportedException(grid_coordinates)
         head, tail = self.coordinate_system_manager.compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(grid_coordinates)
+        use_reverse_coordinates_for_primary = self.primary.supports_reversed_coordinates() and are_coordinates_reversed
         if self.coordinate_system_manager.coordinates_correspond_to_secondary(grid_coordinates, self.persistent_coordinates_manager.get_secondary_persistent_coordinates()):
-            primary_sub_rectangle = self.primary.compute_sub_rectangle_for(self.persistent_coordinates_manager.get_secondary_persistent_coordinates())
+            primary_sub_rectangle = obtain_relevant_sub_rectangle_from_grid_at(
+            self.primary,
+            self.persistent_coordinates_manager.get_secondary_persistent_coordinates(),
+            use_reverse_coordinates_for_primary
+            )
         else:
-            primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
+            primary_sub_rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.primary, head, use_reverse_coordinates_for_primary)
         self.secondary.make_around(primary_sub_rectangle)
-        rectangle = self.secondary.compute_sub_rectangle_for(tail)
+        use_reverse_coordinates_for_secondary = self.secondary.supports_reversed_coordinates() and are_coordinates_reversed
+        rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.secondary, tail, use_reverse_coordinates_for_secondary)
         return rectangle
         
     def get_primary_grid(self) -> Grid:
@@ -261,6 +279,17 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 
     def has_nonoverlapping_sub_rectangles(self) -> bool:
         return self.primary.has_nonoverlapping_sub_rectangles()
+
+    def supports_reversed_coordinates(self) -> bool:
+        return self.primary.supports_reversed_coordinates() or self.secondary.supports_reversed_coordinates()
+    
+    def compute_absolute_position_from_reversed(self, grid_coordinates: str) -> MousePosition:
+        if self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+            return self.compute_absolute_position_from_valid_reversed_coordinates(grid_coordinates)
+        raise CoordinatesNotSupportedException(grid_coordinates)
+    
+    def compute_absolute_position_from_valid_reversed_coordinates(self, grid_coordinates: str) -> MousePosition:
+        pass
 
 def compute_outermost_coordinate_system_from(grid: Grid) -> InputCoordinateSystem:
     if grid.is_combination():
@@ -276,3 +305,8 @@ def persist_coordinates_at_sub_grid(grid: Grid, grid_coordinates: str) -> None:
     if grid.is_combination():
         grid.persist_secondary_at(grid_coordinates)
 
+def obtain_relevant_sub_rectangle_from_grid_at(grid: Grid, coordinates: str, are_coordinates_reversed: bool) -> Rectangle:
+    if are_coordinates_reversed and grid.supports_reversed_coordinates():
+        return grid.compute_sub_rectangle_for(coordinates, are_coordinates_reversed)
+    return grid.compute_sub_rectangle_for(coordinates)
+    
