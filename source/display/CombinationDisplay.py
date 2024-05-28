@@ -18,7 +18,6 @@ class CombinationDisplay(Display):
         primary = tree.get_value()
         for child in tree.get_children():
             secondary = child.get_value()
-            print('coordinate', coordinate, index)
             sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
             secondary.make_around(sub_rectangle)
             sub_display = self.secondary_display_types[index]()
@@ -32,7 +31,6 @@ class CombinationDisplay(Display):
             self.secondary_displays.append(sub_display)
 
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int):
-        print('index', index)
         tree_has_single_child = tree.has_children() and len(tree.get_children()) == 1
         if index < len(self.secondary_display_types) and tree_has_single_child:
             for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
