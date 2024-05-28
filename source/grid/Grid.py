@@ -117,10 +117,17 @@ class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, Horizonta
         vertical_system = ListCoordinateSystem(vertical_coordinates)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
 
-class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
+class PersistentSecondaryCoordinatesManager:
     def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
         self.primary = primary
         self.secondary = secondary
+        self.secondary_persistent_coordinates: str = None
+        
+    def get_secondary_persistent_coordinates(self):
+        return self.secondary_persistent_coordinates
+    
+class CombinationCoordinateSystemManager(InputCoordinateSystem):
+    def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
         self.primary_coordinate_system = obtain_relevant_coordinate_system_from(primary)
         self.secondary_coordinate_system = obtain_relevant_coordinate_system_from(secondary)
         self.coordinate_system = DisjointUnionCoordinateSystem([
@@ -131,26 +138,58 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
                 self.secondary_coordinate_system
             ])
         ])
+    
+    def get_combined_coordinate_system(self):
+        return self.coordinate_system
+    
+    def get_primary_coordinate_system(self):
+        return self.primary_coordinate_system
+    
+    def get_secondary_coordinate_system(self):
+        return self.secondary_coordinate_system
+    
+    def coordinates_correspond_to_secondary(self, grid_coordinates: str, secondary_persistent_coordinates: str) -> bool:
+        return self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
+            and not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
+            and secondary_persistent_coordinates is not None
+        
+    def coordinates_belong_to_system_and_not_secondary(self, grid_coordinates: str) -> bool:
+        return self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates) and not \
+            self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)
+            
+    def compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(self, grid_coordinates: str) -> List:
+        return self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
+    
+    def do_coordinates_belong_to_primary(self, grid_coordinates: str) -> bool:
+        return self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)
+
+    def do_coordinates_belong_to_secondary(self, grid_coordinates: str) -> bool:
+        return self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)
+
+    def do_coordinates_belong_to_system(self, grid_coordinates: str) -> bool:
+        return self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates)
+
+class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
+    def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
+        self.primary = primary
+        self.secondary = secondary
+        self.coordinate_system_manager = CombinationCoordinateSystemManager(primary, secondary)
         self.secondary_persistent_coordinates: str = None
+        self.coordinate_system = self.coordinate_system_manager.get_combined_coordinate_system()
     
     def get_coordinate_system(self) -> InputCoordinateSystem:
         return self.primary.get_coordinate_system()
     
     def get_combined_coordinate_system(self):
-        return self.coordinate_system
+        return self.coordinate_system_manager.get_combined_coordinate_system()
     
     def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
-        if self._coordinates_correspond_to_secondary(grid_coordinates):
+        if self.coordinate_system_manager.coordinates_correspond_to_secondary(grid_coordinates, self.secondary_persistent_coordinates):
             rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle)
         else:
             position = self._compute_absolute_position_from_valid_coordinates_using_head_and_tail(grid_coordinates)
         return position
-
-    def _coordinates_correspond_to_secondary(self, grid_coordinates: str) -> bool:
-        return self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
-            and not self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates) \
-            and self.secondary_persistent_coordinates is not None
 
     def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle) -> MousePosition:
         self.secondary.make_around(rectangle)
@@ -158,7 +197,7 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         return position
 
     def _compute_absolute_position_from_valid_coordinates_using_head_and_tail(self, grid_coordinates: str) -> MousePosition:
-        head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
+        head, tail = self.coordinate_system_manager.compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(grid_coordinates)
         if tail:
             rectangle = self.primary.compute_sub_rectangle_for(head)
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(tail, rectangle)
@@ -176,17 +215,17 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         self.persist_secondary_at(grid_coordinates)
 
     def persist_secondary_at(self, grid_coordinates: str) -> None:
-        if self.primary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+        if self.coordinate_system_manager.do_coordinates_belong_to_primary(grid_coordinates):
             self.secondary_persistent_coordinates = grid_coordinates
             self.persist_secondary_for_primary_grid_at(grid_coordinates)
-        elif self._coordinates_belong_to_system_and_not_secondary(grid_coordinates):
-            head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
+        elif self.coordinate_system_manager.coordinates_belong_to_system_and_not_secondary(grid_coordinates):
+            head, tail = self.coordinate_system_manager.compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(grid_coordinates)
             self.secondary_persistent_coordinates = head
             self.persist_secondary_for_primary_grid_at(head)
             self.persist_secondary_for_secondary_grid_at(tail)
-        elif self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+        elif self.coordinate_system_manager.do_coordinates_belong_to_secondary(grid_coordinates):
             self.persist_secondary_for_secondary_grid_at(grid_coordinates)
-        elif not self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates):
+        elif not self.coordinate_system_manager.do_coordinates_belong_to_system(grid_coordinates):
             raise CoordinatesNotSupportedException()
 
     def persist_secondary_for_secondary_grid_at(self, grid_coordinates: str) -> bool:
@@ -195,13 +234,9 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
     def persist_secondary_for_primary_grid_at(self, grid_coordinates: str) -> bool:
         persist_coordinates_at_sub_grid(self.primary, grid_coordinates)
     
-    def _coordinates_belong_to_system_and_not_secondary(self, grid_coordinates: str) -> bool:
-        return self.coordinate_system.do_coordinates_belong_to_system(grid_coordinates) and not \
-            self.secondary_coordinate_system.do_coordinates_belong_to_system(grid_coordinates)
-
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
-        head, tail = self.primary_coordinate_system.split_coordinates_with_head_belonging_to_system_and_tail_belonging_to_another_system(grid_coordinates)
-        if self._coordinates_correspond_to_secondary(grid_coordinates):
+        head, tail = self.coordinate_system_manager.compute_head_belonging_to_primary_and_tail_belonging_to_another_coordinate_system(grid_coordinates)
+        if self.coordinate_system_manager.coordinates_correspond_to_secondary(grid_coordinates, self.secondary_persistent_coordinates):
             primary_sub_rectangle = self.primary.compute_sub_rectangle_for(self.secondary_persistent_coordinates)
         else:
             primary_sub_rectangle = self.primary.compute_sub_rectangle_for(head)
