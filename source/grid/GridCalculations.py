@@ -56,10 +56,26 @@ def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
             )
     return result
 
+def compute_primary_most_grid(grid: Grid):
+    if grid.is_combination():
+        return compute_primary_most_grid(grid.get_primary_grid())
+    return grid
+
+def compute_next_grid_in_combination(grid: Grid):
+    if grid.is_combination():
+        primary = grid.get_primary_grid()
+        if primary.is_combination():
+            return compute_next_grid_in_combination(primary)
+        else:
+            return compute_primary_most_grid(grid.get_secondary_grid())
+    return grid
+        
 def compute_grid_tree(grid: Grid) -> Node:
     '''Builds a tree representation of the sub grid structure of the given grid such that grid doubling is represented by a node with two children.'''
     if grid.is_combination():
-        result = Node(grid.get_primary_grid(), [compute_grid_tree(grid.get_secondary_grid())])
+        value = compute_primary_most_grid(grid)
+        child = compute_grid_tree(compute_next_grid_in_combination(grid))
+        result = Node(value, [child])
     elif grid.is_wrapper():
         if grid.is_doubling():
             result = compute_grid_tree_for_doubling(grid)
