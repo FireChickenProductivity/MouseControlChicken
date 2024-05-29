@@ -208,9 +208,9 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         if self.coordinate_system_manager.coordinates_correspond_to_secondary(grid_coordinates, self.persistent_coordinates_manager.get_secondary_persistent_coordinates()):
             use_reverse_coordinates = self.primary.supports_reversed_coordinates() and are_coordinates_reversed
             rectangle = obtain_relevant_sub_rectangle_from_grid_at(
-            self.primary,
-            self.persistent_coordinates_manager.get_secondary_persistent_coordinates(),
-            are_coordinates_reversed=use_reverse_coordinates
+                self.primary,
+                self.persistent_coordinates_manager.get_secondary_persistent_coordinates(),
+                are_coordinates_reversed=use_reverse_coordinates
             )
             position = self._compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(grid_coordinates, rectangle, are_coordinates_reversed)
         else:
@@ -219,7 +219,7 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 
     def _compute_absolute_position_from_valid_coordinates_using_secondary_and_rectangle(self, grid_coordinates: str, rectangle: Rectangle, are_coordinates_reversed: bool) -> MousePosition:
         self.secondary.make_around(rectangle)
-        if are_coordinates_reversed and not self.secondary.supports_reversed_coordinates():
+        if are_coordinates_reversed and self.secondary.supports_reversed_coordinates():
             position = self.secondary.compute_absolute_position_from_reversed(grid_coordinates)
         else:
             position = self.secondary.compute_absolute_position_from_valid_coordinates(grid_coordinates)
@@ -289,7 +289,7 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
         raise CoordinatesNotSupportedException(grid_coordinates)
     
     def compute_absolute_position_from_valid_reversed_coordinates(self, grid_coordinates: str) -> MousePosition:
-        pass
+        return self.compute_absolute_position_from_valid_coordinates(grid_coordinates, are_coordinates_reversed=True)
 
 def compute_outermost_coordinate_system_from(grid: Grid) -> InputCoordinateSystem:
     if grid.is_combination():
