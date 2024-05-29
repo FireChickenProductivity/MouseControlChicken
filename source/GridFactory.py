@@ -129,7 +129,9 @@ class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
     
 class HorizontalDoublingGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        print('components', components)
         primary = create_grid_from_options(components[0])
+        print('ReverseCoordinateHorizontalDoublingGrid(primary)', ReverseCoordinateHorizontalDoublingGrid(primary))
         return ReverseCoordinateHorizontalDoublingGrid(primary)
     
     def get_name(self) -> str:

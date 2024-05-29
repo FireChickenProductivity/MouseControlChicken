@@ -8,7 +8,8 @@ def compute_primary_grid(grid: Grid):
 def compute_reverse_coordinate_doubling_sub_grid_representation(grid: ReverseCoordinateDoublingGrid):
     primary_grid = compute_primary_grid(grid.get_primary_grid())
     secondary_grid = compute_primary_grid(grid.get_secondary_grid())
-    return ReverseCoordinateDoublingGrid(primary_grid, secondary_grid)
+    grid_type = type(grid)
+    return grid_type(primary_grid, secondary_grid)
 
 def compute_sub_grids_for_wrapper(grid: Grid):
     result = compute_sub_grids(grid.get_wrapped_grid())
