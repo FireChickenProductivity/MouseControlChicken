@@ -73,6 +73,9 @@ class ReverseCoordinateDoublingGrid(Grid):
             return self.secondary.compute_sub_rectangle_for(coordinates)
         return self.primary.compute_sub_rectangle_for(coordinates)
 
+    def has_nonoverlapping_sub_rectangles(self) -> bool:
+        return self.primary.has_nonoverlapping_sub_rectangles()
+
 def compute_rectangle_length_middle(rectangle: Rectangle) -> MousePosition:
     return rectangle.left + (rectangle.right - rectangle.left) / 2
 
