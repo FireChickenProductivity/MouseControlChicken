@@ -5,7 +5,7 @@ from ..grid.Grid import Grid
 from ..grid.GridCalculations import find_first_grid_tree_node_matching_function, GridNotFoundException, compute_grid_tree, Node
 from .Canvas import Canvas
 
-def is_grid_recursive_doubling_grid_node(node: Node) -> bool:
+def is_node_recursive_doubling_grid_node(node: Node) -> bool:
     grid = node.get_value()
     return isinstance(grid, ReverseCoordinateDoublingGrid)
 
@@ -17,10 +17,10 @@ class ReverseCoordinateDoublingDisplay(Display):
     
     def set_grid(self, grid: Grid):
         tree = compute_grid_tree(grid)
-        if is_grid_recursive_doubling_grid_node(tree):
-            super().set_grid(grid)
+        if is_node_recursive_doubling_grid_node(tree):
+            super().set_grid(tree.get_value())
         else:
-            matching_node = find_first_grid_tree_node_matching_function(tree, is_grid_recursive_doubling_grid_node)
+            matching_node = find_first_grid_tree_node_matching_function(tree, is_node_recursive_doubling_grid_node)
             if matching_node:
                 matching_grid = matching_node.get_value()
                 super().set_grid(matching_grid)
@@ -51,7 +51,7 @@ class ReverseCoordinateDoublingDisplay(Display):
     
     @staticmethod
     def supports_grid(grid):
-        return is_grid_recursive_doubling_grid_node(grid)
+        return is_node_recursive_doubling_grid_node(grid)
     
     def get_name(self) -> str:
         name = 'ReverseCoordinateDoublingDisplay(' + self.primary_display.get_name() + ')'

@@ -5,16 +5,10 @@ from typing import List
 def compute_primary_grid(grid: Grid):
     return compute_sub_grids(grid)[0]
 
-def compute_reverse_coordinate_doubling_sub_grid_representation(grid: ReverseCoordinateDoublingGrid):
-    primary_grid = compute_primary_grid(grid.get_primary_grid())
-    secondary_grid = compute_primary_grid(grid.get_secondary_grid())
-    grid_type = type(grid)
-    return grid_type(primary_grid, secondary_grid)
-
 def compute_sub_grids_for_wrapper(grid: Grid):
     result = compute_sub_grids(grid.get_wrapped_grid())
     if grid.supports_reversed_coordinates() and grid.is_doubling():
-        result[0] = compute_reverse_coordinate_doubling_sub_grid_representation(grid)
+        result[0] = grid
     return result
 
 def compute_sub_grids(grid: Grid) -> List[Grid]:
@@ -45,7 +39,7 @@ class Node:
         return self.value is not None
 
 def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
-    value = compute_reverse_coordinate_doubling_sub_grid_representation(grid)
+    value = grid
     children = []
     primary_grid_tree = compute_grid_tree(grid.get_primary_grid())
     if primary_grid_tree.has_children():
