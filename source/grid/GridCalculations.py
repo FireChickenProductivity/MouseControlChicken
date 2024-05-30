@@ -95,3 +95,15 @@ def apply_function_to_grid_tree_nodes_with_depth_based_state(function, tree: Nod
     state = function(tree, state)
     for child in tree.get_children():
         apply_function_to_grid_tree_nodes_with_depth_based_state(function, child, state)
+     
+def find_first_grid_tree_node_matching_function(tree: Node, function):
+    if function(tree):
+        return tree
+    for child in tree.get_children():
+        result = find_first_grid_tree_node_matching_function(child, function)
+        if result is not None:
+            return result
+    return None
+
+class GridNotFoundException(Exception):
+    pass
