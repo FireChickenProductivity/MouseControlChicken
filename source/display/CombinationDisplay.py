@@ -30,19 +30,23 @@ class CombinationDisplay(Display):
                 sub_display.draw_on(self.canvas)
             self.secondary_displays.append(sub_display)
 
-    def _setup_secondary_displays_for_tree(self, tree: Node, index: int):
-        tree_has_single_child = tree.has_children() and len(tree.get_children()) == 1
-        if index < len(self.secondary_display_types) and tree_has_single_child:
+    def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
+        print(tree.get_value(), len(tree.get_children()))
+        if index >= len(self.secondary_display_types) or not tree.has_children():
+            return
+        if len(tree.get_children()) == 1:
             for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
                 self._setup_secondary_display_for_coordinate(tree, index, coordinate)
-        if tree_has_single_child:
-            index += 1
-        return index
+            self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)
+        else:
+            for child in tree.get_children():
+                self._setup_secondary_displays_for_tree(child, index)
+                print('handling multiple children')
+            print('more children')
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         tree = compute_grid_tree(grid)
-        index = 0
-        apply_function_to_grid_tree_nodes_with_depth_based_state(self._setup_secondary_displays_for_tree, tree, index)
+        self._setup_secondary_displays_for_tree(tree)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
         self.secondary_displays = []

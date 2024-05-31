@@ -64,7 +64,37 @@ def compute_next_grid_in_combination(grid: Grid):
         else:
             return compute_primary_most_grid(grid.get_secondary_grid())
     return grid
-        
+
+def compute_ordered_list_of_non_combination_grids(grid: Grid) -> List[Grid]:
+    result = []
+    if grid.is_combination():
+        result = compute_ordered_list_of_non_combination_grids(grid.get_primary_grid()) + compute_ordered_list_of_non_combination_grids(grid.get_secondary_grid())
+    else:
+        result = [grid]
+    return result
+
+def is_simple_grid(grid: Grid) -> bool:
+    return not (grid.is_combination() or grid.is_wrapper() or grid.is_doubling())
+
+def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], index: int = 0) -> Node:
+    result = None
+    grid = chain[index]
+    if index == len(chain) - 1:
+        result = Node(grid, [])
+    elif is_simple_grid(grid): 
+        result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
+    elif grid.is_wrapper():
+        if grid.is_doubling():
+            pass
+        else:
+            chain[index] = grid.get_wrapped_grid()
+            result = compute_grid_tree_for_chain_of_non_combination_grids(chain, index)
+    return result
+
+def compute_grid_tree_for_combination(grid: Grid) -> Node:
+    chain = compute_ordered_list_of_non_combination_grids(grid)
+    return compute_grid_tree_for_chain_of_non_combination_grids(chain)
+
 def compute_grid_tree(grid: Grid) -> Node:
     '''Builds a tree representation of the sub grid structure of the given grid such that grid doubling is represented by a node with two children.'''
     if grid.is_combination():
