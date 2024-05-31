@@ -37,6 +37,9 @@ class Node:
     
     def has_value(self):
         return self.value is not None
+    
+    def add_children(self, children):
+        self.children.extend(children)
 
 def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
     value = grid
