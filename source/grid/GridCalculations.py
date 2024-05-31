@@ -82,16 +82,27 @@ def is_simple_grid(grid: Grid) -> bool:
 def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], index: int = 0) -> Node:
     result = None
     grid = chain[index]
-    if index == len(chain) - 1:
-        result = Node(grid, [])
-    elif is_simple_grid(grid): 
-        result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
+    if is_simple_grid(grid): 
+        if index == len(chain) - 1:
+            result = Node(grid, [])
+        else:
+            result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
     elif grid.is_wrapper():
         if grid.is_doubling():
-            pass
+            value = grid
+            primary_chain = chain[:]
+            primary_chain[index] = grid.get_primary_grid()
+            secondary_chain = chain[:]
+            secondary_chain[index] = grid.get_secondary_grid()
+            children = [compute_grid_tree_for_chain_of_non_combination_grids(primary_chain, index), compute_grid_tree_for_chain_of_non_combination_grids(secondary_chain, index)]
+            result = Node(value, children)
         else:
             chain[index] = grid.get_wrapped_grid()
             result = compute_grid_tree_for_chain_of_non_combination_grids(chain, index)
+    elif grid.is_combination():
+        chain_head = compute_ordered_list_of_non_combination_grids(grid)
+        chain_tail = chain[index + 1:]
+        result = compute_grid_tree_for_chain_of_non_combination_grids(chain_head + chain_tail, 0)
     return result
 
 def compute_grid_tree_for_combination(grid: Grid) -> Node:
@@ -100,18 +111,8 @@ def compute_grid_tree_for_combination(grid: Grid) -> Node:
 
 def compute_grid_tree(grid: Grid) -> Node:
     '''Builds a tree representation of the sub grid structure of the given grid such that grid doubling is represented by a node with two children.'''
-    if grid.is_combination():
-        value = compute_primary_most_grid(grid)
-        child = compute_grid_tree(compute_next_grid_in_combination(grid))
-        result = Node(value, [child])
-    elif grid.is_wrapper():
-        if grid.is_doubling():
-            result = compute_grid_tree_for_doubling(grid)
-        else:
-            result = compute_grid_tree(grid.get_wrapped_grid())
-    else:
-        result = Node(grid, [])
-    return result
+    chain = compute_ordered_list_of_non_combination_grids(grid)
+    return compute_grid_tree_for_chain_of_non_combination_grids(chain)
 
 def apply_function_to_grid_tree_nodes(function, tree: Node):
     function(tree)
