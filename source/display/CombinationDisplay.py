@@ -31,7 +31,6 @@ class CombinationDisplay(Display):
             self.secondary_displays.append(sub_display)
 
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
-        print(tree.get_value(), len(tree.get_children()))
         if index >= len(self.secondary_display_types) or not tree.has_children():
             return
         if len(tree.get_children()) == 1:
@@ -41,8 +40,6 @@ class CombinationDisplay(Display):
         else:
             for child in tree.get_children():
                 self._setup_secondary_displays_for_tree(child, index)
-                print('handling multiple children')
-            print('more children')
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         tree = compute_grid_tree(grid)

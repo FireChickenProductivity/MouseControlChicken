@@ -1,5 +1,4 @@
 from .Grid import Grid
-from .ReverseCoordinateDoublingGrid import ReverseCoordinateDoublingGrid
 from typing import List
 
 def compute_primary_grid(grid: Grid):
@@ -41,31 +40,9 @@ class Node:
     def add_children(self, children):
         self.children.extend(children)
 
-def compute_grid_tree_for_doubling(grid: ReverseCoordinateDoublingGrid) -> Node:
-    value = grid
-    children = []
-    primary_grid_tree = compute_grid_tree(grid.get_primary_grid())
-    if primary_grid_tree.has_children():
-        secondary_grid_tree = compute_grid_tree(grid.get_secondary_grid())
-        children = [primary_grid_tree, secondary_grid_tree]
-    result = Node(
-            value,
-            children,
-            )
-    return result
-
 def compute_primary_most_grid(grid: Grid):
     if grid.is_combination():
         return compute_primary_most_grid(grid.get_primary_grid())
-    return grid
-
-def compute_next_grid_in_combination(grid: Grid):
-    if grid.is_combination():
-        primary = grid.get_primary_grid()
-        if primary.is_combination():
-            return compute_next_grid_in_combination(primary)
-        else:
-            return compute_primary_most_grid(grid.get_secondary_grid())
     return grid
 
 def compute_ordered_list_of_non_combination_grids(grid: Grid) -> List[Grid]:
@@ -104,10 +81,6 @@ def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], inde
         chain_tail = chain[index + 1:]
         result = compute_grid_tree_for_chain_of_non_combination_grids(chain_head + chain_tail, 0)
     return result
-
-def compute_grid_tree_for_combination(grid: Grid) -> Node:
-    chain = compute_ordered_list_of_non_combination_grids(grid)
-    return compute_grid_tree_for_chain_of_non_combination_grids(chain)
 
 def compute_grid_tree(grid: Grid) -> Node:
     '''Builds a tree representation of the sub grid structure of the given grid such that grid doubling is represented by a node with two children.'''
