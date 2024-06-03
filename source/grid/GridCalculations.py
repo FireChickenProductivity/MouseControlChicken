@@ -56,6 +56,12 @@ def compute_ordered_list_of_non_combination_grids(grid: Grid) -> List[Grid]:
 def is_simple_grid(grid: Grid) -> bool:
     return not (grid.is_combination() or grid.is_wrapper() or grid.is_doubling())
 
+def compute_grid_tree_for_chain_at_combination_grid(chain: List[Grid], index: int) -> Node:
+    chain_head = compute_ordered_list_of_non_combination_grids(chain[index])
+    chain_tail = chain[index + 1:]
+    result = compute_grid_tree_for_chain_of_non_combination_grids(chain_head + chain_tail, 0)
+    return result
+
 def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], index: int = 0) -> Node:
     result = None
     grid = chain[index]
@@ -77,9 +83,7 @@ def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], inde
             chain[index] = grid.get_wrapped_grid()
             result = compute_grid_tree_for_chain_of_non_combination_grids(chain, index)
     elif grid.is_combination():
-        chain_head = compute_ordered_list_of_non_combination_grids(grid)
-        chain_tail = chain[index + 1:]
-        result = compute_grid_tree_for_chain_of_non_combination_grids(chain_head + chain_tail, 0)
+        result = compute_grid_tree_for_chain_at_combination_grid(chain, index)
     return result
 
 def compute_grid_tree(grid: Grid) -> Node:
