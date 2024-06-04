@@ -30,11 +30,14 @@ class CombinationDisplay(Display):
                 sub_display.draw_on(self.canvas)
             self.secondary_displays.append(sub_display)
 
+    def _set_up_secondary_display_for_single_child_tree_node(self, tree: Node, index: int):
+        for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
+            self._setup_secondary_display_for_coordinate(tree, index, coordinate)
+
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
         if index < len(self.secondary_display_types) and tree.has_children():
             if tree.has_single_child():
-                for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
-                    self._setup_secondary_display_for_coordinate(tree, index, coordinate)
+                self._set_up_secondary_display_for_single_child_tree_node(tree, index)
                 self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)
             else:
                 for child in tree.get_children():
