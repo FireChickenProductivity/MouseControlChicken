@@ -69,23 +69,27 @@ def compute_grid_tree_for_chain_at_simple_grid(chain: List[Grid], index: int, gr
         result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
     return result
 
+def compute_grid_tree_for_chain_at_wrapper_grid(chain: List[Grid], index: int, grid: Grid) -> Node:
+    if grid.is_doubling():
+        value = grid
+        primary_chain = chain[:]
+        primary_chain[index] = grid.get_primary_grid()
+        secondary_chain = chain[:]
+        secondary_chain[index] = grid.get_secondary_grid()
+        children = [compute_grid_tree_for_chain_of_non_combination_grids(primary_chain, index), compute_grid_tree_for_chain_of_non_combination_grids(secondary_chain, index)]
+        result = Node(value, children)
+    else:
+        chain[index] = grid.get_wrapped_grid()
+        result = compute_grid_tree_for_chain_of_non_combination_grids(chain, index)
+    return result
+
 def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], index: int = 0) -> Node:
     result = None
     grid = chain[index]
     if is_simple_grid(grid): 
         result = compute_grid_tree_for_chain_at_simple_grid(chain, index, grid)
     elif grid.is_wrapper():
-        if grid.is_doubling():
-            value = grid
-            primary_chain = chain[:]
-            primary_chain[index] = grid.get_primary_grid()
-            secondary_chain = chain[:]
-            secondary_chain[index] = grid.get_secondary_grid()
-            children = [compute_grid_tree_for_chain_of_non_combination_grids(primary_chain, index), compute_grid_tree_for_chain_of_non_combination_grids(secondary_chain, index)]
-            result = Node(value, children)
-        else:
-            chain[index] = grid.get_wrapped_grid()
-            result = compute_grid_tree_for_chain_of_non_combination_grids(chain, index)
+        result = compute_grid_tree_for_chain_at_wrapper_grid(chain, index, grid)
     elif grid.is_combination():
         result = compute_grid_tree_for_chain_at_combination_grid(chain, index)
     return result
