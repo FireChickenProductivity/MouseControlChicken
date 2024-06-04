@@ -62,14 +62,18 @@ def compute_grid_tree_for_chain_at_combination_grid(chain: List[Grid], index: in
     result = compute_grid_tree_for_chain_of_non_combination_grids(chain_head + chain_tail, 0)
     return result
 
+def compute_grid_tree_for_chain_at_simple_grid(chain: List[Grid], index: int, grid: Grid) -> Node:
+    if index == len(chain) - 1:
+        result = Node(grid, [])
+    else:
+        result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
+    return result
+
 def compute_grid_tree_for_chain_of_non_combination_grids(chain: List[Grid], index: int = 0) -> Node:
     result = None
     grid = chain[index]
     if is_simple_grid(grid): 
-        if index == len(chain) - 1:
-            result = Node(grid, [])
-        else:
-            result = Node(grid, [compute_grid_tree_for_chain_of_non_combination_grids(chain, index + 1)])
+        result = compute_grid_tree_for_chain_at_simple_grid(chain, index, grid)
     elif grid.is_wrapper():
         if grid.is_doubling():
             value = grid
