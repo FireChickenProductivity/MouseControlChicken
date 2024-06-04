@@ -170,6 +170,8 @@ Horizontal Doubling: creates a doubled version of a grid such that a copy of the
 
 Vertical Doubling: creates a doubled version of a grid such that a copy of the grid is on the top and another copy is on the bottom. Performing actions by dictating an action followed by a position will perform the operation on the position on the grid copy on the top. Performing actions by dictating a position followed by an action will perform the operation on the position on the grid copy on the bottom.
 
+Doubling currently does not work properly with narrowable grids.
+
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
 
 After you pick the grid type, the process will ask you to provide any needed grid arguments.
