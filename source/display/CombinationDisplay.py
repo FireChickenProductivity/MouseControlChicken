@@ -33,7 +33,7 @@ class CombinationDisplay(Display):
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
         if index >= len(self.secondary_display_types) or not tree.has_children():
             return
-        if len(tree.get_children()) == 1:
+        if tree.has_single_child():
             for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
                 self._setup_secondary_display_for_coordinate(tree, index, coordinate)
             self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)

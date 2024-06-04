@@ -31,6 +31,12 @@ class Node:
     def has_children(self):
         return len(self.children) > 0
     
+    def has_single_child(self):
+        return len(self.children) == 1
+
+    def has_multiple_children(self):
+        return len(self.children) > 1
+    
     def get_children(self):
         return self.children[:]
     
