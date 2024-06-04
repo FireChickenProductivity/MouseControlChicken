@@ -16,6 +16,7 @@ class ListBasedGrid(RectangularGrid):
         self.vertical_divider = None
         self.separator = separator
         self.build_coordinate_system()
+        self.rectangle = None
 
     @staticmethod
     def create_square_grid(coordinate_list: List, separator: str = " "):
@@ -24,6 +25,7 @@ class ListBasedGrid(RectangularGrid):
     def make_around(self, rectangle: Rectangle) -> None:
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))
         self.vertical_divider = LineDivider(rectangle.top, rectangle.bottom, len(self.vertical_coordinates))
+        self.rectangle = rectangle
     
     def compute_sub_rectangle_for(self, grid_coordinates: str) -> Rectangle:
         horizontal_divider_position = self._compute_horizontal_divider_position_from(grid_coordinates)

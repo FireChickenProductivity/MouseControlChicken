@@ -1,6 +1,7 @@
 from .Display import Display
 from .Canvas import Canvas
-from ..grid.Grid import Grid, Rectangle, RecursiveDivisionGrid, compute_primary_grid
+from ..grid.Grid import Grid, Rectangle, RecursiveDivisionGrid
+from ..grid.GridCalculations import compute_primary_grid
 from .UniversalDisplays import UniversalPositionDisplay
 from ..Regions import draw_linear_region_on_canvas, draw_linear_region_on_canvas_with_lines_converted_to_half_lines_around_midpoint
 

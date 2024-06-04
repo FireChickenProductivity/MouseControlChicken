@@ -1,6 +1,7 @@
 from .Display import FrameDisplay, PositionDisplay, BoundariesTouching
 from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
-from ..grid.Grid import Grid, RectangularGrid, Rectangle, compute_primary_grid
+from ..grid.Grid import Grid, RectangularGrid, Rectangle
+from ..grid.GridCalculations import compute_primary_grid
 from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
 from ..SettingsMediator import settings_mediator

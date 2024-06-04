@@ -11,11 +11,8 @@ from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
+from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
-from typing import List
-
-REVERSE_COORDINATES_PREFIX = "reverse"
-PREFIX_POSTFIX = ':'
 
 class GridSystemManager:
     def __init__(self):
@@ -224,14 +221,14 @@ class Actions:
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
 def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition:
-        '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''
-        grid = manager.get_grid()
-        position = None
-        if grid.supports_reversed_coordinates():
-            position = grid.compute_absolute_position_from_reversed(coordinates)
-        elif grid.supports_narrowing():
-            position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
-        return position
+    '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''
+    grid = manager.get_grid()
+    position = None
+    if grid.supports_reversed_coordinates():
+        position = grid.compute_absolute_position_from_reversed(coordinates)
+    elif grid.supports_narrowing():
+        position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
+    return position
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
@@ -257,13 +254,6 @@ def register_on_change_callback():
     callback = NoArgumentCallback(manager.refresh, manager.hide)
     callback_name = "manager_refresh"
     settings_mediator.register_on_change_callback(callback_name, callback)
-
-def obtain_coordinates_and_prefixes(coordinates: str) -> (str, List[str]):
-    if ":" in coordinates:
-        prefix_text, actual_coordinates = coordinates.split(PREFIX_POSTFIX, 1)
-        prefixes = prefix_text.split(",")
-        return actual_coordinates, prefixes
-    return coordinates, []
 
 
 app.register("ready", setup)

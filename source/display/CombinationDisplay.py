@@ -1,6 +1,7 @@
 from ..grid.Grid import Grid
 from .Display import Display, compute_boundaries_touching
-from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle, compute_sub_grids
+from ..grid.Grid import RecursivelyDivisibleGridCombination, Rectangle
+from ..grid.GridCalculations import compute_sub_grids, compute_grid_tree, apply_function_to_grid_tree_nodes_with_depth_based_state, Node
 from typing import List, Type
 
 class CombinationDisplay(Display):
@@ -13,29 +14,41 @@ class CombinationDisplay(Display):
     def set_rectangle(self, rectangle: Rectangle):
         self.rectangle = rectangle
     
-    def _setup_secondary_display_for_coordinate(self, grids: List[RecursivelyDivisibleGridCombination], index: int, coordinate: str):
-        primary = grids[index]
-        secondary = grids[index + 1]
-        sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
-        secondary.make_around(sub_rectangle)
-        sub_display = self.secondary_display_types[index]()
-        sub_display.set_grid(secondary)
-        sub_display.set_rectangle(sub_rectangle)
-        if sub_display.is_boundary_acknowledging():
-            boundaries_touching = compute_boundaries_touching(sub_rectangle, primary.get_rectangle())
-            sub_display.draw_on_canvas_given_boundaries_touching(self.canvas, boundaries_touching)
-        else:
-            sub_display.draw_on(self.canvas)
-        self.secondary_displays.append(sub_display)
+    def _setup_secondary_display_for_coordinate(self, tree: Node, index: int, coordinate: str):
+        primary = tree.get_value()
+        for child in tree.get_children():
+            secondary = child.get_value()
+            sub_rectangle = primary.compute_sub_rectangle_for(coordinate)
+            secondary.make_around(sub_rectangle)
+            sub_display = self.secondary_display_types[index]()
+            sub_display.set_grid(secondary)
+            sub_display.set_rectangle(sub_rectangle)
+            if sub_display.is_boundary_acknowledging():
+                boundaries_touching = compute_boundaries_touching(sub_rectangle, primary.get_rectangle())
+                sub_display.draw_on_canvas_given_boundaries_touching(self.canvas, boundaries_touching)
+            else:
+                sub_display.draw_on(self.canvas)
+            self.secondary_displays.append(sub_display)
 
-    def _setup_secondary_displays_for_grid(self, grids: List[RecursivelyDivisibleGridCombination], index: int):
-        for coordinate in grids[0].get_coordinate_system().get_primary_coordinates():
-            self._setup_secondary_display_for_coordinate(grids, index, coordinate)
+    def _set_up_secondary_displays_for_single_child_tree_node(self, tree: Node, index: int):
+        for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
+            self._setup_secondary_display_for_coordinate(tree, index, coordinate)
+            self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)
+        
+    def _set_up_secondary_displays_for_tree_node_with_multiple_children(self, tree: Node, index: int):
+        for child in tree.get_children():
+            self._setup_secondary_displays_for_tree(child, index)
+
+    def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
+        if index < len(self.secondary_display_types) and tree.has_children():
+            if tree.has_single_child():
+                self._set_up_secondary_displays_for_single_child_tree_node(tree, index)
+            else:
+                self._set_up_secondary_displays_for_tree_node_with_multiple_children(tree, index)
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
-        grids = compute_sub_grids(grid)
-        for index in range(len(self.secondary_display_types)):
-            self._setup_secondary_displays_for_grid(grids, index)
+        tree = compute_grid_tree(grid)
+        self._setup_secondary_displays_for_tree(tree)
 
     def _setup_secondary_displays(self, grid: RecursivelyDivisibleGridCombination):
         self.secondary_displays = []

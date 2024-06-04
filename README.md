@@ -166,6 +166,12 @@ Double Alphabet is a clone of the double alphabet grid.
 
 Recursively Divisible Combination let you put one grid inside another such as how the alphabet numbers grid has the alphabet grid as the primary and the one to nine as the secondary. Having a square or rectangular recursive division grid as the primary will have the recursive aspect removed so that it only provides the top level of the grid. Currently, only one combination can be put inside a combination.
 
+Horizontal Doubling: creates a doubled version of a grid such that a copy of the grid is on the left and another copy is on the right. Performing actions by dictating an action followed by a position will perform the operation on the position on the grid copy on the left. Performing actions by dictating a position followed by an action will perform the operation on the position on the grid copy on the right.
+
+Vertical Doubling: creates a doubled version of a grid such that a copy of the grid is on the top and another copy is on the bottom. Performing actions by dictating an action followed by a position will perform the operation on the position on the grid copy on the top. Performing actions by dictating a position followed by an action will perform the operation on the position on the grid copy on the bottom.
+
+Doubling currently does not work properly with narrowable grids and will never work with having multiple doubled grids inside a single combination.
+
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
 
 After you pick the grid type, the process will ask you to provide any needed grid arguments.
