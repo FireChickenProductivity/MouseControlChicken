@@ -31,15 +31,14 @@ class CombinationDisplay(Display):
             self.secondary_displays.append(sub_display)
 
     def _setup_secondary_displays_for_tree(self, tree: Node, index: int = 0):
-        if index >= len(self.secondary_display_types) or not tree.has_children():
-            return
-        if tree.has_single_child():
-            for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
-                self._setup_secondary_display_for_coordinate(tree, index, coordinate)
-            self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)
-        else:
-            for child in tree.get_children():
-                self._setup_secondary_displays_for_tree(child, index)
+        if index < len(self.secondary_display_types) and tree.has_children():
+            if tree.has_single_child():
+                for coordinate in tree.get_value().get_coordinate_system().get_primary_coordinates():
+                    self._setup_secondary_display_for_coordinate(tree, index, coordinate)
+                self._setup_secondary_displays_for_tree(tree.get_children()[0], index + 1)
+            else:
+                for child in tree.get_children():
+                    self._setup_secondary_displays_for_tree(child, index)
 
     def _setup_secondary_displays_with_rectangle(self, grid: RecursivelyDivisibleGridCombination):
         tree = compute_grid_tree(grid)
