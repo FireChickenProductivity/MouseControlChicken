@@ -181,17 +181,39 @@ class RectangularCheckerDisplay(RectangularPositionDisplay):
         return runner
 
 class RectangularDiagonalDisplay(Display):
-    def draw_on(self, canvas: Canvas):
+    def _create_position_using_vertical_and_horizontal_input_coordinates(self, vertical_coordinate, horizontal_coordinate):
+        vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
+        horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
+        return MousePosition(horizontal, vertical)
+
+    def _generate_coordinates(self, *, generate_alternate_positions: bool = False):
         vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
         horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
-        separator = self.grid.get_coordinate_system().get_separator()
+        if generate_alternate_positions:
+            vertical_coordinates.reverse()
         for i in range(len(vertical_coordinates)):
-            vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinates[i])
-            horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinates[i])
-            canvas.insert_text(Text(horizontal, vertical, vertical_coordinates[i] + separator + horizontal_coordinates[i]))
-            opposite_vertical_index = -i - 1
-            opposite_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinates[opposite_vertical_index])
-            canvas.insert_text(Text(horizontal, opposite_vertical, vertical_coordinates[opposite_vertical_index] + separator + horizontal_coordinates[i]))
+            yield vertical_coordinates[i] + self.grid.get_coordinate_system().get_separator() + horizontal_coordinates[i]
+
+    def _create_position_from_text(self, text: str):
+        vertical_coordinate, horizontal_coordinate = text.split(self.grid.get_coordinate_system().get_separator())
+        return self._create_position_using_vertical_and_horizontal_input_coordinates(vertical_coordinate, horizontal_coordinate)
+    
+    def _draw_text_on_canvas(self, text: str, position: MousePosition):
+        text = Text(position.get_horizontal(), position.get_vertical(), text)
+        self.canvas.insert_text(text)
+
+    def run_on_generator(self, generator):
+        skipper = SkipperComposite([HorizontalSkipper(), VerticalSkipper()])
+        runner = SkipperRunner(skipper)
+        runner.set_generator(generator)
+        runner.set_position_creator(self._create_position_from_text)
+        runner.set_on_inclusion(self._draw_text_on_canvas)
+        runner.run()
+
+    def draw_on(self, canvas: Canvas):
+        self.canvas = canvas
+        self.run_on_generator(self._generate_coordinates())
+        self.run_on_generator(self._generate_coordinates(generate_alternate_positions=True))
     
     def set_grid(self, grid: RectangularGrid): 
         primary_grid = compute_primary_grid(grid)
