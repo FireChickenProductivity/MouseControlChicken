@@ -15,7 +15,7 @@ class Skipper:
         pass
 
 class SkipperComposite(Skipper):
-    """A skipper union object contains multiple skippers and determines if a display should skip showing something of any of these skippers decides it should not show the position"""
+    """A skipper union object contains multiple skippers and determines if a display should skip showing something if any of these skippers decides it should not show the position"""
     def __init__(self, skippers: List[Skipper]):
         self.skippers = skippers
 
