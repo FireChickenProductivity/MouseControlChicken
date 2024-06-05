@@ -253,15 +253,21 @@ class DoubleRectangularDiagonalDisplay(Display):
         self.diagonal_display.draw_on(canvas)
         horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
         vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
-        middle_start = len(horizontal_coordinates) // 2 - 1
+        number_of_coordinates = len(horizontal_coordinates)
+        middle_start = number_of_coordinates // 2 - 1
         middle_end = middle_start
-        if len(horizontal_coordinates) % 2 == 0:
+        if number_of_coordinates % 2 == 0:
             middle_end += 1
-
         left_horizontal = horizontal_coordinates[:middle_start]
         right_horizontal = horizontal_coordinates[middle_end + 1:]
         top_vertical = vertical_coordinates[:middle_start]
         bottom_vertical = vertical_coordinates[middle_end + 1:]
+        if len(left_horizontal) % 2 == 1:
+            coordinate_lists = [left_horizontal, right_horizontal, top_vertical, bottom_vertical]
+            half_middle = len(left_horizontal) // 2 - 1
+            for coordinate_list in coordinate_lists:
+                coordinate_list.pop(half_middle)
+
         self.draw_reverse_coordinates_on(canvas, left_horizontal, top_vertical)
         self.draw_reverse_coordinates_on(canvas, right_horizontal, bottom_vertical)
         for vertical_halve in [top_vertical, bottom_vertical]:
