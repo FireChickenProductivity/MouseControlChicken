@@ -191,8 +191,16 @@ class RectangularDiagonalDisplay(Display):
         horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
         if generate_alternate_positions:
             vertical_coordinates.reverse()
-        for i in range(len(vertical_coordinates)):
-            yield vertical_coordinates[i] + self.grid.get_coordinate_system().get_separator() + horizontal_coordinates[i]
+        number_of_coordinates = len(vertical_coordinates)
+        coordinates_to_avoid = []
+        if generate_alternate_positions:
+            middle_index = number_of_coordinates // 2 - 1
+            coordinates_to_avoid.append(middle_index)
+            if number_of_coordinates % 2 == 0:
+                coordinates_to_avoid.append(middle_index + 1)
+        for i in range(number_of_coordinates):
+            if i not in coordinates_to_avoid:
+                yield vertical_coordinates[i] + self.grid.get_coordinate_system().get_separator() + horizontal_coordinates[i]
 
     def _create_position_from_text(self, text: str):
         vertical_coordinate, horizontal_coordinate = text.split(self.grid.get_coordinate_system().get_separator())
