@@ -180,6 +180,22 @@ class RectangularCheckerDisplay(RectangularPositionDisplay):
         runner = SingleNestedSkipperRunner(VerticalSkipper(), inner_skipper)
         return runner
 
+def _compute_indexes_to_avoid(number_of_coordinates):
+        middle_index = number_of_coordinates // 2 - 1
+        coordinates_to_avoid = [middle_index]
+        if number_of_coordinates % 2 == 0:
+            coordinates_to_avoid.append(middle_index + 1)
+        return coordinates_to_avoid
+
+def generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, separator, *, generate_alternate_positions: bool = False):
+    number_of_coordinates = len(vertical_coordinates)
+    coordinates_to_avoid = []
+    if generate_alternate_positions:
+        coordinates_to_avoid = _compute_indexes_to_avoid(number_of_coordinates)
+    for i in range(number_of_coordinates):
+        if i not in coordinates_to_avoid:
+            yield vertical_coordinates[i] + separator + horizontal_coordinates[i]
+    
 class RectangularDiagonalDisplay(Display):
     def _create_position_using_vertical_and_horizontal_input_coordinates(self, vertical_coordinate, horizontal_coordinate):
         vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
@@ -187,20 +203,11 @@ class RectangularDiagonalDisplay(Display):
         return MousePosition(horizontal, vertical)
 
     def _generate_coordinates(self, *, generate_alternate_positions: bool = False):
-        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
         horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
+        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
         if generate_alternate_positions:
             vertical_coordinates.reverse()
-        number_of_coordinates = len(vertical_coordinates)
-        coordinates_to_avoid = []
-        if generate_alternate_positions:
-            middle_index = number_of_coordinates // 2 - 1
-            coordinates_to_avoid.append(middle_index)
-            if number_of_coordinates % 2 == 0:
-                coordinates_to_avoid.append(middle_index + 1)
-        for i in range(number_of_coordinates):
-            if i not in coordinates_to_avoid:
-                yield vertical_coordinates[i] + self.grid.get_coordinate_system().get_separator() + horizontal_coordinates[i]
+        return generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, self.grid.get_coordinate_system().get_separator(), generate_alternate_positions = generate_alternate_positions)
 
     def _create_position_from_text(self, text: str):
         vertical_coordinate, horizontal_coordinate = text.split(self.grid.get_coordinate_system().get_separator())
@@ -226,6 +233,49 @@ class RectangularDiagonalDisplay(Display):
     def set_grid(self, grid: RectangularGrid): 
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
+
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_square_grid(grid)
+    
+class DoubleRectangularDiagonalDisplay(Display):
+    def __init__(self):
+        super().__init__()
+        self.diagonal_display = RectangularDiagonalDisplay()
+    
+    def draw_reverse_coordinates_on(self, canvas: Canvas, horizontal_coordinates, vertical_coordinates):
+        vertical_coordinates = vertical_coordinates[:]
+        vertical_coordinates.reverse()
+        generator = generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, self.grid.get_coordinate_system().get_separator(), generate_alternate_positions=True)
+        self.diagonal_display.run_on_generator(generator)
+
+    def draw_on(self, canvas: Canvas):
+        self.diagonal_display.draw_on(canvas)
+        horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
+        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
+        middle_start = len(horizontal_coordinates) // 2 - 1
+        middle_end = middle_start
+        if len(horizontal_coordinates) % 2 == 0:
+            middle_end += 1
+
+        left_horizontal = horizontal_coordinates[:middle_start]
+        right_horizontal = horizontal_coordinates[middle_end + 1:]
+        top_vertical = vertical_coordinates[:middle_start]
+        bottom_vertical = vertical_coordinates[middle_end + 1:]
+        self.draw_reverse_coordinates_on(canvas, left_horizontal, top_vertical)
+        self.draw_reverse_coordinates_on(canvas, right_horizontal, bottom_vertical)
+        for vertical_halve in [top_vertical, bottom_vertical]:
+            vertical_halve.reverse()
+        self.draw_reverse_coordinates_on(canvas, right_horizontal, top_vertical)
+        self.draw_reverse_coordinates_on(canvas, left_horizontal, bottom_vertical)
+
+    def set_rectangle(self, rectangle: Rectangle):
+        self.diagonal_display.set_rectangle(rectangle)
+
+    def set_grid(self, grid: RectangularGrid): 
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
+        self.diagonal_display.set_grid(grid)
 
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
