@@ -1,4 +1,4 @@
-from .Display import FrameDisplay, PositionDisplay, BoundariesTouching
+from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
 from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
 from ..grid.GridCalculations import compute_primary_grid
@@ -179,6 +179,27 @@ class RectangularCheckerDisplay(RectangularPositionDisplay):
         inner_skipper = SkipperComposite([CheckerSkipper(checker_frequency), HorizontalSkipper()])
         runner = SingleNestedSkipperRunner(VerticalSkipper(), inner_skipper)
         return runner
+
+class RectangularDiagonalDisplay(Display):
+    def draw_on(self, canvas: Canvas):
+        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
+        horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
+        separator = self.grid.get_coordinate_system().get_separator()
+        for i in range(len(vertical_coordinates)):
+            vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinates[i])
+            horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinates[i])
+            canvas.insert_text(Text(horizontal, vertical, vertical_coordinates[i] + separator + horizontal_coordinates[i]))
+            opposite_vertical_index = -i - 1
+            opposite_vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinates[opposite_vertical_index])
+            canvas.insert_text(Text(horizontal, opposite_vertical, vertical_coordinates[opposite_vertical_index] + separator + horizontal_coordinates[i]))
+    
+    def set_grid(self, grid: RectangularGrid): 
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
+
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_rectangular_grid(grid)
 
 def is_rectangular_grid(grid: Grid) -> bool:
     primary_grid = compute_primary_grid(grid)
