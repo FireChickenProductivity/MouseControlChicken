@@ -252,17 +252,88 @@ class InputCoordinatesDiagonal:
         half_diagonals = self.create_half_diagonals(generate_alternate_positions=generate_alternate_positions)
         reverse_diagonals = [diagonal.create_reverse_diagonal(generate_alternate_positions=generate_alternate_positions) for diagonal in half_diagonals]
         return reverse_diagonals
+
+class SubDiagonals:
+    def __init__(self, division_factor: int ):
+        self.division_factor = division_factor
+        self.main_diagonals = []
+        self.display_diagonals = []
+        for diagonals in [self.main_diagonals, self.display_diagonals]:
+            diagonals.extend([[] for i in range(division_factor + 1)])
     
+    def set_main_diagonals(self, diagonals, index: int):
+        self.main_diagonals[index] = diagonals
+
+    def set_display_diagonals(self, diagonals, index: int):
+        self.display_diagonals[index] = diagonals
+    
+    def get_display_diagonals(self, index: int):
+        return self.display_diagonals[index]
+    
+    def get_main_diagonals(self, index: int):
+        return self.main_diagonals[index]
+    
+    def get_diagonals(self, index: int):
+        total_display_diagonals = []
+        for i in range(index + 1):
+            total_display_diagonals.extend(self.display_diagonals[i])
+        return total_display_diagonals
+
+class DiagonalComputer:
+    def __init__(self, primary_diagonal: InputCoordinatesDiagonal, division_factor: int = 0):
+        self.primary_diagonal = primary_diagonal
+        self.division_factor = division_factor
+        self.diagonals = SubDiagonals(division_factor)
+        self.compute_diagonals()
+
+    def compute_diagonals(self):
+        self.diagonals.set_main_diagonals([self.primary_diagonal], 0)
+        self.diagonals.set_display_diagonals([self.primary_diagonal.create_reverse_diagonal(generate_alternate_positions=True)], 0)
+        for i in range(1, self.division_factor + 1):
+            previous_diagonals = self.diagonals.get_main_diagonals(i - 1)
+            current_diagonals = []
+            for diagonal in previous_diagonals:
+                current_diagonals.extend(diagonal.create_half_diagonals(generate_alternate_positions=False))
+            reverse_diagonals = [diagonal.create_reverse_diagonal(generate_alternate_positions=True) for diagonal in current_diagonals]
+            self.diagonals.set_main_diagonals(current_diagonals, i)
+            self.diagonals.set_display_diagonals(reverse_diagonals, i)
+
+    def compute_diagonals(self):
+        self.diagonals.set_main_diagonals([self.primary_diagonal, self.primary_diagonal.create_reverse_diagonal()], 0)
+        self.diagonals.set_display_diagonals([self.primary_diagonal.create_reverse_diagonal(generate_alternate_positions=True), self.primary_diagonal], 0)
+        for i in range(1, self.division_factor + 1):
+            previous_diagonals = self.diagonals.get_main_diagonals(i - 1)
+            new_display_diagonals = []
+            for diagonal in previous_diagonals:
+                new_display_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
+            self.diagonals.set_display_diagonals(new_display_diagonals, i)
+            new_main_diagonals = []
+            for diagonal in previous_diagonals:
+                new_main_diagonals.extend(diagonal.create_half_diagonals(generate_alternate_positions=False))
+                new_main_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=False))
+            self.diagonals.set_main_diagonals(new_main_diagonals, i)
+            
+    def get_diagonals(self):
+        return self.diagonals.get_diagonals(self.division_factor)
+
 class RectangularDiagonalDisplay(Display):
+    def __init__(self, division_factor: int = 0):
+        super().__init__()
+        self.division_factor = division_factor
+    
     def create_diagonals(self):
+        primary_diagonal = self.create_primary_diagonal()
+        diagonal_computer = DiagonalComputer(primary_diagonal, self.division_factor)
+        return diagonal_computer.get_diagonals()
+
+    def create_primary_diagonal(self):
         horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
         vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
         primary_diagonal = InputCoordinatesDiagonal(
         (horizontal_coordinates, vertical_coordinates),
         self.grid.get_coordinate_system().get_separator()
         )
-        secondary_diagonal = primary_diagonal.create_reverse_diagonal(generate_alternate_positions=True)
-        return [primary_diagonal, secondary_diagonal]
+        return primary_diagonal
 
     def _create_position_using_vertical_and_horizontal_input_coordinates(self, vertical_coordinate, horizontal_coordinate):
         vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
@@ -299,83 +370,13 @@ class RectangularDiagonalDisplay(Display):
     def supports_grid(grid: Grid) -> bool:
         return is_square_grid(grid)
     
-class DoubleRectangularDiagonalDisplay(Display):
-    def __init__(self, diagonal_display: Display = None):
-        super().__init__()
-        if diagonal_display:
-            self.diagonal_display = diagonal_display
-        else:
-            self.diagonal_display = RectangularDiagonalDisplay()
-    
-    def run_on_generator(self, generator):
-        self.diagonal_display.run_on_generator(generator)
-
-    def create_primary_diagonals(self):
-        return self.diagonal_display.create_diagonals()
-
-    def create_secondary_diagonals(self):
-        primary_diagonals = self.create_primary_diagonals()
-        secondary_diagonals = []
-        for diagonal in primary_diagonals:
-            secondary_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
-        return secondary_diagonals
-
-    def create_diagonals(self):
-        return self.create_primary_diagonals() + self.create_secondary_diagonals()
-
-    def draw_on(self, canvas: Canvas):
-        self.diagonal_display.draw_on(canvas)
-        secondary_diagonals = self.create_secondary_diagonals()
-        for diagonal in secondary_diagonals:
-            self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
-
-    def set_rectangle(self, rectangle: Rectangle):
-        self.diagonal_display.set_rectangle(rectangle)
-
-    def set_grid(self, grid: RectangularGrid): 
-        primary_grid = compute_primary_grid(grid)
-        super().set_grid(primary_grid)
-        self.diagonal_display.set_grid(grid)
-
-    @staticmethod
-    def supports_grid(grid: Grid) -> bool:
-        return is_square_grid(grid)
-    
-class QuadrupleRectangularDiagonalDisplay(Display):
+class DoubleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
     def __init__(self):
-        super().__init__()
-        self.diagonal_display = DoubleRectangularDiagonalDisplay()
+        super().__init__(division_factor=1)
     
-    def draw_on(self, canvas: Canvas):
-        self.diagonal_display.draw_on(canvas)
-        secondary_diagonals = self.diagonal_display.create_secondary_diagonals()
-        tertiary_diagonals = []
-        for diagonal in secondary_diagonals:
-            tertiary_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
-        for diagonal in tertiary_diagonals:
-            self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
-        primary_diagonals = self.diagonal_display.create_primary_diagonals()
-        primary_diagonal_halves = []
-        for diagonal in primary_diagonals:
-            primary_diagonal_halves.extend(diagonal.create_half_diagonals(generate_alternate_positions=True))
-        primary_diagonal_quadruples = []
-        for diagonal in primary_diagonal_halves:
-            primary_diagonal_quadruples.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
-        for diagonal in primary_diagonal_quadruples:
-            self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
-
-        
-    def set_rectangle(self, rectangle: Rectangle):
-        self.diagonal_display.set_rectangle(rectangle)
-
-    def set_grid(self, grid: RectangularGrid): 
-        primary_grid = compute_primary_grid(grid)
-        super().set_grid(primary_grid)
-        self.diagonal_display.set_grid(grid)
-
-    @staticmethod
-    def supports_grid(grid: Grid) -> bool:
-        return is_square_grid(grid)
+class QuadrupleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
+    def __init__(self):
+        super().__init__(division_factor=2)
 
 def is_rectangular_grid(grid: Grid) -> bool:
     primary_grid = compute_primary_grid(grid)
