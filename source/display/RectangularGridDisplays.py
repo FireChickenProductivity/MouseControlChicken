@@ -187,6 +187,43 @@ def _compute_indexes_to_avoid(number_of_coordinates):
             coordinates_to_avoid.append(middle_index + 1)
         return coordinates_to_avoid
 
+class InputCoordinatesDiagonal:
+    def __init__(self, coordinates, separator, *, generate_alternate_positions: bool = False):
+        self.horizontal_coordinates = coordinates[0]
+        self.vertical_coordinates = coordinates[1]
+        self.separator = separator
+        self.generate_alternate_positions = generate_alternate_positions
+    
+    def get_coordinate_at(self, index: int):
+        return self.vertical_coordinates[index] + self.separator + self.horizontal_coordinates[index]
+    
+    def get_length(self):
+        return len(self.vertical_coordinates)
+    
+    def generate_coordinates(self):
+        number_of_coordinates = len(self.vertical_coordinates)
+        coordinates_to_avoid = []
+        if self.generate_alternate_positions:
+            coordinates_to_avoid = _compute_indexes_to_avoid(number_of_coordinates)
+        for i in range(number_of_coordinates):
+            if i not in coordinates_to_avoid:
+                yield self.vertical_coordinates[i] + self.separator + self.horizontal_coordinates[i]
+            
+    def get_horizontal_coordinates(self):
+        return self.horizontal_coordinates[:]
+    
+    def get_vertical_coordinates(self):
+        return self.vertical_coordinates[:]
+    
+    def get_separator(self):
+        return self.separator
+    
+    def create_reverse_diagonal(self, *, generate_alternate_positions: bool = False):
+        horizontal_coordinates = self.horizontal_coordinates[:]
+        vertical_coordinates = self.vertical_coordinates[:]
+        vertical_coordinates.reverse()
+        return InputCoordinatesDiagonal((horizontal_coordinates, vertical_coordinates), self.separator, generate_alternate_positions=generate_alternate_positions)
+
 def generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, separator, *, generate_alternate_positions: bool = False):
     number_of_coordinates = len(vertical_coordinates)
     coordinates_to_avoid = []
@@ -197,17 +234,20 @@ def generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, 
             yield vertical_coordinates[i] + separator + horizontal_coordinates[i]
     
 class RectangularDiagonalDisplay(Display):
+    def create_diagonals(self):
+        horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
+        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
+        primary_diagonal = InputCoordinatesDiagonal(
+        (horizontal_coordinates, vertical_coordinates),
+        self.grid.get_coordinate_system().get_separator()
+        )
+        secondary_diagonal = primary_diagonal.create_reverse_diagonal(generate_alternate_positions=True)
+        return [primary_diagonal, secondary_diagonal]
+
     def _create_position_using_vertical_and_horizontal_input_coordinates(self, vertical_coordinate, horizontal_coordinate):
         vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
         horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
         return MousePosition(horizontal, vertical)
-
-    def _generate_coordinates(self, *, generate_alternate_positions: bool = False):
-        horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
-        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
-        if generate_alternate_positions:
-            vertical_coordinates.reverse()
-        return generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, self.grid.get_coordinate_system().get_separator(), generate_alternate_positions = generate_alternate_positions)
 
     def _create_position_from_text(self, text: str):
         vertical_coordinate, horizontal_coordinate = text.split(self.grid.get_coordinate_system().get_separator())
@@ -227,8 +267,9 @@ class RectangularDiagonalDisplay(Display):
 
     def draw_on(self, canvas: Canvas):
         self.canvas = canvas
-        self.run_on_generator(self._generate_coordinates())
-        self.run_on_generator(self._generate_coordinates(generate_alternate_positions=True))
+        diagonals = self.create_diagonals()
+        for diagonal in diagonals:
+            self.run_on_generator(diagonal.generate_coordinates())
     
     def set_grid(self, grid: RectangularGrid): 
         primary_grid = compute_primary_grid(grid)
