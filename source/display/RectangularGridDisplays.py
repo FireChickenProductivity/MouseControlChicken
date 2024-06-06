@@ -37,7 +37,6 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_coordinates_to_frame(
             vertical, 
             self.grid.get_horizontal_coordinates(), 
-            self.grid.compute_absolute_horizontal_from_horizontal_coordinates, 
             HorizontalSkipper(), 
             is_horizontal=True
         )
@@ -47,7 +46,6 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_coordinates_to_frame(
             horizontal, 
             self.grid.get_vertical_coordinates(), 
-            self.grid.compute_absolute_vertical_from_from_vertical_coordinates, 
             VerticalSkipper(),
             is_horizontal=False
         )
@@ -56,13 +54,13 @@ class RectangularGridFrameDisplay(FrameDisplay):
             self, 
             constant_coordinate: int, 
             coordinates: Generator, 
-            compute_absolute_coordinate_from_coordinate: Callable[[str], int], 
             skipper: Skipper,
             *,
             is_horizontal: bool
         ):
         runner = SkipperRunner(skipper)
         runner.set_generator(coordinates)
+        compute_absolute_coordinate_from_coordinate = self._obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(is_horizontal)
         def create_position(coordinate, constant_coordinate, is_horizontal):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
@@ -72,6 +70,11 @@ class RectangularGridFrameDisplay(FrameDisplay):
             self._draw_text_on_canvas(coordinate, position.get_horizontal(), position.get_vertical())
         runner.set_on_inclusion(on_inclusion)
         runner.run()
+
+    def _obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(self, is_horizontal: bool):
+        if is_horizontal:
+            return self.grid.compute_absolute_horizontal_from_horizontal_coordinates
+        return self.grid.compute_absolute_vertical_from_from_vertical_coordinates
 
     @staticmethod
     def _compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate: int, constant_coordinate: int, *, is_horizontal: bool):
