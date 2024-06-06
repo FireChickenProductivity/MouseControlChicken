@@ -300,19 +300,71 @@ class RectangularDiagonalDisplay(Display):
         return is_square_grid(grid)
     
 class DoubleRectangularDiagonalDisplay(Display):
-    def __init__(self):
+    def __init__(self, diagonal_display: Display = None):
         super().__init__()
-        self.diagonal_display = RectangularDiagonalDisplay()
+        if diagonal_display:
+            self.diagonal_display = diagonal_display
+        else:
+            self.diagonal_display = RectangularDiagonalDisplay()
     
-    def draw_on(self, canvas: Canvas):
-        self.diagonal_display.draw_on(canvas)
-        primary_diagonals = self.diagonal_display.create_diagonals()
+    def run_on_generator(self, generator):
+        self.diagonal_display.run_on_generator(generator)
+
+    def create_primary_diagonals(self):
+        return self.diagonal_display.create_diagonals()
+
+    def create_secondary_diagonals(self):
+        primary_diagonals = self.create_primary_diagonals()
         secondary_diagonals = []
         for diagonal in primary_diagonals:
             secondary_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
+        return secondary_diagonals
+
+    def create_diagonals(self):
+        return self.create_primary_diagonals() + self.create_secondary_diagonals()
+
+    def draw_on(self, canvas: Canvas):
+        self.diagonal_display.draw_on(canvas)
+        secondary_diagonals = self.create_secondary_diagonals()
         for diagonal in secondary_diagonals:
             self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
 
+    def set_rectangle(self, rectangle: Rectangle):
+        self.diagonal_display.set_rectangle(rectangle)
+
+    def set_grid(self, grid: RectangularGrid): 
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
+        self.diagonal_display.set_grid(grid)
+
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_square_grid(grid)
+    
+class QuadrupleRectangularDiagonalDisplay(Display):
+    def __init__(self):
+        super().__init__()
+        self.diagonal_display = DoubleRectangularDiagonalDisplay()
+    
+    def draw_on(self, canvas: Canvas):
+        self.diagonal_display.draw_on(canvas)
+        secondary_diagonals = self.diagonal_display.create_secondary_diagonals()
+        tertiary_diagonals = []
+        for diagonal in secondary_diagonals:
+            tertiary_diagonals.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
+        for diagonal in tertiary_diagonals:
+            self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
+        primary_diagonals = self.diagonal_display.create_primary_diagonals()
+        primary_diagonal_halves = []
+        for diagonal in primary_diagonals:
+            primary_diagonal_halves.extend(diagonal.create_half_diagonals(generate_alternate_positions=True))
+        primary_diagonal_quadruples = []
+        for diagonal in primary_diagonal_halves:
+            primary_diagonal_quadruples.extend(diagonal.create_half_reverse_diagonals(generate_alternate_positions=True))
+        for diagonal in primary_diagonal_quadruples:
+            self.diagonal_display.run_on_generator(diagonal.generate_coordinates())
+
+        
     def set_rectangle(self, rectangle: Rectangle):
         self.diagonal_display.set_rectangle(rectangle)
 
