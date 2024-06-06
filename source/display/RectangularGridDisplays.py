@@ -187,6 +187,16 @@ def _compute_indexes_to_avoid(number_of_coordinates):
             coordinates_to_avoid.append(middle_index + 1)
         return coordinates_to_avoid
 
+def compute_coordinate_list_half_splits(coordinate_list):
+    number_of_coordinates = len(coordinate_list)
+    middle_start = number_of_coordinates // 2 - 1
+    middle_end = middle_start
+    if number_of_coordinates % 2 == 0:
+        middle_end += 1
+    start = coordinate_list[:middle_start]
+    end = coordinate_list[middle_end + 1:]
+    return start, end
+
 class InputCoordinatesDiagonal:
     def __init__(self, coordinates, separator, *, generate_alternate_positions: bool = False):
         self.horizontal_coordinates = coordinates[0]
@@ -225,15 +235,8 @@ class InputCoordinatesDiagonal:
         return InputCoordinatesDiagonal((horizontal_coordinates, vertical_coordinates), self.separator, generate_alternate_positions=generate_alternate_positions)
     
     def create_half_diagonals(self, *, generate_alternate_positions: bool = False):
-        number_of_coordinates = len(self.horizontal_coordinates)
-        middle_start = number_of_coordinates // 2 - 1
-        middle_end = middle_start
-        if number_of_coordinates % 2 == 0:
-            middle_end += 1
-        left_horizontal = self.horizontal_coordinates[:middle_start]
-        right_horizontal = self.horizontal_coordinates[middle_end + 1:]
-        top_vertical = self.vertical_coordinates[:middle_start]
-        bottom_vertical = self.vertical_coordinates[middle_end + 1:]
+        left_horizontal, right_horizontal = compute_coordinate_list_half_splits(self.horizontal_coordinates)
+        top_vertical, bottom_vertical = compute_coordinate_list_half_splits(self.vertical_coordinates)
         if len(left_horizontal) % 2 == 1:
             coordinate_lists = [left_horizontal, right_horizontal, top_vertical, bottom_vertical]
             half_middle = len(left_horizontal) // 2 - 1
@@ -249,15 +252,6 @@ class InputCoordinatesDiagonal:
         half_diagonals = self.create_half_diagonals(generate_alternate_positions=generate_alternate_positions)
         reverse_diagonals = [diagonal.create_reverse_diagonal(generate_alternate_positions=generate_alternate_positions) for diagonal in half_diagonals]
         return reverse_diagonals
-
-def generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, separator, *, generate_alternate_positions: bool = False):
-    number_of_coordinates = len(vertical_coordinates)
-    coordinates_to_avoid = []
-    if generate_alternate_positions:
-        coordinates_to_avoid = _compute_indexes_to_avoid(number_of_coordinates)
-    for i in range(number_of_coordinates):
-        if i not in coordinates_to_avoid:
-            yield vertical_coordinates[i] + separator + horizontal_coordinates[i]
     
 class RectangularDiagonalDisplay(Display):
     def create_diagonals(self):
@@ -310,12 +304,6 @@ class DoubleRectangularDiagonalDisplay(Display):
         super().__init__()
         self.diagonal_display = RectangularDiagonalDisplay()
     
-    def draw_reverse_coordinates_on(self, canvas: Canvas, horizontal_coordinates, vertical_coordinates):
-        vertical_coordinates = vertical_coordinates[:]
-        vertical_coordinates.reverse()
-        generator = generate_diagonal_coordinates(horizontal_coordinates, vertical_coordinates, self.grid.get_coordinate_system().get_separator(), generate_alternate_positions=True)
-        self.diagonal_display.run_on_generator(generator)
-
     def draw_on(self, canvas: Canvas):
         self.diagonal_display.draw_on(canvas)
         primary_diagonals = self.diagonal_display.create_diagonals()
