@@ -152,6 +152,19 @@ DoubleNarrow: Behaves like the Narrow option but also shows the regions of the s
 
 ![Double Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/ce99a1b5-2327-4102-88dd-40ba5e47fc8d)
 
+Rectangular Diagonal Display: Shows the main diagonal coordinates.
+
+![Rectangular Diagonal Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/5b2b112e-61dc-4d72-a767-5ea6f88c6f83)
+
+Double Rectangular Diagonal Display: Shows the main diagonal coordinates for each quadrant.
+
+![Double Rectangular Diagonal Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/569e5eda-14b5-4344-a6d8-20faab5e17ec)
+
+Quadruple Rectangular Diagonal Display: Shows the main diagonal coordinates for each quadrant of each quadrant.
+
+![image](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/39b5943e-ddb4-4a6e-a388-a0cda2ef035c)
+
+
 ### Creating Custom Grids
 
 The grid creation process can be initiated with the "chicken create grid" command. The process initially asks for a name for the grid. You should provide a unique name. The process next asks you to choose the type of grid. 

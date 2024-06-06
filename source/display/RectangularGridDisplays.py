@@ -1,5 +1,6 @@
-from .Display import FrameDisplay, PositionDisplay, BoundariesTouching
+from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
 from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
+from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
 from ..grid.GridCalculations import compute_primary_grid
 from .Canvas import Text, Line, Canvas
@@ -180,6 +181,76 @@ class RectangularCheckerDisplay(RectangularPositionDisplay):
         runner = SingleNestedSkipperRunner(VerticalSkipper(), inner_skipper)
         return runner
 
+class RectangularDiagonalDisplay(Display):
+    def __init__(self, division_factor: int = 0):
+        super().__init__()
+        self.division_factor = division_factor
+    
+    def create_diagonals(self):
+        primary_diagonal = self.create_primary_diagonal()
+        diagonal_computer = DiagonalComputer(primary_diagonal, self.division_factor)
+        return diagonal_computer.get_diagonals()
+
+    def create_primary_diagonal(self):
+        horizontal_coordinates = [coordinate for coordinate in self.grid.get_horizontal_coordinates()]
+        vertical_coordinates = [coordinate for coordinate in self.grid.get_vertical_coordinates()]
+        primary_diagonal = InputCoordinatesDiagonal(
+        (horizontal_coordinates, vertical_coordinates),
+        self.grid.get_coordinate_system().get_separator()
+        )
+        return primary_diagonal
+
+    def _create_position_using_vertical_and_horizontal_input_coordinates(self, vertical_coordinate, horizontal_coordinate):
+        vertical = self.grid.compute_absolute_vertical_from_from_vertical_coordinates(vertical_coordinate)
+        horizontal = self.grid.compute_absolute_horizontal_from_horizontal_coordinates(horizontal_coordinate)
+        return MousePosition(horizontal, vertical)
+
+    def _create_position_from_text(self, text: str):
+        vertical_coordinate, horizontal_coordinate = text.split(self.grid.get_coordinate_system().get_separator())
+        return self._create_position_using_vertical_and_horizontal_input_coordinates(vertical_coordinate, horizontal_coordinate)
+    
+    def _draw_text_on_canvas(self, text: str, position: MousePosition):
+        text = Text(position.get_horizontal(), position.get_vertical(), text)
+        self.canvas.insert_text(text)
+
+    def run_on_generator(self, generator):
+        skipper = SkipperComposite([HorizontalSkipper(), VerticalSkipper()])
+        runner = SkipperRunner(skipper)
+        runner.set_generator(generator)
+        runner.set_position_creator(self._create_position_from_text)
+        runner.set_on_inclusion(self._draw_text_on_canvas)
+        runner.run()
+
+    def draw_on(self, canvas: Canvas):
+        self.canvas = canvas
+        diagonals = self.create_diagonals()
+        for diagonal in diagonals:
+            self.run_on_generator(diagonal.generate_coordinates())
+    
+    def set_grid(self, grid: RectangularGrid): 
+        primary_grid = compute_primary_grid(grid)
+        super().set_grid(primary_grid)
+
+    @staticmethod
+    def supports_grid(grid: Grid) -> bool:
+        return is_square_grid(grid)
+    
+class DoubleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
+    def __init__(self):
+        super().__init__(division_factor=1)
+    
+class QuadrupleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
+    def __init__(self):
+        super().__init__(division_factor=2)
+
 def is_rectangular_grid(grid: Grid) -> bool:
     primary_grid = compute_primary_grid(grid)
     return isinstance(primary_grid, RectangularGrid)
+
+def is_square_grid(grid: Grid) -> bool:
+    if not is_rectangular_grid(grid):
+        return False
+    primary_grid = compute_primary_grid(grid)
+    horizontal_coordinates = [coordinate for coordinate in primary_grid.get_horizontal_coordinates()]
+    vertical_coordinates = [coordinate for coordinate in primary_grid.get_vertical_coordinates()]
+    return len(horizontal_coordinates) == len(vertical_coordinates)
