@@ -142,16 +142,6 @@ RectangularChecker: Displays every nth position on the grid's primary coordinate
 
 ![Rectangular Checker Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/f6d291ea-e559-4f3d-a83b-a07389f25e87)
 
-#### Narrow Grid Display Options
-
-Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.
-
-![Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/53959b6f-3f30-4bc4-a3ce-fdb5d4a8c6e7)
-
-DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
-
-![Double Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/ce99a1b5-2327-4102-88dd-40ba5e47fc8d)
-
 Rectangular Diagonal Display: Shows the main diagonal coordinates.
 
 ![Rectangular Diagonal Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/5b2b112e-61dc-4d72-a767-5ea6f88c6f83)
@@ -164,6 +154,15 @@ Quadruple Rectangular Diagonal Display: Shows the main diagonal coordinates for 
 
 ![image](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/39b5943e-ddb4-4a6e-a388-a0cda2ef035c)
 
+#### Narrow Grid Display Options
+
+Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.
+
+![Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/53959b6f-3f30-4bc4-a3ce-fdb5d4a8c6e7)
+
+DoubleNarrow: Behaves like the Narrow option but also shows the regions of the secondary coordinates using half lines.
+
+![Double Narrow Display](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/ce99a1b5-2327-4102-88dd-40ba5e47fc8d)
 
 ### Creating Custom Grids
 
