@@ -11,14 +11,14 @@ from ..fire_chicken.mouse_position import MousePosition
 from typing import Generator
 
 def _compute_new_position_given_offset(position: MousePosition, offset: int, is_horizontal: bool) -> MousePosition:
-        horizontal_delta = vertical_delta = 0
-        if is_horizontal:
-            vertical_delta = offset
-        else:
-            horizontal_delta = offset
-        position_delta = MousePosition(horizontal_delta, vertical_delta)
-        new_position = position + position_delta
-        return new_position
+    horizontal_delta = vertical_delta = 0
+    if is_horizontal:
+        vertical_delta = offset
+    else:
+        horizontal_delta = offset
+    position_delta = MousePosition(horizontal_delta, vertical_delta)
+    new_position = position + position_delta
+    return new_position
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self, zigzag_return_threshold: int = 2):
