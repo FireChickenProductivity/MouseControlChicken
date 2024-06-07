@@ -1,5 +1,5 @@
 from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
-from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
+from .Skipper import HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
 from ..grid.GridCalculations import compute_primary_grid
@@ -10,8 +10,18 @@ from ..SettingsMediator import settings_mediator
 from ..fire_chicken.mouse_position import MousePosition
 from typing import Generator
 
+def _compute_new_position_given_offset(position: MousePosition, offset: int, is_horizontal: bool) -> MousePosition:
+        horizontal_delta = vertical_delta = 0
+        if is_horizontal:
+            vertical_delta = offset
+        else:
+            horizontal_delta = offset
+        position_delta = MousePosition(horizontal_delta, vertical_delta)
+        new_position = position + position_delta
+        return new_position
+
 class RectangularGridFrameDisplay(FrameDisplay):
-    def __init__(self, zigzag_return_threshold: int = None):
+    def __init__(self, zigzag_return_threshold: int = 2):
         super().__init__()
         self.grid: RectangularGrid = None
         self.zigzag_return_threshold = zigzag_return_threshold
@@ -66,21 +76,18 @@ class RectangularGridFrameDisplay(FrameDisplay):
         def create_position(coordinate, constant_coordinate, is_horizontal):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
+            position = MousePosition(horizontal, vertical)
             if self.zigzag_return_threshold:
-                offset = zigzag_offset_computer.compute_offset()
-                if is_horizontal:
-                    vertical += offset
-                else:
-                    horizontal += offset
-            return MousePosition(horizontal, vertical)
+                position = _compute_new_position_given_offset(position, zigzag_offset_computer.compute_offset(), is_horizontal)
+            return position
         runner.set_position_creator(lambda coordinate: create_position(coordinate, constant_coordinate, is_horizontal))
         def on_inclusion(coordinate, position):
             self._draw_text_on_canvas(coordinate, position.get_horizontal(), position.get_vertical())
-            if self.zigzag_return_threshold:
+            if self.zigzag_return_threshold: 
                 zigzag_offset_computer.update_offset()
         runner.set_on_inclusion(on_inclusion)
         runner.run()
-    
+
     def _create_skipper_for_dimension(self, is_horizontal):
         if is_horizontal:
             return HorizontalSkipper()
