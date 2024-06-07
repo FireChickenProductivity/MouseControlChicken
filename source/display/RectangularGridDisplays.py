@@ -39,7 +39,6 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_coordinates_to_frame(
             vertical, 
             self.grid.get_horizontal_coordinates(), 
-            HorizontalSkipper(), 
             is_horizontal=True
         )
 
@@ -48,7 +47,6 @@ class RectangularGridFrameDisplay(FrameDisplay):
         self._add_coordinates_to_frame(
             horizontal, 
             self.grid.get_vertical_coordinates(), 
-            VerticalSkipper(),
             is_horizontal=False
         )
             
@@ -56,10 +54,10 @@ class RectangularGridFrameDisplay(FrameDisplay):
             self, 
             constant_coordinate: int, 
             coordinates: Generator, 
-            skipper: Skipper,
             *,
             is_horizontal: bool
         ):
+        skipper = self._create_skipper_for_dimension(is_horizontal)
         runner = SkipperRunner(skipper)
         runner.set_generator(coordinates)
         compute_absolute_coordinate_from_coordinate = self._obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(is_horizontal)
@@ -82,6 +80,11 @@ class RectangularGridFrameDisplay(FrameDisplay):
                 zigzag_offset_computer.update_offset()
         runner.set_on_inclusion(on_inclusion)
         runner.run()
+    
+    def _create_skipper_for_dimension(self, is_horizontal):
+        if is_horizontal:
+            return HorizontalSkipper()
+        return VerticalSkipper()
 
     def _obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(self, is_horizontal: bool):
         if is_horizontal:
