@@ -21,10 +21,9 @@ def _compute_new_position_given_offset(position: MousePosition, offset: int, is_
     return new_position
 
 class RectangularGridFrameDisplay(FrameDisplay):
-    def __init__(self, zigzag_return_threshold: int = 2):
+    def __init__(self):
         super().__init__()
         self.grid: RectangularGrid = None
-        self.zigzag_return_threshold = zigzag_return_threshold
 
     def set_grid(self, grid: RectangularGrid): 
         primary_grid = compute_primary_grid(grid)
@@ -32,6 +31,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
 
     def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
         self.canvas = canvas
+        self.zigzag_return_threshold = settings_mediator.get_zigzag_threshold()
         self._add_main_frame(boundaries_touching)
         if self._should_show_crisscross():
             self._add_crisscross()

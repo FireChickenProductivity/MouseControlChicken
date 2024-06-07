@@ -22,6 +22,7 @@ settings():
     user.mouse_control_chicken_default_frame_grid_should_show_crisscross = false
     #Every nth position is shown on a checker display where n is the frequency.
     user.mouse_control_chicken_default_checker_frequency = 3
+    user.mouse_control_chicken_default_zigzag_threshold = 0
     user.mouse_control_chicken_scrolling_amount = 600
     user.mouse_control_chicken_flickering_enabled = false
     user.mouse_control_chicken_flickering_show_time = 5000
