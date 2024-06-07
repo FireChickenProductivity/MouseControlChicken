@@ -40,23 +40,25 @@ class RectangularGridFrameDisplay(FrameDisplay):
         frame_offset = settings_mediator.get_frame_grid_offset()
         self._add_horizontal_coordinates_to_frame(self.rectangle.top + frame_offset)
         if boundaries_touching.is_touching_bottom_boundary():
-            self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset)
+            self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset, should_reverse_zigzag_direction=True)
         self._add_vertical_coordinates_to_frame(self.rectangle.left + frame_offset)
         if boundaries_touching.is_touching_right_boundary():
-            self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
+            self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset, should_reverse_zigzag_direction=True)
 
-    def _add_horizontal_coordinates_to_frame(self, vertical: int):
+    def _add_horizontal_coordinates_to_frame(self, vertical: int, *, should_reverse_zigzag_direction: bool = False):
         self._add_coordinates_to_frame(
             vertical, 
             self.grid.get_horizontal_coordinates(), 
+            should_reverse_zigzag_direction=should_reverse_zigzag_direction,
             is_horizontal=True
         )
 
         
-    def _add_vertical_coordinates_to_frame(self, horizontal: int):
+    def _add_vertical_coordinates_to_frame(self, horizontal: int, *, should_reverse_zigzag_direction: bool = False):
         self._add_coordinates_to_frame(
             horizontal, 
             self.grid.get_vertical_coordinates(), 
+            should_reverse_zigzag_direction=should_reverse_zigzag_direction,
             is_horizontal=False
         )
             
@@ -65,6 +67,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
             constant_coordinate: int, 
             coordinates: Generator, 
             *,
+            should_reverse_zigzag_direction: bool,
             is_horizontal: bool
         ):
         skipper = self._create_skipper_for_dimension(is_horizontal)
@@ -72,7 +75,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
         runner.set_generator(coordinates)
         compute_absolute_coordinate_from_coordinate = self._obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(is_horizontal)
         if self.zigzag_return_threshold:
-            zigzag_offset_computer = ZigzagOffsetComputer(settings_mediator.get_text_size(), self.zigzag_return_threshold)
+            zigzag_offset_computer = ZigzagOffsetComputer(settings_mediator.get_text_size(), self.zigzag_return_threshold, should_reverse_direction=should_reverse_zigzag_direction)
         def create_position(coordinate, constant_coordinate, is_horizontal):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
