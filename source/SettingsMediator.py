@@ -91,6 +91,12 @@ default_checker_frequency = setting_creator.create_int_setting(
     'The default checker frequency used by Mouse Control Chicken. Every nth position is shown on a checker display where n is the frequency.'
 )
 
+default_zigzag_threshold = setting_creator.create_int_setting(
+    'default_zigzag_threshold',
+    0,
+    'The default zigzag threshold used by Mouse Control Chicken. Determines how many positions are shown in a zigzagging display before the direction of the zigzag is reversed.'
+)
+
 scrolling_amount = setting_creator.create_int_setting(
     'scrolling_amount',
     600,
@@ -166,6 +172,7 @@ class SettingsMediator:
         self.frame_grid_offset = settings.get(default_frame_grid_offset)
         self.frame_grid_should_show_crisscross = settings.get(default_frame_grid_should_show_crisscross)
         self.checker_frequency = settings.get(default_checker_frequency)
+        self.zigzag_threshold = settings.get(default_zigzag_threshold)
         self.flickering_enabled = settings.get(flickering_enabled)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
         self.alternate_background_transparency = settings.get(default_alternate_background_transparency)
@@ -209,6 +216,9 @@ class SettingsMediator:
 
     def get_checker_frequency(self) -> int:
         return self.checker_frequency
+
+    def get_zigzag_threshold(self) -> int:
+        return self.zigzag_threshold
 
     def get_scrolling_amount(self) -> int:
         return settings.get(scrolling_amount)
@@ -283,6 +293,10 @@ class SettingsMediator:
         self.checker_frequency = frequency
         self._handle_change()
 
+    def set_zigzag_threshold(self, threshold: int):
+        self.zigzag_threshold = threshold
+        self._handle_change()
+
     def register_on_change_callback(self, name: str, callback: Callback):
         self.callback_manager.register_callback(name, callback)
     
@@ -295,17 +309,3 @@ def load_default_settings():
     settings_mediator.initialize()
     create_settings_file()
 app.register('ready', load_default_settings)
-
-@module.action_class
-class Actions:
-    def mouse_control_chicken_toggle_frame_display_crisscross():
-        '''Toggles whether mouse control chicken frame displays should show  crisscrossing lines'''
-        settings_mediator.set_frame_grid_should_show_crisscross(not settings_mediator.get_frame_grid_should_show_crisscross())
-
-    def mouse_control_chicken_set_checker_frequency(frequency: int):
-        '''Sets the mouse control chicken checker frequency'''
-        settings_mediator.set_checker_frequency(frequency)
-
-    def mouse_control_chicken_refresh():
-        '''Refreshes the mouse control chicken grid and reloads settings from their defaults'''
-        settings_mediator.restore_default_settings()

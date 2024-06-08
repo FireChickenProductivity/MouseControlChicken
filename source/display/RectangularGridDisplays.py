@@ -1,13 +1,24 @@
 from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
-from .Skipper import Skipper, HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
+from .Skipper import HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
 from ..grid.GridCalculations import compute_primary_grid
+from .ZigzagComputations import ZigzagOffsetComputer
 from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
 from ..SettingsMediator import settings_mediator
 from ..fire_chicken.mouse_position import MousePosition
-from typing import Callable, Generator
+from typing import Generator
+
+def _compute_new_position_given_offset(position: MousePosition, offset: int, is_horizontal: bool) -> MousePosition:
+    horizontal_delta = vertical_delta = 0
+    if is_horizontal:
+        vertical_delta = offset
+    else:
+        horizontal_delta = offset
+    position_delta = MousePosition(horizontal_delta, vertical_delta)
+    new_position = position + position_delta
+    return new_position
 
 class RectangularGridFrameDisplay(FrameDisplay):
     def __init__(self):
@@ -20,6 +31,7 @@ class RectangularGridFrameDisplay(FrameDisplay):
 
     def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
         self.canvas = canvas
+        self.zigzag_return_threshold = settings_mediator.get_zigzag_threshold()
         self._add_main_frame(boundaries_touching)
         if self._should_show_crisscross():
             self._add_crisscross()
@@ -28,27 +40,25 @@ class RectangularGridFrameDisplay(FrameDisplay):
         frame_offset = settings_mediator.get_frame_grid_offset()
         self._add_horizontal_coordinates_to_frame(self.rectangle.top + frame_offset)
         if boundaries_touching.is_touching_bottom_boundary():
-            self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset)
+            self._add_horizontal_coordinates_to_frame(self.rectangle.bottom - frame_offset, should_reverse_zigzag_direction=True)
         self._add_vertical_coordinates_to_frame(self.rectangle.left + frame_offset)
         if boundaries_touching.is_touching_right_boundary():
-            self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset)
+            self._add_vertical_coordinates_to_frame(self.rectangle.right - frame_offset, should_reverse_zigzag_direction=True)
 
-    def _add_horizontal_coordinates_to_frame(self, vertical: int):
+    def _add_horizontal_coordinates_to_frame(self, vertical: int, *, should_reverse_zigzag_direction: bool = False):
         self._add_coordinates_to_frame(
             vertical, 
             self.grid.get_horizontal_coordinates(), 
-            self.grid.compute_absolute_horizontal_from_horizontal_coordinates, 
-            HorizontalSkipper(), 
+            should_reverse_zigzag_direction=should_reverse_zigzag_direction,
             is_horizontal=True
         )
 
         
-    def _add_vertical_coordinates_to_frame(self, horizontal: int):
+    def _add_vertical_coordinates_to_frame(self, horizontal: int, *, should_reverse_zigzag_direction: bool = False):
         self._add_coordinates_to_frame(
             horizontal, 
             self.grid.get_vertical_coordinates(), 
-            self.grid.compute_absolute_vertical_from_from_vertical_coordinates, 
-            VerticalSkipper(),
+            should_reverse_zigzag_direction=should_reverse_zigzag_direction,
             is_horizontal=False
         )
             
@@ -56,22 +66,40 @@ class RectangularGridFrameDisplay(FrameDisplay):
             self, 
             constant_coordinate: int, 
             coordinates: Generator, 
-            compute_absolute_coordinate_from_coordinate: Callable[[str], int], 
-            skipper: Skipper,
             *,
+            should_reverse_zigzag_direction: bool,
             is_horizontal: bool
         ):
+        skipper = self._create_skipper_for_dimension(is_horizontal)
         runner = SkipperRunner(skipper)
         runner.set_generator(coordinates)
+        compute_absolute_coordinate_from_coordinate = self._obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(is_horizontal)
+        if self.zigzag_return_threshold:
+            zigzag_offset_computer = ZigzagOffsetComputer(settings_mediator.get_text_size(), self.zigzag_return_threshold, should_reverse_direction=should_reverse_zigzag_direction)
         def create_position(coordinate, constant_coordinate, is_horizontal):
             absolute_coordinate = compute_absolute_coordinate_from_coordinate(coordinate)
             horizontal, vertical = self._compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate, constant_coordinate, is_horizontal=is_horizontal)
-            return MousePosition(horizontal, vertical)
+            position = MousePosition(horizontal, vertical)
+            if self.zigzag_return_threshold:
+                position = _compute_new_position_given_offset(position, zigzag_offset_computer.compute_offset(), is_horizontal)
+            return position
         runner.set_position_creator(lambda coordinate: create_position(coordinate, constant_coordinate, is_horizontal))
         def on_inclusion(coordinate, position):
             self._draw_text_on_canvas(coordinate, position.get_horizontal(), position.get_vertical())
+            if self.zigzag_return_threshold: 
+                zigzag_offset_computer.update_offset()
         runner.set_on_inclusion(on_inclusion)
         runner.run()
+
+    def _create_skipper_for_dimension(self, is_horizontal):
+        if is_horizontal:
+            return HorizontalSkipper()
+        return VerticalSkipper()
+
+    def _obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(self, is_horizontal: bool):
+        if is_horizontal:
+            return self.grid.compute_absolute_horizontal_from_horizontal_coordinates
+        return self.grid.compute_absolute_vertical_from_from_vertical_coordinates
 
     @staticmethod
     def _compute_horizontal_and_vertical_from_absolute_and_constant_coordinates(absolute_coordinate: int, constant_coordinate: int, *, is_horizontal: bool):
