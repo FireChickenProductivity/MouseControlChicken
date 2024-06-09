@@ -2,7 +2,7 @@ from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
 from .Skipper import HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
-from ..grid.GridCalculations import compute_primary_grid
+from ..grid.GridCalculations import compute_primary_grid, is_rectangular_grid, is_square_grid
 from .ZigzagComputations import ZigzagOffsetComputer
 from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -293,14 +293,3 @@ class QuadrupleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
     def __init__(self):
         super().__init__(division_factor=2)
 
-def is_rectangular_grid(grid: Grid) -> bool:
-    primary_grid = compute_primary_grid(grid)
-    return isinstance(primary_grid, RectangularGrid)
-
-def is_square_grid(grid: Grid) -> bool:
-    if not is_rectangular_grid(grid):
-        return False
-    primary_grid = compute_primary_grid(grid)
-    horizontal_coordinates = [coordinate for coordinate in primary_grid.get_horizontal_coordinates()]
-    vertical_coordinates = [coordinate for coordinate in primary_grid.get_vertical_coordinates()]
-    return len(horizontal_coordinates) == len(vertical_coordinates)
