@@ -199,71 +199,49 @@ class SettingsMediator:
         self.restore_transparency_settings()
         self._handle_change()
 
-    def get_default_grid_option(self) -> str:
-        return self.default_grid_option
+    def get_default_grid_option(self) -> str: return self.default_grid_option
 
-    def get_text_size(self) -> int:
-        return self.text_size
+    def get_text_size(self) -> int: return self.text_size
 
-    def get_text_color(self) -> str:
-        return self.text_color
+    def get_text_color(self) -> str: return self.text_color
 
-    def get_line_width(self) -> int:
-        return self.line_width
+    def get_line_width(self) -> int: return self.line_width
 
-    def get_line_color(self) -> str:
-        return self.line_color
+    def get_line_color(self) -> str: return self.line_color
 
-    def get_background_transparency(self) -> float:
-        return self.background_transparency
+    def get_background_transparency(self) -> float: return self.background_transparency
 
-    def get_background_color(self) -> str:
-        return self.background_color
+    def get_background_color(self) -> str: return self.background_color
 
-    def get_main_transparency(self) -> float:
-        return self.main_transparency
+    def get_main_transparency(self) -> float: return self.main_transparency
 
-    def get_current_screen_number(self) -> int:
-        return self.current_screen_number
+    def get_current_screen_number(self) -> int: return self.current_screen_number
 
-    def get_frame_grid_offset(self) -> int:
-        return self.frame_grid_offset
+    def get_frame_grid_offset(self) -> int: return self.frame_grid_offset
 
-    def get_frame_grid_should_show_crisscross(self) -> bool:
-        return self.frame_grid_should_show_crisscross
+    def get_frame_grid_should_show_crisscross(self) -> bool: return self.frame_grid_should_show_crisscross
 
-    def get_checker_frequency(self) -> int:
-        return self.checker_frequency
+    def get_checker_frequency(self) -> int: return self.checker_frequency
 
-    def get_zigzag_threshold(self) -> int:
-        return self.zigzag_threshold
+    def get_zigzag_threshold(self) -> int: return self.zigzag_threshold
 
-    def get_scrolling_amount(self) -> int:
-        return settings.get(scrolling_amount)
+    def get_scrolling_amount(self) -> int: return settings.get(scrolling_amount)
 
-    def get_flickering_enabled(self) -> bool:
-        return self.flickering_enabled
+    def get_flickering_enabled(self) -> bool: return self.flickering_enabled
 
-    def get_flickering_show_time(self) -> int:
-        return self.flickering_show_time
+    def get_flickering_show_time(self) -> int: return self.flickering_show_time
 
-    def get_flickering_hide_time(self) -> int:
-        return self.flickering_hide_time
+    def get_flickering_hide_time(self) -> int: return self.flickering_hide_time
 
-    def get_transparency_flickering_show_time(self) -> int:
-        return self.transparency_flickering_show_time
+    def get_transparency_flickering_show_time(self) -> int: return self.transparency_flickering_show_time
     
-    def get_transparency_flickering_hide_time(self) -> int:
-        return self.transparency_flickering_hide_time
+    def get_transparency_flickering_hide_time(self) -> int: return self.transparency_flickering_hide_time
 
-    def get_default_rectangle_manager(self) -> str:
-        return self.default_rectangle_manager
+    def get_default_rectangle_manager(self) -> str: return self.default_rectangle_manager
     
-    def get_horizontal_proximity_frame_distance(self) -> int:
-        return self.horizontal_proximity_frame_distance
+    def get_horizontal_proximity_frame_distance(self) -> int: return self.horizontal_proximity_frame_distance
     
-    def get_vertical_proximity_frame_distance(self) -> int:
-        return self.vertical_proximity_frame_distance
+    def get_vertical_proximity_frame_distance(self) -> int: return self.vertical_proximity_frame_distance
     
     def rotate_transparency_settings_to_alternates(self):
         self.background_transparency = self.alternate_background_transparency
