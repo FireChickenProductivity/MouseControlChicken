@@ -13,7 +13,7 @@ class CombinationDisplayNotSupportedException(Exception):
     pass
 
 DISPLAY_TYPES = [EmptyDisplay, RectangularGridFrameDisplay, UniversalPositionDisplay, DoubleFrameDisplay, QuadrupleFrameDisplay, NarrowDisplay, DoubleNarrowDisplay, RectangularPositionDisplay,
-                 RectangularCheckerDisplay, RectangularDiagonalDisplay, DoubleRectangularDiagonalDisplay, QuadrupleRectangularDiagonalDisplay]
+                 RectangularCheckerDisplay, RectangularDiagonalDisplay, DoubleRectangularDiagonalDisplay, QuadrupleRectangularDiagonalDisplay, ProximityFrameDisplay]
 DISPLAY_WRAPPER_TYPES = [ReverseCoordinateDoublingDisplay]
 
 def obtain_wrapper_and_wrapped_type_from(name: str) -> Tuple[Type, Type]:
