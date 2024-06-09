@@ -2,7 +2,7 @@ from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
 from .Skipper import HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
 from ..grid.Grid import Grid, RectangularGrid, Rectangle
-from ..grid.GridCalculations import compute_primary_grid
+from ..grid.GridCalculations import compute_primary_grid, is_rectangular_grid, is_square_grid
 from .ZigzagComputations import ZigzagOffsetComputer
 from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -159,7 +159,29 @@ class QuadrupleFrameDisplay(DoubleFrameDisplay):
         coroners = compute_rectangle_corners(self.rectangle)
         for corner in coroners: 
             self._add_middle_frame(corner)
-        
+
+class ProximityFrameDisplay(RectangularGridFrameDisplay):
+    def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
+        super().draw_on_canvas_given_boundaries_touching(canvas, boundaries_touching)
+        self._add_proximity_frames(self.rectangle)
+
+    def _add_proximity_frames(self, rectangle: Rectangle):
+        frame_offset = settings_mediator.get_frame_grid_offset()
+        top = rectangle.top + frame_offset
+        bottom = rectangle.bottom - frame_offset
+        left = rectangle.left + frame_offset
+        right = rectangle.right - frame_offset
+        minimum_vertical_distance = settings_mediator.get_vertical_proximity_frame_distance()
+        minimum_horizontal_distance = settings_mediator.get_horizontal_proximity_frame_distance()
+        vertical = top
+        while vertical + minimum_vertical_distance < bottom:
+            vertical += minimum_vertical_distance
+            self._add_horizontal_coordinates_to_frame(vertical)
+        horizontal = left
+        while horizontal + minimum_horizontal_distance < right:
+            horizontal += minimum_horizontal_distance
+            self._add_vertical_coordinates_to_frame(horizontal)
+
 class RectangularPositionDisplay(PositionDisplay):
     """For every horizontal and vertical coordinate combination, show the absolute position of the cursor."""
     def __init__(self):
@@ -271,14 +293,3 @@ class QuadrupleRectangularDiagonalDisplay(RectangularDiagonalDisplay):
     def __init__(self):
         super().__init__(division_factor=2)
 
-def is_rectangular_grid(grid: Grid) -> bool:
-    primary_grid = compute_primary_grid(grid)
-    return isinstance(primary_grid, RectangularGrid)
-
-def is_square_grid(grid: Grid) -> bool:
-    if not is_rectangular_grid(grid):
-        return False
-    primary_grid = compute_primary_grid(grid)
-    horizontal_coordinates = [coordinate for coordinate in primary_grid.get_horizontal_coordinates()]
-    vertical_coordinates = [coordinate for coordinate in primary_grid.get_vertical_coordinates()]
-    return len(horizontal_coordinates) == len(vertical_coordinates)

@@ -156,6 +156,8 @@ Quadruple Rectangular Diagonal Display: Shows the main diagonal coordinates for 
 
 ![image](https://github.com/FireChickenProductivity/MouseControlChicken/assets/107892169/39b5943e-ddb4-4a6e-a388-a0cda2ef035c)
 
+Proximity Frame: Shows a frame display with vertical coordinate frame lines at every pixel distance given by the horizontal frame proximity distance and horizontal coordinate frame lines at every pixel distance given by the vertical frame proximity distance. The default values for this can be set with the user.mouse_control_chicken_default_horizontal_frame_proximity_distance and user.mouse_control_chicken_default_vertical_frame_proximity_distance settings. The main advantage this has over the double and quadruple frames is that it will cover less of the screen with smaller windows while still making it easier to see the coordinates with bigger areas.
+
 #### Narrow Grid Display Options
 
 Narrow: Draws every region on the grid's primary coordinate system and shows the corresponding coordinate in the middle of the region.

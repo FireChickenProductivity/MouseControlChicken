@@ -1,4 +1,4 @@
-from .Grid import Grid
+from .Grid import Grid, RectangularGrid
 from typing import List
 
 def compute_primary_grid(grid: Grid):
@@ -126,3 +126,15 @@ def find_first_grid_tree_node_matching_function(tree: Node, function):
 
 class GridNotFoundException(Exception):
     pass
+
+def is_rectangular_grid(grid: Grid) -> bool:
+    primary_grid = compute_primary_grid(grid)
+    return isinstance(primary_grid, RectangularGrid)
+
+def is_square_grid(grid: Grid) -> bool:
+    if not is_rectangular_grid(grid):
+        return False
+    primary_grid = compute_primary_grid(grid)
+    horizontal_coordinates = [coordinate for coordinate in primary_grid.get_horizontal_coordinates()]
+    vertical_coordinates = [coordinate for coordinate in primary_grid.get_vertical_coordinates()]
+    return len(horizontal_coordinates) == len(vertical_coordinates)

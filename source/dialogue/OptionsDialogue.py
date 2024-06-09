@@ -6,7 +6,7 @@ class OptionsDialogueInformation:
         self.title = title
         self.options = options
         self.page_number = 1
-        self.items_per_page = 10
+        self.items_per_page = 15
         self.compute_page()
 
     def compute_page(self):
