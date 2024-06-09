@@ -171,8 +171,8 @@ class ProximityFrameDisplay(RectangularGridFrameDisplay):
         bottom = rectangle.bottom - frame_offset
         left = rectangle.left + frame_offset
         right = rectangle.right - frame_offset
-        minimum_vertical_distance = 200
-        minimum_horizontal_distance = 300
+        minimum_vertical_distance = settings_mediator.get_vertical_proximity_frame_distance()
+        minimum_horizontal_distance = settings_mediator.get_horizontal_proximity_frame_distance()
         vertical = top
         while vertical + minimum_vertical_distance < bottom:
             vertical += minimum_vertical_distance
