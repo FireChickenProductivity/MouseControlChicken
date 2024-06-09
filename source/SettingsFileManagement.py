@@ -20,6 +20,8 @@ settings():
     #This determines how far from the frame the text is in a frame grid display.
     user.mouse_control_chicken_default_frame_grid_offset = 10
     user.mouse_control_chicken_default_frame_grid_should_show_crisscross = false
+    user.mouse_control_chicken_default_horizontal_frame_proximity_distance = 350
+    user.mouse_control_chicken_default_vertical_frame_proximity_distance = 400
     #Every nth position is shown on a checker display where n is the frequency.
     user.mouse_control_chicken_default_checker_frequency = 3
     user.mouse_control_chicken_default_zigzag_threshold = 0
