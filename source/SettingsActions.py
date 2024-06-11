@@ -3,6 +3,11 @@ from .SettingsMediator import settings_mediator
 
 module = Module()
 
+def is_valid_transparency(transparency: int) -> bool:
+    return transparency >= 0 and transparency <= 100
+
+def convert_transparency_to_float(transparency: int) -> float:
+    return transparency / 100.0
 
 @module.action_class
 class Actions:
@@ -26,3 +31,15 @@ class Actions:
         '''Sets the mouse control chicken text size'''
         if size > 0:
             settings_mediator.set_text_size(size)
+
+    def mouse_control_chickens_set_main_transparency(transparency: int):
+        '''Sets the mouse control chicken main transparency'''
+        if is_valid_transparency(transparency):
+            converted_transparency = convert_transparency_to_float(transparency)
+            settings_mediator.set_main_transparency(converted_transparency)
+        
+    def mouse_control_chickens_set_background_transparency(transparency: int):
+        '''Sets the mouse control chicken background transparency'''
+        if is_valid_transparency(transparency):
+            converted_transparency = convert_transparency_to_float(transparency)
+            settings_mediator.set_background_transparency(converted_transparency)

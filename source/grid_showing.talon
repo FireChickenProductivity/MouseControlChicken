@@ -36,3 +36,4 @@ chicken zigzag [threshold] <number_small>: user.mouse_control_chicken_set_zigzag
 chicken flicker: user.mouse_control_chicken_toggle_flicker_display()
 chicken flicker transparency: user.mouse_control_chicken_toggle_transparency_flicker()
 chicken [text] size <number_small>: user.mouse_control_chicken_set_text_size(number_small)
+chicken [main] (transparency|transparent) <number_small>: user.mouse_control_chickens_set_main_transparency(number_small)
