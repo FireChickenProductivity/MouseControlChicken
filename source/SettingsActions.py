@@ -21,3 +21,8 @@ class Actions:
     def mouse_control_chicken_refresh():
         '''Refreshes the mouse control chicken grid and reloads settings from their defaults'''
         settings_mediator.restore_default_settings()
+    
+    def mouse_control_chicken_set_text_size(size: int):
+        '''Sets the mouse control chicken text size'''
+        if size > 0:
+            settings_mediator.set_text_size(size)
