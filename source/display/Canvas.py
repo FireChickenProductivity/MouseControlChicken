@@ -83,6 +83,7 @@ def compute_transparency_in_hexadecimal(transparency) -> str:
     transparency_amount = 0xFF*(1 - transparency)
     hexadecimal = hex(round(transparency_amount))
     result = hexadecimal[2:4]
+    if result == "0": result += "0"
     return result
 
 def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
