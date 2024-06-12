@@ -38,3 +38,5 @@ chicken flicker transparency: user.mouse_control_chicken_toggle_transparency_fli
 chicken [text] size <number_small>: user.mouse_control_chicken_set_text_size(number_small)
 chicken [main] (transparency|transparent) <user.mouse_control_chicken_percentage>:
     user.mouse_control_chickens_set_main_transparency(mouse_control_chicken_percentage)
+chicken (back|background) (transparency|transparent) <user.mouse_control_chicken_percentage>:
+    user.mouse_control_chickens_set_background_transparency(mouse_control_chicken_percentage)
