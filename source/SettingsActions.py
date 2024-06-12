@@ -46,6 +46,7 @@ class Actions:
         
 @module.capture(rule = '<number_small>|one hundred')
 def mouse_control_chicken_percentage(m) -> int:
-    if m == 'one hundred':
+    number_text = m[0]
+    if number_text == 'one':
         return 100
-    return m[0]
+    return int(number_text)
