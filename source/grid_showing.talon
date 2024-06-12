@@ -40,3 +40,4 @@ chicken [main] (transparency|transparent) <user.mouse_control_chicken_percentage
     user.mouse_control_chickens_set_main_transparency(mouse_control_chicken_percentage)
 chicken (back|background) (transparency|transparent) <user.mouse_control_chicken_percentage>:
     user.mouse_control_chickens_set_background_transparency(mouse_control_chicken_percentage)
+chicken line width <number_small>: user.mouse_control_chickens_set_line_width(number_small)

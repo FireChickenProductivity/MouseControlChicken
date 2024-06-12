@@ -44,6 +44,11 @@ class Actions:
             converted_transparency = convert_transparency_to_float(transparency)
             settings_mediator.set_background_transparency(converted_transparency)
         
+    def mouse_control_chickens_set_line_width(width: int):
+        '''Sets the mouse control chicken line width'''
+        if width > 0:
+            settings_mediator.set_line_width(width)
+        
 @module.capture(rule = '<number_small>|one hundred')
 def mouse_control_chicken_percentage(m) -> int:
     number_text = m[0]
