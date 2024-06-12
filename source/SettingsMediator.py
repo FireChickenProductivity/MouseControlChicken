@@ -299,6 +299,14 @@ class SettingsMediator:
         self.zigzag_threshold = threshold
         self._handle_change()
     
+    def set_horizontal_proximity_frame_distance(self, distance: int):
+        self.horizontal_proximity_frame_distance = distance
+        self._handle_change()
+    
+    def set_vertical_proximity_frame_distance(self, distance: int):
+        self.vertical_proximity_frame_distance = distance
+        self._handle_change()
+    
     def register_on_change_callback(self, name: str, callback: Callback):
         self.callback_manager.register_callback(name, callback)
     
