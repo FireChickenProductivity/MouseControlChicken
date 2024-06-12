@@ -43,3 +43,9 @@ class Actions:
         if is_valid_transparency(transparency):
             converted_transparency = convert_transparency_to_float(transparency)
             settings_mediator.set_background_transparency(converted_transparency)
+        
+@module.capture(rule = '<number_small>|one hundred')
+def mouse_control_chicken_percentage(m) -> int:
+    if m == 'one hundred':
+        return 100
+    return m[0]
