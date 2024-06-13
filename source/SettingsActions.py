@@ -49,6 +49,16 @@ class Actions:
         if width > 0:
             settings_mediator.set_line_width(width)
         
+    def mouse_control_chicken_set_horizontal_proximity_frame_distance(distance: int):
+        '''Sets the mouse control chicken horizontal proximity frame distance'''
+        if distance > 0:
+            settings_mediator.set_horizontal_proximity_frame_distance(distance)
+
+    def mouse_control_chicken_set_vertical_proximity_frame_distance(distance: int):
+        '''Sets the mouse control chicken vertical proximity frame distance'''
+        if distance > 0:
+            settings_mediator.set_vertical_proximity_frame_distance(distance)
+        
 @module.capture(rule = '<number_small>|one hundred')
 def mouse_control_chicken_percentage(m) -> int:
     number_text = m[0]
