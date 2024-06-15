@@ -38,6 +38,12 @@ default_line_color = setting_creator.create_str_setting(
     desc = 'The default line color used by Mouse Control Chicken'
 ) 
 
+default_line_transparency = setting_creator.create_float_setting(
+    'default_line_transparency',
+    default = 0.50,
+    desc = 'The default line transparency used by Mouse Control Chicken'
+)
+
 default_background_transparency = setting_creator.create_float_setting(
     'default_background_transparency',
     default = 0.50,
@@ -199,6 +205,7 @@ class SettingsMediator:
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
         self.alternate_background_transparency = settings.get(default_alternate_background_transparency)
         self.alternate_main_transparency = settings.get(default_alternate_main_transparency)
+        self.line_transparency = settings.get(default_line_transparency)
         self.initialize_frame_settings()
         self.initialize_flicker_time_settings()
         self.restore_transparency_settings()
@@ -248,6 +255,8 @@ class SettingsMediator:
     
     def get_vertical_proximity_frame_distance(self) -> int: return self.vertical_proximity_frame_distance
     
+    def get_line_transparency(self) -> float: return self.line_transparency
+
     def rotate_transparency_settings_to_alternates(self):
         self.background_transparency = self.alternate_background_transparency
         self.main_transparency = self.alternate_main_transparency
@@ -266,6 +275,10 @@ class SettingsMediator:
 
     def set_line_color(self, color: str):
         self.line_color = color
+        self._handle_change()
+    
+    def set_line_transparency(self, transparency: float):
+        self.line_transparency = transparency
         self._handle_change()
 
     def set_background_transparency(self, transparency: float):
