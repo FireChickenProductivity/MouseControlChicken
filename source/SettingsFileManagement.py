@@ -12,6 +12,7 @@ settings():
     user.mouse_control_chicken_default_text_color = "66ff00"
     user.mouse_control_chicken_default_line_width = 1
     user.mouse_control_chicken_default_line_color = "FF0000"
+    user.mouse_control_chicken_default_line_transparency = 0.5
     user.mouse_control_chicken_default_background_transparency = 0.50
     user.mouse_control_chicken_default_background_color = "000000"
     user.mouse_control_chicken_default_main_transparency = 0
