@@ -1,5 +1,6 @@
 from talon import Module
 from .SettingsMediator import settings_mediator
+from .ColorUtilities import convert_color_name_to_hexadecimal_color_code
 
 module = Module()
 
@@ -8,19 +9,6 @@ def is_valid_transparency(transparency: int) -> bool:
 
 def convert_transparency_to_float(transparency: int) -> float:
     return transparency / 100.0
-
-def convert_color_name_to_hexadecimal_color_code(name):
-    color_name_to_hexadecimal_color_code = {
-        'black': '#000000',
-        'blue': '#0000FF',
-        'green': '#008000',
-        'red': '#FF0000',
-        'white': '#FFFFFF',
-        'yellow': '#FFFF00',
-        'bright green': '#66ff00',
-        'bright blue': '#0096FF',
-    }
-    return color_name_to_hexadecimal_color_code.get(name, None)
 
 def update_color_setting(color, setting_method):
     hexadecimal_color_code = convert_color_name_to_hexadecimal_color_code(color)

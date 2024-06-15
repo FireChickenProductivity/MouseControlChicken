@@ -2,6 +2,7 @@ from talon import Module, settings, app
 from .SettingsFileManagement import create_settings_file
 from .SettingsCreation import SettingCreator
 from .Callbacks import CallbackManager, Callback
+from .ColorUtilities import compute_color
 
 module = Module()
 
@@ -152,7 +153,11 @@ default_vertical_frame_proximity_distance = setting_creator.create_int_setting(
     "For the mouse control chicken proximity frame grid, this gives the maximum amount of distance in between the horizontal frame coordinate lines."
 )
     
-
+def compute_color_setting(name):
+    setting_value = settings.get(name)
+    color = compute_color(setting_value)
+    return color
+    
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
@@ -185,10 +190,10 @@ class SettingsMediator:
     def restore_default_settings(self):
         self.default_grid_option = settings.get(default_grid_option)
         self.text_size = settings.get(default_text_size)
-        self.text_color = settings.get(default_text_color)
+        self.text_color = compute_color_setting(default_text_color)
         self.line_width = settings.get(default_line_width)
-        self.line_color = settings.get(default_line_color)
-        self.background_color = settings.get(default_background_color)
+        self.line_color = compute_color_setting(default_line_color)
+        self.background_color = compute_color_setting(default_background_color)
         self.checker_frequency = settings.get(default_checker_frequency)
         self.flickering_enabled = settings.get(flickering_enabled)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
