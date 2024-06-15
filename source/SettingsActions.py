@@ -38,19 +38,25 @@ class Actions:
         if size > 0:
             settings_mediator.set_text_size(size)
 
-    def mouse_control_chickens_set_main_transparency(transparency: int):
+    def mouse_control_chicken_set_main_transparency(transparency: int):
         '''Sets the mouse control chicken main transparency'''
         if is_valid_transparency(transparency):
             converted_transparency = convert_transparency_to_float(transparency)
             settings_mediator.set_main_transparency(converted_transparency)
         
-    def mouse_control_chickens_set_background_transparency(transparency: int):
+    def mouse_control_chicken_set_background_transparency(transparency: int):
         '''Sets the mouse control chicken background transparency'''
         if is_valid_transparency(transparency):
             converted_transparency = convert_transparency_to_float(transparency)
             settings_mediator.set_background_transparency(converted_transparency)
+
+    def mouse_control_chicken_set_line_transparency(transparency: int):
+        '''Sets the mouse control chicken line transparency'''
+        if is_valid_transparency(transparency):
+            converted_transparency = convert_transparency_to_float(transparency)
+            settings_mediator.set_line_transparency(converted_transparency)
         
-    def mouse_control_chickens_set_line_width(width: int):
+    def mouse_control_chicken_set_line_width(width: int):
         '''Sets the mouse control chicken line width'''
         if width > 0:
             settings_mediator.set_line_width(width)
@@ -65,15 +71,15 @@ class Actions:
         if distance > 0:
             settings_mediator.set_vertical_proximity_frame_distance(distance)
 
-    def mouse_control_chickens_set_text_color(color: str):
+    def mouse_control_chicken_set_text_color(color: str):
         '''Sets the mouse control chicken text color'''
         update_color_setting(color, settings_mediator.set_text_color)
 
-    def mouse_control_chickens_set_background_color(color: str):
+    def mouse_control_chicken_set_background_color(color: str):
         '''Sets the mouse control chicken background color'''
         update_color_setting(color, settings_mediator.set_background_color)
         
-    def mouse_control_chickens_set_line_color(color: str):
+    def mouse_control_chicken_set_line_color(color: str):
         '''Sets the mouse control chicken line color'''
         update_color_setting(color, settings_mediator.set_line_color)
         
