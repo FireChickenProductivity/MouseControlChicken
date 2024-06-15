@@ -9,6 +9,24 @@ def is_valid_transparency(transparency: int) -> bool:
 def convert_transparency_to_float(transparency: int) -> float:
     return transparency / 100.0
 
+def convert_color_name_to_hexadecimal_color_code(name):
+    color_name_to_hexadecimal_color_code = {
+        'black': '#000000',
+        'blue': '#0000FF',
+        'green': '#008000',
+        'red': '#FF0000',
+        'white': '#FFFFFF',
+        'yellow': '#FFFF00',
+        'bright green': '#66ff00',
+        'bright blue': '#0096FF',
+    }
+    return color_name_to_hexadecimal_color_code.get(name, None)
+
+def update_color_setting(color, setting_method):
+    hexadecimal_color_code = convert_color_name_to_hexadecimal_color_code(color)
+    if hexadecimal_color_code:
+        setting_method(hexadecimal_color_code)
+
 @module.action_class
 class Actions:
     def mouse_control_chicken_toggle_frame_display_crisscross():
@@ -58,6 +76,18 @@ class Actions:
         '''Sets the mouse control chicken vertical proximity frame distance'''
         if distance > 0:
             settings_mediator.set_vertical_proximity_frame_distance(distance)
+
+    def mouse_control_chickens_set_text_color(color: str):
+        '''Sets the mouse control chicken text color'''
+        update_color_setting(color, settings_mediator.set_text_color)
+
+    def mouse_control_chickens_set_background_color(color: str):
+        '''Sets the mouse control chicken background color'''
+        update_color_setting(color, settings_mediator.set_background_color)
+        
+    def mouse_control_chickens_set_line_color(color: str):
+        '''Sets the mouse control chicken line color'''
+        update_color_setting(color, settings_mediator.set_line_color)
         
 @module.capture(rule = '<number_small>|one hundred')
 def mouse_control_chicken_percentage(m) -> int:
@@ -65,3 +95,7 @@ def mouse_control_chicken_percentage(m) -> int:
     if number_text == 'one':
         return 100
     return int(number_text)
+
+@module.capture(rule = '([bright] green|red|[bright] blue|yellow|black|white)')
+def mouse_control_chicken_color_name(m) -> str:
+    return ' '.join(m)

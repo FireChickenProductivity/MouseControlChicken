@@ -43,3 +43,5 @@ chicken (back|background) (transparency|transparent) <user.mouse_control_chicken
 chicken line width <number_small>: user.mouse_control_chickens_set_line_width(number_small)
 chicken horizontal (procs|proximity) <number>: user.mouse_control_chicken_set_horizontal_proximity_frame_distance(number)
 chicken vertical (procs|proximity) <number>: user.mouse_control_chicken_set_vertical_proximity_frame_distance(number)
+chicken text color <user.mouse_control_chicken_color_name>: user.mouse_control_chickens_set_text_color(mouse_control_chicken_color_name)
+chicken (back|background) color <user.mouse_control_chicken_color_name>: user.mouse_control_chickens_set_background_color(mouse_control_chicken_color_name)
