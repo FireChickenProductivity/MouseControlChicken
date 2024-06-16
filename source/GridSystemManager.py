@@ -11,7 +11,7 @@ from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display
 from .DisplayManagement import DisplayManager
-from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
+from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
 
 class GridSystemManager:
