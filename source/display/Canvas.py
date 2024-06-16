@@ -83,6 +83,7 @@ def compute_transparency_in_hexadecimal(transparency) -> str:
     transparency_amount = 0xFF*(1 - transparency)
     hexadecimal = hex(round(transparency_amount))
     result = hexadecimal[2:4]
+    if result == "0": result += "0"
     return result
 
 def draw_background_rectangle_for_text(canvas, text: Text, text_size: int):
@@ -110,12 +111,18 @@ def compute_text_vertical(canvas, text: Text):
 def compute_background_rectangle_for_text(canvas, text: Text):
     return canvas.paint.measure_text(text.text)[1].copy()
 
+def compute_line_color_with_transparency() -> str:
+    color = settings_mediator.get_line_color()
+    transparency = settings_mediator.get_line_transparency()
+    result = color + compute_transparency_in_hexadecimal(transparency)
+    return result
+
 class Canvas:
     def __init__(self):
         self.rect = None
         self.canvas = None
         self.showing = False
-        self.line_options = CanvasElementOptions(settings_mediator.get_line_width(), settings_mediator.get_line_color())
+        self.line_options = CanvasElementOptions(settings_mediator.get_line_width(), compute_line_color_with_transparency())
         self.text_options = CanvasElementOptions(settings_mediator.get_text_size(), settings_mediator.get_text_color())
         self.lines = LineManager(self.line_options)
         self.text = TextManager(self.text_options)
