@@ -196,6 +196,47 @@ class Actions:
         '''Returns the mouse control chicken grid factory with the specified name'''
         return grid_factory_options.get_factory(name)
 
+class ConstructionCommand:
+    def execute_on_current_grid(self, grid: Grid) -> Grid: pass
+
+    def is_leaf_command(self) -> bool: pass
+
+class SimpleGridConstructionCommand(ConstructionCommand):
+    def __init__(self, factory, argument: str):
+        self.factory = factory
+        self.argument = argument
+    
+    def execute_on_current_grid(self, grid: Grid) -> Grid:
+        return self.factory.create_grid(self.argument)
+
+    def is_leaf_command(self) -> bool:
+        return True
+    
+    def get_factory(self):
+        return self.factory
+    
+class ComplexGridConstructionCommand(ConstructionCommand):
+    def is_leaf_command(self) -> bool:
+        return False
+
+class CombineWithConstructionCommand(ComplexGridConstructionCommand):
+    def __init__(self, parent_grid_command: ConstructionCommand):
+        self.parent_grid_command = parent_grid_command
+
+    def execute_on_current_grid(self, grid: Grid) -> Grid:
+        parent = self.parent_grid_command.execute_on_current_grid(None)
+        return RecursivelyDivisibleGridCombination(parent, grid)
+    
+class ReverseCoordinateDoublingConstructionCommand(ComplexGridConstructionCommand):
+    def __init__(self, is_horizontal: bool):
+        self.is_horizontal = is_horizontal
+    
+    def execute_on_current_grid(self, grid: Grid) -> Grid:
+        if self.is_horizontal:
+            return ReverseCoordinateHorizontalDoublingGrid(grid)
+        else:
+            return ReverseCoordinateVerticalDoublingGrid(grid)
+
 
 def create_grid_from_options(name: str) -> Grid:
     options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()

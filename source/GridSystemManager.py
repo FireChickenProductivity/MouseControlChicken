@@ -1,4 +1,5 @@
 from .grid.Grid import Grid, Rectangle, RecursivelyDivisibleGrid
+from .GridFactory import RectangularRecursiveDivisionGridFactory #Unnecessary import to try to help prevent needing to restart after download
 from .display.Display import Display
 from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
@@ -91,7 +92,7 @@ class GridSystemManager:
             self.display_manager.toggle_transparency_flickering(show_time, hide_time)
         
 manager: GridSystemManager = None
-current_option: str = None
+last_option_name: str = None
 
 def perform_grid_switch_with_display(grid: Grid, display: Display):
     global manager
@@ -105,8 +106,8 @@ module = Module()
 class Actions:
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
-        global current_option
-        current_option = name
+        global last_option_name
+        last_option_name = name
         options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
@@ -138,7 +139,7 @@ class Actions:
 
     def mouse_control_chicken_show_default_display_options():
         '''Shows options for the new default grid display for the active mouse control chicken grid'''
-        show_display_options("Default Display Options", lambda display_name: update_option_default_display(current_option, display_name))
+        show_display_options("Default Display Options", lambda display_name: update_option_default_display(last_option_name, display_name))
 
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
@@ -232,6 +233,11 @@ def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition
     elif grid.supports_narrowing():
         position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
     return position
+
+@module.action_class
+class DynamicGridChangeActions:
+    pass
+            
 
 def show_display_options(title: str, callback):
     grid = manager.get_grid()
