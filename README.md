@@ -68,6 +68,23 @@ chicken checker frequency (number_small): This determines how frequently to show
 
 chicken zigzag (number_small): If 0, frame grids will not zigzag. Otherwise, the frames will be drawn in a zigzagging pattern instead of with straight lines where the number determines how many coordinates will be drawn before changing directions. This can make the grid obscure less of what is behind it but make reading the coordinates for a position somewhat harder.
 
+chicken [text] size <number_small>: user.mouse_control_chicken_set_text_size(number_small)
+chicken [main] (transparency|transparent) <user.mouse_control_chicken_percentage>:
+    user.mouse_control_chicken_set_main_transparency(mouse_control_chicken_percentage)
+chicken (back|background) (transparency|transparent) <user.mouse_control_chicken_percentage>:
+    user.mouse_control_chicken_set_background_transparency(mouse_control_chicken_percentage)
+chicken line width <number_small>: user.mouse_control_chicken_set_line_width(number_small)
+chicken horizontal (procs|proximity) <number>: user.mouse_control_chicken_set_horizontal_proximity_frame_distance(number)
+chicken vertical (procs|proximity) <number>: user.mouse_control_chicken_set_vertical_proximity_frame_distance(number)
+chicken text color <user.mouse_control_chicken_color_name>: user.mouse_control_chicken_set_text_color(mouse_control_chicken_color_name)
+chicken (back|background) color <user.mouse_control_chicken_color_name>: user.mouse_control_chicken_set_background_color(mouse_control_chicken_color_name)
+chicken line color <user.mouse_control_chicken_color_name>: user.mouse_control_chicken_set_line_color(mouse_control_chicken_color_name)
+chicken line (transparency|transparent) <user.mouse_control_chicken_percentage>:
+    user.mouse_control_chicken_set_line_transparency(mouse_control_chicken_percentage)
+
+chicken text size (number_small): temporarily changes the text size.
+chicken main transparence
+
 ### Narrowing Grid Showing Commands
 
 If the active grid showing operates by narrowing around dictated coordinates, the following becomes available (The standard grid showing commands are still available and work the way they usually do but do not narrow the grid):
