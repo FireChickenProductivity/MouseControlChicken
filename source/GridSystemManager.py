@@ -134,7 +134,7 @@ class Actions:
         )
 
     def mouse_control_chicken_show_default_display_options():
-        '''Shows options for the new default grid for the active mouse control chicken grid'''
+        '''Shows options for the new default grid display for the active mouse control chicken grid'''
         show_display_options("Default Display Options", lambda display_name: update_option_default_display(current_option, display_name))
 
     def mouse_control_chicken_hide_grid():
