@@ -248,7 +248,7 @@ https://github.com/tararoys/modified_full_mouse_grid
 
 https://github.com/tararoys/dense-mouse-grid
 
-In particular, I was inspired by the idea of an alphabet based grid.
+In particular, I was inspired by the idea of an alphabet based grid as well as the idea of a checker display. 
 
 The community repository (https://github.com/talonhub/community) mouse grid influenced my default color scheme.
 
