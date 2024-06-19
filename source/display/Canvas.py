@@ -153,6 +153,7 @@ class Canvas:
     def draw(self, canvas):
         canvas.paint.text_align = canvas.paint.TextAlign.CENTER
         canvas.paint.style = Paint.Style.FILL
+        canvas.paint.font.typeface = settings_mediator.get_font()
         self.lines.add_to_canvas(canvas)
         self.text.add_to_canvas(canvas)
 

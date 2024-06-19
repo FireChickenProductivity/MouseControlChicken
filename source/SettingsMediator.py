@@ -14,6 +14,12 @@ default_grid_option = setting_creator.create_str_setting(
     desc = 'The default grid option used by Mouse Control Chicken',
 )
 
+font = setting_creator.create_str_setting(
+    'font',
+    default = "lucida sans typewriter",
+    desc = 'The font used by Mouse Control Chicken'
+)
+
 default_text_size = setting_creator.create_int_setting(
     'default_text_size',
     default = 10,
@@ -212,6 +218,8 @@ class SettingsMediator:
         self._handle_change()
 
     def get_default_grid_option(self) -> str: return self.default_grid_option
+
+    def get_font(self) -> str: return settings.get(font)
 
     def get_text_size(self) -> int: return self.text_size
 
