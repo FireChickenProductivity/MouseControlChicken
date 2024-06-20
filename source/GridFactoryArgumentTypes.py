@@ -1,5 +1,6 @@
 from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
 , GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
+from .GridOptionsList import get_grid_options
 from .dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
 from .ContextUtilities import create_context_matches_single_tag_string
 from .GridOptions import GridOptions
@@ -60,14 +61,14 @@ class GridOptionArgumentType(FactoryArgumentType):
         super().__init__(str, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG)
 
     def _argument_has_valid_value(self, argument):
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: GridOptions = get_grid_options()
         return options.has_option(argument)
 
     def supports_options_dialogue(self) -> bool:
         return True
 
     def get_options(self) -> List[str]:
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: GridOptions = get_grid_options()
         return options.get_option_names()
 
 CAPTURE_NAME = "user.mouse_control_chicken_grid_factory_argument"

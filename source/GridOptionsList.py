@@ -85,9 +85,7 @@ def initialize_grid_options():
     fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")
 
-@module.action_class
-class Actions:
-    def mouse_control_chicken_get_grid_options() -> GridOptions:
+def get_grid_options() -> GridOptions:
         '''Returns the mouse control chicken grid options'''
         global options
         return options

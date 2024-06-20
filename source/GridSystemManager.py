@@ -9,7 +9,7 @@ from .display.DisplayOptionsComputations import compute_display_options_given_gr
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
-from .GridOptionsList import update_option_default_display, initialize_grid_options
+from .GridOptionsList import update_option_default_display, initialize_grid_options, get_grid_options
 from .DisplayManagement import DisplayManager
 from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
@@ -100,7 +100,7 @@ class Actions:
         '''Updates the mouse control chicken current grid to the specified grid option'''
         global current_option
         current_option = name
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: GridOptions = get_grid_options()
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = compute_display_options_given_grid(grid)
@@ -121,7 +121,7 @@ class Actions:
 
     def mouse_control_chicken_show_grid_options():
         '''Shows the mouse control chicken grid options'''
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: GridOptions = get_grid_options()
         names = [name for name in options.get_option_names()]
         actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
 

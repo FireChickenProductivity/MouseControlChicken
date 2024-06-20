@@ -1,4 +1,5 @@
 from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
+from .GridOptionsList import get_grid_options
 from .GridOptions import GridOptions
 from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
 from .grid.RectangularGrid import ListBasedGrid
@@ -198,7 +199,7 @@ class Actions:
 
 
 def create_grid_from_options(name: str) -> Grid:
-    options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+    options: GridOptions = get_grid_options()
     option = options.get_option(name)
     grid = grid_factory_options.create_grid(option.get_factory_name(), option.get_argument())
     return grid
