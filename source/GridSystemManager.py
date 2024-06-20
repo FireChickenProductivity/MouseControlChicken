@@ -9,7 +9,7 @@ from .display.DisplayOptionsComputations import compute_display_options_given_gr
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
-from .GridOptionsList import update_option_default_display
+from .GridOptionsList import update_option_default_display, initialize_grid_options
 from .DisplayManagement import DisplayManager
 from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
@@ -246,6 +246,7 @@ def manager_has_narrow_able_grid() -> bool:
     return grid and grid.supports_narrowing()
 
 def setup():
+    initialize_grid_options()
     global manager
     manager = GridSystemManager()
     register_on_change_callback()
