@@ -74,10 +74,7 @@ class GridSystemManager:
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
-        print('showing!')
         if not self.grid and self.should_load_default_grid_next:
-            print('self.grid', self.grid)
-            print('self.should_load_default_grid_next', self.should_load_default_grid_next)
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
         else:
             self.display_manager.prepare_to_show()
@@ -106,8 +103,6 @@ class Actions:
         global current_option
         current_option = name
         options: GridOptions = get_grid_options()
-        print('options', options)
-        print('current_option', current_option)
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = compute_display_options_given_grid(grid)
@@ -152,7 +147,6 @@ class Actions:
     def mouse_control_chicken_show_grid():
         '''Shows the mouse control chicken grid'''
         global manager
-        print('manager', manager)
         manager.show()
 
     def mouse_control_chicken_toggle_flicker_display():
