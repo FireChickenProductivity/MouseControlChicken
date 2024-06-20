@@ -4,6 +4,7 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
+from .GridFactory import GridFactory #Unused import to help with startup issue
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
@@ -73,10 +74,14 @@ class GridSystemManager:
         actions.user.mouse_control_chicken_disable_grid_showing_tags()
     
     def show(self):
+        print('showing!')
         if not self.grid and self.should_load_default_grid_next:
+            print('self.grid', self.grid)
+            print('self.should_load_default_grid_next', self.should_load_default_grid_next)
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
-        self.display_manager.prepare_to_show()
-        self.refresh()
+        else:
+            self.display_manager.prepare_to_show()
+            self.refresh()
     
     def toggle_flicker_display(self):
         if settings_mediator.get_flickering_enabled():
@@ -101,6 +106,8 @@ class Actions:
         global current_option
         current_option = name
         options: GridOptions = get_grid_options()
+        print('options', options)
+        print('current_option', current_option)
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = compute_display_options_given_grid(grid)
