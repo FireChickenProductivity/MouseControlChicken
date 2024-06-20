@@ -342,6 +342,6 @@ class SettingsMediator:
 settings_mediator = SettingsMediator()
 def load_default_settings():
     global settings_mediator
-    settings_mediator.initialize()
     create_settings_file()
+    settings_mediator.initialize()
 app.register('ready', load_default_settings)

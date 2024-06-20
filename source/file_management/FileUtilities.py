@@ -51,6 +51,7 @@ def read_rows_from_csv_file(path: str) -> List[List[str]]:
     return rows
 
 def write_text_to_file_if_uninitialized(path: str, text: str):
+    guarantee_data_directory_exists()
     '''Writes the given text to the file at the given path if the file does not exist'''
     if not os.path.exists(path):
         with open(path, "w") as file:

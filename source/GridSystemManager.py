@@ -152,6 +152,7 @@ class Actions:
     def mouse_control_chicken_show_grid():
         '''Shows the mouse control chicken grid'''
         global manager
+        print('manager', manager)
         manager.show()
 
     def mouse_control_chicken_toggle_flicker_display():
