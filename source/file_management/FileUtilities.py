@@ -4,6 +4,11 @@ from csv import reader, writer
 from typing import List
 
 OUTPUT_DIRECTORY = None
+def guarantee_data_directory_exists():
+    '''Creates the mouse control chicken data directory if it does not exist'''
+    if not os.path.exists(OUTPUT_DIRECTORY):
+        os.makedirs(OUTPUT_DIRECTORY)
+
 def initialize():
     global OUTPUT_DIRECTORY
     OUTPUT_DIRECTORY = compute_output_directory()
@@ -16,11 +21,6 @@ app.register('ready', initialize)
 
 def compute_path_within_output_directory(file_name: str):
     return os.path.join(OUTPUT_DIRECTORY, file_name)
-
-def guarantee_data_directory_exists():
-    '''Creates the mouse control chicken data directory if it does not exist'''
-    if not os.path.exists(OUTPUT_DIRECTORY):
-        os.makedirs(OUTPUT_DIRECTORY)
 
 def guarantee_csv_file_is_initialized(path: str, rows: List[List[str]]):
     '''If the csv file does not exist, this initializes it with the given rows'''
