@@ -8,6 +8,9 @@ def create_settings_file():
 settings():
     #The name of the default grid option. This must be one of the great options that shows up when you open the grid options list.
     user.mouse_control_chicken_default_grid_option = "double alphabet numbers"
+    #The default font option makes it easier to differentiate between I and l.
+    #If you do not like it, you could try "arial rounded mt", which is the default font used by the flex grid
+    user.mouse_control_chicken_font = "lucida sans typewriter"
     user.mouse_control_chicken_default_text_size = 10
     user.mouse_control_chicken_default_text_color = "66ff00"
     user.mouse_control_chicken_default_line_width = 1

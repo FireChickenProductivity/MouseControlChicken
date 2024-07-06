@@ -145,6 +145,7 @@ class DisplayOptions:
         if self.is_for_combination_grid:
             display = self.create_combination_display_from_option(name, current_display)
         else:
+            if name not in self.options: raise ValueError(f"Name {name} not in options {self.options.keys()}")
             display = self.options[name].instantiate()
         return display
 

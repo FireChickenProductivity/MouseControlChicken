@@ -5,12 +5,13 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
+from .GridFactory import GridFactory #Unused import to help with startup issue
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
-from .GridOptionsList import update_option_default_display
+from .GridOptionsList import update_option_default_display, initialize_grid_options, get_grid_options
 from .DisplayManagement import DisplayManager
 from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, obtain_coordinates_and_prefixes
 from talon import Module, actions, app
@@ -76,8 +77,9 @@ class GridSystemManager:
     def show(self):
         if not self.grid and self.should_load_default_grid_next:
             actions.user.mouse_control_chicken_choose_grid_from_options(settings_mediator.get_default_grid_option())
-        self.display_manager.prepare_to_show()
-        self.refresh()
+        else:
+            self.display_manager.prepare_to_show()
+            self.refresh()
     
     def toggle_flicker_display(self):
         if settings_mediator.get_flickering_enabled():
@@ -106,9 +108,9 @@ module = Module()
 class Actions:
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
-        global last_option_name
-        last_option_name = name
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        global current_option
+        current_option = name
+        options: GridOptions = get_grid_options()
         option = options.get_option(name)
         grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
         display_options = compute_display_options_given_grid(grid)
@@ -125,7 +127,7 @@ class Actions:
 
     def mouse_control_chicken_show_grid_options():
         '''Shows the mouse control chicken grid options'''
-        options: GridOptions = actions.user.mouse_control_chicken_get_grid_options()
+        options: GridOptions = get_grid_options()
         names = [name for name in options.get_option_names()]
         actions.user.mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(names, "Grid Options", actions.user.mouse_control_chicken_choose_grid_from_options)
 
@@ -255,6 +257,7 @@ def manager_has_narrow_able_grid() -> bool:
     return grid and grid.supports_narrowing()
 
 def setup():
+    initialize_grid_options()
     global manager
     manager = GridSystemManager()
     register_on_change_callback()

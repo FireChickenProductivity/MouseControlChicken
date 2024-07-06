@@ -78,18 +78,14 @@ def read_grid_options_from_path(path: str) -> GridOptions:
             options.append(option)
     return GridOptions(options)
 
-def on_ready():
+def initialize_grid_options():
     global GRID_OPTIONS_PATH
     GRID_OPTIONS_PATH = compute_path_within_output_directory("GridOptions.csv")
     guarantee_grid_options_file_initialized_at_path(GRID_OPTIONS_PATH)
     fs.watch(GRID_OPTIONS_PATH, update_options)
     update_options(GRID_OPTIONS_PATH, "")
 
-@module.action_class
-class Actions:
-    def mouse_control_chicken_get_grid_options() -> GridOptions:
+def get_grid_options() -> GridOptions:
         '''Returns the mouse control chicken grid options'''
         global options
         return options
-
-app.register("ready", on_ready)

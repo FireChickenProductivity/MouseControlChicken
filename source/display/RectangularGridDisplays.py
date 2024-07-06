@@ -30,9 +30,15 @@ class RectangularGridFrameDisplay(FrameDisplay):
         super().set_grid(primary_grid)
 
     def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
+        self.prepare_for_drawing(canvas)
+        self._add_main_frame(boundaries_touching)
+        self.draw_non_frame_components()
+
+    def prepare_for_drawing(self, canvas: Canvas):
         self.canvas = canvas
         self.zigzag_return_threshold = settings_mediator.get_zigzag_threshold()
-        self._add_main_frame(boundaries_touching)
+
+    def draw_non_frame_components(self):
         if self._should_show_crisscross():
             self._add_crisscross()
     
@@ -162,7 +168,8 @@ class QuadrupleFrameDisplay(DoubleFrameDisplay):
 
 class ProximityFrameDisplay(RectangularGridFrameDisplay):
     def draw_on_canvas_given_boundaries_touching(self, canvas: Canvas, boundaries_touching: BoundariesTouching):
-        super().draw_on_canvas_given_boundaries_touching(canvas, boundaries_touching)
+        self.prepare_for_drawing(canvas)
+        self.draw_non_frame_components()
         self._add_proximity_frames(self.rectangle)
 
     def _add_proximity_frames(self, rectangle: Rectangle):
@@ -174,13 +181,13 @@ class ProximityFrameDisplay(RectangularGridFrameDisplay):
         minimum_vertical_distance = settings_mediator.get_vertical_proximity_frame_distance()
         minimum_horizontal_distance = settings_mediator.get_horizontal_proximity_frame_distance()
         vertical = top
-        while vertical + minimum_vertical_distance < bottom:
-            vertical += minimum_vertical_distance
+        while vertical < bottom + minimum_vertical_distance:
             self._add_horizontal_coordinates_to_frame(vertical)
+            vertical += minimum_vertical_distance
         horizontal = left
-        while horizontal + minimum_horizontal_distance < right:
-            horizontal += minimum_horizontal_distance
+        while horizontal < right + minimum_horizontal_distance:
             self._add_vertical_coordinates_to_frame(horizontal)
+            horizontal += minimum_horizontal_distance
 
 class RectangularPositionDisplay(PositionDisplay):
     """For every horizontal and vertical coordinate combination, show the absolute position of the cursor."""
