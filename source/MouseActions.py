@@ -1,7 +1,7 @@
 from talon import Module, actions
 from .SettingsMediator import settings_mediator
 from .fire_chicken.mouse_position import MousePosition
-from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
+from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
 module = Module()
 @module.action_class
