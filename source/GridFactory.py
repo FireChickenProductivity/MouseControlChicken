@@ -136,7 +136,7 @@ class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
         combination = self.create_grid_from_sub_grids(primary, secondary)
         return combination
 
-    def create_grid_from_sub_grids(primary: Grid, secondary: Grid) -> Grid:
+    def create_grid_from_sub_grids(self, primary: Grid, secondary: Grid) -> Grid:
         return RecursivelyDivisibleGridCombination(primary, secondary)
 
     def compute_primary_and_secondary_options_from_arguments(self, arguments: str):
