@@ -270,6 +270,14 @@ class ReverseCoordinateDoublingConstructionCommand(ComplexGridConstructionComman
         else:
             return ReverseCoordinateVerticalDoublingGrid(grid)
 
+def create_grid_from_construction_commands(commands: List[ConstructionCommand]) -> Grid:
+    current_grid = None
+    for i in range(len(commands) - 1, -1, -1):
+        command = commands[i]
+        current_grid = command.execute_on_current_grid(current_grid)
+    return current_grid
+
+
 
 def create_grid_from_options(name: str) -> Grid:
     options: GridOptions = get_grid_options()
