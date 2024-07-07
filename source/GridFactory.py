@@ -169,19 +169,27 @@ class DoublingGridFactory(GridFactory):
     
     def is_simple_factory(self) -> bool:
         return False
+    
+    def create_grid_from_primary(self, primary: Grid):
+        doubling_class = self.get_doubling_class()
+        return doubling_class(primary)
 
-class HorizontalDoublingGridFactory(DoublingGridFactory):
+    def get_doubling_class(self): pass
+
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         primary = create_grid_from_options(components[0])
-        return ReverseCoordinateHorizontalDoublingGrid(primary)
+        return self.create_grid_from_primary(primary)
+
+class HorizontalDoublingGridFactory(DoublingGridFactory):
+    def get_doubling_class(self):
+        return ReverseCoordinateHorizontalDoublingGrid
     
     def get_name(self) -> str:
         return HORIZONTAL_DOUBLING_GRID_NAME
 
 class VerticalDoublingGridFactory(DoublingGridFactory):
-    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
-        primary = create_grid_from_options(components[0])
-        return ReverseCoordinateVerticalDoublingGrid(primary)
+    def get_doubling_class(self):
+        return ReverseCoordinateVerticalDoublingGrid
     
     def get_name(self) -> str:
         return VERTICAL_DOUBLING_GRID_NAME
