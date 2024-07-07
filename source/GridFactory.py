@@ -133,8 +133,11 @@ class RecursivelyDivisibleGridCombinationGridFactory(GridFactory):
         if primary.supports_narrowing():
             primary = SingleLayerFromRecursiveGridGrid(primary)
         secondary = create_grid_from_options(components[1])
-        combination = RecursivelyDivisibleGridCombination(primary, secondary)
+        combination = self.create_grid_from_sub_grids(primary, secondary)
         return combination
+
+    def create_grid_from_sub_grids(primary: Grid, secondary: Grid) -> Grid:
+        return RecursivelyDivisibleGridCombination(primary, secondary)
 
     def compute_primary_and_secondary_options_from_arguments(self, arguments: str):
         return self._perform_function_on_successful_argument_validation_with_argument_components(
@@ -277,7 +280,31 @@ def create_grid_from_construction_commands(commands: List[ConstructionCommand]) 
         current_grid = command.execute_on_current_grid(current_grid)
     return current_grid
 
+class GridFactoryPair:
+    def __init__(self, grid: Grid, factory: GridFactory):
+        self.grid = grid
+        self.factory = factory
 
+def grid_factory_pair_matches_grid(pair: GridFactoryPair, grid: Grid) -> bool:
+    return pair.grid == grid
+
+def compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(option_name: str) -> List[GridFactoryPair]:
+    options: GridOptions = get_grid_options()
+    option = options.get_option(option_name)
+    factory = grid_factory_options.get_factory(option_name)
+    if factory.is_simple_factory():
+        grid = factory.create_grid(option.get_argument())
+        return [GridFactoryPair(grid, factory)], grid
+    elif factory.get_name() == RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME:
+        primary, secondary = factory.compute_primary_and_secondary_options_from_arguments(option.get_argument())
+        primary_pairs, primary_grid = compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(primary)
+        secondary_pairs, secondary_grid = compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(secondary)
+        return primary_pairs + secondary_pairs, factory.create_grid_from_sub_grids(primary_grid, secondary_grid)
+    elif factory.get_name() in [HORIZONTAL_DOUBLING_GRID_NAME, VERTICAL_DOUBLING_GRID_NAME]:
+        pass
+
+def create_construction_commands_from_option(option: str) -> List[ConstructionCommand]:
+    pass
 
 def create_grid_from_options(name: str) -> Grid:
     options: GridOptions = get_grid_options()
