@@ -6,7 +6,7 @@ from .grid.RectangularGrid import ListBasedGrid
 from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
 from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
-from .grid.GridCalculations import compute_primary_most_grid
+from .grid.GridCalculations import compute_grid_tree
 from typing import List
 from talon import Module, actions
 
@@ -288,31 +288,50 @@ def create_grid_from_construction_commands(commands: List[ConstructionCommand]) 
         current_grid = command.execute_on_current_grid(current_grid)
     return current_grid
 
-class GridFactoryPair:
-    def __init__(self, grid: Grid, factory: GridFactory):
+class GridFactoryOptionTriple:
+    def __init__(self, grid: Grid, factory: GridFactory, option):
         self.grid = grid
         self.factory = factory
+        self.option = option
 
-def grid_factory_pair_matches_grid(pair: GridFactoryPair, grid: Grid) -> bool:
+def grid_factory_option_triple_matches_grid(pair: GridFactoryOptionTriple, grid: Grid) -> bool:
     return pair.grid == grid
 
-def compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(option_name: str) -> List[GridFactoryPair]:
+def find_grid_factory_option_triple_matching_grid(triples: List[GridFactoryOptionTriple], grid: Grid) -> GridFactoryOptionTriple:
+    return next(filter(lambda pair: grid_factory_option_triple_matches_grid(pair, grid), triples))
+
+def compute_grid_factory_option_triples_for_simple_grids_created_during_grid_construction_and_final_grid(option_name: str) -> List[GridFactoryOptionTriple]:
     options: GridOptions = get_grid_options()
     option = options.get_option(option_name)
     factory = grid_factory_options.get_factory(option_name)
     if factory.is_simple_factory():
         grid = factory.create_grid(option.get_argument())
-        return [GridFactoryPair(grid, factory)], grid
+        return [GridFactoryOptionTriple(grid, factory, option)], grid
     elif factory.get_name() == RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME:
         primary, secondary = factory.compute_primary_and_secondary_options_from_arguments(option.get_argument())
-        primary_pairs, primary_grid = compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(primary)
-        secondary_pairs, secondary_grid = compute_grid_factory_pairs_for_simple_grids_created_during_grid_construction_and_final_grid(secondary)
+        primary_pairs, primary_grid = compute_grid_factory_option_triples_for_simple_grids_created_during_grid_construction_and_final_grid(primary)
+        secondary_pairs, secondary_grid = compute_grid_factory_option_triples_for_simple_grids_created_during_grid_construction_and_final_grid(secondary)
         return primary_pairs + secondary_pairs, factory.create_grid_from_sub_grids(primary_grid, secondary_grid)
     elif factory.get_name() in [HORIZONTAL_DOUBLING_GRID_NAME, VERTICAL_DOUBLING_GRID_NAME]:
-        pass
+        primary_option_name = option.get_argument()
+        primary_pairs, primary_grid = compute_grid_factory_option_triples_for_simple_grids_created_during_grid_construction_and_final_grid(primary_option_name)
+        return primary_pairs, factory.create_grid_from_primary(primary_grid)
 
 def create_construction_commands_from_option(option: str) -> List[ConstructionCommand]:
-    pass
+    triples, final_grid = compute_grid_factory_option_triples_for_simple_grids_created_during_grid_construction_and_final_grid(option)
+    tree = compute_grid_tree(final_grid)
+    commands = []
+    while tree.has_children():
+        grid: Grid = tree.get_children()[0]
+        if grid.is_doubling_grid():
+            commands.append(ReverseCoordinateDoublingConstructionCommand(grid.is_horizontal_doubling_grid()))
+        else:
+            triple = find_grid_factory_option_triple_matching_grid(triples, grid)
+            commands.append(CombineWithConstructionCommand(SimpleGridConstructionCommand(triple.factory, triple.option.get_argument())))
+        tree = tree.get_child()
+    triple = find_grid_factory_option_triple_matching_grid(triples, grid)
+    commands.append(SimpleGridConstructionCommand(triple.factory, triple.option.get_argument()))
+    return commands
 
 def create_grid_from_options(name: str) -> Grid:
     options: GridOptions = get_grid_options()
