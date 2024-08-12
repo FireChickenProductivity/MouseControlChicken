@@ -37,6 +37,6 @@ def mouse_control_chicken_letter(m) -> str:
 def mouse_control_chicken_letter_pair(m) -> str:
     return m[0] + " " + m[1] 
 
-@module.capture(rule = "mouse_control_chicken_letter_pair")
+@module.capture(rule = "<user.mouse_control_chicken_letter_pair>")
 def mouse_control_chicken_main_coordinates(m) -> str:
     return " ".join(m)
