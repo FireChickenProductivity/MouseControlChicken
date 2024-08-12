@@ -11,6 +11,7 @@ cancellation_callback: Callable[[], None] = None
 options_information: OptionsDialogueInformation = None
 
 DICTATION_INPUT_CAPTURE = "user.mouse_control_chicken_dictation_input"
+CHOOSING_COMMAND_NAME = "chicken choose"
 
 @imgui.open(y = 0)
 def gui(gui: imgui.GUI):
@@ -21,7 +22,7 @@ def gui(gui: imgui.GUI):
 
 def show_commands_on(gui: imgui.GUI):
     gui.line()
-    gui.text("chicken choose <text>: chooses the dictated text")
+    gui.text(CHOOSING_COMMAND_NAME + " <text>: chooses the dictated text")
     gui.text("accept: accepts the current text input")
     gui.text("cancel or reject: cancels the current text input")
     gui.line()

@@ -6,10 +6,10 @@ from .display.DisplayOptionsComputations import compute_display_options_names_gi
 from .GridOptionsList import write_grid_option
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
+from .dialogue.DictationInputDialogue import CHOOSING_COMMAND_NAME
 from .display.DisplayOptionsComputations import should_compute_combination_display_options_for_grid
 from talon import Module, actions
 
-CHOOSING_COMMAND_NAME = "chicken choose"
 
 class CurrentGrid:
     def __init__(self):
