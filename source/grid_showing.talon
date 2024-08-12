@@ -48,3 +48,6 @@ chicken (back|background) color <user.mouse_control_chicken_color_name>: user.mo
 chicken line color <user.mouse_control_chicken_color_name>: user.mouse_control_chicken_set_line_color(mouse_control_chicken_color_name)
 chicken line (transparency|transparent) <user.mouse_control_chicken_percentage>:
     user.mouse_control_chicken_set_line_transparency(mouse_control_chicken_percentage)
+
+chicken quick [(act|action)] [on]: user.mouse_control_chicken_enable_quick_action_context()
+chicken quick [(act|action)] off: user.mouse_control_chicken_disable_quick_action_context()

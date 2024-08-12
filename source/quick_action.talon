@@ -1,0 +1,4 @@
+tag: user.mouse_control_chicken_showing
+and tag: user.mouse_control_chicken_quick_action
+-
+^<user.mouse_control_chicken_letter_pair>$: user.mouse_control_chicken_click_position(mouse_control_chicken_letter_pair)
