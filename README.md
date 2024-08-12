@@ -112,7 +112,7 @@ choose (option number): Chooses the option with the specified number.
 ### Dictation Input Commands
 Dictation input is available for some dialogues.
 
-choose (option): Sets the dictation input to the dictated option. Depending upon the specific dialogue, the option could be arbitrary dictation or limited.
+chicken choose (option): Sets the dictation input to the dictated option. Depending upon the specific dialogue, the option could be arbitrary dictation or limited.
 
 accept: Accepts the dictation input and closes the dialogue.
 
