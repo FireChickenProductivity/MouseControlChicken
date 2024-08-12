@@ -21,7 +21,7 @@ def gui(gui: imgui.GUI):
 
 def show_commands_on(gui: imgui.GUI):
     gui.line()
-    gui.text("choose <text>: chooses the dictated text")
+    gui.text("chicken choose <text>: chooses the dictated text")
     gui.text("accept: accepts the current text input")
     gui.text("cancel or reject: cancels the current text input")
     gui.line()

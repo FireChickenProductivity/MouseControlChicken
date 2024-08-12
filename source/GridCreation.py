@@ -9,6 +9,8 @@ from .dialogue.DialogueOptions import DialogueOptions
 from .display.DisplayOptionsComputations import should_compute_combination_display_options_for_grid
 from talon import Module, actions
 
+CHOOSING_COMMAND_NAME = "chicken choose"
+
 class CurrentGrid:
     def __init__(self):
         self.name = ''
@@ -71,7 +73,7 @@ class ArgumentBuilder:
             self.arguments.append(choice)
             self.obtain_next_argument_from_user()
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_tag_names_and_options(
-            f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument number>",
+            f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say {CHOOSING_COMMAND_NAME} <argument number>",
             handle_choice,
             actions.user.mouse_control_chicken_cancel_grid_creation,
             argument_type.get_tags(),
@@ -84,7 +86,7 @@ class ArgumentBuilder:
             self.arguments.append(str(argument))
             self.obtain_next_argument_from_user()
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_tag_names(
-            f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say choose <argument>",
+            f"Choose argument {self.argument_index + 1}. Arguments description: {self.factory.get_arguments_description()}: say {CHOOSING_COMMAND_NAME} <argument>",
             handle_argument,
             actions.user.mouse_control_chicken_cancel_grid_creation,
             argument_type.get_tags()
@@ -111,7 +113,7 @@ class Actions:
             actions.user.mouse_control_chicken_set_current_grid_name(dictation_input)
             actions.user.mouse_control_chicken_start_grid_factory_selection()
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_and_cancellation_callback(
-            "Choose Grid Name: say choose <grid name>",
+            f"Choose Grid Name: say {CHOOSING_COMMAND_NAME} <grid name>",
             handle_accepting_dictation_input,
             actions.user.mouse_control_chicken_cancel_grid_creation
         )
@@ -122,7 +124,7 @@ class Actions:
             actions.user.mouse_control_chicken_set_current_grid_factory_name(choice)
             actions.user.mouse_control_chicken_start_grid_argument_selection()
         actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
-            "Choose Grid Factory: say choose <grid factory number>",
+            f"Choose Grid Factory: say {CHOOSING_COMMAND_NAME} <grid factory number>",
             handle_choice,
             actions.user.mouse_control_chicken_cancel_grid_creation,
             actions.user.mouse_control_chicken_get_grid_factory_options()
@@ -144,13 +146,13 @@ class Actions:
         if should_compute_combination_display_options_for_grid(grid):
             options = DialogueOptions(
             handle_choice,
-            "Choose Default Display: say choose <display number>",
+            f"Choose Default Display: say {CHOOSING_COMMAND_NAME} <display number>",
             actions.user.mouse_control_chicken_cancel_grid_creation
             )
             show_combination_display_options(options, grid)
         else:
             actions.user.mouse_control_chicken_show_dictation_input_dialogue_with_title_acceptance_callback_cancellation_callback_and_options(
-                "Choose Default Display: say choose <display number>",
+                f"Choose Default Display: say {CHOOSING_COMMAND_NAME} <display number>",
                 handle_choice,
                 actions.user.mouse_control_chicken_cancel_grid_creation,
                 compute_display_options_names_given_grid(grid)
