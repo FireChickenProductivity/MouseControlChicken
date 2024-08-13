@@ -103,11 +103,13 @@ def compute_categories(grid: Grid):
     result = []
     tree = compute_grid_tree(grid)
     while tree:
-        node_grid = tree.get_value()
-        coordinate_system = node_grid.get_coordinate_system()
-        category = coordinate_system.get_category()
-        result.append(category)
-        print('category', category)
+        number_of_children = len(tree.get_children())
+        if number_of_children < 2:
+            node_grid = tree.get_value()
+            coordinate_system = node_grid.get_coordinate_system()
+            category = coordinate_system.get_category()
+            result.append(category)
+            print('category', category)
         if tree.has_children():
             tree = tree.get_children()[0]
         else:
