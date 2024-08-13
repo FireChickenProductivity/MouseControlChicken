@@ -1,4 +1,7 @@
 from talon import Module, Context
+from .InputCoordinateSystem import InputCoordinateSystem, InputCoordinateSystemCategory
+from .grid.Grid import Grid
+from .grid.GridCalculations import Node, compute_grid_tree
 
 module = Module()
 module.list('mouse_control_chicken_uppercase_letter', desc="Upper case letters for use with the mouse control chicken grids")
@@ -75,3 +78,49 @@ def build_override_contexts():
             module.tag(context.tag, desc=f"Tag for the level {level} of the {input_coordinate_capture_name} capture")
             override_contexts.append(context)
 build_override_contexts()
+
+def compute_tag_start_for_category(category: InputCoordinateSystemCategory):
+    result = ""
+    if category == InputCoordinateSystemCategory.LETTER_PAIR:
+        result = "letter_pair"
+    elif category == InputCoordinateSystemCategory.NUMBER_SEQUENCE:
+        result = "number_sequence"
+    elif category == InputCoordinateSystemCategory.SINGLE_NUMBER:
+        result = "single_number"
+    elif category == InputCoordinateSystemCategory.LOWERCASE_LETTER_PAIR:
+        result = "lowercase_letter_pair"
+    if result:
+        result = f"mouse_control_chicken_{result}"
+    return result
+
+def compute_tag_for_coordinate_system_category_and_depth(category: InputCoordinateSystemCategory, depth: int) -> str:
+    category_tag_start = compute_tag_start_for_category(category)
+    if not category_tag_start:
+        return None
+    return f"user.{category_tag_start}_{depth}"
+
+def compute_categories(grid: Grid):
+    result = []
+    tree = compute_grid_tree(grid)
+    while tree:
+        node_grid = tree.get_value()
+        coordinate_system = node_grid.get_coordinate_system()
+        category = coordinate_system.get_category()
+        result.append(category)
+        print('category', category)
+        if tree.has_children():
+            tree = tree.get_children()[0]
+        else:
+            tree = None
+    print('categories', result)
+    return result
+
+def compute_category_tags(grid: Grid):
+    categories = compute_categories(grid)
+    result = []
+    for index, category in enumerate(categories):
+        tag = compute_tag_for_coordinate_system_category_and_depth(category, index + 1)
+        if tag:
+            result.append(tag)  
+    print('category tags', result)
+    return result
