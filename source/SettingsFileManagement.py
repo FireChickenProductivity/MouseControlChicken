@@ -38,6 +38,9 @@ settings():
     user.mouse_control_chicken_default_alternate_main_transparency = 0.66
     user.mouse_control_chicken_transparency_flickering_show_time = 5000
     user.mouse_control_chicken_transparency_flickering_hide_time = 2000
+    #Set this to user.mouse_control_chicken_move_only_to_position to only move the mouse to the position when the quick action is performed. 
+    #This can be any talent action that takes a string as an argument.
+    user.mouse_control_chicken_quick_action = ""
 """
 
     )
