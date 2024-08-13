@@ -70,8 +70,9 @@ class Actions:
         tags = [GRID_SHOWING_TAG]
         if grid.supports_narrowing(): tags.append(NARROW_ABLE_GRID_SHOWING_TAG)
         if grid.supports_reversed_coordinates() or grid.supports_narrowing(): tags.append(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG)
+        category_tags = compute_category_tags(grid)
+        tags.extend(category_tags)
         assign_tags_to_context(grid_open_context, tags)
-        compute_category_tags(grid)
     
     def mouse_control_chicken_disable_grid_showing_tags():
         '''Disables commands for working with the active mouse control chicken grid'''
