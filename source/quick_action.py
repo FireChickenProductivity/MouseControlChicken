@@ -16,7 +16,6 @@ class Actions:
     def mouse_control_chicken_perform_quick_action(coordinates: str):
         """Performs the mouse control chicken quick action on the specified coordinates"""
         action_description = settings.get(MOUSE_CONTROL_CHICKEN_QUICK_ACTION_SETTING)
-        print('action_description', action_description)
         if not action_description:
             action_description = "user.mouse_control_chicken_click_position"
         action = getattr(actions, action_description)
