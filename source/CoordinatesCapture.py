@@ -1,7 +1,7 @@
 from talon import Module, Context
 from .InputCoordinateSystem import InputCoordinateSystem, InputCoordinateSystemCategory
 from .grid.Grid import Grid
-from .grid.GridCalculations import Node, compute_grid_tree
+from .grid.GridCalculations import Node, compute_grid_tree, TreeComputationOptions
 
 module = Module()
 module.list('mouse_control_chicken_uppercase_letter', desc="Upper case letters for use with the mouse control chicken grids")
@@ -101,7 +101,8 @@ def compute_tag_for_coordinate_system_category_and_depth(category: InputCoordina
 
 def compute_categories(grid: Grid):
     result = []
-    tree = compute_grid_tree(grid)
+    tree_computation_options = TreeComputationOptions(keep_coordinate_system_modifying_wrappers=True)
+    tree = compute_grid_tree(grid, tree_computation_options)
     while tree:
         number_of_children = len(tree.get_children())
         if number_of_children < 2:
@@ -109,12 +110,10 @@ def compute_categories(grid: Grid):
             coordinate_system = node_grid.get_coordinate_system()
             category = coordinate_system.get_category()
             result.append(category)
-            print('category', category)
         if tree.has_children():
             tree = tree.get_children()[0]
         else:
             tree = None
-    print('categories', result)
     return result
 
 def compute_category_tags(grid: Grid):
@@ -124,5 +123,4 @@ def compute_category_tags(grid: Grid):
         tag = compute_tag_for_coordinate_system_category_and_depth(category, index + 1)
         if tag:
             result.append(tag)  
-    print('category tags', result)
     return result

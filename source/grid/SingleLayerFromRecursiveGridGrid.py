@@ -6,7 +6,8 @@ class SingleLayerFromRecursiveGridGrid(RecursivelyDivisibleGrid):
         self.recursive_grid = recursive_grid
     
     def get_coordinate_system(self):
-        return self.recursive_grid.get_coordinate_system().get_infinitely_repeated_system()
+        result = self.recursive_grid.get_coordinate_system().get_infinitely_repeated_system()
+        return result
 
     def make_around(self, rectangle: Rectangle) -> None:
         return self.recursive_grid.make_around(rectangle)
@@ -24,6 +25,9 @@ class SingleLayerFromRecursiveGridGrid(RecursivelyDivisibleGrid):
         return self.recursive_grid.is_combination()
 
     def is_wrapper(self) -> bool:
+        return True
+    
+    def is_coordinate_system_modifying_wrapper(self) -> bool:
         return True
 
     def get_wrapped_grid(self) -> RecursivelyDivisibleGrid:
