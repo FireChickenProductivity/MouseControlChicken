@@ -1,6 +1,7 @@
 from talon import Module, Context
 from typing import List
 from .grid.Grid import Grid
+from .CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
 
 module = Module()
 
@@ -52,6 +53,11 @@ PAGE_ADJUSTMENT_TAG_NAME = 'mouse_control_chicken_page_adjustment'
 PAGE_ADJUSTMENT_TAG = 'user.' + PAGE_ADJUSTMENT_TAG_NAME
 module.tag(PAGE_ADJUSTMENT_TAG_NAME, desc = 'Tag for enabling page adjustment commands for mouse control chicken dialogues')
 
+QUICK_ACTION_TAG_NAME = "mouse_control_chicken_quick_action"
+QUICK_ACTION_TAG = 'user.' + QUICK_ACTION_TAG_NAME
+module.tag(QUICK_ACTION_TAG_NAME, desc="Tag for activating the quick action command which activates an action on dictating the main coordinates for the active mouse control chicken coordinate system")
+quick_action_context = Context()
+
 grid_open_context = Context()
 options_dialogue_context = Context()
 grid_creation_context = Context()
@@ -64,6 +70,11 @@ class Actions:
         tags = [GRID_SHOWING_TAG]
         if grid.supports_narrowing(): tags.append(NARROW_ABLE_GRID_SHOWING_TAG)
         if grid.supports_reversed_coordinates() or grid.supports_narrowing(): tags.append(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG)
+        category_tags = compute_category_tags(grid)
+        tags.extend(category_tags)
+        level_tag_representing__representing_coordinate_system_depth = compute_appropriate_level_tag_from_category_tags(category_tags)
+        if level_tag_representing__representing_coordinate_system_depth:
+            tags.append(level_tag_representing__representing_coordinate_system_depth)
         assign_tags_to_context(grid_open_context, tags)
     
     def mouse_control_chicken_disable_grid_showing_tags():
@@ -106,6 +117,14 @@ class Actions:
         '''Disables the mouse control chicken dictation input dialogue tag'''
         remove_tags_from_context(dictation_input_context)
     
+    def mouse_control_chicken_enable_quick_action_context():
+        '''Enables the quick action commands'''
+        assign_tag_to_context(quick_action_context, QUICK_ACTION_TAG)
+    
+    def mouse_control_chicken_disable_quick_action_context():
+        '''Disables the quick action commands'''
+        remove_tags_from_context(quick_action_context)
+    
 def assign_tag_to_context(context, tag):
     context.tags = [tag]
 
@@ -114,3 +133,5 @@ def assign_tags_to_context(context, tags):
 
 def remove_tags_from_context(context):
     context.tags = []
+
+  

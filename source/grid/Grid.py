@@ -49,6 +49,9 @@ class Grid:
 
     def is_wrapper(self) -> bool:
         return False
+    
+    def is_coordinate_system_modifying_wrapper(self) -> bool:
+        return False
 
     def is_doubling(self) -> bool:
         return False

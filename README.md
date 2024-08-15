@@ -88,6 +88,9 @@ chicken line color (color): temporarily changes the line color.
 
 chicken line (transparency or transparent) (number_small): temporarily changes the line transparency.
 
+chicken quick (act or action) on:  This enables the quick action, so dictating the main coordinates on the grid (As opposed to secondary or tertiary coordinates) will activate the action specified by the user.mouse_control_chicken_quick_action setting (which is to click the position by default). The words act, action, and on are all optional.
+
+chicken quick (act or action) off: Disables the quick action. The words act and action are optional.
 
 ### Narrowing Grid Showing Commands
 
