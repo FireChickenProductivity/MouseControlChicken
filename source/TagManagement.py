@@ -1,7 +1,7 @@
 from talon import Module, Context
 from typing import List
 from .grid.Grid import Grid
-from .CoordinatesCapture import compute_category_tags
+from .CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
 
 module = Module()
 
@@ -72,6 +72,9 @@ class Actions:
         if grid.supports_reversed_coordinates() or grid.supports_narrowing(): tags.append(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG)
         category_tags = compute_category_tags(grid)
         tags.extend(category_tags)
+        level_tag_representing__representing_coordinate_system_depth = compute_appropriate_level_tag_from_category_tags(category_tags)
+        if level_tag_representing__representing_coordinate_system_depth:
+            tags.append(level_tag_representing__representing_coordinate_system_depth)
         assign_tags_to_context(grid_open_context, tags)
     
     def mouse_control_chicken_disable_grid_showing_tags():

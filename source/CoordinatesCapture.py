@@ -10,8 +10,7 @@ module.list('mouse_control_chicken_uppercase_letter', desc="Upper case letters f
 def mouse_control_chicken_uppercase_letter(m) -> str:
     return m.mouse_control_chicken_uppercase_letter
 
-@module.capture(rule = "(<user.letter>|<user.mouse_control_chicken_uppercase_letter>|<number_small>)+")
-def mouse_control_chicken_coordinates(m) -> str:
+def compute_coordinates_from_utterance(m) -> str:
     result: str = ""
     after_first_element: bool = False
     for element in m: 
@@ -21,6 +20,10 @@ def mouse_control_chicken_coordinates(m) -> str:
             after_first_element = True
         result += str(element)
     return result
+
+@module.capture(rule = "(<user.letter>|<user.mouse_control_chicken_uppercase_letter>|<number_small>)+")
+def mouse_control_chicken_coordinates(m) -> str:
+    return compute_coordinates_from_utterance(m)
 
 module.list('mouse_control_chicken_empty_list', desc="An empty list")
 
@@ -63,7 +66,44 @@ class CoordinateContext:
         self.context.matches = f"""
         tag: user.{self.tag}
 """
-        
+
+def compute_level_tag(level: int) -> str:
+    return f"mouse_control_chicken_coordinate_system_level_{level}"
+
+class LevelContext:
+    def __init__(self, level: int):
+        self.context = Context()
+        self.tag = compute_level_tag(level)
+        self.context.matches = f"""
+        tag: user.{self.tag}
+"""
+
+level_contexts = []
+def build_level_contexts():
+    for level in range(1, 4):
+        context = LevelContext(level)
+        module.tag(context.tag, desc=f"Tag for a mouse control chicken coordinate system coordinate system with depth {level}.")
+        level_contexts.append(context)
+build_level_contexts()
+
+@level_contexts[0].context.capture("user.mouse_control_chicken_coordinates", rule = "<user.mouse_control_chicken_main_coordinates>")
+def mouse_control_chicken_level_one_coordinates(m) -> str:
+    return compute_coordinates_from_utterance(m)
+
+@level_contexts[1].context.capture(
+    "user.mouse_control_chicken_coordinates",
+    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chickens_secondary_coordinates>])|<user.mouse_control_chickens_secondary_coordinates>"
+    )
+def mouse_control_chicken_level_two_coordinates(m) -> str:
+    return compute_coordinates_from_utterance(m)
+
+@level_contexts[2].context.capture(
+    "user.mouse_control_chicken_coordinates",
+    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chickens_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>]])|(<user.mouse_control_chickens_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>])|<user.mouse_control_chicken_tertiary_coordinates>"
+    )
+def mouse_control_chicken_level_three_coordinates(m) -> str:
+    return compute_coordinates_from_utterance(m)
+
 override_contexts = []
 def build_override_contexts():
     input_coordinate_capture_names = ["mouse_control_chicken_number_sequence", "mouse_control_chicken_lowercase_letter_pair", "mouse_control_chicken_letter_pair", "mouse_control_chicken_single_number"]
@@ -127,3 +167,22 @@ def compute_category_tags(grid: Grid):
         if tag:
             result.append(tag)  
     return result
+
+
+def compute_level_for_tag(tag: str) -> int:
+    last_underscore_index = tag.rfind("_")
+    if last_underscore_index == -1:
+        return 0
+    level_text = tag[last_underscore_index + 1:]
+    level = int(level_text)
+    return level
+
+def compute_appropriate_level_tag_from_category_tags(category_tags):
+    maximum_level = 0
+    for tag in category_tags:
+        level = compute_level_for_tag(tag)
+        if level > maximum_level:
+            maximum_level = level
+    if maximum_level > 0 and maximum_level < 4:
+        return 'user.' + compute_level_tag(maximum_level)
+    return None
