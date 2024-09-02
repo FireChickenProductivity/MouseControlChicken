@@ -36,6 +36,7 @@ def compute_settings_already_in_settings_file(path: str):
     return encountered_settings
 
 def append_missing_settings_to_settings_file(path: str, missing_settings: List[SettingsFileEntry]):
+    print('missing settings', missing_settings)
     with open(path, "a") as file:
         for entry in missing_settings:
             file.write(entry.compute_text() + "\n")
@@ -47,9 +48,8 @@ def append_any_missing_settings_to_settings_file(path: str, setting_file_entrees
     if missing_settings:
         append_missing_settings_to_settings_file(path, missing_settings)
 
-def create_settings_file():
-    path = compute_path_within_output_directory("settings.talon")
-    setting_file_entrees = [
+def create_settings_file_entries() -> List[SettingsFileEntry]:
+    return [
         SettingsFileEntry(
             "user.mouse_control_chicken_default_grid_option",
             "double alphabet numbers",
@@ -92,11 +92,22 @@ def create_settings_file():
             "This can be any talon action that takes a string as an argument."]
         ),
     ]
+
+def compute_text_for_setting_file_entries(entrees: List[SettingsFileEntry]) -> str:
     text = "-\nsettings():\n"
-    for entry in setting_file_entrees:
+    for entry in entrees:
         text += entry.compute_text() + "\n"
+    return text
+    
+def creates_settings_file_with_entries(path, entrees: List[SettingsFileEntry]):
+    text = compute_text_for_setting_file_entries(entrees)
+    with open(path, "w") as file:
+        file.write(text)
+
+def create_settings_file():
+    path = compute_path_within_output_directory("settings.talon")
+    setting_file_entrees = create_settings_file_entries()
     if os.path.exists(path):
         append_any_missing_settings_to_settings_file(path, setting_file_entrees)
     else:
-        with open(path, "w") as file:
-            file.write(text)
+        creates_settings_file_with_entries(path, setting_file_entrees)
