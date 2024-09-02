@@ -1,5 +1,16 @@
 from .file_management.FileUtilities import write_text_to_file_if_uninitialized, compute_path_within_output_directory
 
+class SettingsFileEntry:
+    def __init__(self, name, value, comment = None):
+        self.name = name
+        self.value = value
+        self.comment = comment
+    
+    def compute_text(self):
+        result = f"\t{self.name} = {self.value}"
+        if self.comment:
+            result = f"\t# {self.comment}\n{result}"
+
 def create_settings_file():
     path = compute_path_within_output_directory("settings.talon")
     write_text_to_file_if_uninitialized(
