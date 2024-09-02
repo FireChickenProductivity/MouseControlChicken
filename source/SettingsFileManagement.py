@@ -22,7 +22,7 @@ class SettingsFileEntry:
         return self.name
 
 def compute_setting_name_from_line(line: str) -> str:
-    if line.startswith("\t") and "=" in line:
+    if "=" in line:
         return line.split("=")[0].strip()
     return None
 
