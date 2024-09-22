@@ -1,7 +1,6 @@
 from .file_management.FileUtilities import compute_path_within_output_directory
 import os
 from typing import List
-from talon import app
 
 class SettingsFileEntry:
     def __init__(self, name, value, comment_lines = None):
@@ -12,7 +11,7 @@ class SettingsFileEntry:
             self.comment_lines = []
     
     def compute_text(self) -> str:
-        result = ""
+        result = "\n"
         for line in self.comment_lines:
             result += f"\t#{line}\n"
         result += f"\t{self.name} = {self.value}"
@@ -39,8 +38,7 @@ def append_missing_settings_to_settings_file(path: str, missing_settings: List[S
     print('missing settings', missing_settings)
     with open(path, "a") as file:
         for entry in missing_settings:
-            file.write(entry.compute_text() + "\n")
-            app.notify(f"Added missing setting {entry.get_name()} to settings.talon")
+            file.write(entry.compute_text())
 
 def append_any_missing_settings_to_settings_file(path: str, setting_file_entrees: List[SettingsFileEntry]):
     encountered_settings = compute_settings_already_in_settings_file(path)
@@ -106,9 +104,9 @@ def create_settings_file_entries() -> List[SettingsFileEntry]:
     ]
 
 def compute_text_for_setting_file_entries(entrees: List[SettingsFileEntry]) -> str:
-    text = "-\nsettings():\n"
+    text = "-\nsettings():"
     for entry in entrees:
-        text += entry.compute_text() + "\n"
+        text += entry.compute_text()
     return text
     
 def creates_settings_file_with_entries(path, entrees: List[SettingsFileEntry]):
