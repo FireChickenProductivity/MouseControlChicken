@@ -29,6 +29,7 @@ class Actions:
         scrolling_state = ScrollingState(speed, is_direction_down, acceleration)
         global scrolling_job
         scrolling_job = cron.interval(SCROLLING_TIME_UNIT, lambda: scroll(scrolling_state))
+        actions.user.mouse_control_chicken_enable_scroll_mode()
     
     def mouse_control_chicken_reverse_scrolling():
         """Reverse the direction of mouse control chicken mouse scrolling."""
@@ -42,3 +43,4 @@ class Actions:
         scrolling_job = None
         global scrolling_state
         scrolling_state = None
+        actions.user.mouse_control_chicken_disable_scroll_mode()

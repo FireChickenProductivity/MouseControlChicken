@@ -34,7 +34,6 @@ class Actions:
         '''Disables the mouse control chicken scroll mode'''
         disable_mode(scroll_mode)
     
-    
     def mouse_control_chicken_disable_narrow_able_grid_mode():
         '''Disables the narrow able mouse control chicken grid mode'''
         actions.mode.disable(narrow_able_grid_mode)
