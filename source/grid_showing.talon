@@ -30,6 +30,12 @@ twist <user.mouse_control_chicken_coordinates>:
 roll <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_scroll_down_at_position(mouse_control_chicken_coordinates)
 
+down <user.mouse_control_chicken_coordinates> [speed <number_small>]:
+    user.mouse_control_chicken_scroll_continuously_at_position(mouse_control_chicken_coordinates, number_small or 1)
+
+up <user.mouse_control_chicken_coordinates> [speed <number_small>]:
+    user.mouse_control_chicken_scroll_continuously_at_position(mouse_control_chicken_coordinates, number_small or 1, false)
+
 chicken crisscross: user.mouse_control_chicken_toggle_frame_display_crisscross()
 chicken checker [frequency] <number_small>: user.mouse_control_chicken_set_checker_frequency(number_small)
 chicken zigzag [threshold] <number_small>: user.mouse_control_chicken_set_zigzag_threshold(number_small)

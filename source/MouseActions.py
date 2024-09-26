@@ -53,6 +53,12 @@ class Actions:
         scroll_down()
         actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
     
+    def mouse_control_chicken_scroll_continuously_at_position(coordinates: str, speed: int, is_direction_down: bool = True):
+        '''Moves the mouse to the specified position on the current mouse control chicken position and starts continuous scrolling'''
+        actions.user.mouse_control_chicken_move_to_position(coordinates)
+        actions.user.mouse_control_chicken_start_scrolling(speed, is_direction_down)
+        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
+
     def mouse_control_chicken_click_current_position_on_narrow_able_grid():
         '''Clicks the current position on the current mouse control chicken grid'''
         if manager_has_narrow_able_grid():
