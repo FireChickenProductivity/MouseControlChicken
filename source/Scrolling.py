@@ -1,6 +1,6 @@
 from talon import Module, actions, cron
+from .SettingsMediator import settings_mediator
 
-SCROLLING_UNIT = 20
 SCROLLING_TIME_UNIT = "100ms"
 
 class ScrollingState:
@@ -10,7 +10,7 @@ class ScrollingState:
         self.acceleration = acceleration
     
 def scroll(scrolling_state: ScrollingState):
-    value = scrolling_state.speed*SCROLLING_UNIT
+    value = scrolling_state.speed*settings_mediator.get_scrolling_unit()
     if not scrolling_state.is_direction_down:
         value = -value
     actions.mouse_scroll(value)
