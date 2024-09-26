@@ -10,7 +10,7 @@ class ScrollingState:
         self.acceleration = acceleration
     
 def scroll(scrolling_state: ScrollingState):
-    value = scrolling_state.speed*settings_mediator.get_scrolling_unit()
+    value = scrolling_state.speed*settings_mediator.get_continuous_scrolling_unit()
     if not scrolling_state.is_direction_down:
         value = -value
     actions.mouse_scroll(value)
