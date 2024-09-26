@@ -4,7 +4,7 @@ SCROLLING_UNIT = 20
 SCROLLING_TIME_UNIT = "100ms"
 
 class ScrollingState:
-    def __init__(self, speed: int, is_direction_down: bool = True, acceleration: int = 0):
+    def __init__(self, speed: float, is_direction_down: bool = True, acceleration: int = 0):
         self.speed = speed
         self.is_direction_down = is_direction_down
         self.acceleration = acceleration
@@ -44,3 +44,13 @@ class Actions:
         global scrolling_state
         scrolling_state = None
         actions.user.mouse_control_chicken_disable_scroll_mode()
+
+    def mouse_control_chicken_set_scrolling_speed(speed: int):
+        """Set the speed of mouse control chicken scrolling."""
+        if scrolling_state:
+            scrolling_state.speed = speed
+    
+    def mouse_control_chicken_multiply_scrolling_speed(factor: float):
+        """Multiply the speed of mouse control chicken scrolling by the given factor."""
+        if scrolling_state:
+            scrolling_state.speed = scrolling_state.speed*factor
