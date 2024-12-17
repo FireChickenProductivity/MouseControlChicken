@@ -11,6 +11,11 @@ def perform_action_on_narrow_able_grid_center(action):
         actions.user.mouse_control_chicken_reset_narrow_able_grid()
         actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
+def perform_action_on_reverse_coordinates(coordinates, action):
+    actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
+    action(compute_reverse_coordinates_string(coordinates))
+    actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+
 module = Module()
 @module.action_class
 class Actions:
@@ -111,57 +116,40 @@ class Actions:
 class ReverseCoordinateActions:
     def mouse_control_chicken_move_to_reverse_coordinates_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_move_to_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_move_to_position)
 
     def mouse_control_chicken_click_reverse_coordinates_position(coordinates: str):
         '''Clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_click_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_click_position)
     
     def mouse_control_chicken_double_click_reverse_coordinates_position(coordinates: str):
         '''Double clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_double_click_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_double_click_position)
     
     def mouse_control_chicken_right_click_reverse_coordinates_position(coordinates: str):
         '''Right clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_right_click_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_right_click_position)
     
     def mouse_control_chicken_drag_from_reverse_coordinates_position(coordinates: str):
         '''Starts dragging from the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_drag_from_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_drag_from_position)
     
     def mouse_control_chicken_end_drag_at_reverse_coordinates_position(coordinates: str):
         '''Ends dragging at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_end_drag_at_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_end_drag_at_position)
     
     def mouse_control_chicken_scroll_up_at_reverse_coordinates_position(coordinates: str):
         '''Scrolls up at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_scroll_up_at_position(compute_reverse_coordinates_string(coordinates))
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_scroll_up_at_position)
     
     def mouse_control_chicken_scroll_down_at_reverse_coordinates_position(coordinates: str):
         '''Scrolls down at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_scroll_down_at_position(compute_reverse_coordinates_string(coordinates))
+        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_scroll_down_at_position)
         actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
     
     def mouse_control_chicken_scroll_start_scroll_continuously_at_reverse_coordinates(coordinates: str, speed: int, is_direction_down: bool = True):
         '''Starts scrolling at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-        actions.user.mouse_control_chicken_scroll_continuously_at_position(compute_reverse_coordinates_string(coordinates), speed, is_direction_down)
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+        perform_action_on_reverse_coordinates(coordinates, lambda coordinates: actions.user.mouse_control_chicken_scroll_continuously_at_position(coordinates, speed, is_direction_down))
 
 def compute_reverse_coordinates_string(coordinates: str) -> str:
     return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
