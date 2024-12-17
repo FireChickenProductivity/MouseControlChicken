@@ -21,3 +21,9 @@ meet here: user.mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid
 twist here: user.mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid()
 
 roll here: user.mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid()
+
+down here [speed <number_small>]: 
+    user.mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(number_small or 1)
+
+up here [speed <number_small>]:
+    user.mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(number_small or 1, false)

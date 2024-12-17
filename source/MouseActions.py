@@ -3,6 +3,14 @@ from .SettingsMediator import settings_mediator
 from .fire_chicken.mouse_position import MousePosition
 from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
+def perform_action_on_narrow_able_grid_center(action):
+    if manager_has_narrow_able_grid():
+        position = get_current_position_on_narrow_able_grid()
+        position.go()
+        action()
+        actions.user.mouse_control_chicken_reset_narrow_able_grid()
+        actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+
 module = Module()
 @module.action_class
 class Actions:
@@ -61,48 +69,23 @@ class Actions:
 
     def mouse_control_chicken_click_current_position_on_narrow_able_grid():
         '''Clicks the current position on the current mouse control chicken grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            actions.mouse_click()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(actions.mouse_click)
         
     def mouse_control_chicken_double_click_current_position_on_narrow_able_grid():
         '''Double clicks the current position on the current mouse control chicken grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            double_click()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(double_click)
         
     def mouse_control_chicken_right_click_current_position_on_narrow_able_grid():
         '''Right clicks the current position on the current mouse control chicken grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            actions.mouse_click(1)
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(lambda: actions.mouse_click(1))
         
     def mouse_control_chicken_drag_from_current_position_on_narrow_able_grid():
         '''Starts dragging from the current position on the current mouse control chicken grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            drag_from_position()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(drag_from_position)
     
     def mouse_control_chicken_end_drag_at_current_position_on_narrow_able_grid():
         '''Ends dragging at the current position on the current mouse control chicken narrow able grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            end_drag_at_position()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(end_drag_at_position)
 
     def mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid():
         '''Moves the mouse to the current position on the current mouse control chicken narrow able grid'''
@@ -114,21 +97,15 @@ class Actions:
         
     def mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid():
         '''Scrolls up at the current position on the current mouse control chicken narrow able grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            scroll_up()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(scroll_up)
         
     def mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid():
         '''Scrolls down at the current position on the current mouse control chicken narrow able grid'''
-        if manager_has_narrow_able_grid():
-            position = get_current_position_on_narrow_able_grid()
-            position.go()
-            scroll_down()
-            actions.user.mouse_control_chicken_reset_narrow_able_grid()
-            actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+        perform_action_on_narrow_able_grid_center(scroll_down)
+
+    def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
+        ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
+        perform_action_on_narrow_able_grid_center(lambda: actions.user.mouse_control_chicken_start_scrolling(speed, is_direction_down))
 
 @module.action_class
 class ReverseCoordinateActions:
