@@ -180,7 +180,11 @@ class ReverseCoordinateActions:
         actions.user.mouse_control_chicken_scroll_down_at_position(compute_reverse_coordinates_string(coordinates))
         actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
     
-    
+    def mouse_control_chicken_scroll_start_scroll_continuously_at_reverse_coordinates(coordinates: str, speed: int, is_direction_down: bool = True):
+        '''Starts scrolling at the specified position on the current mouse control chicken grid using reverse coordinates'''
+        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
+        actions.user.mouse_control_chicken_scroll_continuously_at_position(compute_reverse_coordinates_string(coordinates), speed, is_direction_down)
+        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
 
 def compute_reverse_coordinates_string(coordinates: str) -> str:
     return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
