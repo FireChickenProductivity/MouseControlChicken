@@ -45,11 +45,14 @@ ACTION_MAP = {
     "scroll_down": scroll_down,
 }
 
+def performed_action_from_map(action_name: str):
+    action = ACTION_MAP[action_name]
+    action()
+
 def perform_action_from_map_at_coordinates(action_name: str, coordinates: str):
     position = get_position_on_grid(coordinates)
     position.go()
-    action = ACTION_MAP[action_name]
-    action()
+    performed_action_from_map(action_name)
     actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
 def perform_action_on_narrow_able_grid_center(action):
@@ -136,26 +139,6 @@ class Actions:
         actions.user.mouse_control_chicken_start_scrolling(speed, is_direction_down)
         actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
-    def mouse_control_chicken_click_current_position_on_narrow_able_grid():
-        '''Clicks the current position on the current mouse control chicken grid'''
-        perform_action_on_narrow_able_grid_center(actions.mouse_click)
-        
-    def mouse_control_chicken_double_click_current_position_on_narrow_able_grid():
-        '''Double clicks the current position on the current mouse control chicken grid'''
-        perform_action_on_narrow_able_grid_center(double_click)
-        
-    def mouse_control_chicken_right_click_current_position_on_narrow_able_grid():
-        '''Right clicks the current position on the current mouse control chicken grid'''
-        perform_action_on_narrow_able_grid_center(lambda: actions.mouse_click(1))
-        
-    def mouse_control_chicken_drag_from_current_position_on_narrow_able_grid():
-        '''Starts dragging from the current position on the current mouse control chicken grid'''
-        perform_action_on_narrow_able_grid_center(drag_from_position)
-    
-    def mouse_control_chicken_end_drag_at_current_position_on_narrow_able_grid():
-        '''Ends dragging at the current position on the current mouse control chicken narrow able grid'''
-        perform_action_on_narrow_able_grid_center(end_drag_at_position)
-
     def mouse_control_chicken_move_mouse_to_position_on_narrow_able_grid():
         '''Moves the mouse to the current position on the current mouse control chicken narrow able grid'''
         if manager_has_narrow_able_grid():
@@ -164,13 +147,9 @@ class Actions:
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
-    def mouse_control_chicken_scroll_up_at_current_position_on_narrow_able_grid():
-        '''Scrolls up at the current position on the current mouse control chicken narrow able grid'''
-        perform_action_on_narrow_able_grid_center(scroll_up)
-        
-    def mouse_control_chicken_scroll_down_at_current_position_on_narrow_able_grid():
-        '''Scrolls down at the current position on the current mouse control chicken narrow able grid'''
-        perform_action_on_narrow_able_grid_center(scroll_down)
+    def mouse_control_chicken_perform_action_at_current_position_on_narrow_able_grid(action_name: str):
+        '''Performs the specified action at the current position on the current mouse control chicken narrow able grid'''
+        perform_action_on_narrow_able_grid_center(lambda: performed_action_from_map(action_name))
 
     def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
         ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
