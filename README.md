@@ -60,7 +60,7 @@ twist (mouse_control_chicken_coordinates): Moves the cursor to the specified pos
 
 roll (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls down.
 
-(down or up) (mouse_control_chicken_coordinates): Starts continuously scrolling down or up respectively at the specified position on the grid. You may optionally dictate "speed" (number_small) to set the scrolling speed.
+(down or up) (mouse_control_chicken_coordinates): Starts continuously scrolling down or up respectively at the specified position on the grid. You may optionally dictate "speed" (number_small) at the end to set the scrolling speed.
 
 chicken crisscross: Toggles showing cross crossing lines on the display for rectangular frame grids.
 
