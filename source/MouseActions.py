@@ -97,18 +97,6 @@ class Actions:
         actions.mouse_click()
         actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
-    def mouse_control_chicken_double_click_position(coordinates: str):
-        '''Double clicks the specified position on the current mouse control chicken grid'''
-        actions.user.mouse_control_chicken_move_to_position(coordinates)
-        double_click()
-        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
-    
-    def mouse_control_chicken_right_click_position(coordinates: str):
-        '''Clicks the specified position on the current mouse control chicken grid'''
-        actions.user.mouse_control_chicken_move_to_position(coordinates)
-        actions.mouse_click(1)
-        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
-    
     def mouse_control_chicken_drag_from_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken position and starts dragging'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
@@ -121,18 +109,6 @@ class Actions:
         end_drag_at_position()
         actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
-    def mouse_control_chicken_scroll_up_at_position(coordinates: str):
-        '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls up'''
-        actions.user.mouse_control_chicken_move_to_position(coordinates)
-        scroll_up()
-        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
-    
-    def mouse_control_chicken_scroll_down_at_position(coordinates: str):
-        '''Moves the mouse to the specified position on the current mouse control chicken position and scrolls down'''
-        actions.user.mouse_control_chicken_move_to_position(coordinates)
-        scroll_down()
-        actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
-    
     def mouse_control_chicken_scroll_continuously_at_position(coordinates: str, speed: int, is_direction_down: bool = True):
         '''Moves the mouse to the specified position on the current mouse control chicken position and starts continuous scrolling'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
