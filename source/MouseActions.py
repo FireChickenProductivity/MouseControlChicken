@@ -145,7 +145,6 @@ class ReverseCoordinateActions:
     def mouse_control_chicken_scroll_down_at_reverse_coordinates_position(coordinates: str):
         '''Scrolls down at the specified position on the current mouse control chicken grid using reverse coordinates'''
         perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_scroll_down_at_position)
-        actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
     
     def mouse_control_chicken_scroll_start_scroll_continuously_at_reverse_coordinates(coordinates: str, speed: int, is_direction_down: bool = True):
         '''Starts scrolling at the specified position on the current mouse control chicken grid using reverse coordinates'''
