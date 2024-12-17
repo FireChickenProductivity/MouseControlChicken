@@ -181,34 +181,6 @@ class ReverseCoordinateActions:
     def mouse_control_chicken_move_to_reverse_coordinates_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid using reverse coordinates'''
         perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_move_to_position)
-
-    def mouse_control_chicken_click_reverse_coordinates_position(coordinates: str):
-        '''Clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_click_position)
-    
-    def mouse_control_chicken_double_click_reverse_coordinates_position(coordinates: str):
-        '''Double clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_double_click_position)
-    
-    def mouse_control_chicken_right_click_reverse_coordinates_position(coordinates: str):
-        '''Right clicks the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_right_click_position)
-    
-    def mouse_control_chicken_drag_from_reverse_coordinates_position(coordinates: str):
-        '''Starts dragging from the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_drag_from_position)
-    
-    def mouse_control_chicken_end_drag_at_reverse_coordinates_position(coordinates: str):
-        '''Ends dragging at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_end_drag_at_position)
-    
-    def mouse_control_chicken_scroll_up_at_reverse_coordinates_position(coordinates: str):
-        '''Scrolls up at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_scroll_up_at_position)
-    
-    def mouse_control_chicken_scroll_down_at_reverse_coordinates_position(coordinates: str):
-        '''Scrolls down at the specified position on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_on_reverse_coordinates(coordinates, actions.user.mouse_control_chicken_scroll_down_at_position)
     
     def mouse_control_chicken_scroll_start_scroll_continuously_at_reverse_coordinates(coordinates: str, speed: int, is_direction_down: bool = True):
         '''Starts scrolling at the specified position on the current mouse control chicken grid using reverse coordinates'''
