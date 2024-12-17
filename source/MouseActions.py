@@ -3,6 +3,57 @@ from .SettingsMediator import settings_mediator
 from .fire_chicken.mouse_position import MousePosition
 from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
+def compute_reverse_coordinates_string(coordinates: str) -> str:
+    return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
+
+def get_position_on_grid(coordinates: str) -> MousePosition:
+    position = actions.user.mouse_control_chicken_get_position_on_grid(coordinates)
+    return position
+
+def get_current_position_on_narrow_able_grid() -> MousePosition:
+    position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
+    return position
+
+def manager_has_narrow_able_grid() -> bool:
+    return actions.user.mouse_control_chicken_is_using_narrow_able_grid()
+
+def drag_from_position():
+    actions.sleep(0.5)
+    actions.user.mouse_drag(0)
+
+def end_drag_at_position():
+    actions.sleep(0.5)
+    actions.user.mouse_drag_end()
+
+def double_click():
+    actions.mouse_click()
+    actions.mouse_click()
+
+def scroll_up():
+    actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
+
+def scroll_down():
+    actions.mouse_scroll(settings_mediator.get_scrolling_amount())
+
+ACTION_MAP = {
+    "click": actions.mouse_click,
+    "double_click": double_click,
+    "right_click": lambda: actions.mouse_click(1),
+    "drag": drag_from_position,
+    "end_drag": end_drag_at_position,
+    "scroll_up": scroll_up,
+    "scroll_down": scroll_down,
+    "scroll_continuously_down": actions.user.mouse_control_chicken_start_scrolling,
+    "scroll_continuously_up": lambda: actions.user.mouse_control_chicken_start_scrolling(1, False),
+}
+
+def perform_action_from_map_at_coordinates(action_name: str, coordinates: str):
+    position = get_position_on_grid(coordinates)
+    position.go()
+    action = ACTION_MAP[action_name]
+    action()
+    actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
+
 def perform_action_on_narrow_able_grid_center(action):
     if manager_has_narrow_able_grid():
         position = get_current_position_on_narrow_able_grid()
@@ -17,8 +68,13 @@ def perform_action_on_reverse_coordinates(coordinates, action):
     actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
 
 module = Module()
+module.list("mouse_control_chicken_action", desc="List of actions that can be performed on mouse control chicken grids")
 @module.action_class
 class Actions:
+    def mouse_control_chicken_perform_action_at_coordinates(action_name: str, coordinates: str):
+        '''Performs the specified action at the specified coordinates on the current mouse control chicken grid'''
+        perform_action_from_map_at_coordinates(action_name, coordinates)
+        
     def mouse_control_chicken_move_only_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid and handle that as a complete action'''
         actions.user.mouse_control_chicken_move_to_position(coordinates)
@@ -150,34 +206,3 @@ class ReverseCoordinateActions:
         '''Starts scrolling at the specified position on the current mouse control chicken grid using reverse coordinates'''
         perform_action_on_reverse_coordinates(coordinates, lambda coordinates: actions.user.mouse_control_chicken_scroll_continuously_at_position(coordinates, speed, is_direction_down))
 
-def compute_reverse_coordinates_string(coordinates: str) -> str:
-    return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
-
-def get_position_on_grid(coordinates: str) -> MousePosition:
-    position = actions.user.mouse_control_chicken_get_position_on_grid(coordinates)
-    return position
-
-def get_current_position_on_narrow_able_grid() -> MousePosition:
-    position = actions.user.mouse_control_chicken_get_current_position_on_narrow_able_grid()
-    return position
-
-def manager_has_narrow_able_grid() -> bool:
-    return actions.user.mouse_control_chicken_is_using_narrow_able_grid()
-
-def drag_from_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag(0)
-
-def end_drag_at_position():
-    actions.sleep(0.5)
-    actions.user.mouse_drag_end()
-
-def double_click():
-    actions.mouse_click()
-    actions.mouse_click()
-
-def scroll_up():
-    actions.mouse_scroll(-settings_mediator.get_scrolling_amount())
-
-def scroll_down():
-    actions.mouse_scroll(settings_mediator.get_scrolling_amount())
