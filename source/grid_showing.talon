@@ -13,7 +13,6 @@ meet <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_end_drag_at_position(mouse_control_chicken_coordinates_2)
 
 down <user.mouse_control_chicken_coordinates> [speed <number_small>]:
-
     user.mouse_control_chicken_scroll_continuously_at_position(mouse_control_chicken_coordinates, number_small or 1)
 
 up <user.mouse_control_chicken_coordinates> [speed <number_small>]:

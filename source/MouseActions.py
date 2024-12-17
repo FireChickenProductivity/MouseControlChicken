@@ -43,8 +43,6 @@ ACTION_MAP = {
     "end_drag": end_drag_at_position,
     "scroll_up": scroll_up,
     "scroll_down": scroll_down,
-    "scroll_continuously_down": actions.user.mouse_control_chicken_start_scrolling,
-    "scroll_continuously_up": lambda: actions.user.mouse_control_chicken_start_scrolling(1, False),
 }
 
 def perform_action_from_map_at_coordinates(action_name: str, coordinates: str):
@@ -62,6 +60,12 @@ def perform_action_on_narrow_able_grid_center(action):
         actions.user.mouse_control_chicken_reset_narrow_able_grid()
         actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
+def perform_action_from_map_at_reverse_coordinates(action_name: str, coordinates: str):
+    reverse_coordinates = compute_reverse_coordinates_string(coordinates)
+    actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
+    perform_action_from_map_at_coordinates(action_name, reverse_coordinates)
+    actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
+
 def perform_action_on_reverse_coordinates(coordinates, action):
     actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
     action(compute_reverse_coordinates_string(coordinates))
@@ -74,6 +78,10 @@ class Actions:
     def mouse_control_chicken_perform_action_at_coordinates(action_name: str, coordinates: str):
         '''Performs the specified action at the specified coordinates on the current mouse control chicken grid'''
         perform_action_from_map_at_coordinates(action_name, coordinates)
+
+    def mouse_control_chicken_perform_action_at_reverse_coordinates(action_name: str, coordinates: str):
+        '''Performs the specified action at the specified coordinates on the current mouse control chicken grid using reverse coordinates'''
+        perform_action_from_map_at_reverse_coordinates(action_name, coordinates)
         
     def mouse_control_chicken_move_only_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid and handle that as a complete action'''
