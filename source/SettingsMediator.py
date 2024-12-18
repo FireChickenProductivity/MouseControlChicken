@@ -164,6 +164,12 @@ default_vertical_frame_proximity_distance = setting_creator.create_int_setting(
     400,
     "For the mouse control chicken proximity frame grid, this gives the maximum amount of distance in between the horizontal frame coordinate lines."
 )
+
+continuous_scrolling_unit = setting_creator.create_int_setting(
+    'continuous_scrolling_unit',
+    20,
+    "The unit of measurement for mouse control chicken scrolling speeds with continuous scrolling."
+)
     
 def compute_color_setting(name):
     setting_value = settings.get(name)
@@ -264,6 +270,8 @@ class SettingsMediator:
     def get_vertical_proximity_frame_distance(self) -> int: return self.vertical_proximity_frame_distance
     
     def get_line_transparency(self) -> float: return self.line_transparency
+
+    def get_continuous_scrolling_unit(self) -> int: return settings.get(continuous_scrolling_unit)
 
     def rotate_transparency_settings_to_alternates(self):
         self.background_transparency = self.alternate_background_transparency

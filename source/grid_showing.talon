@@ -5,30 +5,18 @@ mode: command
 meet <user.mouse_control_chicken_coordinates>: 
     user.mouse_control_chicken_move_only_to_position(mouse_control_chicken_coordinates)
 
-tap <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_click_position(mouse_control_chicken_coordinates)
-
-pierce <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_double_click_position(mouse_control_chicken_coordinates)
-
-brush <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_right_click_position(mouse_control_chicken_coordinates)
+{user.mouse_control_chicken_action} <user.mouse_control_chicken_coordinates>:
+    user.mouse_control_chicken_perform_action_at_coordinates(mouse_control_chicken_action, mouse_control_chicken_coordinates)
 
 <user.mouse_control_chicken_coordinates> slide <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_drag_from_position(mouse_control_chicken_coordinates_1)
     user.mouse_control_chicken_end_drag_at_position(mouse_control_chicken_coordinates_2)
 
-hold <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_drag_from_position(mouse_control_chicken_coordinates)
+down <user.mouse_control_chicken_coordinates> [speed <number_small>]:
+    user.mouse_control_chicken_scroll_continuously_at_position(mouse_control_chicken_coordinates, number_small or 1)
 
-drop <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_end_drag_at_position(mouse_control_chicken_coordinates)
-
-twist <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_scroll_up_at_position(mouse_control_chicken_coordinates)
-
-roll <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_scroll_down_at_position(mouse_control_chicken_coordinates)
+up <user.mouse_control_chicken_coordinates> [speed <number_small>]:
+    user.mouse_control_chicken_scroll_continuously_at_position(mouse_control_chicken_coordinates, number_small or 1, false)
 
 chicken crisscross: user.mouse_control_chicken_toggle_frame_display_crisscross()
 chicken checker [frequency] <number_small>: user.mouse_control_chicken_set_checker_frequency(number_small)

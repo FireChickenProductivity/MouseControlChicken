@@ -101,6 +101,11 @@ def create_settings_file_entries() -> List[SettingsFileEntry]:
             ["Set this to user.mouse_control_chicken_move_only_to_position to only move the mouse to the position when the quick action is performed.", 
             "This can be any talon action that takes a string as an argument."]
         ),
+        SettingsFileEntry(
+            "user.mouse_control_chicken_continuous_scrolling_unit",
+            "20",
+            ["During continuous scrolling, this is multiplied by the speed value to determine the amount to scroll."],
+        )
     ]
 
 def compute_text_for_setting_file_entries(entrees: List[SettingsFileEntry]) -> str:

@@ -38,6 +38,8 @@ chicken follow screen: Makes the active mouse grid around the screen containing 
 
 chicken refresh: Refreshes the mouse grid and reloads the active settings from their defaults.
 
+chicken (down or up) (optional number_small): Starts continuously scrolling down or up respectively. The optional number sets the scrolling speed.
+
 ### Grid Showing Commands
 
 meet (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid.
@@ -57,6 +59,8 @@ drop (mouse_control_chicken_coordinates): Stops dragging at the specified positi
 twist (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls up.
 
 roll (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls down.
+
+(down or up) (mouse_control_chicken_coordinates): Starts continuously scrolling down or up respectively at the specified position on the grid. You may optionally dictate "speed" (number_small) at the end to set the scrolling speed.
 
 chicken crisscross: Toggles showing cross crossing lines on the display for rectangular frame grids.
 
@@ -101,6 +105,26 @@ trace (mouse_control_chicken_coordinates): Narrows the grid and display around t
 (mouse_control_chicken_coordinates) (mouse control chicken grid action, such as tap, brush, etc): Narrows the grid and display around the specified position, performs the specified action, and then re-expands the grid and display.
 
 (mouse control chicken grid action) here: Performs the specified action using the middle of the grid as the position and then re-expands the grid and display.
+
+### Continuous Scrolling Commands
+
+Continuous scrolling activates a specialized mode where only the following scrolling commands are available.
+
+(reverse or rev or verse): reverse the scrolling direction.
+
+stop: exit scrolling mode and stop continuously scrolling.
+
+(number_small): set the scrolling speed to the number. You may optionally proceed this with the word speed.
+
+half: halve the scrolling speed.
+
+double: double the scrolling speed.
+
+slow: set the scrolling speed to 1.
+
+skip (number_small): scroll an amount in the current scrolling direction based on the number dictated. 
+
+back (number_small): scroll an amount in the opposite direction of the current scrolling direction based on the number dictated.
 
 ### Dialogue Options Commands
 
