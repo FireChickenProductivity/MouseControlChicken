@@ -104,6 +104,12 @@ default_checker_frequency = setting_creator.create_int_setting(
     'The default checker frequency used by Mouse Control Chicken. Every nth position is shown on a checker display where n is the frequency.'
 )
 
+default_frame_checker_frequency = setting_creator.create_int_setting(
+    'default_frame_checker_frequency',
+    1,
+    'The default checker frequency used by Mouse Control Chicken for frame displays. Every nth position is shown on a checker display where n is the frequency.'
+)
+
 default_zigzag_threshold = setting_creator.create_int_setting(
     'default_zigzag_threshold',
     0,
@@ -213,6 +219,7 @@ class SettingsMediator:
         self.line_color = compute_color_setting(default_line_color)
         self.background_color = compute_color_setting(default_background_color)
         self.checker_frequency = settings.get(default_checker_frequency)
+        self.frame_checker_frequency = settings.get(default_frame_checker_frequency)
         self.flickering_enabled = settings.get(flickering_enabled)
         self.default_rectangle_manager = settings.get(default_rectangle_manager)
         self.alternate_background_transparency = settings.get(default_alternate_background_transparency)
@@ -248,6 +255,8 @@ class SettingsMediator:
     def get_frame_grid_should_show_crisscross(self) -> bool: return self.frame_grid_should_show_crisscross
 
     def get_checker_frequency(self) -> int: return self.checker_frequency
+
+    def get_frame_checker_frequency(self) -> int: return self.frame_checker_frequency
 
     def get_zigzag_threshold(self) -> int: return self.zigzag_threshold
 
@@ -327,6 +336,10 @@ class SettingsMediator:
 
     def set_checker_frequency(self, frequency: int):
         self.checker_frequency = frequency
+        self._handle_change()
+
+    def set_frame_checker_frequency(self, frequency: int):
+        self.frame_checker_frequency = frequency
         self._handle_change()
 
     def set_zigzag_threshold(self, threshold: int):

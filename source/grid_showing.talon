@@ -20,6 +20,7 @@ up <user.mouse_control_chicken_coordinates> [speed <number_small>]:
 
 chicken crisscross: user.mouse_control_chicken_toggle_frame_display_crisscross()
 chicken checker [frequency] <number_small>: user.mouse_control_chicken_set_checker_frequency(number_small)
+chicken frame checker [frequency] <number_small>: user.mouse_control_chicken_set_frame_checker_frequency(number_small)
 chicken zigzag [threshold] <number_small>: user.mouse_control_chicken_set_zigzag_threshold(number_small)
 chicken flicker: user.mouse_control_chicken_toggle_flicker_display()
 chicken flicker transparency: user.mouse_control_chicken_toggle_transparency_flicker()

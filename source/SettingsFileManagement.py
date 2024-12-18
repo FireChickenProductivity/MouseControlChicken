@@ -85,6 +85,11 @@ def create_settings_file_entries() -> List[SettingsFileEntry]:
             "3",
             ["Every nth position is shown on a checker display where n is the frequency."],
         ),
+        SettingsFileEntry(
+            "user.mouse_control_chicken_default_frame_checker_frequency",
+            "1",
+            ["Every nth position is shown on the frames of a frame display where n is the frequency."],
+        ),
         SettingsFileEntry("user.mouse_control_chicken_default_zigzag_threshold", "0"),
         SettingsFileEntry("user.mouse_control_chicken_scrolling_amount", "600"),
         SettingsFileEntry("user.mouse_control_chicken_flickering_enabled", "false"),
