@@ -70,6 +70,8 @@ chicken flicker transparency: If the setting user.mouse_control_chicken_flickeri
 
 chicken checker frequency (number_small): This determines how frequently to show a position on a checker display. Every nth position will be shown where n is the frequency.
 
+chicken frame checker (number_small): This determines how frequently to show a position on a frame line of a frame display. Every nth position will be shown where n is the frequency. n=1 shows every position.
+
 chicken zigzag (number_small): If 0, frame grids will not zigzag. Otherwise, the frames will be drawn in a zigzagging pattern instead of with straight lines where the number determines how many coordinates will be drawn before changing directions. This can make the grid obscure less of what is behind it but make reading the coordinates for a position somewhat harder.
 
 chicken text size (number_small): temporarily changes the text size.
