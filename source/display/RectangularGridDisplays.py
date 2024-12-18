@@ -98,9 +98,11 @@ class RectangularGridFrameDisplay(FrameDisplay):
         runner.run()
 
     def _create_skipper_for_dimension(self, is_horizontal):
-        if is_horizontal:
-            return HorizontalSkipper()
-        return VerticalSkipper()
+        checker_frequency = settings_mediator.get_frame_checker_frequency()
+        skipper = HorizontalSkipper() if is_horizontal else VerticalSkipper()
+        if checker_frequency > 1:
+            skipper = SkipperComposite([CheckerSkipper(checker_frequency), skipper])
+        return skipper
 
     def _obtain_proper_function_for_computing_absolute_coordinates_from_coordinate_given_dimension(self, is_horizontal: bool):
         if is_horizontal:

@@ -25,6 +25,10 @@ class Actions:
         '''Sets the mouse control chicken checker frequency'''
         settings_mediator.set_checker_frequency(frequency)
 
+    def mouse_control_chicken_set_frame_checker_frequency(frequency: int):
+        '''Sets the mouse control chicken frame checker frequency'''
+        settings_mediator.set_frame_checker_frequency(frequency)
+
     def mouse_control_chicken_set_zigzag_threshold(threshold: int):
         '''Sets the mouse control chicken zigzag threshold'''
         settings_mediator.set_zigzag_threshold(threshold)
