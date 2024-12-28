@@ -176,6 +176,12 @@ continuous_scrolling_unit = setting_creator.create_int_setting(
     20,
     "The unit of measurement for mouse control chicken scrolling speeds with continuous scrolling."
 )
+
+dragging_delay = setting_creator.create_float_setting(
+    'dragging_delay',
+    0.5,
+    'Determines how much time is spent pausing with dragging commands in seconds.'
+)
     
 def compute_color_setting(name):
     setting_value = settings.get(name)
@@ -281,6 +287,8 @@ class SettingsMediator:
     def get_line_transparency(self) -> float: return self.line_transparency
 
     def get_continuous_scrolling_unit(self) -> int: return settings.get(continuous_scrolling_unit)
+
+    def get_dragging_delay(self) -> float: return settings.get(dragging_delay)
 
     def rotate_transparency_settings_to_alternates(self):
         self.background_transparency = self.alternate_background_transparency

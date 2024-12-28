@@ -110,7 +110,8 @@ def create_settings_file_entries() -> List[SettingsFileEntry]:
             "user.mouse_control_chicken_continuous_scrolling_unit",
             "20",
             ["During continuous scrolling, this is multiplied by the speed value to determine the amount to scroll."],
-        )
+        ),
+        SettingsFileEntry("user.mouse_control_chicken_dragging_delay", 0.5),
     ]
 
 def compute_text_for_setting_file_entries(entrees: List[SettingsFileEntry]) -> str:

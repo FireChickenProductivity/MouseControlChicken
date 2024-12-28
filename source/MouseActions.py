@@ -20,12 +20,12 @@ def manager_has_narrow_able_grid() -> bool:
     return actions.user.mouse_control_chicken_is_using_narrow_able_grid()
 
 def drag_from_position():
-    actions.sleep(0.5)
+    actions.sleep(settings_mediator.get_dragging_delay())
     actions.user.mouse_drag(0)
 
 def end_drag_at_position():
     global LAST_DRAG_POSITION
-    actions.sleep(0.5)
+    actions.sleep(settings_mediator.get_dragging_delay())
     LAST_DRAG_POSITION = MousePosition.current()
     actions.user.mouse_drag_end()
 
@@ -33,7 +33,7 @@ def drag_back_to_last_drag_position():
     global LAST_DRAG_POSITION
     if LAST_DRAG_POSITION is not None:
         drag_from_position()
-        actions.sleep(0.5)
+        actions.sleep(settings_mediator.get_dragging_delay())
         LAST_DRAG_POSITION.go()
         end_drag_at_position()
 
