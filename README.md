@@ -56,6 +56,8 @@ hold (mouse_control_chicken_coordinates): Starts dragging at the specified posit
 
 drop (mouse_control_chicken_coordinates): Stops dragging at the specified position on the grid.
 
+carry (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and drags to the last position where dragging ended through a Mouse Control Chicken command.
+
 twist (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls up.
 
 roll (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid and then scrolls down.
