@@ -3,6 +3,8 @@ from .SettingsMediator import settings_mediator
 from .fire_chicken.mouse_position import MousePosition
 from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
+LAST_DRAG_POSITION: MousePosition = None
+
 def compute_reverse_coordinates_string(coordinates: str) -> str:
     return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
 
@@ -22,8 +24,18 @@ def drag_from_position():
     actions.user.mouse_drag(0)
 
 def end_drag_at_position():
+    global LAST_DRAG_POSITION
     actions.sleep(0.5)
+    LAST_DRAG_POSITION = MousePosition.current()
     actions.user.mouse_drag_end()
+
+def drag_back_to_last_drag_position():
+    global LAST_DRAG_POSITION
+    if LAST_DRAG_POSITION is not None:
+        drag_from_position()
+        actions.sleep(0.5)
+        LAST_DRAG_POSITION.go()
+        end_drag_at_position()
 
 def double_click():
     actions.mouse_click()
@@ -41,6 +53,7 @@ ACTION_MAP = {
     "right_click": lambda: actions.mouse_click(1),
     "drag": drag_from_position,
     "end_drag": end_drag_at_position,
+    "drag_back": drag_back_to_last_drag_position,
     "scroll_up": scroll_up,
     "scroll_down": scroll_down,
 }
