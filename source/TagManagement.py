@@ -58,6 +58,11 @@ QUICK_ACTION_TAG = 'user.' + QUICK_ACTION_TAG_NAME
 module.tag(QUICK_ACTION_TAG_NAME, desc="Tag for activating the quick action command which activates an action on dictating the main coordinates for the active mouse control chicken coordinate system")
 quick_action_context = Context()
 
+QUICK_DROP_TAG_NAME = "mouse_control_chicken_quick_drop"
+QUICK_DROP_TAG = 'user.' + QUICK_DROP_TAG_NAME
+module.tag(QUICK_DROP_TAG_NAME, desc="Tag for activating Mouse Control Chicken quick drop")
+quick_drop_context = Context()
+
 grid_open_context = Context()
 options_dialogue_context = Context()
 grid_creation_context = Context()
@@ -124,6 +129,14 @@ class Actions:
     def mouse_control_chicken_disable_quick_action_context():
         '''Disables the quick action commands'''
         remove_tags_from_context(quick_action_context)
+
+    def mouse_control_chicken_enable_quick_drop_context():
+        '''Enables the quick drop command'''
+        assign_tag_to_context(quick_drop_context, QUICK_DROP_TAG)
+    
+    def mouse_control_chicken_disable_quick_drop_context():
+        '''Disables the quick drop command'''
+        remove_tags_from_context(quick_drop_context)
     
 def assign_tag_to_context(context, tag):
     context.tags = [tag]
