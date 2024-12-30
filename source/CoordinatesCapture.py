@@ -18,6 +18,7 @@ def create_custom_number_small():
         result[number] = str(eleven_to_nineteen[number])
     result["ten"] = "10"
     for ten_product in tens:
+        result[ten_product] = str(tens[ten_product])
         for digit in digits:
             result[f"{ten_product} {digit}"] = str(tens[ten_product] + digits[digit])
     return result
