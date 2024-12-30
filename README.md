@@ -52,7 +52,7 @@ brush (mouse_control_chicken_coordinates): Right clicks the specified position o
 
 (mouse_control_chicken_coordinates) slide (mouse_control_chicken_coordinates): Moves the cursor to the first specified position on the grid, starts dragging, moves to the second specified position on the grid, and stops dragging.
 
-hold (mouse_control_chicken_coordinates): Starts dragging at the specified position on the grid.
+hold (mouse_control_chicken_coordinates): Starts dragging at the specified position on the grid. When dragging, you can dictate coordinates on the grid to move the cursor to that position and stop dragging. This takes priority over the quick action.
 
 drop (mouse_control_chicken_coordinates): Stops dragging at the specified position on the grid.
 
