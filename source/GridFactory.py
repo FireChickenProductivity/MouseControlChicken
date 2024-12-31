@@ -225,26 +225,6 @@ class GridFactoryOptions:
 
 grid_factory_options = GridFactoryOptions(options)
 
-module = Module()
-@module.action_class
-class Actions:
-    def mouse_control_chicken_get_grid_factory_options() -> List[str]:
-        '''Returns the mouse control chicken grid options'''
-        names = [name for name in grid_factory_options.get_option_names()]
-        return names
-    
-    def mouse_control_chicken_create_grid_from_factory(factory: str, argument: str) -> Grid:
-        '''Creates the specified mouse control chicken grid using the specified factory'''
-        return grid_factory_options.create_grid(factory, argument)
-
-    def mouse_control_chicken_create_grid_from_options(name: str) -> Grid:
-        '''Creates the specified mouse control chicken grid using the specified option name'''
-        return create_grid_from_options(name)
-
-    def mouse_control_chicken_get_grid_factory(name: str) -> GridFactory:
-        '''Returns the mouse control chicken grid factory with the specified name'''
-        return grid_factory_options.get_factory(name)
-
 class ConstructionCommand:
     def execute_on_current_grid(self, grid: Grid) -> Grid: pass
 
@@ -272,14 +252,6 @@ class ComplexGridConstructionCommand(ConstructionCommand):
     def is_leaf_command(self) -> bool:
         return False
 
-class CombineWithConstructionCommand(ComplexGridConstructionCommand):
-    def __init__(self, parent_grid_command: ConstructionCommand):
-        self.parent_grid_command = parent_grid_command
-
-    def execute_on_current_grid(self, grid: Grid) -> Grid:
-        parent = self.parent_grid_command.execute_on_current_grid(None)
-        return RecursivelyDivisibleGridCombination(parent, grid)
-    
 class ReverseCoordinateDoublingConstructionCommand(ComplexGridConstructionCommand):
     def __init__(self, is_horizontal: bool):
         self.is_horizontal = is_horizontal
@@ -289,6 +261,34 @@ class ReverseCoordinateDoublingConstructionCommand(ComplexGridConstructionComman
             return ReverseCoordinateHorizontalDoublingGrid(grid)
         else:
             return ReverseCoordinateVerticalDoublingGrid(grid)
+
+module = Module()
+@module.action_class
+class Actions:
+    def mouse_control_chicken_get_grid_factory_options() -> List[str]:
+        '''Returns the mouse control chicken grid options'''
+        names = [name for name in grid_factory_options.get_option_names()]
+        return names
+    
+    def mouse_control_chicken_create_grid_from_factory(factory: str, argument: str) -> Grid:
+        '''Creates the specified mouse control chicken grid using the specified factory'''
+        return grid_factory_options.create_grid(factory, argument)
+
+    def mouse_control_chicken_create_grid_from_options(name: str) -> Grid:
+        '''Creates the specified mouse control chicken grid using the specified option name'''
+        return create_grid_from_options(name)
+
+    def mouse_control_chicken_create_grid_creation_commands_from_options(name: str):
+        """Creates the construction commands for the specified mouse control chicken grid option"""
+        return compute_creation_commands_from_options(name)
+    
+    def mouse_control_chicken_create_grid_from_creation_commands(commands: List[ConstructionCommand]) -> Grid:
+        '''Creates a mouse control chicken grid from the specified construction commands'''
+        return create_grid_from_construction_commands(commands)
+
+    def mouse_control_chicken_get_grid_factory(name: str) -> GridFactory:
+        '''Returns the mouse control chicken grid factory with the specified name'''
+        return grid_factory_options.get_factory(name)
 
 def create_grid_from_construction_commands(commands: List[ConstructionCommand]) -> Grid:
     current_grid = None
