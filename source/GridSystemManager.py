@@ -104,7 +104,7 @@ class Actions:
         current_option = name
         options: GridOptions = get_grid_options()
         option = options.get_option(name)
-        grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
+        grid = actions.user.mouse_control_chicken_create_grid_from_options(name)
         display_options = compute_display_options_given_grid(grid)
         display = display_options.create_display_from_option(option.get_default_display_option())
         global manager
