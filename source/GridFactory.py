@@ -257,7 +257,10 @@ class SimpleGridConstructionCommand(ConstructionCommand):
         self.argument = argument
     
     def execute_on_current_grid(self, grid: Grid) -> Grid:
-        return self.factory.create_grid(self.argument)
+        parent = self.factory.create_grid(self.argument)
+        if grid is not None:
+            return RecursivelyDivisibleGridCombination(parent, grid)
+        return parent
 
     def is_leaf_command(self) -> bool:
         return True
@@ -294,24 +297,23 @@ def create_grid_from_construction_commands(commands: List[ConstructionCommand]) 
         current_grid = command.execute_on_current_grid(current_grid)
     return current_grid
 
-
-
-def create_grid_from_options(name: str) -> Grid:
+def compute_creation_commands_from_options(name: str) -> List[ConstructionCommand]:
     options: GridOptions = get_grid_options()
     option = options.get_option(name)
     factory = grid_factory_options.get_factory(option.get_factory_name())
     if factory.is_simple_factory():
-        print('creating simple', name)
-        return factory.create_grid(option.get_argument())
+        return [SimpleGridConstructionCommand(factory, option.get_argument())]
     else:
         if factory.get_number_of_sub_grids() == 2:
             primary, secondary = factory.compute_primary_and_secondary_options_from_arguments(option.get_argument())
-            print('computing combination', primary, secondary)
-            primary_grid = create_grid_from_options(primary)
-            secondary_grid = create_grid_from_options(secondary)
-            return factory.create_grid_from_sub_grids(primary_grid, secondary_grid)
+            primary_commands = compute_creation_commands_from_options(primary)
+            secondary_commands = compute_creation_commands_from_options(secondary)
+            return primary_commands + secondary_commands
         elif factory.get_number_of_sub_grids() == 1:
-            print('computing single', option.get_argument())
-            sub_grid = create_grid_from_options(option.get_argument())
-            return factory.create_grid_from_primary(sub_grid)
+            sub_commands = compute_creation_commands_from_options(option.get_argument())
+            return [ReverseCoordinateDoublingConstructionCommand(is_horizontal=factory.get_name() == HORIZONTAL_DOUBLING_GRID_NAME)] + sub_commands
+
+def create_grid_from_options(name: str) -> Grid:
+    commands = compute_creation_commands_from_options(name)
+    return create_grid_from_construction_commands(commands)
         
