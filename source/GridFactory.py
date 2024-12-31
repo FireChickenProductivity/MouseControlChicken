@@ -16,6 +16,7 @@ DOUBLE_ALPHABET_GRID_NAME = "Double Alphabet"
 RECURSIVELY_DIVISIBLE_GRID_COMBINATION_NAME = "Recursively Divisible Combination"
 HORIZONTAL_DOUBLING_GRID_NAME = "Horizontal Doubling"
 VERTICAL_DOUBLING_GRID_NAME = "Vertical Doubling"
+RECTANGULAR_DIVISION_GRID_NAME = "Rectangular Recursive Division Grid"
 
 ALPHABET = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", ]
 DOUBLE_ALPHABET = ALPHABET + ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", ]
@@ -105,7 +106,7 @@ class RectangularRecursiveDivisionGridFactory(GridFactory):
         return RectangularRecursiveDivisionGrid(RectangularDivisionAmounts(horizontal, vertical), input_coordinate_list)
 
     def get_name(self) -> str:
-        return "Rectangular Recursive Division Grid"
+        return RECTANGULAR_DIVISION_GRID_NAME
     
     def get_arguments_description(self) -> str:
         return "Two integers. The first integer is the number of horizontal divisions. The second integer is the number of vertical divisions. "
@@ -246,7 +247,18 @@ class SimpleGridConstructionCommand(ConstructionCommand):
         return True
     
     def get_factory(self):
-        return self.factory
+        factory = self.factory
+        parent = factory.compute_parent_factory()
+        while parent is not None:
+            factory = parent
+            parent = factory.compute_parent_factory()
+        return factory
+
+    def get_argument(self):
+        return self.argument
+
+    def set_argument(self, argument: str):
+        self.argument = argument
     
 class ComplexGridConstructionCommand(ConstructionCommand):
     def is_leaf_command(self) -> bool:

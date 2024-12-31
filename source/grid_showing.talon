@@ -40,3 +40,9 @@ chicken line (transparency|transparent) <user.mouse_control_chicken_percentage>:
 
 chicken quick [(act|action)] [on]: user.mouse_control_chicken_enable_quick_action_context()
 chicken quick [(act|action)] off: user.mouse_control_chicken_disable_quick_action_context()
+
+chicken {user.mouse_control_chicken_number_small}:
+    user.mouse_control_chicken_update_numeric_grid_parameters(mouse_control_chicken_number_small)
+chicken {user.mouse_control_chicken_number_small} {user.mouse_control_chicken_number_small}:
+    user.mouse_control_chicken_update_numeric_grid_parameters(mouse_control_chicken_number_small, mouse_control_chicken_number_small_2)
+

@@ -4,7 +4,7 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
-from .GridFactory import GridFactory #Unused import to help with startup issue
+from .GridFactory import GridFactory, RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
@@ -251,6 +251,24 @@ def show_singular_display_options(title: str, callback, grid: Grid):
 def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()
     return grid and grid.supports_narrowing()
+
+@module.action_class
+class RedrawActions:
+    def mouse_control_chicken_update_numeric_grid_parameters(first: str, second: str=None):
+        """Updates the outermost numeric grid parameters"""
+        if second is None:
+            second = first
+        global current_grid_command_sequence
+        command_index = 0
+        while command_index < len(current_grid_command_sequence) and not current_grid_command_sequence[command_index].is_leaf_command():
+            command_index += 1
+        first_factory = current_grid_command_sequence[command_index].get_factory()
+        if first_factory.get_name() == RECTANGULAR_DIVISION_GRID_NAME:
+            argument = first + GRID_ARGUMENT_SEPARATOR + second
+            current_grid_command_sequence[command_index] = SimpleGridConstructionCommand(RectangularRecursiveDivisionGridFactory(), argument)
+            update_manager_grid()
+        
+
 
 def setup():
     initialize_grid_options()
