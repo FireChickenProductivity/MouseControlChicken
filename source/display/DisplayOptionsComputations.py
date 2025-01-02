@@ -273,5 +273,14 @@ def compute_combined_display_option(non_combination_display_option: DisplayOptio
 
 def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
     if display_option.is_combination():
-        return CombinationDisplayOption(display_option.get_types()[1:])
+        types = display_option.get_types()[:]
+        if isinstance(types[0], WrappingDisplayType):
+            wrapped_type = types[0].get_wrapped()
+            types[0] = wrapped_type
+        else:
+            types = types[1:]
+        return CombinationDisplayOption(types)
+    display_type = display_option.get_type()
+    if isinstance(display_type, WrappingDisplayType):
+        return DisplayOption(display_type.get_wrapped())
     return DisplayOption(EmptyDisplay)
