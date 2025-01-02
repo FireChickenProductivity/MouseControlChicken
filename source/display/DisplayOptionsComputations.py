@@ -267,15 +267,24 @@ def compute_combined_display_option(non_combination_display_option: DisplayOptio
     combination = CombinationDisplayOption(non_combination_display_option.get_types() + old.get_types())
     return combination
 
+def is_first_type_wrapped(types):
+    return isinstance(types[0], WrappingDisplayType)
+
+def unwrap_first_type(types):
+    wrapped_type = types[0].get_wrapped()
+    types[0] = wrapped_type
+
+def remove_first_display_type(types):
+    types.pop(0)
+    if len(types) == 0:
+        types.append(EmptyDisplay)
+
 def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
     types = display_option.get_types()[:]
-    if isinstance(types[0], WrappingDisplayType):
-        wrapped_type = types[0].get_wrapped()
-        types[0] = wrapped_type
+    if is_first_type_wrapped(types):
+        unwrap_first_type(types)
     else:
-        types.pop(0)
-        if len(types) == 0:
-            types = [EmptyDisplay]
+        remove_first_display_type(types)
     return create_display_option(types)
 
 def _compute_reverse_coordinate_doubling_display_type_from_type(display_type: type) -> type:

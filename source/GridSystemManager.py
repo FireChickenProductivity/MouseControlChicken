@@ -286,7 +286,6 @@ class RedrawActions:
         if len(current_grid_command_sequence) > 1:
             current_grid_command_sequence.pop(0)
             current_display_option = remove_first_display_option(current_display_option)
-            print(current_display_option.get_name())
             update_manager_grid(current_display_option)
 
     def mouse_control_chicken_double_grid(is_horizontal_doubling: bool):
