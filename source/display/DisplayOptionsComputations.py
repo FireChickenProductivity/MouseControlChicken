@@ -123,9 +123,6 @@ class CombinationDisplayOption:
         else:
             raise ValueError(f"Index {index} is too large for Combination Display Option display types {self.display_types}")
 
-    def add_display(self, display: Display):
-        self.display_types.insert(0, display)
-    
     def receive_partial_combination_display_option(self, option: PartialCombinationDisplayOption):
         self.set_display(option.get_type(), option.get_index())
 
