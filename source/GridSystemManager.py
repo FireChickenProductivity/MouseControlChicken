@@ -95,15 +95,16 @@ class GridSystemManager:
 manager: GridSystemManager = None
 current_option: str = None
 current_grid_command_sequence = None
+current_display_option = None
 
 def update_manager_grid():
-    global current_option, current_grid_command_sequence, manager
+    global current_option, current_grid_command_sequence, manager, current_display_option
     manager.prepare_for_grid_switch()
     grid = actions.user.mouse_control_chicken_create_grid_from_creation_commands(current_grid_command_sequence)
     display_options = compute_display_options_given_grid(grid)
     options: GridOptions = get_grid_options()
     option = options.get_option(current_option)
-    display = display_options.create_display_from_option(option.get_default_display_option())
+    display, current_display_option = display_options.create_display_from_option(option.get_default_display_option())
     manager.set_display(display)
     manager.set_grid(grid)
     manager.show()
@@ -120,9 +121,9 @@ class Actions:
     
     def mouse_control_chicken_choose_display_from_options(name: str):
         '''Changes the active mouse control chicken grid display based on the name of the option'''
-        global manager
+        global manager, current_display_option
         display_options = compute_display_options_given_grid(manager.get_grid())
-        display = display_options.create_display_from_option(name, current_display=manager.get_display())
+        display, current_display_option = display_options.create_display_from_option(name, current_display=manager.get_display())
         manager.set_display(display)
         manager.show()
 

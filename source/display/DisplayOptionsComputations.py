@@ -116,6 +116,9 @@ class CombinationDisplayOption:
             self.display_types.append(display)
         else:
             raise ValueError(f"Index {index} is too large for Combination Display Option display types {self.display_types}")
+
+    def add_display(self, display: Display):
+        self.display_types.insert(0, display)
     
     def receive_partial_combination_display_option(self, option: PartialCombinationDisplayOption):
         self.set_display(option.get_type(), option.get_index())
@@ -143,15 +146,17 @@ class DisplayOptions:
     
     def create_display_from_option(self, name: str, current_display: Display = None) -> Display:
         if self.is_for_combination_grid:
-            display = self.create_combination_display_from_option(name, current_display)
+            option = self.create_combination_display_option_from_option(name, current_display)
+            display = option.instantiate()
         else:
             if name not in self.options: raise ValueError(f"Name {name} not in options {self.options.keys()}")
-            display = self.options[name].instantiate()
-        return display
+            option = self.options[name]
+            display = option.instantiate()
+        return display, option
 
-    def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
+    def create_combination_display_option_from_option(self, name: str, current_display: Display = None):
         if is_combination_option_display_name(name):
-            return self.create_combination_display_option_from_name(name).instantiate()
+            return self.create_combination_display_option_from_name(name)
         partial_option = self.compute_partial_option_from_name(name)
         sub_display_names = []
         if current_display:
@@ -160,7 +165,7 @@ class DisplayOptions:
             sub_display_names = ["Empty"]*(partial_option.get_index() + 1)
         combination = self.create_combination_display_option_from_sub_displays(sub_display_names)
         combination.receive_partial_combination_display_option(partial_option)
-        return combination.instantiate()
+        return combination
 
     def create_combination_display_option_from_name(self, name: str) -> CombinationDisplay:
         sub_display_names = name.split(DISPLAY_NAME_SEPARATOR)
@@ -252,7 +257,3 @@ def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)
     options_text = compute_display_option_names_given_options(display_options)
     return options_text
-
-def create_display_given_name_and_grid(name: str, grid: Grid) -> Display:
-    options = compute_display_options_given_grid(grid)
-    return options.create_display_from_option(name)
