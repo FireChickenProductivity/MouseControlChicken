@@ -261,7 +261,7 @@ def compute_display_option_names_given_options(options: DisplayOptions) -> List[
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)
-    options_text = compute_display_option_names_given_options(display_options)
+    options_text = compute_display_option_names_given_options()
     return options_text
 
 def compute_combined_display_option(non_combination_display_option: DisplayOption, old: DisplayOption) -> DisplayOption:
@@ -284,3 +284,19 @@ def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
     if isinstance(display_type, WrappingDisplayType):
         return DisplayOption(display_type.get_wrapped())
     return DisplayOption(EmptyDisplay)
+
+def _compute_reverse_coordinate_doubling_display_type_from_type(display_type: type) -> type:
+    if isinstance(display_type, WrappingDisplayType):
+        wrapped = display_type.get_wrapped()
+        return WrappingDisplayType(ReverseCoordinateDoublingDisplay, wrapped)
+    return WrappingDisplayType(ReverseCoordinateDoublingDisplay, display_type)
+
+def wrap_first_display_option_with_doubling(display_option: DisplayOption) -> DisplayOption:
+    if display_option.is_combination():
+        types = display_option.get_types()[:]
+        types[0] = _compute_reverse_coordinate_doubling_display_type_from_type(types[0])
+        return CombinationDisplayOption(types)
+    display_type = display_option.get_type()
+    wrapped_type = _compute_reverse_coordinate_doubling_display_type_from_type(display_type)
+    option = DisplayOption(wrapped_type)
+    return option

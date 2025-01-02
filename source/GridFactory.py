@@ -231,6 +231,9 @@ class ConstructionCommand:
 
     def is_leaf_command(self) -> bool: pass
 
+    def is_doubling(self) -> bool:
+        return False
+
 
 class SimpleGridConstructionCommand(ConstructionCommand):
     def __init__(self, factory, argument: str):
@@ -273,6 +276,9 @@ class ReverseCoordinateDoublingConstructionCommand(ComplexGridConstructionComman
             return ReverseCoordinateHorizontalDoublingGrid(grid)
         else:
             return ReverseCoordinateVerticalDoublingGrid(grid)
+    
+    def is_doubling(self) -> bool:
+        return True
 
 module = Module()
 @module.action_class

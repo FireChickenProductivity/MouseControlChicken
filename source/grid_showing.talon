@@ -47,3 +47,7 @@ chicken {user.mouse_control_chicken_number_small} {user.mouse_control_chicken_nu
     user.mouse_control_chicken_update_numeric_grid_parameters(mouse_control_chicken_number_small, mouse_control_chicken_number_small_2)
 chicken pop:
     user.mouse_control_chicken_remove_first_grid()
+chicken double [(horizontal|horizontally)]:
+    user.mouse_control_chicken_double_grid(true)
+chicken double (vertical|vertically):
+    user.mouse_control_chicken_double_grid(false)

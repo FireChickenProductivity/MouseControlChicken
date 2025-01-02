@@ -4,9 +4,9 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
-from .GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
+from .GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME, ReverseCoordinateDoublingConstructionCommand
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option
+    should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option, wrap_first_display_option_with_doubling
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
@@ -289,6 +289,17 @@ class RedrawActions:
             print(current_display_option.get_name())
             update_manager_grid(current_display_option)
 
+    def mouse_control_chicken_double_grid(is_horizontal_doubling: bool):
+        """Doubles the outermost grid"""
+        global current_grid_command_sequence, current_display_option
+        new_command = ReverseCoordinateDoublingConstructionCommand(is_horizontal_doubling)
+        first_command = current_grid_command_sequence[0]
+        if first_command.is_doubling():
+            current_grid_command_sequence[0] = new_command
+        else:
+            current_grid_command_sequence.insert(0, new_command)
+        current_display_option = wrap_first_display_option_with_doubling(current_display_option)
+        update_manager_grid(current_display_option)
 
 def setup():
     initialize_grid_options()
