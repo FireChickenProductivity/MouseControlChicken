@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module, ui, actions, app
+from talon import ui, Module,  actions, app
 
 class RectangleManager:
     def __init__(self):

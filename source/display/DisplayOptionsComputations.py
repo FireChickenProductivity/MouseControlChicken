@@ -67,6 +67,9 @@ class DisplayOption:
     def is_partial_combination_option(self) -> bool:
         return False
 
+    def is_combination(self) -> bool:
+        return False
+
     def __repr__(self) -> str:
         return self.__str__()
     
@@ -128,6 +131,9 @@ class CombinationDisplayOption:
 
     def get_name(self):
         return ":".join([display_type.get_name() for display_type in self.display_types])
+
+    def is_combination(self) -> bool:
+        return True
 
     def __repr__(self) -> str:
         return self.__str__()
@@ -257,3 +263,12 @@ def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)
     options_text = compute_display_option_names_given_options(display_options)
     return options_text
+
+def compute_combined_display_option(non_combination_display_option: DisplayOption, old: DisplayOption) -> DisplayOption:
+    if old.is_combination():
+        combination = CombinationDisplayOption([non_combination_display_option.get_type()] + old.get_types())
+    else:
+        combination = CombinationDisplayOption([non_combination_display_option.get_type(), old.get_type()])
+    return combination
+
+    

@@ -6,7 +6,7 @@ from .RectangleManagement import RectangleManager, create_default_rectangle_mana
 from .GridOptions import GridOptions
 from .GridFactory import GridFactory, RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid
+    should_compute_combination_display_options_for_grid, compute_combined_display_option
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
@@ -97,14 +97,17 @@ current_option: str = None
 current_grid_command_sequence = None
 current_display_option = None
 
-def update_manager_grid():
+def update_manager_grid(display_option=None):
     global current_option, current_grid_command_sequence, manager, current_display_option
     manager.prepare_for_grid_switch()
     grid = actions.user.mouse_control_chicken_create_grid_from_creation_commands(current_grid_command_sequence)
-    display_options = compute_display_options_given_grid(grid)
-    options: GridOptions = get_grid_options()
-    option = options.get_option(current_option)
-    display, current_display_option = display_options.create_display_from_option(option.get_default_display_option())
+    if display_option:
+        display = display_option.instantiate()
+    else:
+        display_options = compute_display_options_given_grid(grid)
+        options: GridOptions = get_grid_options()
+        option = options.get_option(current_option)
+        display, current_display_option = display_options.create_display_from_option(option.get_default_display_option())
     manager.set_display(display)
     manager.set_grid(grid)
     manager.show()
@@ -259,16 +262,23 @@ class RedrawActions:
         """Updates the outermost numeric grid parameters"""
         if second is None:
             second = first
-        global current_grid_command_sequence
+        global current_grid_command_sequence, current_display_option
         command_index = 0
         while command_index < len(current_grid_command_sequence) and not current_grid_command_sequence[command_index].is_leaf_command():
             command_index += 1
         first_factory = current_grid_command_sequence[command_index].get_factory()
+        argument = first + GRID_ARGUMENT_SEPARATOR + second
         if first_factory.get_name() == RECTANGULAR_DIVISION_GRID_NAME:
-            argument = first + GRID_ARGUMENT_SEPARATOR + second
             current_grid_command_sequence[command_index] = SimpleGridConstructionCommand(RectangularRecursiveDivisionGridFactory(), argument)
-            update_manager_grid()
-        
+            update_manager_grid(current_display_option)
+        else:
+            new_leading_grid_construction_command = SimpleGridConstructionCommand(RectangularRecursiveDivisionGridFactory(), argument)
+            current_grid_command_sequence.insert(0, new_leading_grid_construction_command)
+            new_grid = new_leading_grid_construction_command.execute_on_current_grid(None)
+            display_options = compute_display_options_given_grid(new_grid)
+            _, starting_display_option = display_options.create_display_from_option(settings_mediator.get_default_one_through_n_display())
+            current_display_option = compute_combined_display_option(starting_display_option, current_display_option)
+            update_manager_grid(current_display_option)
 
 
 def setup():

@@ -54,6 +54,10 @@ def create_settings_file_entries() -> List[SettingsFileEntry]:
             ["The name of the default grid option. This must be one of the grid options that shows up when you open the grid options list."]
         ),
         SettingsFileEntry(
+            "user.mouse_control_chicken_default_one_through_n_display",
+            '"Narrow"',
+        ),
+        SettingsFileEntry(
             "user.mouse_control_chicken_font",
             '"lucida sans typewriter"',
             ["The default font option makes it easier to differentiate between I and l.",
