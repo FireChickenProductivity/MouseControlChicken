@@ -61,6 +61,9 @@ class DisplayOption:
     def get_type(self):
         return self.display_type
 
+    def get_types(self):
+        return [self.get_type()]
+
     def get_name(self):
         return self.display_type.get_name()
 
@@ -116,7 +119,7 @@ class CombinationDisplayOption:
             self.display_types.append(display)
         else:
             raise ValueError(f"Index {index} is too large for Combination Display Option display types {self.display_types}")
-    
+
     def receive_partial_combination_display_option(self, option: PartialCombinationDisplayOption):
         self.set_display(option.get_type(), option.get_index())
 
@@ -143,15 +146,17 @@ class DisplayOptions:
     
     def create_display_from_option(self, name: str, current_display: Display = None) -> Display:
         if self.is_for_combination_grid:
-            display = self.create_combination_display_from_option(name, current_display)
+            option = self.create_combination_display_option_from_option(name, current_display)
+            display = option.instantiate()
         else:
             if name not in self.options: raise ValueError(f"Name {name} not in options {self.options.keys()}")
-            display = self.options[name].instantiate()
-        return display
+            option = self.options[name]
+            display = option.instantiate()
+        return display, option
 
-    def create_combination_display_from_option(self, name: str, current_display: Display = None) -> CombinationDisplay:
+    def create_combination_display_option_from_option(self, name: str, current_display: Display = None):
         if is_combination_option_display_name(name):
-            return self.create_combination_display_option_from_name(name).instantiate()
+            return self.create_combination_display_option_from_name(name)
         partial_option = self.compute_partial_option_from_name(name)
         sub_display_names = []
         if current_display:
@@ -160,7 +165,7 @@ class DisplayOptions:
             sub_display_names = ["Empty"]*(partial_option.get_index() + 1)
         combination = self.create_combination_display_option_from_sub_displays(sub_display_names)
         combination.receive_partial_combination_display_option(partial_option)
-        return combination.instantiate()
+        return combination
 
     def create_combination_display_option_from_name(self, name: str) -> CombinationDisplay:
         sub_display_names = name.split(DISPLAY_NAME_SEPARATOR)
@@ -253,6 +258,42 @@ def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     options_text = compute_display_option_names_given_options(display_options)
     return options_text
 
-def create_display_given_name_and_grid(name: str, grid: Grid) -> Display:
-    options = compute_display_options_given_grid(grid)
-    return options.create_display_from_option(name)
+def create_display_option(types: List[type]) -> DisplayOption:
+    if len(types) == 1:
+        return DisplayOption(types[0])
+    return CombinationDisplayOption(types)
+
+def compute_combined_display_option(non_combination_display_option: DisplayOption, old: DisplayOption) -> DisplayOption:
+    combination = CombinationDisplayOption(non_combination_display_option.get_types() + old.get_types())
+    return combination
+
+def is_first_type_wrapped(types):
+    return isinstance(types[0], WrappingDisplayType)
+
+def unwrap_first_type(types):
+    wrapped_type = types[0].get_wrapped()
+    types[0] = wrapped_type
+
+def remove_first_display_type(types):
+    types.pop(0)
+    if len(types) == 0:
+        types.append(EmptyDisplay)
+
+def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
+    types = display_option.get_types()[:]
+    if is_first_type_wrapped(types):
+        unwrap_first_type(types)
+    else:
+        remove_first_display_type(types)
+    return create_display_option(types)
+
+def _compute_reverse_coordinate_doubling_display_type_from_type(display_type: type) -> type:
+    if isinstance(display_type, WrappingDisplayType):
+        wrapped = display_type.get_wrapped()
+        return WrappingDisplayType(ReverseCoordinateDoublingDisplay, wrapped)
+    return WrappingDisplayType(ReverseCoordinateDoublingDisplay, display_type)
+
+def wrap_first_display_option_with_doubling(display_option: DisplayOption) -> DisplayOption:
+    types = display_option.get_types()[:]
+    types[0] = _compute_reverse_coordinate_doubling_display_type_from_type(types[0])
+    return create_display_option(types)

@@ -1,5 +1,5 @@
 import math
-from talon import ctrl, actions
+from talon import actions
 
 class MousePosition:
     COORDINATE_SEPARATOR = ' '
@@ -57,7 +57,8 @@ class MousePosition:
 
     @staticmethod
     def current():
-        horizontal, vertical = ctrl.mouse_pos()
+        horizontal = actions.mouse_x()
+        vertical = actions.mouse_y()
         current_mouse_position = MousePosition(horizontal, vertical)
         return current_mouse_position
     

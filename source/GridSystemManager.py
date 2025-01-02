@@ -4,9 +4,9 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
-from .GridFactory import GridFactory #Unused import to help with startup issue
+from .GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME, ReverseCoordinateDoublingConstructionCommand
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid
+    should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option, wrap_first_display_option_with_doubling
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
@@ -94,30 +94,39 @@ class GridSystemManager:
         
 manager: GridSystemManager = None
 current_option: str = None
+current_grid_command_sequence = None
+current_display_option = None
+
+def update_manager_grid(display_option=None):
+    global current_option, current_grid_command_sequence, manager, current_display_option
+    manager.prepare_for_grid_switch()
+    grid = actions.user.mouse_control_chicken_create_grid_from_creation_commands(current_grid_command_sequence)
+    if display_option:
+        display = display_option.instantiate()
+    else:
+        display_options = compute_display_options_given_grid(grid)
+        options: GridOptions = get_grid_options()
+        option = options.get_option(current_option)
+        display, current_display_option = display_options.create_display_from_option(option.get_default_display_option())
+    manager.set_display(display)
+    manager.set_grid(grid)
+    manager.show()
 
 module = Module()
 @module.action_class
 class Actions:
     def mouse_control_chicken_choose_grid_from_options(name: str):
         '''Updates the mouse control chicken current grid to the specified grid option'''
-        global current_option
+        global current_option, current_grid_command_sequence
         current_option = name
-        options: GridOptions = get_grid_options()
-        option = options.get_option(name)
-        grid = actions.user.mouse_control_chicken_create_grid_from_factory(option.get_factory_name(), option.get_argument())
-        display_options = compute_display_options_given_grid(grid)
-        display = display_options.create_display_from_option(option.get_default_display_option())
-        global manager
-        manager.prepare_for_grid_switch()
-        manager.set_display(display)
-        manager.set_grid(grid)
-        manager.show()
+        current_grid_command_sequence = actions.user.mouse_control_chicken_create_grid_creation_commands_from_options(name)
+        update_manager_grid()
     
     def mouse_control_chicken_choose_display_from_options(name: str):
         '''Changes the active mouse control chicken grid display based on the name of the option'''
-        global manager
+        global manager, current_display_option
         display_options = compute_display_options_given_grid(manager.get_grid())
-        display = display_options.create_display_from_option(name, current_display=manager.get_display())
+        display, current_display_option = display_options.create_display_from_option(name, current_display=manager.get_display())
         manager.set_display(display)
         manager.show()
 
@@ -246,6 +255,50 @@ def show_singular_display_options(title: str, callback, grid: Grid):
 def manager_has_narrow_able_grid() -> bool:
     grid = manager.get_grid()
     return grid and grid.supports_narrowing()
+
+@module.action_class
+class RedrawActions:
+    def mouse_control_chicken_update_numeric_grid_parameters(first: str, second: str=None):
+        """Updates the outermost numeric grid parameters"""
+        if second is None:
+            second = first
+        global current_grid_command_sequence, current_display_option
+        command_index = 0
+        while command_index < len(current_grid_command_sequence) and not current_grid_command_sequence[command_index].is_leaf_command():
+            command_index += 1
+        first_factory = current_grid_command_sequence[command_index].get_factory()
+        argument = first + GRID_ARGUMENT_SEPARATOR + second
+        if first_factory.get_name() == RECTANGULAR_DIVISION_GRID_NAME:
+            current_grid_command_sequence[command_index] = SimpleGridConstructionCommand(RectangularRecursiveDivisionGridFactory(), argument)
+            update_manager_grid(current_display_option)
+        else:
+            new_leading_grid_construction_command = SimpleGridConstructionCommand(RectangularRecursiveDivisionGridFactory(), argument)
+            current_grid_command_sequence.insert(0, new_leading_grid_construction_command)
+            new_grid = new_leading_grid_construction_command.execute_on_current_grid(None)
+            display_options = compute_display_options_given_grid(new_grid)
+            _, starting_display_option = display_options.create_display_from_option(settings_mediator.get_default_one_through_n_display())
+            current_display_option = compute_combined_display_option(starting_display_option, current_display_option)
+            update_manager_grid(current_display_option)
+
+    def mouse_control_chicken_remove_first_grid():
+        """Removes the outermost grid"""
+        global current_grid_command_sequence, current_display_option
+        if len(current_grid_command_sequence) > 1:
+            current_grid_command_sequence.pop(0)
+            current_display_option = remove_first_display_option(current_display_option)
+            update_manager_grid(current_display_option)
+
+    def mouse_control_chicken_double_grid(is_horizontal_doubling: bool):
+        """Doubles the outermost grid"""
+        global current_grid_command_sequence, current_display_option
+        new_command = ReverseCoordinateDoublingConstructionCommand(is_horizontal_doubling)
+        first_command = current_grid_command_sequence[0]
+        if first_command.is_doubling():
+            current_grid_command_sequence[0] = new_command
+        else:
+            current_grid_command_sequence.insert(0, new_command)
+        current_display_option = wrap_first_display_option_with_doubling(current_display_option)
+        update_manager_grid(current_display_option)
 
 def setup():
     initialize_grid_options()

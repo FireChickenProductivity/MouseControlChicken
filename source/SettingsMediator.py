@@ -14,6 +14,12 @@ default_grid_option = setting_creator.create_str_setting(
     desc = 'The default grid option used by Mouse Control Chicken',
 )
 
+default_one_through_n_display = setting_creator.create_str_setting(
+    'default_one_through_n_display',
+    default = "Narrow",
+    desc = 'The default display used by Mouse Control Chicken for the one through n grid during dynamic grid creation'
+)
+
 font = setting_creator.create_str_setting(
     'font',
     default = "lucida sans typewriter",
@@ -182,7 +188,7 @@ dragging_delay = setting_creator.create_float_setting(
     0.5,
     'Determines how much time is spent pausing with dragging commands in seconds.'
 )
-    
+
 def compute_color_setting(name):
     setting_value = settings.get(name)
     color = compute_color(setting_value)
@@ -191,7 +197,6 @@ def compute_color_setting(name):
 class SettingsMediator:
     def __init__(self):
         self.callback_manager = CallbackManager()
-        self.initialize()
         
     def initialize(self):
         self.restore_default_settings()
@@ -237,6 +242,8 @@ class SettingsMediator:
         self._handle_change()
 
     def get_default_grid_option(self) -> str: return self.default_grid_option
+
+    def get_default_one_through_n_display(self) -> str: return settings.get(default_one_through_n_display)
 
     def get_font(self) -> str: return settings.get(font)
 

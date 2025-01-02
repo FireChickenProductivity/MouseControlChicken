@@ -8,3 +8,6 @@ class WrappingDisplayType:
     
     def get_name(self) -> str:
         return self.__call__().get_name()
+
+    def get_wrapped(self):
+        return self.wrapped
