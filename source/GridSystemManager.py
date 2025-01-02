@@ -4,7 +4,7 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
-from .GridFactory import GridFactory, RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
+from .GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
@@ -286,6 +286,7 @@ class RedrawActions:
         if len(current_grid_command_sequence) > 1:
             current_grid_command_sequence.pop(0)
             current_display_option = remove_first_display_option(current_display_option)
+            print(current_display_option.get_name())
             update_manager_grid(current_display_option)
 
 
