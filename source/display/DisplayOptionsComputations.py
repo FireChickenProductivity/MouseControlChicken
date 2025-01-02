@@ -61,6 +61,9 @@ class DisplayOption:
     def get_type(self):
         return self.display_type
 
+    def get_types(self):
+        return [self.get_type()]
+
     def get_name(self):
         return self.display_type.get_name()
 
@@ -261,29 +264,28 @@ def compute_display_option_names_given_options(options: DisplayOptions) -> List[
 
 def compute_display_options_names_given_grid(grid: Grid) -> List[str]:
     display_options = compute_display_options_given_grid(grid)
-    options_text = compute_display_option_names_given_options()
+    options_text = compute_display_option_names_given_options(display_options)
     return options_text
 
+def create_display_option(types: List[type]) -> DisplayOption:
+    if len(types) == 1:
+        return DisplayOption(types[0])
+    return CombinationDisplayOption(types)
+
 def compute_combined_display_option(non_combination_display_option: DisplayOption, old: DisplayOption) -> DisplayOption:
-    if old.is_combination():
-        combination = CombinationDisplayOption([non_combination_display_option.get_type()] + old.get_types())
-    else:
-        combination = CombinationDisplayOption([non_combination_display_option.get_type(), old.get_type()])
+    combination = CombinationDisplayOption(non_combination_display_option.get_types() + old.get_types())
     return combination
 
 def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
-    if display_option.is_combination():
-        types = display_option.get_types()[:]
-        if isinstance(types[0], WrappingDisplayType):
-            wrapped_type = types[0].get_wrapped()
-            types[0] = wrapped_type
-        else:
-            types = types[1:]
-        return CombinationDisplayOption(types)
-    display_type = display_option.get_type()
-    if isinstance(display_type, WrappingDisplayType):
-        return DisplayOption(display_type.get_wrapped())
-    return DisplayOption(EmptyDisplay)
+    types = display_option.get_types()[:]
+    if isinstance(types[0], WrappingDisplayType):
+        wrapped_type = types[0].get_wrapped()
+        types[0] = wrapped_type
+    else:
+        types.pop(0)
+        if len(types) == 0:
+            types = [EmptyDisplay]
+    return create_display_option(types)
 
 def _compute_reverse_coordinate_doubling_display_type_from_type(display_type: type) -> type:
     if isinstance(display_type, WrappingDisplayType):
@@ -292,11 +294,6 @@ def _compute_reverse_coordinate_doubling_display_type_from_type(display_type: ty
     return WrappingDisplayType(ReverseCoordinateDoublingDisplay, display_type)
 
 def wrap_first_display_option_with_doubling(display_option: DisplayOption) -> DisplayOption:
-    if display_option.is_combination():
-        types = display_option.get_types()[:]
-        types[0] = _compute_reverse_coordinate_doubling_display_type_from_type(types[0])
-        return CombinationDisplayOption(types)
-    display_type = display_option.get_type()
-    wrapped_type = _compute_reverse_coordinate_doubling_display_type_from_type(display_type)
-    option = DisplayOption(wrapped_type)
-    return option
+    types = display_option.get_types()[:]
+    types[0] = _compute_reverse_coordinate_doubling_display_type_from_type(types[0])
+    return create_display_option(types)
