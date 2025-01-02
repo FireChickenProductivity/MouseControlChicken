@@ -70,9 +70,6 @@ class DisplayOption:
     def is_partial_combination_option(self) -> bool:
         return False
 
-    def is_combination(self) -> bool:
-        return False
-
     def __repr__(self) -> str:
         return self.__str__()
     
@@ -131,9 +128,6 @@ class CombinationDisplayOption:
 
     def get_name(self):
         return ":".join([display_type.get_name() for display_type in self.display_types])
-
-    def is_combination(self) -> bool:
-        return True
 
     def __repr__(self) -> str:
         return self.__str__()
