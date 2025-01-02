@@ -271,4 +271,7 @@ def compute_combined_display_option(non_combination_display_option: DisplayOptio
         combination = CombinationDisplayOption([non_combination_display_option.get_type(), old.get_type()])
     return combination
 
-    
+def remove_first_display_option(display_option: DisplayOption) -> DisplayOption:
+    if display_option.is_combination():
+        return CombinationDisplayOption(display_option.get_types()[1:])
+    return DisplayOption(EmptyDisplay)

@@ -6,7 +6,7 @@ from .RectangleManagement import RectangleManager, create_default_rectangle_mana
 from .GridOptions import GridOptions
 from .GridFactory import GridFactory, RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
-    should_compute_combination_display_options_for_grid, compute_combined_display_option
+    should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
 from .dialogue.DialogueOptions import DialogueOptions
 from .fire_chicken.mouse_position import MousePosition
@@ -278,6 +278,14 @@ class RedrawActions:
             display_options = compute_display_options_given_grid(new_grid)
             _, starting_display_option = display_options.create_display_from_option(settings_mediator.get_default_one_through_n_display())
             current_display_option = compute_combined_display_option(starting_display_option, current_display_option)
+            update_manager_grid(current_display_option)
+
+    def mouse_control_chicken_remove_first_grid():
+        """Removes the outermost grid"""
+        global current_grid_command_sequence, current_display_option
+        if len(current_grid_command_sequence) > 1:
+            current_grid_command_sequence.pop(0)
+            current_display_option = remove_first_display_option(current_display_option)
             update_manager_grid(current_display_option)
 
 
