@@ -6,9 +6,8 @@ from .grid.RectangularGrid import ListBasedGrid
 from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
 from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
-from .grid.GridCalculations import compute_grid_tree
 from typing import List
-from talon import Module, actions
+from talon import Module
 
 ONE_TO_NINE_GRID_NAME = "one to nine division"
 ALPHABET_GRID_NAME = "Alphabet"
