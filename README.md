@@ -110,6 +110,14 @@ trace (mouse_control_chicken_coordinates): Narrows the grid and display around t
 
 (mouse control chicken grid action) here: Performs the specified action using the middle of the grid as the position and then re-expands the grid and display.
 
+chicken (small positive integer) (small positive integer): If the grid is currently a one through n recursively divisible grid, the first number determines the number of horizontal divisions and the second number determines the number of vertical divisions. Otherwise, the current grid is put inside a one through n recursively divisible grid with the specified number of horizontal and vertical divisions. If the second number is omitted, than the first number is used for both the horizontal and vertical divisions.
+
+chicken pop: If the current grid is a combination of grids, the outermost grid is removed. For purposes of this command, a doubling is counted as a grid.
+
+chicken double (horizontal or horizontally): This makes the current grid horizontally doubled. This can optionally just be dictated as "chicken double".
+
+chicken double (vertical or vertically): This makes the current grid vertically doubled.
+
 ### Continuous Scrolling Commands
 
 Continuous scrolling activates a specialized mode where only the following scrolling commands are available.
