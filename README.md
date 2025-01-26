@@ -118,6 +118,11 @@ chicken double (horizontal or horizontally): This makes the current grid horizon
 
 chicken double (vertical or vertically): This makes the current grid vertically doubled.
 
+### Modifier Keys
+When using actions from the user.mouse_control_chicken_action list, you can dictate modifier keys before the action to have those keys pressed during the action.
+
+The user.modifiers capture is used for dictating modifier keys. To use this feature without community, you will need to define this capture yourself.
+
 ### Continuous Scrolling Commands
 
 Continuous scrolling activates a specialized mode where only the following scrolling commands are available.
