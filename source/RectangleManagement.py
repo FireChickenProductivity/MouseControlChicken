@@ -1,6 +1,6 @@
 from .grid.Grid import Rectangle
 from .SettingsMediator import settings_mediator
-from talon import ui, Module,  actions, app
+from talon import ui, Module,  actions, app, cron
 
 class RectangleManager:
     def __init__(self):
@@ -34,6 +34,9 @@ class CurrentWindowRectangleManager(RectangleManager):
             rectangle = ScreenRectangleManager().compute_rectangle()
         return rectangle
 
+def call_after_window_following_delay(callback):
+    cron.after(f"{settings_mediator.get_window_following_delay()}ms", callback)
+
 class WindowTrackingRectangleManager(RectangleManager):
     def __init__(self, sensitive_focus_switching: bool = True):
         super().__init__()
@@ -46,14 +49,17 @@ class WindowTrackingRectangleManager(RectangleManager):
         self.last_window_rectangle = None
         self.active = True
     
-    def update_rectangle(self, cause, window):
+    def _update_rectangle_helper(self, window):
         new_rectangle = self.current_window_rectangle_manager.compute_rectangle()
         if self.active and window == ui.active_window() and (not self.last_window_rectangle or new_rectangle != self.last_window_rectangle):
             self.call_callback()
 
+    def update_rectangle(self, cause, window):
+        call_after_window_following_delay(lambda: self._update_rectangle_helper(window))
+
     def compute_rectangle(self) -> Rectangle:
         self.last_window_rectangle = self.current_window_rectangle_manager.compute_rectangle()
-        return self.current_window_rectangle_manager.compute_rectangle()
+        return self.last_window_rectangle
 
     def deactivate(self):
         self.active = False
@@ -68,7 +74,7 @@ class ScreenTrackingRectangleManager(RectangleManager):
         self.last_rectangle = ScreenRectangleManager().compute_rectangle()
         self.update_rectangle()
     
-    def update_rectangle(self):
+    def _update_rectangle_helper(self):
         window = ui.active_window()
         window_rectangle = None
         try:
@@ -80,6 +86,9 @@ class ScreenTrackingRectangleManager(RectangleManager):
         if not self.last_rectangle or new_rectangle != self.last_rectangle:
             self.last_rectangle = new_rectangle
             self.call_callback()
+
+    def update_rectangle(self):
+        call_after_window_following_delay(self._update_rectangle_helper)
     
     def compute_rectangle(self) -> Rectangle:
         '''Returns the rectangle of the screen that the active window is on'''

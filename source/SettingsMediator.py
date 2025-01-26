@@ -189,6 +189,12 @@ dragging_delay = setting_creator.create_float_setting(
     'Determines how much time is spent pausing with dragging commands in seconds.'
 )
 
+window_following_delay = setting_creator.create_int_setting(
+    'window_following_delay',
+    25,
+    'Determines how long to wait before updating the active grid rectangle with a rectangle manager following the active window after the window changes in milliseconds.'
+)
+
 def compute_color_setting(name):
     setting_value = settings.get(name)
     color = compute_color(setting_value)
@@ -296,6 +302,8 @@ class SettingsMediator:
     def get_continuous_scrolling_unit(self) -> int: return settings.get(continuous_scrolling_unit)
 
     def get_dragging_delay(self) -> float: return settings.get(dragging_delay)
+
+    def get_window_following_delay(self) -> int: return settings.get(window_following_delay)
 
     def rotate_transparency_settings_to_alternates(self):
         self.background_transparency = self.alternate_background_transparency
