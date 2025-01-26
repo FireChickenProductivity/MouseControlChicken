@@ -74,7 +74,7 @@ class ScreenTrackingRectangleManager(RectangleManager):
         self.last_rectangle = ScreenRectangleManager().compute_rectangle()
         self.update_rectangle()
     
-    def _update_rectangle_helper(self):
+    def update_rectangle(self):
         window = ui.active_window()
         window_rectangle = None
         try:
@@ -86,9 +86,6 @@ class ScreenTrackingRectangleManager(RectangleManager):
         if not self.last_rectangle or new_rectangle != self.last_rectangle:
             self.last_rectangle = new_rectangle
             self.call_callback()
-
-    def update_rectangle(self):
-        call_after_window_following_delay(self._update_rectangle_helper)
     
     def compute_rectangle(self) -> Rectangle:
         '''Returns the rectangle of the screen that the active window is on'''
