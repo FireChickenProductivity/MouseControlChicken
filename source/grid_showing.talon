@@ -5,11 +5,8 @@ mode: command
 meet <user.mouse_control_chicken_coordinates>: 
     user.mouse_control_chicken_move_only_to_position(mouse_control_chicken_coordinates)
 
-{user.mouse_control_chicken_action} <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_perform_action_at_coordinates(mouse_control_chicken_action, mouse_control_chicken_coordinates)
-
-<user.modifiers> {user.mouse_control_chicken_action} <user.mouse_control_chicken_coordinates>:
-    user.mouse_control_chicken_perform_action_at_coordinates(mouse_control_chicken_action, mouse_control_chicken_coordinates, modifiers)
+[<user.modifiers>] {user.mouse_control_chicken_action} <user.mouse_control_chicken_coordinates>:
+    user.mouse_control_chicken_perform_action_at_coordinates(mouse_control_chicken_action, mouse_control_chicken_coordinates, modifiers or "")
 
 <user.mouse_control_chicken_coordinates> slide <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_drag_from_position(mouse_control_chicken_coordinates_1)

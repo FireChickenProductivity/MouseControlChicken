@@ -60,16 +60,16 @@ ACTION_MAP = {
     "scroll_down": scroll_down,
 }
 
-def perform_action_from_map(action_name: str):
+def perform_action_from_map(action_name: str, modifiers: str=""):
+    if modifiers: actions.key(f"{modifiers}:down")
     action = ACTION_MAP[action_name]
     action()
+    if modifiers: actions.key(f"{modifiers}:up")
 
 def perform_action_from_map_at_coordinates(action_name: str, coordinates: str, modifiers: str=""):
     position = get_position_on_grid(coordinates)
     position.go()
-    if modifiers: actions.key(f"{modifiers}:down")
-    perform_action_from_map(action_name)
-    if modifiers: actions.key(f"{modifiers}:up")
+    perform_action_from_map(action_name, modifiers)
     actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
 def perform_action_on_narrow_able_grid_center(action):
@@ -140,9 +140,9 @@ class Actions:
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
-    def mouse_control_chicken_perform_action_at_current_position_on_narrow_able_grid(action_name: str):
+    def mouse_control_chicken_perform_action_at_current_position_on_narrow_able_grid(action_name: str, modifiers: str=""):
         '''Performs the specified action at the current position on the current mouse control chicken narrow able grid'''
-        perform_action_on_narrow_able_grid_center(lambda: perform_action_from_map(action_name))
+        perform_action_on_narrow_able_grid_center(lambda: perform_action_from_map(action_name, modifiers))
 
     def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
         ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
