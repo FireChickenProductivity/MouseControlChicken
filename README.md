@@ -1,9 +1,7 @@
 # Mouse Control Chicken
 Offers talon voice customization for controlling the mouse. The project currently offers mouse grid systems. 
 
-The system is intended to be useful now but is still early in development. There are plans to add more grid and display options as well as commands for dealing with scrolling by voice.
-
-The project has only been tested on windows.
+The project has only been tested on Windows and MacOS.
 
 The data directory mentioned below should be created in the talon user directory and called "Mouse Control Chicken Data". 
 
