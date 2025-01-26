@@ -60,14 +60,16 @@ ACTION_MAP = {
     "scroll_down": scroll_down,
 }
 
-def performed_action_from_map(action_name: str):
+def perform_action_from_map(action_name: str, modifiers: str=""):
+    if modifiers: actions.key(f"{modifiers}:down")
     action = ACTION_MAP[action_name]
     action()
+    if modifiers: actions.key(f"{modifiers}:up")
 
-def perform_action_from_map_at_coordinates(action_name: str, coordinates: str):
+def perform_action_from_map_at_coordinates(action_name: str, coordinates: str, modifiers: str=""):
     position = get_position_on_grid(coordinates)
     position.go()
-    performed_action_from_map(action_name)
+    perform_action_from_map(action_name, modifiers)
     actions.user.mouse_control_chicken_handle_action_using_coordinates(coordinates)
 
 def perform_action_on_narrow_able_grid_center(action):
@@ -78,10 +80,10 @@ def perform_action_on_narrow_able_grid_center(action):
         actions.user.mouse_control_chicken_reset_narrow_able_grid()
         actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
 
-def perform_action_from_map_at_reverse_coordinates(action_name: str, coordinates: str):
+def perform_action_from_map_at_reverse_coordinates(action_name: str, coordinates: str, modifiers: str=""):
     reverse_coordinates = compute_reverse_coordinates_string(coordinates)
     actions.user.mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates)
-    perform_action_from_map_at_coordinates(action_name, reverse_coordinates)
+    perform_action_from_map_at_coordinates(action_name, reverse_coordinates, modifiers)
     actions.user.mouse_control_chicken_handle_reverse_coordinate_action_cleanup()
 
 def perform_action_on_reverse_coordinates(coordinates, action):
@@ -93,13 +95,13 @@ module = Module()
 module.list("mouse_control_chicken_action", desc="List of actions that can be performed on mouse control chicken grids")
 @module.action_class
 class Actions:
-    def mouse_control_chicken_perform_action_at_coordinates(action_name: str, coordinates: str):
+    def mouse_control_chicken_perform_action_at_coordinates(action_name: str, coordinates: str, modifiers: str=""):
         '''Performs the specified action at the specified coordinates on the current mouse control chicken grid'''
-        perform_action_from_map_at_coordinates(action_name, coordinates)
+        perform_action_from_map_at_coordinates(action_name, coordinates, modifiers)
 
-    def mouse_control_chicken_perform_action_at_reverse_coordinates(action_name: str, coordinates: str):
+    def mouse_control_chicken_perform_action_at_reverse_coordinates(action_name: str, coordinates: str, modifiers: str=""):
         '''Performs the specified action at the specified coordinates on the current mouse control chicken grid using reverse coordinates'''
-        perform_action_from_map_at_reverse_coordinates(action_name, coordinates)
+        perform_action_from_map_at_reverse_coordinates(action_name, coordinates, modifiers)
         
     def mouse_control_chicken_move_only_to_position(coordinates: str):
         '''Moves the mouse to the specified position on the current mouse control chicken grid and handle that as a complete action'''
@@ -138,9 +140,9 @@ class Actions:
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
         
-    def mouse_control_chicken_perform_action_at_current_position_on_narrow_able_grid(action_name: str):
+    def mouse_control_chicken_perform_action_at_current_position_on_narrow_able_grid(action_name: str, modifiers: str=""):
         '''Performs the specified action at the current position on the current mouse control chicken narrow able grid'''
-        perform_action_on_narrow_able_grid_center(lambda: performed_action_from_map(action_name))
+        perform_action_on_narrow_able_grid_center(lambda: perform_action_from_map(action_name, modifiers))
 
     def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
         ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
