@@ -51,7 +51,7 @@ module = Module()
 class Actions:
     def mouse_control_chicken_show_options_dialogue_with_options_title_callback_and_tag(options: List[str], title: str, new_callback: Callable[[str], None], tag: str = ""):
         '''Shows options for mouse control chicken'''
-        actions.user.mouse_control_chicken_hide_options_dialogue()
+        actions.user.mouse_control_chicken_close_all_dialogues()
         global information
         information = OptionsDialogueInformation(title, options)
         global callback
