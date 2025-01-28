@@ -1,4 +1,4 @@
-from talon import Module, Context
+from talon import Module, Context, actions
 from typing import List
 from .grid.Grid import Grid
 from .CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
@@ -63,6 +63,10 @@ QUICK_DROP_TAG = 'user.' + QUICK_DROP_TAG_NAME
 module.tag(QUICK_DROP_TAG_NAME, desc="Tag for activating Mouse Control Chicken quick drop")
 quick_drop_context = Context()
 
+GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME = "mouse_control_chicken_open_for_single_action"
+GRID_OPEN_FOR_SINGLE_ACTION_TAG = 'user.' + GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME
+module.tag(GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME, desc="Tag for showing a Mouse Control Chicken for a single action")
+
 grid_open_context = Context()
 options_dialogue_context = Context()
 grid_creation_context = Context()
@@ -75,6 +79,7 @@ class Actions:
         tags = [GRID_SHOWING_TAG]
         if grid.supports_narrowing(): tags.append(NARROW_ABLE_GRID_SHOWING_TAG)
         if grid.supports_reversed_coordinates() or grid.supports_narrowing(): tags.append(REVERSE_COORDINATES_SUPPORTING_GRID_SHOWING_TAG)
+        if actions.user.mouse_control_chicken_is_grid_open_for_single_action(): tags.append(GRID_OPEN_FOR_SINGLE_ACTION_TAG)
         category_tags = compute_category_tags(grid)
         tags.extend(category_tags)
         level_tag_representing__representing_coordinate_system_depth = compute_appropriate_level_tag_from_category_tags(category_tags)

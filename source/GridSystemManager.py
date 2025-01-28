@@ -160,12 +160,6 @@ class Actions:
         global manager
         manager.show()
 
-    def mouse_control_chicken_show_grid_for_single_action():
-        ''''Shows the mouse control chicken grid for a single action'''
-        global is_open_for_single_action
-        is_open_for_single_action = True
-        actions.user.mouse_control_chicken_show_grid()
-
     def mouse_control_chicken_toggle_flicker_display():
         '''Toggles flickering the mouse control chicken display'''
         global manager
@@ -311,6 +305,19 @@ class RedrawActions:
         current_display_option = wrap_first_display_option_with_doubling(current_display_option)
         update_manager_grid(current_display_option)
 
+@module.action_class
+class TransientActions:
+    def mouse_control_chicken_show_grid_for_single_action():
+        ''''Shows the mouse control chicken grid for a single action'''
+        global is_open_for_single_action
+        is_open_for_single_action = True
+        actions.user.mouse_control_chicken_show_grid()
+
+    def mouse_control_chicken_is_grid_open_for_single_action() -> bool:
+        '''Returns whether the mouse control chicken grid is open for a single action'''
+        global is_open_for_single_action
+        return is_open_for_single_action
+        
 def setup():
     initialize_grid_options()
     global manager

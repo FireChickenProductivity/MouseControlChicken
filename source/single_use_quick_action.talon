@@ -1,0 +1,6 @@
+tag: user.mouse_control_chicken_showing
+and tag: user.mouse_control_chicken_open_for_single_action
+mode: user.mouse_control_chicken_narrow_able_grid_mode
+mode: command
+-
+<user.mouse_control_chicken_coordinates>: user.mouse_control_chicken_perform_transient_quick_action_at_coordinates(mouse_control_chicken_coordinates)

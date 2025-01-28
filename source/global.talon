@@ -4,7 +4,11 @@ chicken choose grid <user.mouse_control_chicken_grid_option>:
 
 chicken hide: user.mouse_control_chicken_hide_grid()
 chicken show: user.mouse_control_chicken_show_grid()
-chicken: user.mouse_control_chicken_show_grid_for_single_action()
+
+chicken flash: user.mouse_control_chicken_show_grid_for_single_action()
+chicken [<user.modifiers>] {user.mouse_control_chicken_action}:
+    user.mouse_control_chicken_set_transient_quick_action(mouse_control_chicken_action, modifiers or "")
+    user.mouse_control_chicken_show_grid_for_single_action()
 
 chicken choose grid: user.mouse_control_chicken_show_grid_options()
 chicken choose display: user.mouse_control_chicken_show_display_options()

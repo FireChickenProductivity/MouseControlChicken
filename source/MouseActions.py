@@ -4,6 +4,7 @@ from .fire_chicken.mouse_position import MousePosition
 from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
 LAST_DRAG_POSITION: MousePosition = None
+transient_quick_action = ["click"]
 
 def compute_reverse_coordinates_string(coordinates: str) -> str:
     return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
@@ -147,6 +148,19 @@ class Actions:
     def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
         ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
         perform_action_on_narrow_able_grid_center(lambda: actions.user.mouse_control_chicken_start_scrolling(speed, is_direction_down))
+    
+    def mouse_control_chicken_set_transient_quick_action(name: str, modifiers: str=""):
+        '''Sets the transient quick action to the specified name'''
+        global transient_quick_action
+        transient_quick_action = [name]
+        if modifiers:
+            transient_quick_action.append(modifiers)
+
+    def mouse_control_chicken_perform_transient_quick_action_at_coordinates(coordinates: str):
+        '''Performs the transient quick action at the specified coordinates'''
+        action_name = transient_quick_action[0]
+        modifiers = transient_quick_action[1] if len(transient_quick_action) > 1 else ""
+        perform_action_from_map_at_coordinates(action_name, coordinates, modifiers)
 
 @module.action_class
 class ReverseCoordinateActions:
