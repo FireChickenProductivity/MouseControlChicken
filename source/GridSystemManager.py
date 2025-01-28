@@ -96,6 +96,7 @@ manager: GridSystemManager = None
 current_option: str = None
 current_grid_command_sequence = None
 current_display_option = None
+is_open_for_single_action: bool = False
 
 def update_manager_grid(display_option=None):
     global current_option, current_grid_command_sequence, manager, current_display_option
@@ -150,13 +151,20 @@ class Actions:
 
     def mouse_control_chicken_hide_grid():
         '''Hides the mouse control chicken grid'''
-        global manager
+        global manager, is_open_for_single_action
         manager.hide()
+        is_open_for_single_action = False
     
     def mouse_control_chicken_show_grid():
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+
+    def mouse_control_chicken_show_grid_for_single_action():
+        ''''Shows the mouse control chicken grid for a single action'''
+        global is_open_for_single_action
+        is_open_for_single_action = True
+        actions.user.mouse_control_chicken_show_grid()
 
     def mouse_control_chicken_toggle_flicker_display():
         '''Toggles flickering the mouse control chicken display'''
@@ -214,8 +222,11 @@ class Actions:
     
     def mouse_control_chicken_handle_action_using_coordinates(coordinates: str) -> None:
         '''Has the active grid handle the fact that a mouse action was performed using the specified coordinates'''
+        global is_open_for_single_action
         grid = manager.get_grid()
         grid.handle_using_coordinates_with_mouse_command(coordinates)
+        if is_open_for_single_action:
+            actions.user.mouse_control_chicken_hide_grid()
 
     def mouse_control_chicken_handle_reverse_coordinate_action_setup_using_coordinates(coordinates: str) -> None:
         '''Prepares for an reverse coordinate action'''
