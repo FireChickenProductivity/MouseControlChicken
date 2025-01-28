@@ -54,8 +54,7 @@ class Actions:
             tag_names: List[str]
         ):
         '''Shows dictation input for mouse control chicken with a tag name'''
-        erase_dictation_input_data()
-        actions.user.mouse_control_chicken_hide_dictation_input_dialogue()
+        actions.user.mouse_control_chicken_close_all_dialogues()
         global title
         title = new_title
         global acceptance_callback
@@ -81,6 +80,11 @@ class Actions:
         actions.user.mouse_control_chicken_hide_dictation_input_dialogue()
         erase_dictation_input_data()
         callback(input)
+
+    def mouse_control_chicken_exit_dictation_input():
+        '''Exits the current dictation input if present so that another dialogue can open'''
+        erase_dictation_input_data()
+        actions.user.mouse_control_chicken_hide_dictation_input_dialogue()
 
     def mouse_control_chicken_cancel_dictation_input():
         '''Cancels taking dictation input for mouse control chicken'''
