@@ -2,9 +2,6 @@ tag: user.mouse_control_chicken_showing
 mode: user.mouse_control_chicken_narrow_able_grid_mode
 mode: command
 -
-meet <user.mouse_control_chicken_coordinates>: 
-    user.mouse_control_chicken_move_only_to_position(mouse_control_chicken_coordinates)
-
 [<user.modifiers>] {user.mouse_control_chicken_action} <user.mouse_control_chicken_coordinates>:
     user.mouse_control_chicken_perform_action_at_coordinates(mouse_control_chicken_action, mouse_control_chicken_coordinates, modifiers or "")
 

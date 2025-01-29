@@ -4,6 +4,7 @@ from .fire_chicken.mouse_position import MousePosition
 from .GridSystemManager import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX
 
 LAST_DRAG_POSITION: MousePosition = None
+transient_quick_action = ["click"]
 
 def compute_reverse_coordinates_string(coordinates: str) -> str:
     return REVERSE_COORDINATES_PREFIX + PREFIX_POSTFIX + coordinates
@@ -22,7 +23,8 @@ def manager_has_narrow_able_grid() -> bool:
 def drag_from_position():
     actions.sleep(settings_mediator.get_dragging_delay())
     actions.user.mouse_drag(0)
-    actions.user.mouse_control_chicken_enable_quick_drop_context()
+    if not actions.user.mouse_control_chicken_is_grid_open_for_single_action():
+        actions.user.mouse_control_chicken_enable_quick_drop_context()
 
 def end_drag_at_position():
     global LAST_DRAG_POSITION
@@ -50,6 +52,7 @@ def scroll_down():
     actions.mouse_scroll(settings_mediator.get_scrolling_amount())
 
 ACTION_MAP = {
+    "meet": lambda: None,
     "click": actions.mouse_click,
     "double_click": double_click,
     "right_click": lambda: actions.mouse_click(1),
@@ -147,6 +150,19 @@ class Actions:
     def mouse_control_chicken_start_scrolling_at_current_position_on_narrow_able_grid(speed: int, is_direction_down: bool = True):
         ''''Starts scrolling at the current position on the current mouse control chicken narrow able grid'''
         perform_action_on_narrow_able_grid_center(lambda: actions.user.mouse_control_chicken_start_scrolling(speed, is_direction_down))
+    
+    def mouse_control_chicken_set_transient_quick_action(name: str, modifiers: str=""):
+        '''Sets the transient quick action to the specified name'''
+        global transient_quick_action
+        transient_quick_action = [name]
+        if modifiers:
+            transient_quick_action.append(modifiers)
+
+    def mouse_control_chicken_perform_transient_quick_action_at_coordinates(coordinates: str):
+        '''Performs the transient quick action at the specified coordinates'''
+        action_name = transient_quick_action[0]
+        modifiers = transient_quick_action[1] if len(transient_quick_action) > 1 else ""
+        perform_action_from_map_at_coordinates(action_name, coordinates, modifiers)
 
 @module.action_class
 class ReverseCoordinateActions:

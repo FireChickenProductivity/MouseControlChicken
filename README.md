@@ -38,6 +38,13 @@ chicken refresh: Refreshes the mouse grid and reloads the active settings from t
 
 chicken (down or up) (optional number_small): Starts continuously scrolling down or up respectively. The optional number sets the scrolling speed.
 
+#### Transient Grid Commands
+When the grid is shown transiently, it will close after the next grid action. Dictating coordinates without an action will perform the transient quick action at those coordinates, which is "tap" by default.
+
+chicken brief: Shows the active grid transiently.
+
+(optional modifier keys) (grid action from the user.mouse_control_chicken_action list) chicken: Shows the active grid transiently and sets the transient quick action to performing the specified action while pressing the modifier keys if given. 
+
 ### Grid Showing Commands
 
 meet (mouse_control_chicken_coordinates): Moves the cursor to the specified position on the grid.
@@ -295,6 +302,3 @@ In particular, I was inspired by the idea of an alphabet based grid as well as t
 The community repository (https://github.com/talonhub/community) mouse grid influenced my default color scheme.
 
 My default font and recommended alternative came from 2 of the fonts recommended by the [Flex Grid](https://github.com/brollin/flex-mouse-grid). 
-
-## Credit
-I used GitHub Copilot on this project. It did an astonishingly good job of offering useful code completions that mimicked my coding style. Without Copilot, I would not have been able to develop Mouse Control Chicken so quickly without wearing out my voice. If you have to program a lot of Talon Voice customization in python, I highly recommend using Copilot to make your life easier.
