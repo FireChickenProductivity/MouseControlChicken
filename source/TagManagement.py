@@ -65,7 +65,7 @@ quick_drop_context = Context()
 
 GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME = "mouse_control_chicken_open_for_single_action"
 GRID_OPEN_FOR_SINGLE_ACTION_TAG = 'user.' + GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME
-module.tag(GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME, desc="Tag for showing a Mouse Control Chicken for a single action")
+module.tag(GRID_OPEN_FOR_SINGLE_ACTION_TAG_NAME, desc="Tag for showing a Mouse Control Chicken grid for a single action")
 
 grid_open_context = Context()
 options_dialogue_context = Context()
