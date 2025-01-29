@@ -23,7 +23,8 @@ def manager_has_narrow_able_grid() -> bool:
 def drag_from_position():
     actions.sleep(settings_mediator.get_dragging_delay())
     actions.user.mouse_drag(0)
-    actions.user.mouse_control_chicken_enable_quick_drop_context()
+    if not actions.user.mouse_control_chicken_is_grid_open_for_single_action():
+        actions.user.mouse_control_chicken_enable_quick_drop_context()
 
 def end_drag_at_position():
     global LAST_DRAG_POSITION
