@@ -6,7 +6,7 @@ chicken hide: user.mouse_control_chicken_hide_grid()
 chicken show: user.mouse_control_chicken_show_grid()
 
 chicken brief: user.mouse_control_chicken_show_grid_for_single_action()
-chicken [<user.modifiers>] {user.mouse_control_chicken_action}:
+[<user.modifiers>] {user.mouse_control_chicken_action} chicken:
     user.mouse_control_chicken_set_transient_quick_action(mouse_control_chicken_action, modifiers or "")
     user.mouse_control_chicken_show_grid_for_single_action()
 
