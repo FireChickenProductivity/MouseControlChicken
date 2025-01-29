@@ -52,6 +52,7 @@ def scroll_down():
     actions.mouse_scroll(settings_mediator.get_scrolling_amount())
 
 ACTION_MAP = {
+    "meet": lambda: None,
     "click": actions.mouse_click,
     "double_click": double_click,
     "right_click": lambda: actions.mouse_click(1),
