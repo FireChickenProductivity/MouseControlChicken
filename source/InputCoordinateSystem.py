@@ -10,6 +10,9 @@ class InputCoordinateSystemCategory(Enum):
     LOWERCASE_LETTER = 5
     LETTER = 6
     OTHER = 7
+    CUSTOM = 8
+    CUSTOM_PAIR = 9
+    CUSTOM_SEQUENCE = 10
 
 def every_item_in_list_matches(input_list, test_function):
     for item in input_list:
@@ -55,6 +58,8 @@ def compute_category_for_sequence(systems):
             category = InputCoordinateSystemCategory.LOWERCASE_LETTER_PAIR
         elif all_categories_match(categories, InputCoordinateSystemCategory.LETTER): 
             category = InputCoordinateSystemCategory.LETTER_PAIR
+        elif all_categories_match(categories, InputCoordinateSystemCategory.CUSTOM): 
+            category = InputCoordinateSystemCategory.CUSTOM_PAIR
     return category
     
 
@@ -80,6 +85,9 @@ class InputCoordinateSystem:
     
     def get_category(self) -> InputCoordinateSystemCategory:
         return InputCoordinateSystemCategory.OTHER
+
+    def is_custom(self) -> bool:
+        return False
 
 class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
     def __init__(self, system: InputCoordinateSystem, separator: str = " "):
@@ -115,6 +123,8 @@ class InfiniteSequenceCoordinateSystem(InputCoordinateSystem):
     def get_category(self) -> InputCoordinateSystemCategory:
         if self.system.get_category() == InputCoordinateSystemCategory.SINGLE_NUMBER: 
             return InputCoordinateSystemCategory.NUMBER_SEQUENCE
+        elif self.system.get_category() == InputCoordinateSystemCategory.CUSTOM: 
+            return InputCoordinateSystemCategory.CUSTOM_SEQUENCE
         return InputCoordinateSystemCategory.OTHER
 
 class DisjointUnionCoordinateSystem(InputCoordinateSystem):
@@ -201,10 +211,11 @@ class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
         pass
 
 class ListCoordinateSystem(SingleCoordinateCoordinateSystem):
-    def __init__(self, coordinate_list: List[str], separator: str = " "):
+    def __init__(self, coordinate_list: List[str], custom_coordinate_name: str = "", separator: str = " "):
         self.coordinates = set(coordinate_list)
         self.separator = separator
         self.category = compute_category_for_list(coordinate_list)
+        self.custom_coordinate_name = custom_coordinate_name
     
     def get_primary_coordinates(self) -> Generator:
         for coordinate in self.coordinates: yield coordinate
@@ -215,20 +226,8 @@ class ListCoordinateSystem(SingleCoordinateCoordinateSystem):
     def get_category(self) -> InputCoordinateSystemCategory:
         return self.category
 
-class SimpleNumericCoordinateSystem(SingleCoordinateCoordinateSystem):
-    def __init__(self, minimum: int, maximum: int, separator: str = " "):
-        self.minimum = minimum
-        self.maximum = maximum
-        self.separator = separator
-    
-    def get_primary_coordinates(self) -> Generator:
-        for coordinate in range(self.minimum, self.maximum + 1): yield str(coordinate)
-    
-    def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
-        return coordinate.isdigit() and self.number_is_in_range(int(coordinate))
+    def is_custom(self) -> bool:
+        return len(self.custom_coordinate_name) > 0
 
-    def number_is_in_range(self, number: int):
-        return self.minimum <= number and number <= self.maximum
-    
-    def get_category(self) -> InputCoordinateSystemCategory:
-        return InputCoordinateSystemCategory.SINGLE_NUMBER
+    def get_custom_coordinate_name(self):
+        return self.custom_coordinate_name
