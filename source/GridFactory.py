@@ -5,9 +5,9 @@ from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, Rectan
 from .grid.RectangularGrid import ListBasedGrid
 from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
 from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
-from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, InvalidFactoryArgumentException
+from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, CustomCoordinateSystemArgumentType, InvalidFactoryArgumentException
 from typing import List
-from talon import Module
+from talon import Module, actions
 
 ONE_TO_NINE_GRID_NAME = "one to nine division"
 ALPHABET_GRID_NAME = "Alphabet"
@@ -119,7 +119,7 @@ class AlphabetGridFactory(GridFactory):
 
     def get_name(self) -> str:
         return ALPHABET_GRID_NAME
-    
+
 class DoubleAlphabetGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         return ListBasedGrid(DOUBLE_ALPHABET, DOUBLE_ALPHABET)
@@ -200,6 +200,27 @@ class VerticalDoublingGridFactory(DoublingGridFactory):
     def get_name(self) -> str:
         return VERTICAL_DOUBLING_GRID_NAME
 
+class CustomCoordinateGridFactory(GridFactory):
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        spoken_forms, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(components[0])
+        return self.create_grid_from_file(spoken_forms, written_forms)
+
+    def get_arguments_description(self) -> str:
+        return "A custom coordinate list file name"
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [CustomCoordinateSystemArgumentType()]
+
+    def create_grid_from_file(self, spoken_forms: List[str], written_forms: List[str]) -> Grid:
+        pass
+
+class CustomListCoordinatesGridFactory(CustomCoordinateGridFactory):
+    def create_grid_from_file(self, spoken_forms: List[str], written_forms: List[str]) -> Grid:
+        return ListBasedGrid(written_forms, written_forms)
+
+    def get_name(self) -> str:
+        return "Custom List Coordinates"
+
 options = [
     SquareRecursiveDivisionGridFactory(),
     RectangularRecursiveDivisionGridFactory(),
@@ -207,7 +228,8 @@ options = [
     DoubleAlphabetGridFactory(),
     RecursivelyDivisibleGridCombinationGridFactory(),
     HorizontalDoublingGridFactory(),
-    VerticalDoublingGridFactory()
+    VerticalDoublingGridFactory(),
+    CustomListCoordinatesGridFactory(),
 ]
 
 class GridFactoryOptions:

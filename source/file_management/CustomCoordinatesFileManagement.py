@@ -11,6 +11,11 @@ class Actions:
         '''the names of the coordinate list files'''
         return compute_file_names_for_extension(CUSTOM_COORDINATES_DIRECTORY, COORDINATE_FILE_EXTENSION)
 
+    def mouse_control_chicken_coordinate_list_file_exists(file_name: str) -> bool:
+        '''Determines if the coordinate list file with the given name exists'''
+        path = os.path.join(CUSTOM_COORDINATES_DIRECTORY, file_name + COORDINATE_FILE_EXTENSION)
+        return os.path.exists(path)
+
     def mouse_control_chicken_compute_coordinate_columns(file_name: str) -> tuple[list[str], list[str]]:
         '''Obtains the columns of the coordinate list file with the given name'''
         path = os.path.join(CUSTOM_COORDINATES_DIRECTORY, file_name + COORDINATE_FILE_EXTENSION)

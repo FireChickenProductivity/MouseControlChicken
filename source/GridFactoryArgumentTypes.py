@@ -71,6 +71,16 @@ class GridOptionArgumentType(FactoryArgumentType):
         options: GridOptions = get_grid_options()
         return options.get_option_names()
 
+class CustomCoordinateSystemArgumentType(FactoryArgumentType):
+    def _argument_has_valid_value(self, argument):
+        return actions.mouse_control_chicken_coordinate_list_file_exists(argument)
+
+    def supports_options_dialogue(self) -> bool:
+        return True
+
+    def get_options(self) -> List[str]:
+        return actions.mouse_control_chicken_compute_coordinate_list_file_names()
+
 CAPTURE_NAME = "user.mouse_control_chicken_grid_factory_argument"
 module = Module()
 @module.capture(rule = "placeholder")
