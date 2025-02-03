@@ -19,6 +19,12 @@ def every_item_in_list_matches(input_list, test_function):
         if not test_function(item): return False
     return True
 
+def every_item_in_list_matches_first(input_list, value_function):
+    target = value_function(input_list[0])
+    for i in range(1, len(input_list)):
+        if value_function(input_list[i]) != target: return False
+    return True
+
 def is_numeric_text(text: str) -> bool:
     return text.isdigit()
 
@@ -50,6 +56,9 @@ def compute_category_for_list(input_list: List[str]) -> InputCoordinateSystemCat
 def all_categories_match(categories: List[InputCoordinateSystemCategory], target: str) -> bool:
     return every_item_in_list_matches(categories, lambda category: category == target)
 
+def custom_coordinate_systems_match(systems: list[str]) -> bool:
+    return every_item_in_list_matches_first(systems, lambda system: system.get_custom_coordinate_name())
+
 def compute_category_for_sequence(systems):
     category = InputCoordinateSystemCategory.OTHER
     if len(systems) == 2:
@@ -58,7 +67,7 @@ def compute_category_for_sequence(systems):
             category = InputCoordinateSystemCategory.LOWERCASE_LETTER_PAIR
         elif all_categories_match(categories, InputCoordinateSystemCategory.LETTER): 
             category = InputCoordinateSystemCategory.LETTER_PAIR
-        elif all_categories_match(categories, InputCoordinateSystemCategory.CUSTOM): 
+        elif all_categories_match(categories, InputCoordinateSystemCategory.CUSTOM) and custom_coordinate_systems_match(systems): 
             category = InputCoordinateSystemCategory.CUSTOM_PAIR
     return category
     
@@ -231,3 +240,21 @@ class ListCoordinateSystem(SingleCoordinateCoordinateSystem):
 
     def get_custom_coordinate_name(self):
         return self.custom_coordinate_name
+
+class SimpleNumericCoordinateSystem(SingleCoordinateCoordinateSystem):
+    def __init__(self, minimum: int, maximum: int, separator: str = " "):
+        self.minimum = minimum
+        self.maximum = maximum
+        self.separator = separator
+    
+    def get_primary_coordinates(self) -> Generator:
+        for coordinate in range(self.minimum, self.maximum + 1): yield str(coordinate)
+    
+    def does_single_coordinate_belong_to_system(self, coordinate: str) -> bool:
+        return coordinate.isdigit() and self.number_is_in_range(int(coordinate))
+
+    def number_is_in_range(self, number: int):
+        return self.minimum <= number and number <= self.maximum
+    
+    def get_category(self) -> InputCoordinateSystemCategory:
+        return InputCoordinateSystemCategory.SINGLE_NUMBER
