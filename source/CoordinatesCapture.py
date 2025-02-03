@@ -59,8 +59,6 @@ def compute_coordinates_from_utterance(m) -> str:
 def mouse_control_chicken_coordinates(m) -> str:
     return compute_coordinates_from_utterance(m)
 
-module.list('mouse_control_chicken_empty_list', desc="An empty list")
-
 @module.capture(rule = "{user.mouse_control_chicken_number_small}+")
 def mouse_control_chicken_number_sequence(m) -> str:
     return " ".join([str(x) for x in m])
