@@ -1,7 +1,7 @@
 from talon import Module, Context, actions
 from .InputCoordinateSystem import InputCoordinateSystem, InputCoordinateSystemCategory
-from .grid.Grid import Grid
-from .grid.GridCalculations import Node, compute_grid_tree, TreeComputationOptions
+from ..grid.Grid import Grid
+from ..grid.GridCalculations import Node, compute_grid_tree, TreeComputationOptions
 
 DEPTH_LIMIT = 3
 

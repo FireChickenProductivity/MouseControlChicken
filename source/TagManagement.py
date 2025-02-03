@@ -1,7 +1,7 @@
 from talon import Module, Context, actions
 from typing import List
 from .grid.Grid import Grid
-from .CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
+from .input_coordinates.CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
 
 module = Module()
 

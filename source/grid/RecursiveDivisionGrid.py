@@ -1,4 +1,4 @@
-from ..InputCoordinateSystem import InputCoordinateSystem
+from ..input_coordinates.InputCoordinateSystem import InputCoordinateSystem
 from .Grid import Rectangle, RecursiveDivisionGrid
 from typing import Generator, Tuple
 from ..fire_chicken.mouse_position import MousePosition
