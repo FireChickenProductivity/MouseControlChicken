@@ -84,7 +84,7 @@ def mouse_control_chicken_main_coordinates(m) -> str:
     return " ".join(m)
 
 @module.capture(rule = "<user.letter> <user.letter>")
-def mouse_control_chickens_secondary_coordinates(m) -> str:
+def mouse_control_chicken_secondary_coordinates(m) -> str:
     return " ".join(m)
 
 @module.capture(rule = "<user.mouse_control_chicken_letter_pair>")
@@ -124,14 +124,14 @@ def mouse_control_chicken_level_one_coordinates(m) -> str:
 
 @level_contexts[1].context.capture(
     "user.mouse_control_chicken_coordinates",
-    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chickens_secondary_coordinates>])|<user.mouse_control_chickens_secondary_coordinates>"
+    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chicken_secondary_coordinates>])|<user.mouse_control_chicken_secondary_coordinates>"
     )
 def mouse_control_chicken_level_two_coordinates(m) -> str:
     return compute_coordinates_from_utterance(m)
 
 @level_contexts[2].context.capture(
     "user.mouse_control_chicken_coordinates",
-    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chickens_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>]])|(<user.mouse_control_chickens_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>])|<user.mouse_control_chicken_tertiary_coordinates>"
+    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chicken_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>]])|(<user.mouse_control_chicken_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>])|<user.mouse_control_chicken_tertiary_coordinates>"
     )
 def mouse_control_chicken_level_three_coordinates(m) -> str:
     return compute_coordinates_from_utterance(m)
@@ -139,7 +139,7 @@ def mouse_control_chicken_level_three_coordinates(m) -> str:
 override_contexts = []
 def build_override_contexts():
     input_coordinate_capture_names = ["mouse_control_chicken_number_sequence", "mouse_control_chicken_lowercase_letter_pair", "mouse_control_chicken_letter_pair", "mouse_control_chicken_single_number"]
-    captures_to_override_by_level = {1:"mouse_control_chicken_main_coordinates", 2:"mouse_control_chickens_secondary_coordinates", 3:"mouse_control_chicken_tertiary_coordinates"}
+    captures_to_override_by_level = {1:"mouse_control_chicken_main_coordinates", 2:"mouse_control_chicken_secondary_coordinates", 3:"mouse_control_chicken_tertiary_coordinates"}
     for input_coordinate_capture_name in input_coordinate_capture_names:
         for level, capture_to_override in captures_to_override_by_level.items():
             context = CoordinateContext(input_coordinate_capture_name, level)
