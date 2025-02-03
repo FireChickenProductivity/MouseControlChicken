@@ -1,11 +1,26 @@
-from talon import Module, Context
+from talon import Module, Context, actions
 from .InputCoordinateSystem import InputCoordinateSystem, InputCoordinateSystemCategory
 from .grid.Grid import Grid
 from .grid.GridCalculations import Node, compute_grid_tree, TreeComputationOptions
 
+DEPTH_LIMIT = 3
+
 module = Module()
 module.list('mouse_control_chicken_uppercase_letter', desc="Upper case letters for use with the mouse control chicken grids")
 module.list('mouse_control_chicken_number_small', desc="Numeric coordinates for mouse control chicken")
+
+def compute_custom_coordinate_system_list_name(level: int):
+    return f"mouse_control_chicken_custom_coordinate_system_{level}"
+
+#Define the talon lists for custom coordinate systems.
+for i in range(1, DEPTH_LIMIT + 1):
+    module.list(compute_custom_coordinate_system_list_name(i), desc=f"Custom coordinate system for mouse control chicken {i}")
+
+default_context = Context()
+
+def update_custom_coordinate_list(level: int, name: str):
+    custom_coordinate_list_name = compute_custom_coordinate_system_list_name(level)
+    default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
 def create_custom_number_small():
     result = {}
@@ -23,7 +38,6 @@ def create_custom_number_small():
             result[f"{ten_product} {digit}"] = str(tens[ten_product] + digits[digit])
     return result
 
-default_context = Context()
 default_context.lists["user.mouse_control_chicken_number_small"] = create_custom_number_small()
 
 @module.capture(rule = "{user.mouse_control_chicken_uppercase_letter}")
@@ -100,7 +114,7 @@ class LevelContext:
 
 level_contexts = []
 def build_level_contexts():
-    for level in range(1, 4):
+    for level in range(1, DEPTH_LIMIT + 1):
         context = LevelContext(level)
         module.tag(context.tag, desc=f"Tag for a mouse control chicken coordinate system coordinate system with depth {level}.")
         level_contexts.append(context)
@@ -203,6 +217,6 @@ def compute_appropriate_level_tag_from_category_tags(category_tags):
         level = compute_level_for_tag(tag)
         if level > maximum_level:
             maximum_level = level
-    if maximum_level > 0 and maximum_level < 4:
+    if maximum_level > 0 and maximum_level < DEPTH_LIMIT + 1:
         return 'user.' + compute_level_tag(maximum_level)
     return None

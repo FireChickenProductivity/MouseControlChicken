@@ -73,6 +73,14 @@ def read_two_columns_from_csv_file(path: str) -> tuple[list[str], list[str]]:
             column2.append(row[1])
     return column1, column2
 
+def build_dictionary_from_two_columns_csv_file(path: str) -> dict[str, str]:
+    '''Obtains the dictionary from the csv file at the given path'''
+    result = {}
+    column1, column2 = read_two_columns_from_csv_file(path)
+    for i in range(len(column1)):
+        result[column1[i]] = column2[i]
+    return result
+
 def write_text_to_file_if_uninitialized(path: str, text: str):
     guarantee_data_directory_exists()
     '''Writes the given text to the file at the given path if the file does not exist'''
