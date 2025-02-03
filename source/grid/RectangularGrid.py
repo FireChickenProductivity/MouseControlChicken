@@ -7,7 +7,7 @@ class ListBasedGrid(RectangularGrid):
     '''Creates a rectangular grid with the positions corresponding to the list elements in order
         Separator is used for parsing horizontal versus vertical. Empty string separator means single character coordinates
     '''
-    def __init__(self, horizontal_list: List, vertical_list: List, separator: str = " "):
+    def __init__(self, horizontal_list: List, vertical_list: List, custom_coordinate_system_name="", separator: str = " "):
         self.horizontal_list = horizontal_list
         self.vertical_list = vertical_list
         self.horizontal_coordinates = create_ordering_dictionary(horizontal_list)
@@ -15,12 +15,12 @@ class ListBasedGrid(RectangularGrid):
         self.horizontal_divider = None
         self.vertical_divider = None
         self.separator = separator
-        self.build_coordinate_system()
+        self.build_coordinate_system(custom_coordinate_system_name)
         self.rectangle = None
 
     @staticmethod
-    def create_square_grid(coordinate_list: List, separator: str = " "):
-        return ListBasedGrid(coordinate_list, coordinate_list, separator)
+    def create_square_grid(coordinate_list: List, custom_coordinate_system_name: str=""):
+        return ListBasedGrid(coordinate_list, coordinate_list, custom_coordinate_system_name)
 
     def make_around(self, rectangle: Rectangle) -> None:
         self.horizontal_divider = LineDivider(rectangle.left, rectangle.right, len(self.horizontal_coordinates))

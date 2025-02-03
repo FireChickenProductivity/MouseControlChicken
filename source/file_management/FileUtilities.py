@@ -25,6 +25,10 @@ def compute_output_directory():
 def compute_custom_coordinates_directory(output_directory: str):
     return os.path.join(output_directory, 'Custom Coordinates')
 
+def get_custom_coordinates_directory():
+    global CUSTOM_COORDINATES_DIRECTORY
+    return CUSTOM_COORDINATES_DIRECTORY
+
 app.register('ready', initialize)
 
 def compute_path_within_output_directory(file_name: str):

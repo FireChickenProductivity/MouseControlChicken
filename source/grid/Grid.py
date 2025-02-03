@@ -113,11 +113,11 @@ class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, Horizonta
             for vertical in self.get_vertical_coordinates():
                 yield vertical + self.separator + horizontal
     
-    def build_coordinate_system(self):
+    def build_coordinate_system(self, custom_coordinate_system_name: str=""):
         horizontal_coordinates = [horizontal for horizontal in self.get_horizontal_coordinates()]
         vertical_coordinates = [vertical for vertical in self.get_vertical_coordinates()]
-        horizontal_system = ListCoordinateSystem(horizontal_coordinates)
-        vertical_system = ListCoordinateSystem(vertical_coordinates)
+        horizontal_system = ListCoordinateSystem(horizontal_coordinates, custom_coordinate_system_name)
+        vertical_system = ListCoordinateSystem(vertical_coordinates, custom_coordinate_system_name)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
 
 class CombinationCoordinateSystemManager():

@@ -202,8 +202,9 @@ class VerticalDoublingGridFactory(DoublingGridFactory):
 
 class CustomCoordinateGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
-        spoken_forms, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(components[0])
-        return self.create_grid_from_file(spoken_forms, written_forms)
+        name = components[0]
+        _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
+        return self.create_grid_from_file(name, written_forms)
 
     def get_arguments_description(self) -> str:
         return "A custom coordinate list file name"
@@ -211,12 +212,12 @@ class CustomCoordinateGridFactory(GridFactory):
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [CustomCoordinateSystemArgumentType()]
 
-    def create_grid_from_file(self, spoken_forms: List[str], written_forms: List[str]) -> Grid:
+    def create_grid_from_file(self, name: str, written_forms: List[str]) -> Grid:
         pass
 
 class CustomListCoordinatesGridFactory(CustomCoordinateGridFactory):
-    def create_grid_from_file(self, spoken_forms: List[str], written_forms: List[str]) -> Grid:
-        return ListBasedGrid(written_forms, written_forms)
+    def create_grid_from_file(self, name: str, written_forms: List[str]) -> Grid:
+        return ListBasedGrid.create_square_grid(written_forms, name)
 
     def get_name(self) -> str:
         return "Custom List Coordinates"
