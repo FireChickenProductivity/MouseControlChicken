@@ -1,4 +1,4 @@
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
+from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
 , GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
 from .GridOptionsList import get_grid_options
 from .dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
@@ -13,7 +13,7 @@ class OptionsNotSupportedException(Exception): pass
 class InvalidFactoryArgumentException(Exception): pass
 
 class FactoryArgumentType:
-    def __init__(self, type: type, tag: str):
+    def __init__(self, type: type, tag: str=""):
         self.type = type
         self.tag = tag
     
@@ -30,11 +30,11 @@ class FactoryArgumentType:
     def _argument_has_valid_value(self, argument):
         pass
 
-    def get_tag(self) -> str:
-        return self.tag
-
     def get_tags(self) -> List[str]:
-        return [self.get_tag(), ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG]
+        tags = [ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG]
+        if self.tag != "":
+            tags.append(self.tag)
+        return tags
 
     def supports_options_dialogue(self) -> bool:
         return False
@@ -58,7 +58,7 @@ class PositiveIntegerArgumentType(FactoryArgumentType):
     
 class GridOptionArgumentType(FactoryArgumentType):
     def __init__(self):
-        super().__init__(str, GRID_CREATION_ARGUMENT_GRID_OPTION_TAG)
+        super().__init__(str)
 
     def _argument_has_valid_value(self, argument):
         options: GridOptions = get_grid_options()
@@ -72,14 +72,17 @@ class GridOptionArgumentType(FactoryArgumentType):
         return options.get_option_names()
 
 class CustomCoordinateSystemArgumentType(FactoryArgumentType):
+    def __init__(self):
+        super().__init__(str)
+
     def _argument_has_valid_value(self, argument):
-        return actions.mouse_control_chicken_coordinate_list_file_exists(argument)
+        return actions.user.mouse_control_chicken_coordinate_list_file_exists(argument)
 
     def supports_options_dialogue(self) -> bool:
         return True
 
     def get_options(self) -> List[str]:
-        return actions.mouse_control_chicken_compute_coordinate_list_file_names()
+        return actions.user.mouse_control_chicken_compute_coordinate_list_file_names()
 
 CAPTURE_NAME = "user.mouse_control_chicken_grid_factory_argument"
 module = Module()
