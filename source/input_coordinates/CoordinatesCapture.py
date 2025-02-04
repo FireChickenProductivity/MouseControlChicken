@@ -18,9 +18,13 @@ for i in range(1, DEPTH_LIMIT + 1):
 
 default_context = Context()
 
+custom_coordinates_map = {}
+
 def update_custom_coordinate_list(level: int, name: str):
-    custom_coordinate_list_name = compute_custom_coordinate_system_list_name(level)
-    default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
+    custom_coordinate_list_name = "user." + compute_custom_coordinate_system_list_name(level)
+    if custom_coordinate_list_name not in custom_coordinates_map or custom_coordinates_map[custom_coordinate_list_name] != name:
+        custom_coordinates_map[custom_coordinate_list_name] = name
+        default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
 CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates"
 CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_pair"
@@ -112,7 +116,7 @@ class CustomCoordinatesCaptureContext:
         self.rule = rule
         
 def create_base_custom_coordinate_system_capture_rule(level: int):
-    return "{" + compute_custom_coordinate_system_list_name(level) + "}"
+    return "{user." + compute_custom_coordinate_system_list_name(level) + "}"
 
 def create_pair_custom_coordinate_system_capture_rule(level: int):
     base_rule = create_base_custom_coordinate_system_capture_rule(level)
@@ -238,6 +242,7 @@ def compute_categories(grid: Grid):
     return result
 
 def compute_category_tags(grid: Grid):
+    update_custom_coordinate_system(grid)
     categories = compute_categories(grid)
     result = []
     for index, category in enumerate(categories):
@@ -264,3 +269,34 @@ def compute_appropriate_level_tag_from_category_tags(category_tags):
     if maximum_level > 0 and maximum_level < DEPTH_LIMIT + 1:
         return 'user.' + compute_level_tag(maximum_level)
     return None
+
+def _append_custom_coordinate_system_name_to_list(tree: Node, input_list: list):
+    number_of_children = len(tree.get_children())
+    if number_of_children < 2:
+        node_grid = tree.get_value()
+        coordinate_system = node_grid.get_coordinate_system()
+        if coordinate_system.is_custom():
+            name = coordinate_system.get_custom_coordinate_name()
+        else:
+            name = ""
+        input_list.append(name)
+
+def compute_custom_ordinate_system_names(grid: Grid):
+    result = []
+    tree_computation_options = TreeComputationOptions(keep_coordinate_system_modifying_wrappers=True)
+    tree = compute_grid_tree(grid, tree_computation_options)
+    while tree:
+        _append_custom_coordinate_system_name_to_list(tree, result)
+        if tree.has_children():
+            tree = tree.get_children()[0]
+        else:
+            tree = None
+    return result
+
+def update_custom_coordinate_system(grid: Grid):
+    names = compute_custom_ordinate_system_names(grid)
+    print('names', names)
+    for index, name in enumerate(names):
+        if name:
+            print('name', name)
+            update_custom_coordinate_list(index + 1, name)

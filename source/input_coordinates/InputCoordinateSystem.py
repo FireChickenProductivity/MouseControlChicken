@@ -169,6 +169,7 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
         self.systems = systems
         self.separator = separator
         self.category = compute_category_for_sequence(systems)
+        self.has_custom_children = self.category == InputCoordinateSystemCategory.CUSTOM_PAIR
     
     def get_primary_coordinates(self) -> Generator:
         primary_coordinates = [system.get_primary_coordinates() for system in self.systems]
@@ -200,6 +201,12 @@ class SequentialCombinationCoordinateSystem(InputCoordinateSystem):
 
     def get_category(self) -> InputCoordinateSystemCategory:
         return self.category
+
+    def is_custom(self) -> bool:
+        return self.has_custom_children
+
+    def get_custom_coordinate_name(self):
+        return self.systems[0].get_custom_coordinate_name()
 
 class SingleCoordinateCoordinateSystem(InputCoordinateSystem):
     def do_coordinates_belong_to_system(self, coordinates: str) -> bool:
