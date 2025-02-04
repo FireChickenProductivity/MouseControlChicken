@@ -22,6 +22,13 @@ def update_custom_coordinate_list(level: int, name: str):
     custom_coordinate_list_name = compute_custom_coordinate_system_list_name(level)
     default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
+CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_"
+
+CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_pair_"
+
+CUSTOM_COORDINATE_SYSTEM_SEQUENCE_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_sequence_"
+
+
 def create_custom_number_small():
     result = {}
     digits = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
@@ -95,9 +102,27 @@ class CoordinateContext:
     def __init__(self, input_coordinate_capture_name: str, coordinate_level: int = 1):
         self.context = Context()
         self.tag = f"{input_coordinate_capture_name}_{coordinate_level}"
+        self.input_coordinate_capture_name = input_coordinate_capture_name
+        self.level = coordinate_level
         self.context.matches = f"""
         tag: user.{self.tag}
 """
+
+class CustomCoordinatesCaptureContext:
+    def __init__(self, base_name: str, rule: str, level: int = 1):
+        self.coordinate_context = CoordinateContext(base_name, level)
+        self.rule = rule
+        
+def create_base_custom_coordinate_system_capture_rule(level: int):
+    return "{" + compute_custom_coordinate_system_list_name(level) + "}"
+
+def create_pair_custom_coordinate_system_capture_rule(level: int):
+    base_rule = create_base_custom_coordinate_system_capture_rule(level)
+    return f"{base_rule} {base_rule}"
+
+def create_sequence_custom_coordinate_system_capture_rule(level: int):
+    base_rule = create_base_custom_coordinate_system_capture_rule(level)
+    return base_rule + "+"
 
 def compute_level_tag(level: int) -> str:
     return f"mouse_control_chicken_coordinate_system_level_{level}"
@@ -149,6 +174,22 @@ def build_override_contexts():
                 return " ".join(text_list)
             module.tag(context.tag, desc=f"Tag for the level {level} of the {input_coordinate_capture_name} capture")
             override_contexts.append(context)
+    
+    custom_coordinate_captures = []
+    for level in range(1, DEPTH_LIMIT + 1):
+        base_context = CustomCoordinatesCaptureContext(CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME, create_base_custom_coordinate_system_capture_rule(level), level)
+        pair_context = CustomCoordinatesCaptureContext(CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME, create_pair_custom_coordinate_system_capture_rule(level), level)
+        sequence_context = CustomCoordinatesCaptureContext(CUSTOM_COORDINATE_SYSTEM_SEQUENCE_TAG_BASE_NAME, create_sequence_custom_coordinate_system_capture_rule(level), level)
+        custom_coordinate_captures.extend([base_context, pair_context, sequence_context])
+        
+    for custom_coordinate_capture in custom_coordinate_captures:
+        coordinate_context = custom_coordinate_capture.coordinate_context
+        capture_to_override = captures_to_override_by_level[coordinate_context.level]
+        @coordinate_context.context.capture(capture_to_override, rule = custom_coordinate_capture.rule)
+        def new_capture(m) -> str:
+            return compute_coordinates_from_utterance(m)
+        module.tag(coordinate_context.tag, desc=f"Tag for the level {coordinate_context.level} of the capture {coordinate_context.input_coordinate_capture_name}")
+
 build_override_contexts()
 
 def compute_tag_start_for_category(category: InputCoordinateSystemCategory):
