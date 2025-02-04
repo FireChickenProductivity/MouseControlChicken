@@ -223,7 +223,10 @@ class ListCoordinateSystem(SingleCoordinateCoordinateSystem):
     def __init__(self, coordinate_list: List[str], custom_coordinate_name: str = "", separator: str = " "):
         self.coordinates = set(coordinate_list)
         self.separator = separator
-        self.category = compute_category_for_list(coordinate_list)
+        if custom_coordinate_name: 
+            self.category = InputCoordinateSystemCategory.CUSTOM
+        else:
+            self.category = compute_category_for_list(coordinate_list)
         self.custom_coordinate_name = custom_coordinate_name
     
     def get_primary_coordinates(self) -> Generator:

@@ -22,11 +22,9 @@ def update_custom_coordinate_list(level: int, name: str):
     custom_coordinate_list_name = compute_custom_coordinate_system_list_name(level)
     default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
-CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_"
-
-CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_pair_"
-
-CUSTOM_COORDINATE_SYSTEM_SEQUENCE_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_sequence_"
+CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates"
+CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_pair"
+CUSTOM_COORDINATE_SYSTEM_SEQUENCE_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_sequence"
 
 
 def create_custom_number_small():
@@ -185,10 +183,11 @@ def build_override_contexts():
     for custom_coordinate_capture in custom_coordinate_captures:
         coordinate_context = custom_coordinate_capture.coordinate_context
         capture_to_override = captures_to_override_by_level[coordinate_context.level]
-        @coordinate_context.context.capture(capture_to_override, rule = custom_coordinate_capture.rule)
+        @coordinate_context.context.capture("user." + capture_to_override, rule = custom_coordinate_capture.rule)
         def new_capture(m) -> str:
             return compute_coordinates_from_utterance(m)
         module.tag(coordinate_context.tag, desc=f"Tag for the level {coordinate_context.level} of the capture {coordinate_context.input_coordinate_capture_name}")
+        override_contexts.append(coordinate_context)
 
 build_override_contexts()
 
@@ -202,6 +201,12 @@ def compute_tag_start_for_category(category: InputCoordinateSystemCategory):
         result = "single_number"
     elif category == InputCoordinateSystemCategory.LOWERCASE_LETTER_PAIR:
         result = "lowercase_letter_pair"
+    elif category == InputCoordinateSystemCategory.CUSTOM:
+        result = "custom_coordinates"
+    elif category == InputCoordinateSystemCategory.CUSTOM_PAIR:
+        result = "custom_coordinates_pair"
+    elif category == InputCoordinateSystemCategory.CUSTOM_SEQUENCE:
+        result = "custom_coordinates_sequence"
     if result:
         result = f"mouse_control_chicken_{result}"
     return result
