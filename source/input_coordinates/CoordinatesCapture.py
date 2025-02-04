@@ -248,7 +248,6 @@ def compute_categories(grid: Grid):
     return _compute_properties_from_coordinate_systems(grid, _append_tree_node_category_to_list)
 
 def compute_category_tags(grid: Grid):
-    update_custom_coordinate_system(grid)
     categories = compute_categories(grid)
     result = []
     for index, category in enumerate(categories):
@@ -288,8 +287,13 @@ def compute_custom_ordinate_system_names(grid: Grid):
 
 def update_custom_coordinate_system(grid: Grid):
     names = compute_custom_ordinate_system_names(grid)
-    print('names', names)
     for index, name in enumerate(names):
         if name:
-            print('name', name)
             update_custom_coordinate_list(index + 1, name)
+
+@module.action_class
+class Actions:
+    def mouse_control_chicken_update_custom_coordinate_system(grid: Grid):
+        '''Updates the custom coordinate system lists for the given grid'''
+        if grid:
+            update_custom_coordinate_system(grid)

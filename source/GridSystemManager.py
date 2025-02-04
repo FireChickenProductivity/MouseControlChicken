@@ -25,6 +25,7 @@ class GridSystemManager:
     
     def set_grid(self, grid: Grid):
         self.grid = grid
+        actions.user.mouse_control_chicken_update_custom_coordinate_system(self.grid)
         if self.has_received_first_grid():
             self.should_load_default_grid_next = False
         self.refresh()
