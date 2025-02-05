@@ -16,13 +16,9 @@ for i in range(1, DEPTH_LIMIT + 1):
     module.list(compute_custom_coordinate_system_list_name(i), desc=f"Custom coordinate system for mouse control chicken {i}")
 
 #This allows updating the current implementation of a certain depth custom coordinate system
-#To prevent unnecessary updates, the current name of the custom coordinate system is stored
-custom_coordinates_map = {}
 def update_custom_coordinate_list(level: int, name: str):
     custom_coordinate_list_name = "user." + compute_custom_coordinate_system_list_name(level)
-    if custom_coordinate_list_name not in custom_coordinates_map or custom_coordinates_map[custom_coordinate_list_name] != name:
-        custom_coordinates_map[custom_coordinate_list_name] = name
-        default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
+    default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
 class CustomCoordinatesCaptureContext:
     def __init__(self, base_name: str, rule: str, level: int = 1):
