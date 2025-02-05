@@ -1,167 +1,26 @@
+#This defines the capture for dictating mouse control chicken coordinates
+#This requires defining numerous sub captures to be used in the main capture based on the context
+#This is complicated by the need to support grid composition. This is addressed by defining a context for each level of the grid
+
 from talon import Module, Context, actions
 from .InputCoordinateSystem import InputCoordinateSystem, InputCoordinateSystemCategory
 from ..grid.Grid import Grid
 from ..grid.GridCalculations import Node, compute_grid_tree, TreeComputationOptions
-
-DEPTH_LIMIT = 3
+from .Captures import compute_coordinates_from_utterance
+from .DepthCaptures import DEPTH_LIMIT, compute_level_tag
+from .CustomCoordinates import CustomCoordinatesCaptureContext, create_base_custom_coordinate_system_capture_rule, create_pair_custom_coordinate_system_capture_rule, create_sequence_custom_coordinate_system_capture_rule
+from .CoordinatesContext import CoordinateContext
+from .CoordinateSystemTreeCalculations import compute_categories
 
 module = Module()
-module.list('mouse_control_chicken_uppercase_letter', desc="Upper case letters for use with the mouse control chicken grids")
-module.list('mouse_control_chicken_number_small', desc="Numeric coordinates for mouse control chicken")
-
-def compute_custom_coordinate_system_list_name(level: int):
-    return f"mouse_control_chicken_custom_coordinate_system_{level}"
-
-#Define the talon lists for custom coordinate systems.
-for i in range(1, DEPTH_LIMIT + 1):
-    module.list(compute_custom_coordinate_system_list_name(i), desc=f"Custom coordinate system for mouse control chicken {i}")
 
 default_context = Context()
 
-custom_coordinates_map = {}
-
-def update_custom_coordinate_list(level: int, name: str):
-    custom_coordinate_list_name = "user." + compute_custom_coordinate_system_list_name(level)
-    if custom_coordinate_list_name not in custom_coordinates_map or custom_coordinates_map[custom_coordinate_list_name] != name:
-        custom_coordinates_map[custom_coordinate_list_name] = name
-        default_context.lists[custom_coordinate_list_name] = actions.user.mouse_control_chicken_build_coordinate_dictionary(name)
 
 CUSTOM_COORDINATE_SYSTEM_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates"
 CUSTOM_COORDINATE_SYSTEM_PAIR_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_pair"
 CUSTOM_COORDINATE_SYSTEM_SEQUENCE_TAG_BASE_NAME = "mouse_control_chicken_custom_coordinates_sequence"
 
-
-def create_custom_number_small():
-    result = {}
-    digits = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9}
-    eleven_to_nineteen = {"eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19}
-    tens = {"twenty": 20, "thirty": 30, "forty": 40, "fifty": 50, "sixty": 60, "seventy": 70, "eighty": 80, "ninety": 90}
-    for digit in digits:
-        result[digit] = str(digits[digit])
-    for number in eleven_to_nineteen:
-        result[number] = str(eleven_to_nineteen[number])
-    result["ten"] = "10"
-    for ten_product in tens:
-        result[ten_product] = str(tens[ten_product])
-        for digit in digits:
-            result[f"{ten_product} {digit}"] = str(tens[ten_product] + digits[digit])
-    return result
-
-default_context.lists["user.mouse_control_chicken_number_small"] = create_custom_number_small()
-
-@module.capture(rule = "{user.mouse_control_chicken_uppercase_letter}")
-def mouse_control_chicken_uppercase_letter(m) -> str:
-    return m.mouse_control_chicken_uppercase_letter
-
-def compute_coordinates_from_utterance(m) -> str:
-    result: str = ""
-    after_first_element: bool = False
-    for element in m: 
-        if after_first_element:
-            result += " "
-        else:
-            after_first_element = True
-        result += str(element)
-    return result
-
-@module.capture(rule = "(<user.letter>|<user.mouse_control_chicken_uppercase_letter>|{user.mouse_control_chicken_number_small})+")
-def mouse_control_chicken_coordinates(m) -> str:
-    return compute_coordinates_from_utterance(m)
-
-@module.capture(rule = "{user.mouse_control_chicken_number_small}+")
-def mouse_control_chicken_number_sequence(m) -> str:
-    return " ".join([str(x) for x in m])
-
-@module.capture(rule = "{user.mouse_control_chicken_number_small}")
-def mouse_control_chicken_single_number(m) -> str:
-    return str(m[0])
-
-@module.capture(rule = "<user.letter> <user.letter>")
-def mouse_control_chicken_lowercase_letter_pair(m) -> str:
-    return m[0] + " " + m[1]
-
-@module.capture(rule = "<user.letter>|<user.mouse_control_chicken_uppercase_letter>")
-def mouse_control_chicken_letter(m) -> str:
-    return m[0]
-
-@module.capture(rule = "<user.mouse_control_chicken_letter> <user.mouse_control_chicken_letter>")
-def mouse_control_chicken_letter_pair(m) -> str:
-    return m[0] + " " + m[1] 
-
-@module.capture(rule = "<user.mouse_control_chicken_letter_pair>")
-def mouse_control_chicken_main_coordinates(m) -> str:
-    return " ".join(m)
-
-@module.capture(rule = "<user.letter> <user.letter>")
-def mouse_control_chicken_secondary_coordinates(m) -> str:
-    return " ".join(m)
-
-@module.capture(rule = "<user.mouse_control_chicken_letter_pair>")
-def mouse_control_chicken_tertiary_coordinates(m) -> str:
-    return " ".join(m)
-
-class CoordinateContext:
-    def __init__(self, input_coordinate_capture_name: str, coordinate_level: int = 1):
-        self.context = Context()
-        self.tag = f"{input_coordinate_capture_name}_{coordinate_level}"
-        self.input_coordinate_capture_name = input_coordinate_capture_name
-        self.level = coordinate_level
-        self.context.matches = f"""
-        tag: user.{self.tag}
-"""
-
-class CustomCoordinatesCaptureContext:
-    def __init__(self, base_name: str, rule: str, level: int = 1):
-        self.coordinate_context = CoordinateContext(base_name, level)
-        self.rule = rule
-        
-def create_base_custom_coordinate_system_capture_rule(level: int):
-    return "{user." + compute_custom_coordinate_system_list_name(level) + "}"
-
-def create_pair_custom_coordinate_system_capture_rule(level: int):
-    base_rule = create_base_custom_coordinate_system_capture_rule(level)
-    return f"{base_rule} {base_rule}"
-
-def create_sequence_custom_coordinate_system_capture_rule(level: int):
-    base_rule = create_base_custom_coordinate_system_capture_rule(level)
-    return base_rule + "+"
-
-def compute_level_tag(level: int) -> str:
-    return f"mouse_control_chicken_coordinate_system_level_{level}"
-
-class LevelContext:
-    def __init__(self, level: int):
-        self.context = Context()
-        self.tag = compute_level_tag(level)
-        self.context.matches = f"""
-        tag: user.{self.tag}
-"""
-
-level_contexts = []
-def build_level_contexts():
-    for level in range(1, DEPTH_LIMIT + 1):
-        context = LevelContext(level)
-        module.tag(context.tag, desc=f"Tag for a mouse control chicken coordinate system coordinate system with depth {level}.")
-        level_contexts.append(context)
-build_level_contexts()
-
-@level_contexts[0].context.capture("user.mouse_control_chicken_coordinates", rule = "<user.mouse_control_chicken_main_coordinates>")
-def mouse_control_chicken_level_one_coordinates(m) -> str:
-    return compute_coordinates_from_utterance(m)
-
-@level_contexts[1].context.capture(
-    "user.mouse_control_chicken_coordinates",
-    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chicken_secondary_coordinates>])|<user.mouse_control_chicken_secondary_coordinates>"
-    )
-def mouse_control_chicken_level_two_coordinates(m) -> str:
-    return compute_coordinates_from_utterance(m)
-
-@level_contexts[2].context.capture(
-    "user.mouse_control_chicken_coordinates",
-    rule = "(<user.mouse_control_chicken_main_coordinates> [<user.mouse_control_chicken_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>]])|(<user.mouse_control_chicken_secondary_coordinates> [<user.mouse_control_chicken_tertiary_coordinates>])|<user.mouse_control_chicken_tertiary_coordinates>"
-    )
-def mouse_control_chicken_level_three_coordinates(m) -> str:
-    return compute_coordinates_from_utterance(m)
 
 override_contexts = []
 def build_override_contexts():
@@ -221,31 +80,6 @@ def compute_tag_for_coordinate_system_category_and_depth(category: InputCoordina
         return None
     return f"user.{category_tag_start}_{depth}"
 
-def _append_single_child_tree_node_category_to_list(tree: Node, input_list: list, compute_property):
-    number_of_children = len(tree.get_children())
-    if number_of_children < 2:
-        node_grid = tree.get_value()
-        coordinate_system = node_grid.get_coordinate_system()
-        node_property = compute_property(coordinate_system)
-        input_list.append(node_property)
-
-def _append_tree_node_category_to_list(tree: Node, input_list: list):
-    _append_single_child_tree_node_category_to_list(tree, input_list, lambda coordinate_system: coordinate_system.get_category())
-
-def _compute_properties_from_coordinate_systems(grid: Grid, append_property_to_list):
-    result = []
-    tree_computation_options = TreeComputationOptions(keep_coordinate_system_modifying_wrappers=True)
-    tree = compute_grid_tree(grid, tree_computation_options)
-    while tree:
-        append_property_to_list(tree, result)
-        if tree.has_children():
-            tree = tree.get_children()[0]
-        else:
-            tree = None
-    return result
-
-def compute_categories(grid: Grid):
-    return _compute_properties_from_coordinate_systems(grid, _append_tree_node_category_to_list)
 
 def compute_category_tags(grid: Grid):
     categories = compute_categories(grid)
@@ -275,25 +109,3 @@ def compute_appropriate_level_tag_from_category_tags(category_tags):
         return 'user.' + compute_level_tag(maximum_level)
     return None
 
-def _append_custom_coordinate_system_name_to_list(tree: Node, input_list: list):
-    def compute_name(coordinate_system: InputCoordinateSystem):
-        if coordinate_system.is_custom():
-            return coordinate_system.get_custom_coordinate_name()
-        return ""
-    _append_single_child_tree_node_category_to_list(tree, input_list, compute_name)
-
-def compute_custom_ordinate_system_names(grid: Grid):
-    return _compute_properties_from_coordinate_systems(grid, _append_custom_coordinate_system_name_to_list)
-
-def update_custom_coordinate_system(grid: Grid):
-    names = compute_custom_ordinate_system_names(grid)
-    for index, name in enumerate(names):
-        if name:
-            update_custom_coordinate_list(index + 1, name)
-
-@module.action_class
-class Actions:
-    def mouse_control_chicken_update_custom_coordinate_system(grid: Grid):
-        '''Updates the custom coordinate system lists for the given grid'''
-        if grid:
-            update_custom_coordinate_system(grid)
