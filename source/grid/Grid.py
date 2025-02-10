@@ -120,6 +120,10 @@ class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, Horizonta
         vertical_system = ListCoordinateSystem(vertical_coordinates, custom_coordinate_system_name)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
 
+class FlatRectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+    """FlatRectangularGrid is like a rectangular grid but instead of the positions being built by combining vertical and horizontal coordinates, the possessions are atomic. This should be usable with non frame rectangular position displays. This this uses an intermediate coordinate system to allow querying for the horizontal and vertical coordinates separately"""
+    pass
+
 class CombinationCoordinateSystemManager():
     def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):
         self.primary_coordinate_system = obtain_relevant_coordinate_system_from(primary)
