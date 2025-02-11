@@ -105,7 +105,12 @@ class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
     def supports_narrowing(self) -> bool:
         return True
 
-class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class TableGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+    """A table grid has its positions in rows and columns"""
+    def compute_combined_coordinates(self, horizontal_coordinate: str, vertical_coordinate: str) -> str: 
+        return vertical_coordinate + self.separator + horizontal_coordinate
+
+class RectangularGrid(TableGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
@@ -120,7 +125,7 @@ class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, Horizonta
         vertical_system = ListCoordinateSystem(vertical_coordinates, custom_coordinate_system_name)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
 
-class FlatRectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class FlatRectangularGrid(TableGrid):
     """FlatRectangularGrid is like a rectangular grid but instead of the positions being built by combining vertical and horizontal coordinates, the possessions are atomic. This should be usable with non frame rectangular position displays. This this uses an intermediate coordinate system to allow querying for the horizontal and vertical coordinates separately"""
     pass
 

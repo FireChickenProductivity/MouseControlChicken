@@ -5,6 +5,7 @@ from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, Rectan
 from .grid.RectangularGrid import ListBasedGrid
 from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
 from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
+from .grid.FlatRectangularGrid import FlatListBasedGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, CustomCoordinateSystemArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions
@@ -220,7 +221,25 @@ class CustomListCoordinatesGridFactory(CustomCoordinateGridFactory):
         return ListBasedGrid.create_square_grid(written_forms, name)
 
     def get_name(self) -> str:
-        return "Custom List Coordinates"
+        return "Custom List Coordinates Rectangular Grid"
+
+class CustomListCoordinatesTableGridFactory(GridFactory):
+    """Allows creating a grid from horizontal and vertical dimensions and custom coordinates"""
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        dimensions = (int(components[0]), int(components[1]))
+        name = components[2]
+        _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
+        return FlatListBasedGrid(dimensions, written_forms, name)
+
+    def get_name(self) -> str:
+        return "Custom List Coordinates Table Grid"
+
+    def get_arguments_description(self) -> str:
+        return "Two integers for the horizontal and vertical dimensions and a custom coordinate list file name"
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [PositiveIntegerArgumentType(), PositiveIntegerArgumentType(), CustomCoordinateSystemArgumentType()]
+
 
 options = [
     SquareRecursiveDivisionGridFactory(),
@@ -231,6 +250,7 @@ options = [
     HorizontalDoublingGridFactory(),
     VerticalDoublingGridFactory(),
     CustomListCoordinatesGridFactory(),
+    CustomListCoordinatesTableGridFactory(),
 ]
 
 class GridFactoryOptions:

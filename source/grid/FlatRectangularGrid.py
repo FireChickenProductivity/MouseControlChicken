@@ -6,10 +6,11 @@ from ..input_coordinates.InputCoordinateSystem import ListCoordinateSystem
 
 class FlatListBasedGrid(FlatRectangularGrid):
     def __init__(self, dimensions: tuple[int, int], coordinates_list: list[str], custom_coordinate_system_name="", separator: str = " "):
+        self.dimensions = dimensions
         size = dimensions[0] * dimensions[1]
         if len(coordinates_list) < size:
             raise ValueError("The number of coordinates is less than the number of positions on the grid")
-        coordinates_list = coordinates_list[:size]
+        self.coordinates_list = coordinates_list[:size]
         vertical_num = dimensions[0]
         horizontal_num = dimensions[1]
         horizontal_coordinates_list = [str(i) for i in range(horizontal_num)]
@@ -21,16 +22,26 @@ class FlatListBasedGrid(FlatRectangularGrid):
             separator
         )
         self.coordinate_system = ListCoordinateSystem(
+            self.coordinates_list,
             custom_coordinate_system_name,
-            coordinates_list,
             separator
         )
         self.converter = {}
         for v in range(vertical_num):
             for h in range(horizontal_num):
                 coordinate_string = f"{v}{separator}{h}"
-                target_index = h + v * horizontal_num
-                self.converter[coordinate_string] = coordinates_list[target_index]
+                target_index = self._compute_index_from_intermediate_coordinates(h, v)
+                self.converter[self.coordinates_list[target_index]] = coordinate_string
+
+    def _compute_index_from_intermediate_coordinates(self, horizontal: str, vertical: str) -> int:
+        return horizontal + vertical * self.dimensions[1]
+
+    def compute_combined_coordinates(self, intermediate_horizontal: str, intermediate_vertical: str):
+        index = self._compute_index_from_intermediate_coordinates(
+            int(intermediate_horizontal),
+            int(intermediate_vertical)
+        )
+        return self.coordinates_list[index]
 
     def _convert_coordinates_to_intermediate_form(self, coordinates: str) -> str:
         return self.converter[coordinates]

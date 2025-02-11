@@ -1,8 +1,8 @@
 from .Display import FrameDisplay, PositionDisplay, BoundariesTouching, Display
 from .Skipper import HorizontalSkipper, VerticalSkipper, SkipperRunner, SingleNestedSkipperRunner, SkipperComposite, CheckerSkipper
 from .InputCoordinatesDiagonalComputations import DiagonalComputer, InputCoordinatesDiagonal
-from ..grid.Grid import Grid, RectangularGrid, Rectangle
-from ..grid.GridCalculations import compute_primary_grid, is_rectangular_grid, is_square_grid
+from ..grid.Grid import Grid, RectangularGrid, TableGrid, Rectangle
+from ..grid.GridCalculations import compute_primary_grid, is_rectangular_grid, is_square_grid, is_table_grid
 from .ZigzagComputations import ZigzagOffsetComputer
 from .Canvas import Text, Line, Canvas
 from ..RectangleUtilities import compute_average, compute_rectangle_corners
@@ -195,9 +195,9 @@ class RectangularPositionDisplay(PositionDisplay):
     """For every horizontal and vertical coordinate combination, show the absolute position of the cursor."""
     def __init__(self):
         super().__init__()
-        self.grid: RectangularGrid = None
+        self.grid: TableGrid = None
     
-    def set_grid(self, grid: RectangularGrid): 
+    def set_grid(self, grid: TableGrid): 
         primary_grid = compute_primary_grid(grid)
         super().set_grid(primary_grid)
     
@@ -223,7 +223,7 @@ class RectangularPositionDisplay(PositionDisplay):
         self.canvas.insert_text(text)
 
     def _compute_text_to_display(self, horizontal_coordinate: str, vertical_coordinate: str) -> str:
-        return vertical_coordinate + self.grid.get_coordinate_system().get_separator() + horizontal_coordinate
+        return self.grid.compute_combined_coordinates(horizontal_coordinate, vertical_coordinate)
 
     def _create_skipper_runner(self) -> SingleNestedSkipperRunner:
         runner = SingleNestedSkipperRunner(VerticalSkipper(), HorizontalSkipper())
@@ -231,7 +231,7 @@ class RectangularPositionDisplay(PositionDisplay):
 
     @staticmethod
     def supports_grid(grid: Grid) -> bool:
-        return is_rectangular_grid(grid)
+        return is_table_grid(grid)
     
 class RectangularCheckerDisplay(RectangularPositionDisplay):
     def _create_skipper_runner(self) -> SingleNestedSkipperRunner:
