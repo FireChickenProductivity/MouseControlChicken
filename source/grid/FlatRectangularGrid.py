@@ -72,12 +72,10 @@ class FlatListBasedGrid(FlatRectangularGrid):
         return self.list_based_grid.compute_absolute_vertical_from(converted_coordinates)
 
     def compute_absolute_horizontal_from_horizontal_coordinates(self, coordinates: str) -> int:
-        converted_coordinates = self._convert_coordinates_to_intermediate_form("0" + self.list_based_grid.separator + coordinates)
-        return self.list_based_grid.compute_absolute_horizontal_from(converted_coordinates)
+        return self.list_based_grid.compute_absolute_horizontal_from("0" + self.list_based_grid.separator + coordinates)
 
     def compute_absolute_vertical_from_from_vertical_coordinates(self, coordinates: str) -> int:
-        converted_coordinates = self._convert_coordinates_to_intermediate_form(coordinates + self.list_based_grid.separator + "0")
-        return self.list_based_grid.compute_absolute_vertical_from(converted_coordinates)
+        return self.list_based_grid.compute_absolute_vertical_from(coordinates + self.list_based_grid.separator + "0")
 
     def has_nonoverlapping_sub_rectangles(self) -> bool:
         return False
