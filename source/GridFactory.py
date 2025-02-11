@@ -1,3 +1,6 @@
+#Grid factory classes contain the information needed to create a certain type of grid. They are used internally and to let users define new grids. 
+#ConstructionCommands are used to track the steps used to create grids so that users can use use commands to alter the current grid dynamically. This is useful for manipulating grids defined in terms of other grids, which involves a grid factory calling other factories.
+
 from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
 from .GridOptionsList import get_grid_options
 from .GridOptions import GridOptions
@@ -223,13 +226,16 @@ class CustomListCoordinatesGridFactory(CustomCoordinateGridFactory):
     def get_name(self) -> str:
         return "Custom List Coordinates Rectangular Grid"
 
+def create_flat_list_based_grid(dimensions, name):
+    _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
+    return FlatListBasedGrid(dimensions, written_forms, name)
+
 class CustomListCoordinatesTableGridFactory(GridFactory):
     """Allows creating a grid from horizontal and vertical dimensions and custom coordinates"""
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         dimensions = (int(components[0]), int(components[1]))
         name = components[2]
-        _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
-        return FlatListBasedGrid(dimensions, written_forms, name)
+        return create_flat_list_based_grid(dimensions, name)
 
     def get_name(self) -> str:
         return "Custom List Coordinates Table Grid"
@@ -240,6 +246,26 @@ class CustomListCoordinatesTableGridFactory(GridFactory):
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [PositiveIntegerArgumentType(), PositiveIntegerArgumentType(), CustomCoordinateSystemArgumentType()]
 
+def compute_floor_square_root(number) -> int:
+    return int(number**0.5)
+
+class CustomListCoordinatesSquareTableGridFactory(GridFactory):
+    """Creates a square table grid from a custom coordinate list by using the square root of the number of coordinates for the horizontal and vertical dimensions"""
+    def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
+        name = components[0]
+        _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
+        dimension = compute_floor_square_root(len(written_forms))
+        dimensions = (dimension, dimension)
+        return create_flat_list_based_grid(dimensions, name)
+
+    def get_name(self) -> str:
+        return "Custom List Coordinates Square Table Grid"
+
+    def get_arguments_description(self) -> str:
+        return "A custom coordinate list file name"
+
+    def get_argument_types(self) -> List[FactoryArgumentType]:
+        return [CustomCoordinateSystemArgumentType()]
 
 options = [
     SquareRecursiveDivisionGridFactory(),
@@ -251,6 +277,7 @@ options = [
     VerticalDoublingGridFactory(),
     CustomListCoordinatesGridFactory(),
     CustomListCoordinatesTableGridFactory(),
+    CustomListCoordinatesSquareTableGridFactory(),
 ]
 
 class GridFactoryOptions:
