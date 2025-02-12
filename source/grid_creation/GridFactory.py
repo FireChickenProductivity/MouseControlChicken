@@ -1,14 +1,14 @@
 #Grid factory classes contain the information needed to create a certain type of grid. They are used internally and to let users define new grids. 
 #ConstructionCommands are used to track the steps used to create grids so that users can use use commands to alter the current grid dynamically. This is useful for manipulating grids defined in terms of other grids, which involves a grid factory calling other factories.
 
-from .grid.Grid import Grid, RecursivelyDivisibleGridCombination
-from .GridOptionsList import get_grid_options
-from .GridOptions import GridOptions
-from .grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
-from .grid.RectangularGrid import ListBasedGrid
-from .grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
-from .grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
-from .grid.FlatRectangularGrid import FlatListBasedGrid
+from ..grid.Grid import Grid, RecursivelyDivisibleGridCombination
+from ..GridOptionsList import get_grid_options
+from ..GridOptions import GridOptions
+from ..grid.RecursiveDivisionGrid import RectangularRecursiveDivisionGrid, RectangularDivisionAmounts
+from ..grid.RectangularGrid import ListBasedGrid
+from ..grid.SingleLayerFromRecursiveGridGrid import SingleLayerFromRecursiveGridGrid
+from ..grid.ReverseCoordinateDoublingGrid import ReverseCoordinateHorizontalDoublingGrid, ReverseCoordinateVerticalDoublingGrid
+from ..grid.FlatRectangularGrid import FlatListBasedGrid
 from .GridFactoryArgumentTypes import FactoryArgumentType, TwoToNineArgumentType, GridOptionArgumentType, PositiveIntegerArgumentType, CustomCoordinateSystemArgumentType, InvalidFactoryArgumentException
 from typing import List
 from talon import Module, actions

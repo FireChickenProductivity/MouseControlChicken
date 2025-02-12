@@ -1,13 +1,13 @@
-from .grid.Grid import Grid
-from .GridOptions import GridOption
+from ..grid.Grid import Grid
+from ..GridOptions import GridOption
 from .GridFactory import GridFactory, GRID_ARGUMENT_SEPARATOR
 from .GridFactoryArgumentTypes import FactoryArgumentType
-from .display.DisplayOptionsComputations import compute_display_options_names_given_grid
-from .GridOptionsList import write_grid_option
-from .dialogue.DisplayOptionsDialogue import show_combination_display_options
-from .dialogue.DialogueOptions import DialogueOptions
-from .dialogue.DictationInputDialogue import CHOOSING_COMMAND_NAME
-from .display.DisplayOptionsComputations import should_compute_combination_display_options_for_grid
+from ..display.DisplayOptionsComputations import compute_display_options_names_given_grid
+from ..GridOptionsList import write_grid_option
+from ..dialogue.DisplayOptionsDialogue import show_combination_display_options
+from ..dialogue.DialogueOptions import DialogueOptions
+from ..dialogue.DictationInputDialogue import CHOOSING_COMMAND_NAME
+from ..display.DisplayOptionsComputations import should_compute_combination_display_options_for_grid
 from talon import Module, actions
 
 

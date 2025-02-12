@@ -1,9 +1,9 @@
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
+from ..TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG, ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG \
 , GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
-from .GridOptionsList import get_grid_options
-from .dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
-from .ContextUtilities import create_context_matches_single_tag_string
-from .GridOptions import GridOptions
+from ..GridOptionsList import get_grid_options
+from ..dialogue.DictationInputDialogue import DICTATION_INPUT_CAPTURE
+from ..ContextUtilities import create_context_matches_single_tag_string
+from ..GridOptions import GridOptions
 from talon import actions, Context, Module
 from typing import List
 
