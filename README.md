@@ -269,6 +269,7 @@ Example using the coordinates t, a, s, f, m, e, c, d and 4 columns, 2 rows:
 
 
 Custom List Coordinates Square Table Grid: this takes the name of a custom coordinate file and creates a square table grid with the same number of rows and columns interpreting each coordinate as referring to a single position. 
+
 Example using the coordinates t, a, s, f, m, e, c, d (Because the number of coordinates given is not a perfect square, the number of rows and columns is automatically decided to be the smallest number such that its square is less than the number of coordinates, which is 2 in this case):
 ![image](https://github.com/user-attachments/assets/924057a5-307b-484b-952c-dae4759bb782)
 
