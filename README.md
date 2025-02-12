@@ -290,7 +290,7 @@ The grid creation process does not currently make sure that your input makes sen
 During the process, choose an enumerated option with the corresponding number.
 
 #### Custom Coordinates
-Custom coordinates can be defined in a .csv file inside the "Mouse Control Chicken Data/Custom Coordinates" directory. The left hand side for every line contains the spoken form and the right hand side provides the displayed form. 
+Custom coordinates can be defined in a .csv file inside the "Mouse Control Chicken Data/Custom Coordinates" directory. The left hand side for every line contains the spoken form and the right hand side provides the displayed form. Custom coordinates used for an active grid will currently not update even after changing the corresponding file unless you choose the grid again from the grid menu.
 
 Example:
 
