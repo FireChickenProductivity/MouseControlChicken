@@ -215,6 +215,7 @@ class CustomListCoordinatesGridFactory(GridFactory):
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [CustomCoordinateSystemArgumentType()]
+        
     def create_grid_from_file(self, name: str, written_forms: List[str]) -> Grid:
         return ListBasedGrid.create_square_grid(written_forms, name)
 
