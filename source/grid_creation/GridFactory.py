@@ -237,7 +237,7 @@ class CustomListCoordinatesTableGridFactory(GridFactory):
         return "Custom List Coordinates Table Grid"
 
     def get_arguments_description(self) -> str:
-        return "Two integers for the horizontal and vertical dimensions and a custom coordinate list file name"
+        return "Two integers for the number of columns and rows and a custom coordinate list file name"
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [PositiveIntegerArgumentType(), PositiveIntegerArgumentType(), CustomCoordinateSystemArgumentType()]
@@ -246,7 +246,7 @@ def compute_floor_square_root(number) -> int:
     return int(number**0.5)
 
 class CustomListCoordinatesSquareTableGridFactory(GridFactory):
-    """Creates a square table grid from a custom coordinate list by using the square root of the number of coordinates for the horizontal and vertical dimensions"""
+    """Creates a square table grid from a custom coordinate list by using the square root of the number of coordinates for the number of columns and rows"""
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         name = components[0]
         _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
