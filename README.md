@@ -256,6 +256,12 @@ Horizontal Doubling: creates a doubled version of a grid such that a copy of the
 
 Vertical Doubling: creates a doubled version of a grid such that a copy of the grid is on the top and another copy is on the bottom. Performing actions by dictating an action followed by a position will perform the operation on the position on the grid copy on the top. Performing actions by dictating a position followed by an action will perform the operation on the position on the grid copy on the bottom.
 
+Custom List Coordinates Rectangular Grid: this takes the name of a custom coordinate file and creates a rectangular grid interpreting those coordinates as horizontal and vertical coordinates. Given n coordinates, this creates a n by n grid.
+
+Custom List Coordinates Table Grid: this takes the number of columns and rows and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
+
+Custom List Coordinates Square Table Grid: this takes the name of a custom coordinate file and creates a square table grid with the same number of rows and columns interpreting each coordinate as referring to a single position. 
+
 Doubling currently does not work properly with narrowable grids and will never work with having multiple doubled grids inside a single combination.
 
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
