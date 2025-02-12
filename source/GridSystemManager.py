@@ -264,6 +264,11 @@ def manager_has_narrow_able_grid() -> bool:
 
 @module.action_class
 class RedrawActions:
+    def mouse_control_chicken_recreate_current_grid():
+        '''Recreates the current mouse control chicken grid'''
+        global current_display_option
+        update_manager_grid(current_display_option)
+
     def mouse_control_chicken_update_numeric_grid_parameters(first: str, second: str=None):
         """Updates the outermost numeric grid parameters"""
         if second is None:
