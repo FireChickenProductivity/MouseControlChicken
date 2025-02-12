@@ -204,7 +204,7 @@ class VerticalDoublingGridFactory(DoublingGridFactory):
     def get_name(self) -> str:
         return VERTICAL_DOUBLING_GRID_NAME
 
-class CustomCoordinateGridFactory(GridFactory):
+class CustomListCoordinatesGridFactory(GridFactory):
     def create_grid_with_valid_argument_from_components(self, components: List[str]) -> Grid:
         name = components[0]
         _, written_forms = actions.user.mouse_control_chicken_compute_coordinate_columns(name)
@@ -215,11 +215,6 @@ class CustomCoordinateGridFactory(GridFactory):
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [CustomCoordinateSystemArgumentType()]
-
-    def create_grid_from_file(self, name: str, written_forms: List[str]) -> Grid:
-        pass
-
-class CustomListCoordinatesGridFactory(CustomCoordinateGridFactory):
     def create_grid_from_file(self, name: str, written_forms: List[str]) -> Grid:
         return ListBasedGrid.create_square_grid(written_forms, name)
 
