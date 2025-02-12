@@ -258,6 +258,10 @@ Vertical Doubling: creates a doubled version of a grid such that a copy of the g
 
 Custom List Coordinates Rectangular Grid: this takes the name of a custom coordinate file and creates a rectangular grid interpreting those coordinates as horizontal and vertical coordinates. Given n coordinates, this creates a n by n grid.
 
+Example using the coordinates t, a, s, f, m, e, c, d:
+![image](https://github.com/user-attachments/assets/a492d080-6ebe-47c4-9243-455ad38b753b)
+
+
 Custom List Coordinates Table Grid: this takes the number of columns and rows and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
 
 Custom List Coordinates Square Table Grid: this takes the name of a custom coordinate file and creates a square table grid with the same number of rows and columns interpreting each coordinate as referring to a single position. 
