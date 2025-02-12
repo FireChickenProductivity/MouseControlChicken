@@ -264,7 +264,14 @@ Example using the coordinates t, a, s, f, m, e, c, d:
 
 Custom List Coordinates Table Grid: this takes the number of columns and rows and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
 
+Example using the coordinates t, a, s, f, m, e, c, d and 4 columns, 2 rows:
+![image](https://github.com/user-attachments/assets/014ded32-60b7-4a29-b62b-522a7881b8f9)
+
+
 Custom List Coordinates Square Table Grid: this takes the name of a custom coordinate file and creates a square table grid with the same number of rows and columns interpreting each coordinate as referring to a single position. 
+Example using the coordinates t, a, s, f, m, e, c, d (Because the number of coordinates given is not a perfect square, the number of rows and columns is automatically decided to be the smallest number such that its square is less than the number of coordinates, which is 2 in this case):
+![image](https://github.com/user-attachments/assets/924057a5-307b-484b-952c-dae4759bb782)
+
 
 Doubling currently does not work properly with narrowable grids and will never work with having multiple doubled grids inside a single combination.
 
