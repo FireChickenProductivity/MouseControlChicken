@@ -274,6 +274,24 @@ The grid creation process does not currently make sure that your input makes sen
 
 During the process, choose an enumerated option with the corresponding number.
 
+#### Custom Coordinates
+Custom coordinates can be defined in a .csv file inside the "Mouse Control Chicken Data/Custom Coordinates" directory. The left hand side for every line contains the spoken form and the right hand side provides the displayed form. 
+
+Example:
+
+```
+test,t
+another,a
+sample,s
+foo,f
+more,m
+even,e
+coordinates,c
+defined,d
+```
+
+Displayed forms should not contain spaces and should be unique within a coordinate system. Note that when using custom coordinates in a grid combination, having the same display form or spoken form for a coordinate used by more than one grid can create ambiguities that have undesired results.
+
 ## Settings
 Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.
 
