@@ -31,9 +31,12 @@ class FactoryArgumentType:
         pass
 
     def get_tags(self) -> List[str]:
-        tags = [ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG]
-        if self.tag != "":
-            tags.append(self.tag)
+        #Avoid overriding the dictation input capture through a tag when using the options dialogue because it uses its own tag and context to override that already
+        tags = []
+        if not self.supports_options_dialogue():
+            tags.append(ARGUMENT_INPUT_THROUGH_DICTATION_INPUT_TAG)
+            if self.tag != "":
+                tags.append(self.tag)
         return tags
 
     def supports_options_dialogue(self) -> bool:
