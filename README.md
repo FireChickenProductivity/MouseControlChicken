@@ -265,9 +265,9 @@ Example using the coordinates t, a, s, f, m, e, c, d:
 ![image](https://github.com/user-attachments/assets/a492d080-6ebe-47c4-9243-455ad38b753b)
 
 
-Custom List Coordinates Table Grid: this takes the number of columns and rows and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
+Custom List Coordinates Table Grid: this takes the number of rows and columns and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
 
-Example using the coordinates t, a, s, f, m, e, c, d and 4 columns, 2 rows:
+Example using the coordinates t, a, s, f, m, e, c, d and 2 rows, 4 columns:
 
 ![image](https://github.com/user-attachments/assets/014ded32-60b7-4a29-b62b-522a7881b8f9)
 

@@ -237,7 +237,7 @@ class CustomListCoordinatesTableGridFactory(GridFactory):
         return "Custom List Coordinates Table Grid"
 
     def get_arguments_description(self) -> str:
-        return "Two integers for the number of columns and rows and a custom coordinate list file name"
+        return "Two integers for the number of rows and columns and a custom coordinate list file name"
 
     def get_argument_types(self) -> List[FactoryArgumentType]:
         return [PositiveIntegerArgumentType(), PositiveIntegerArgumentType(), CustomCoordinateSystemArgumentType()]
