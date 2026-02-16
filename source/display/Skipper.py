@@ -1,3 +1,5 @@
+#This defines Skipper objects used to determine if a display should skip showing something. This is primarily for only showing some of coordinates, such as if the rectangle is small or the user wants to use a checker pattern display.
+
 from ..fire_chicken.mouse_position import MousePosition
 from ..SettingsMediator import settings_mediator
 from .Canvas import compute_background_horizontal_rectangle_size, compute_background_vertical_rectangle_size
@@ -74,6 +76,7 @@ class CheckerSkipper(Skipper):
         self.count += 1
 
 class SkipperRunner:
+    """A skipper runner is used to apply the inclusion function on positions that should not be skipped by the given skipper"""
     def __init__(self, Skipper: Skipper):
         self.skipper = Skipper
         self.generator = None
@@ -99,6 +102,7 @@ class SkipperRunner:
                 self.skipper.handle_position_excluded(position)
 
 class SingleNestedSkipperRunner:
+    """The nested skipper runner is intended for applying a skipper to 2 dimensions"""
     def __init__(self, outer_skipper: Skipper, inner_skipper: Skipper):
         self.outer_skipper = outer_skipper
         self.inner_skipper = inner_skipper

@@ -36,6 +36,8 @@ chicken follow screen: Makes the active mouse grid around the screen containing 
 
 chicken refresh: Refreshes the mouse grid and reloads the active settings from their defaults.
 
+chicken recreate: Recreates the active grid. This is useful if you have changed a custom coordinates file and want the grid to update accordingly.
+
 chicken (down or up) (optional number_small): Starts continuously scrolling down or up respectively. The optional number sets the scrolling speed.
 
 #### Transient Grid Commands
@@ -256,6 +258,27 @@ Horizontal Doubling: creates a doubled version of a grid such that a copy of the
 
 Vertical Doubling: creates a doubled version of a grid such that a copy of the grid is on the top and another copy is on the bottom. Performing actions by dictating an action followed by a position will perform the operation on the position on the grid copy on the top. Performing actions by dictating a position followed by an action will perform the operation on the position on the grid copy on the bottom.
 
+Custom List Coordinates Rectangular Grid: this takes the name of a custom coordinate file and creates a rectangular grid interpreting those coordinates as horizontal and vertical coordinates. Given n coordinates, this creates a n by n grid.
+
+Example using the coordinates t, a, s, f, m, e, c, d:
+
+![image](https://github.com/user-attachments/assets/a492d080-6ebe-47c4-9243-455ad38b753b)
+
+
+Custom List Coordinates Table Grid: this takes the number of rows and columns and the name of a custom coordinate file and creates a table grid interpreting each coordinate as referring to a single position. This does not work if your coordinate system does not provide at least as many coordinates as the desired number of rows times the desired number of columns.
+
+Example using the coordinates t, a, s, f, m, e, c, d and 2 rows, 4 columns:
+
+![image](https://github.com/user-attachments/assets/014ded32-60b7-4a29-b62b-522a7881b8f9)
+
+
+Custom List Coordinates Square Table Grid: this takes the name of a custom coordinate file and creates a square table grid with the same number of rows and columns interpreting each coordinate as referring to a single position. 
+
+Example using the coordinates t, a, s, f, m, e, c, d (Because the number of coordinates given is not a perfect square, the number of rows and columns is automatically decided to be the smallest number such that its square is less than the number of coordinates, which is 2 in this case):
+
+![image](https://github.com/user-attachments/assets/924057a5-307b-484b-952c-dae4759bb782)
+
+
 Doubling currently does not work properly with narrowable grids and will never work with having multiple doubled grids inside a single combination.
 
 Cloning an existing grid can be useful if you want multiple options for the same grid that have different default displays.
@@ -267,6 +290,24 @@ Next, the process will ask you to choose the default display.
 The grid creation process does not currently make sure that your input makes sense. Providing input that this document explains is not a valid option may have unexpected results.
 
 During the process, choose an enumerated option with the corresponding number.
+
+#### Custom Coordinates
+Custom coordinates can be defined in a .csv file inside the "Mouse Control Chicken Data/Custom Coordinates" directory. The left hand side for every line contains the spoken form and the right hand side provides the displayed form. Custom coordinates used for an active grid will currently not update even after changing the corresponding file unless you recreate the grid using the "chicken recreate" command or you choose the grid again from the grid menu.
+
+Example:
+
+```
+test,t
+another,a
+sample,s
+foo,f
+more,m
+even,e
+coordinates,c
+defined,d
+```
+
+Displayed forms should not contain spaces and should be unique within a coordinate system. Note that when using custom coordinates in a grid combination, having the same display form or spoken form for a coordinate used by more than one grid can create ambiguities that have undesired results.
 
 ## Settings
 Mouse Control Chicken generates a settings file in the data directory called settings.talon. If you want to read the description for any setting, you can find it in the settings definitions in SettingsMediator.py. Changes to some settings may require using the "chicken refresh" command to take effect in the current talon session.

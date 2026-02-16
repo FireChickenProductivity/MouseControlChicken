@@ -4,7 +4,7 @@ from .Callbacks import NoArgumentCallback
 from .SettingsMediator import settings_mediator
 from .RectangleManagement import RectangleManager, create_default_rectangle_manager
 from .GridOptions import GridOptions
-from .GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME, ReverseCoordinateDoublingConstructionCommand
+from .grid_creation.GridFactory import RectangularRecursiveDivisionGridFactory, SimpleGridConstructionCommand, GRID_ARGUMENT_SEPARATOR, RECTANGULAR_DIVISION_GRID_NAME, ReverseCoordinateDoublingConstructionCommand
 from .display.DisplayOptionsComputations import compute_display_options_given_grid, compute_display_options_names_given_grid, \
     should_compute_combination_display_options_for_grid, compute_combined_display_option, remove_first_display_option, wrap_first_display_option_with_doubling
 from .dialogue.DisplayOptionsDialogue import show_combination_display_options
@@ -25,6 +25,7 @@ class GridSystemManager:
     
     def set_grid(self, grid: Grid):
         self.grid = grid
+        actions.user.mouse_control_chicken_update_custom_coordinate_system(self.grid)
         if self.has_received_first_grid():
             self.should_load_default_grid_next = False
         self.refresh()
@@ -263,6 +264,11 @@ def manager_has_narrow_able_grid() -> bool:
 
 @module.action_class
 class RedrawActions:
+    def mouse_control_chicken_recreate_current_grid():
+        '''Recreates the current mouse control chicken grid'''
+        global current_display_option
+        update_manager_grid(current_display_option)
+
     def mouse_control_chicken_update_numeric_grid_parameters(first: str, second: str=None):
         """Updates the outermost numeric grid parameters"""
         if second is None:

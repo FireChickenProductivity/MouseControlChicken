@@ -1,6 +1,6 @@
 from talon import Context
-from .ContextUtilities import create_context_matches_single_tag_string
-from .TagManagement import GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
+from ..ContextUtilities import create_context_matches_single_tag_string
+from ..TagManagement import GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG
 from .GridFactoryArgumentTypes import CAPTURE_NAME
 
 positive_integer_context = Context()

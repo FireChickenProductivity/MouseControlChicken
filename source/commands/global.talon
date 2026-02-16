@@ -27,6 +27,7 @@ chicken (window|dough|when): user.mouse_control_chicken_set_rectangle_manager_to
 chicken follow (window|dough|when): user.mouse_control_chicken_set_rectangle_manager_to_follow_window()
 chicken follow screen: user.mouse_control_chicken_set_rectangle_manager_to_follow_screen()
 chicken refresh: user.mouse_control_chicken_refresh()
+chicken recreate: user.mouse_control_chicken_recreate_current_grid()
 
 chicken down [<number_small>]:
     user.mouse_control_chicken_start_scrolling(number_small or 1)

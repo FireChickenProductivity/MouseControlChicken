@@ -1,6 +1,6 @@
 from ..fire_chicken.mouse_position import MousePosition
 from typing import Generator, List
-from ..InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem, DisjointUnionCoordinateSystem
+from ..input_coordinates.InputCoordinateSystem import InputCoordinateSystem, ListCoordinateSystem, SequentialCombinationCoordinateSystem, InfiniteSequenceCoordinateSystem, DisjointUnionCoordinateSystem
 
 class Rectangle:
     '''Rectangle holds the coordinates of the sides of a rectangle'''
@@ -105,7 +105,12 @@ class RecursiveDivisionGrid(RecursivelyDivisibleGrid):
     def supports_narrowing(self) -> bool:
         return True
 
-class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+class TableGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, HorizontallyOrderedGrid):
+    """A table grid has its positions in rows and columns"""
+    def compute_combined_coordinates(self, horizontal_coordinate: str, vertical_coordinate: str) -> str: 
+        return vertical_coordinate + self.separator + horizontal_coordinate
+
+class RectangularGrid(TableGrid):
     '''RectangularGrid offers a coordinate system that divides the given rectangle into a rectangular coordinate system such that
         the positions are determined by a vertical and a horizontal axis'''
     def get_coordinate_pairs(self) -> Generator:
@@ -113,12 +118,16 @@ class RectangularGrid(RecursivelyDivisibleGrid, VerticallyOrderedGrid, Horizonta
             for vertical in self.get_vertical_coordinates():
                 yield vertical + self.separator + horizontal
     
-    def build_coordinate_system(self):
+    def build_coordinate_system(self, custom_coordinate_system_name: str=""):
         horizontal_coordinates = [horizontal for horizontal in self.get_horizontal_coordinates()]
         vertical_coordinates = [vertical for vertical in self.get_vertical_coordinates()]
-        horizontal_system = ListCoordinateSystem(horizontal_coordinates)
-        vertical_system = ListCoordinateSystem(vertical_coordinates)
+        horizontal_system = ListCoordinateSystem(horizontal_coordinates, custom_coordinate_system_name)
+        vertical_system = ListCoordinateSystem(vertical_coordinates, custom_coordinate_system_name)
         self.coordinate_system = SequentialCombinationCoordinateSystem([vertical_system, horizontal_system])
+
+class FlatRectangularGrid(TableGrid):
+    """FlatRectangularGrid is like a rectangular grid but instead of the positions being built by combining vertical and horizontal coordinates, the possessions are atomic. This should be usable with non frame rectangular position displays. This this uses an intermediate coordinate system to allow querying for the horizontal and vertical coordinates separately"""
+    pass
 
 class CombinationCoordinateSystemManager():
     def __init__(self, primary: RecursivelyDivisibleGrid, secondary: RecursivelyDivisibleGrid):

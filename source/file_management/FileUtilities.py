@@ -4,6 +4,7 @@ from csv import reader, writer
 from typing import List
 
 OUTPUT_DIRECTORY = None
+CUSTOM_COORDINATES_DIRECTORY = None
 def guarantee_data_directory_exists():
     '''Creates the mouse control chicken data directory if it does not exist'''
     if not os.path.exists(OUTPUT_DIRECTORY):
@@ -13,9 +14,20 @@ def initialize():
     global OUTPUT_DIRECTORY
     OUTPUT_DIRECTORY = compute_output_directory()
     guarantee_data_directory_exists()
+    
+    global CUSTOM_COORDINATES_DIRECTORY
+    CUSTOM_COORDINATES_DIRECTORY = compute_custom_coordinates_directory(OUTPUT_DIRECTORY)
+    os.makedirs(CUSTOM_COORDINATES_DIRECTORY, exist_ok=True)
 
 def compute_output_directory():
     return os.path.join(actions.path.talon_user(), 'Mouse Control Chicken Data')
+
+def compute_custom_coordinates_directory(output_directory: str):
+    return os.path.join(output_directory, 'Custom Coordinates')
+
+def get_custom_coordinates_directory():
+    global CUSTOM_COORDINATES_DIRECTORY
+    return CUSTOM_COORDINATES_DIRECTORY
 
 app.register('ready', initialize)
 
@@ -50,6 +62,25 @@ def read_rows_from_csv_file(path: str) -> List[List[str]]:
                 rows.append(row)
     return rows
 
+def read_two_columns_from_csv_file(path: str) -> tuple[list[str], list[str]]:
+    '''Obtains the two columns from the csv file at the given path'''
+    column1 = []
+    column2 = []
+    rows = read_rows_from_csv_file(path)
+    for row in rows:
+        if len(row) > 1:
+            column1.append(row[0])
+            column2.append(row[1])
+    return column1, column2
+
+def build_dictionary_from_two_columns_csv_file(path: str) -> dict[str, str]:
+    '''Obtains the dictionary from the csv file at the given path'''
+    result = {}
+    column1, column2 = read_two_columns_from_csv_file(path)
+    for i in range(len(column1)):
+        result[column1[i]] = column2[i]
+    return result
+
 def write_text_to_file_if_uninitialized(path: str, text: str):
     guarantee_data_directory_exists()
     '''Writes the given text to the file at the given path if the file does not exist'''
@@ -57,5 +88,12 @@ def write_text_to_file_if_uninitialized(path: str, text: str):
         with open(path, "w") as file:
             file.write(text)
     
-
+def compute_file_names_for_extension(directory: str, extension: str) -> list[str]:
+    '''Obtains the file names in the given directory with the given extension'''
+    result = []
+    for file_name in os.listdir(directory):
+        if file_name.endswith(extension) and file_name.count(".") == 1:
+            point_index = file_name.index(".")
+            result.append(file_name[:point_index])
+    return result
 

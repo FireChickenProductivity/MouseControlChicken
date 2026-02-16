@@ -1,6 +1,6 @@
 from talon import Context
-from .ContextUtilities import create_context_matches_single_tag_string
-from .TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG
+from ..ContextUtilities import create_context_matches_single_tag_string
+from ..TagManagement import GRID_CREATION_ARGUMENT_TWO_TO_NINE_TAG
 from .GridFactoryArgumentTypes import CAPTURE_NAME
 
 two_to_nine_context = Context()

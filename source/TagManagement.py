@@ -1,7 +1,7 @@
 from talon import Module, Context, actions
 from typing import List
 from .grid.Grid import Grid
-from .CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
+from .input_coordinates.CoordinatesCapture import compute_category_tags, compute_appropriate_level_tag_from_category_tags
 
 module = Module()
 
@@ -33,9 +33,6 @@ GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME = 'mouse_control_chicken_grid_c
 GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG = 'user.' + GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME
 module.tag(GRID_CREATION_ARGUMENT_POSITIVE_INTEGER_TAG_NAME, desc = 'Tag for setting the current argument type to positive integer for mouse control chicken grid creation')
 
-GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME = 'mouse_control_chicken_grid_creation_argument_grid_option'
-GRID_CREATION_ARGUMENT_GRID_OPTION_TAG = 'user.' + GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME
-module.tag(GRID_CREATION_ARGUMENT_GRID_OPTION_TAG_NAME, desc = 'Tag for setting the current argument type to grid option for mouse control chicken grid creation')
 
 DICTATION_INPUT_TAG_NAME = 'mouse_control_chicken_dictation_input_showing'
 DICTATION_INPUT_TAG = 'user.' + DICTATION_INPUT_TAG_NAME

@@ -1,4 +1,4 @@
-from .Grid import Grid, RectangularGrid
+from .Grid import Grid, RectangularGrid, TableGrid
 from typing import List
 
 class TreeComputationOptions:
@@ -143,9 +143,15 @@ def find_first_grid_tree_node_matching_function(tree: Node, function):
 class GridNotFoundException(Exception):
     pass
 
-def is_rectangular_grid(grid: Grid) -> bool:
+def does_grid_match_class(grid: Grid, grid_class) -> bool:
     primary_grid = compute_primary_grid(grid)
-    return isinstance(primary_grid, RectangularGrid)
+    return isinstance(primary_grid, grid_class)
+
+def is_rectangular_grid(grid: Grid) -> bool:
+    return does_grid_match_class(grid, RectangularGrid)
+
+def is_table_grid(grid: Grid) -> bool:
+    return does_grid_match_class(grid, TableGrid)
 
 def is_square_grid(grid: Grid) -> bool:
     if not is_rectangular_grid(grid):
