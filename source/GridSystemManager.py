@@ -168,7 +168,8 @@ class Actions:
         '''Toggles showing the mouse control chicken grid'''
         if manager.is_showing():
             actions.user.mouse_control_chicken_hide_grid()
-        actions.user.mouse_control_chicken_show_grid()
+        else:
+            actions.user.mouse_control_chicken_show_grid()
 
     def mouse_control_chicken_toggle_flicker_display():
         '''Toggles flickering the mouse control chicken display'''
