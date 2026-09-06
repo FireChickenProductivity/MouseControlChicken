@@ -154,10 +154,20 @@ class DisplayManager:
         self.canvas.setup(rectangle)
         self.secondary_canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
+        self.refresh_secondary_canvas(rectangle)
+
+    def refresh_secondary_canvas(self, rectangle: Rectangle | None=None, show: bool=False):
+        if not rectangle:
+            rectangle = self.rectangle
+        if not self.secondary_displays or not rectangle:
+            return 
+        self.secondary_canvas.hide()
         self.secondary_canvas = Canvas()
         self.secondary_canvas.setup(rectangle)
         for d in self.secondary_displays.values():
             d.draw_on(self.secondary_canvas)
+        if show:
+            self.secondary_canvas.show()
 
     def refresh_secondary_canvases(self):
         if not self.secondary_displays:

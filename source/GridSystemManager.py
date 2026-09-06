@@ -232,6 +232,7 @@ class Actions:
         global is_open_for_single_action
         grid = manager.get_grid()
         grid.handle_using_coordinates_with_mouse_command(coordinates)
+        manager.display_manager.refresh_secondary_canvas(show=True)
         if is_open_for_single_action:
             actions.user.mouse_control_chicken_hide_grid()
 
