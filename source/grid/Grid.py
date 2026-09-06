@@ -41,6 +41,9 @@ class Grid:
     def is_combination(self) -> bool:
         return False
 
+    def get_persistent_coordinates(self) -> str | None:
+        return None
+
     def supports_narrowing(self) -> bool:
         return False
     
@@ -179,7 +182,7 @@ class PersistentSecondaryCoordinatesManager:
         self.secondary = secondary
         self.secondary_persistent_coordinates: str = None
         
-    def get_secondary_persistent_coordinates(self):
+    def get_secondary_persistent_coordinates(self) -> str | None:
         return self.secondary_persistent_coordinates
     
     def persist_secondary_at(self, grid_coordinates: str) -> None:
@@ -261,6 +264,9 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
 
     def persist_secondary_at(self, grid_coordinates: str) -> None:
         self.persistent_coordinates_manager.persist_secondary_at(grid_coordinates)
+
+    def get_persistent_coordinates(self) -> str | None:
+        return self.persistent_coordinates_manager.get_secondary_persistent_coordinates()
     
     def compute_sub_rectangle_for(self, grid_coordinates: str, are_coordinates_reversed: bool = False) -> Rectangle:
         if not self.coordinate_system_manager.do_coordinates_belong_to_system(grid_coordinates):
@@ -321,4 +327,21 @@ def obtain_relevant_sub_rectangle_from_grid_at(grid: Grid, coordinates: str, are
     if are_coordinates_reversed and grid.supports_reversed_coordinates():
         return grid.compute_sub_rectangle_for(coordinates, are_coordinates_reversed)
     return grid.compute_sub_rectangle_for(coordinates)
-    
+
+def has_non_wrapping_combination(grid: Grid) -> bool:
+    if grid.is_wrapper():
+        return has_non_wrapping_combination(grid.get_wrapped_grid())
+    return grid.is_combination()
+
+def get_innermost_combination(grid: Grid) -> Grid:
+    """Assumes that the grid has a combination grid in it"""
+    if grid.is_wrapper():
+        return get_innermost_combination(grid.get_wrapped_grid())
+    elif grid.is_combination():
+        secondary = grid.get_secondary_grid()
+        primary = grid.get_primary_grid()
+        if secondary.is_combination():
+            return get_innermost_combination(secondary)
+        if primary.is_combination():
+            return get_innermost_combination(primary)
+        return grid
