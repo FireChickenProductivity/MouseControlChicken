@@ -314,6 +314,10 @@ Mouse Control Chicken generates a settings file in the data directory called set
 
 user.mouse_control_chicken_default_rectangle_manager is a string setting that determines the default strategy for deciding what to draw the grid around. The options correspond to the commands for setting the rectangle manager and are "window", "screen", "follow window", and "follow screen". "screen" will be used if you provide an invalid value.
 
+## Actions
+The following actions are intended as part of the stable API but currently have no command
+- user.mouse_control_chicken_toggle_grid toggles showing the grid
+
 ## Dependencies
 The project depends upon the following from the community repository:
 

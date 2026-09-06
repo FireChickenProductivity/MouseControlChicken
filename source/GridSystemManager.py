@@ -92,6 +92,9 @@ class GridSystemManager:
             show_time = settings_mediator.get_transparency_flickering_show_time()
             hide_time = settings_mediator.get_transparency_flickering_hide_time()
             self.display_manager.toggle_transparency_flickering(show_time, hide_time)
+
+    def is_showing(self) -> bool:
+        return self.display_manager.is_currently_showing()
         
 manager: GridSystemManager = None
 current_option: str = None
@@ -160,6 +163,13 @@ class Actions:
         '''Shows the mouse control chicken grid'''
         global manager
         manager.show()
+
+    def mouse_control_chicken_toggle_grid():
+        '''Toggles showing the mouse control chicken grid'''
+        if manager.is_showing():
+            actions.user.mouse_control_chicken_hide_grid()
+        else:
+            actions.user.mouse_control_chicken_show_grid()
 
     def mouse_control_chicken_toggle_flicker_display():
         '''Toggles flickering the mouse control chicken display'''
