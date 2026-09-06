@@ -18,22 +18,24 @@ class SecondaryDisplay:
 	def set_rectangle(self, rectangle: Rectangle):
 		self.rectangle = rectangle
 
-	@staticmethod
-	def supports_grid(grid: Grid) -> bool:
+	def supports_grid(self, grid: Grid) -> bool:
 		return True
 
 	def draw_on(self, canvas: Canvas):
+		if self.grid and self.supports_grid(self.grid):
+			self.represent_supported_grid_on(canvas)
+
+	def represent_supported_grid_on(self, canvas: Canvas):
 		pass
 
 class SubRectangleDisplay(SecondaryDisplay):
 	def __init__(self):
 		super().__init__()
 
-	@staticmethod
-	def supports_grid(grid: Grid) -> bool:
+	def supports_grid(self, grid: Grid) -> bool:
 		return grid.is_combination() and has_non_wrapping_combination(grid)
 
-	def draw_on(self, canvas: Canvas):
+	def represent_supported_grid_on(self, canvas: Canvas):
 		# find the sub grid
 		# get its rectangle
 		if self.grid is None:
