@@ -283,7 +283,10 @@ class RecursivelyDivisibleGridCombination(RecursivelyDivisibleGrid):
             primary_sub_rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.primary, head, use_reverse_coordinates_for_primary)
         self.secondary.make_around(primary_sub_rectangle)
         use_reverse_coordinates_for_secondary = self.secondary.supports_reversed_coordinates() and are_coordinates_reversed
-        rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.secondary, tail, use_reverse_coordinates_for_secondary)
+        if tail:
+            rectangle = obtain_relevant_sub_rectangle_from_grid_at(self.secondary, tail, use_reverse_coordinates_for_secondary)
+        else:
+            rectangle = primary_sub_rectangle
         return rectangle
         
     def get_primary_grid(self) -> Grid:
