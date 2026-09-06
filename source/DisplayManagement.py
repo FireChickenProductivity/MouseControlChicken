@@ -108,12 +108,10 @@ class DisplayManager:
     def remove_secondary_display(self, secondary_grid_type: SecondaryGridType):
         if secondary_grid_type in self.secondary_displays:
             self.secondary_displays.pop(secondary_grid_type)
-            self.refresh_display_using_previous_values()
 
     def update_secondary_display(self, display: SecondaryDisplay):
         secondary_grid_type = display.get_secondary_grid_type()
         self.secondary_displays[secondary_grid_type] = display
-        self.refresh_display_using_previous_values()
 
     def set_display(self, display: Display):
         self.hide()

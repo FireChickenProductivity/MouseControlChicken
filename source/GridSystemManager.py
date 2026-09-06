@@ -255,6 +255,9 @@ class Actions:
         display_manager = manager.display_manager
         secondary_display = SubRectangleDisplay()
         display_manager.update_secondary_display(secondary_display)
+        if display_manager.is_currently_showing():
+            display_manager.refresh_display_using_previous_values()
+            display_manager.show()
 
 def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition:
     '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''
