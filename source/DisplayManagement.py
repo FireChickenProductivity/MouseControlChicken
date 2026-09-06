@@ -99,6 +99,9 @@ class DisplayManager:
         self.transparency_flickerer: Flickerer = Flickerer(self.transparency_flicker_hide, self.transparency_flicker_show, settings_mediator.restore_transparency_settings)
         self.flickerer_manager: FlickererManager = FlickererManager([self.flickerer, self.transparency_flickerer])
         self.canvas: Canvas = Canvas()
+        self.secondary_canvas: Canvas = Canvas()
+        self.secondary_displays: list[Display] = []
+        
     
     def set_display(self, display: Display):
         self.hide()
@@ -126,14 +129,20 @@ class DisplayManager:
 
     def hide_temporarily(self):
         if self.display: self.canvas.hide()
+        if self.secondary_displays:
+            self.secondary_canvas.hide()
     
     def show_temporarily(self):
         if self.display: self.canvas.show()
+        if self.secondary_displays:
+            self.secondary_canvas.show()
 
     def refresh_canvas(self, rectangle: Rectangle):
         self.canvas = Canvas()
         self.canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
+        for d in self.secondary_displays:
+            d.draw_on(self.secondary_canvas)
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.hide_temporarily()
