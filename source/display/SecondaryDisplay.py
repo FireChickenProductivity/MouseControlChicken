@@ -1,7 +1,7 @@
 from ..grid.SecondaryGrid import *
 from ..grid.Grid import Grid, get_innermost_combination, has_non_wrapping_combination, obtain_relevant_sub_rectangle_from_grid_at
 from .Display import Display
-from .Canvas import Canvas
+from .Canvas import Canvas, Line
 
 class SecondaryDisplay:
 	def __init__(self):
@@ -43,4 +43,11 @@ class SubRectangleDisplay(SecondaryDisplay):
 		if not sub_rectangle:
 			return 
 		# draw the rectangle on the canvas using lines
-		
+		left = sub_rectangle.left
+		right = sub_rectangle.right
+		bottom = sub_rectangle.bottom
+		top = sub_rectangle.top
+		canvas.insert_line(Line(left, top, left, bottom))
+		canvas.insert_line(Line(left, bottom, right, bottom))
+		canvas.insert_line(Line(right, top, right, bottom))
+		canvas.insert_line(Line(left, top, right, top))
