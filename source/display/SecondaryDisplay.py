@@ -1,11 +1,12 @@
 from ..grid.SecondaryGrid import *
-from ..grid.Grid import Grid, get_innermost_combination, has_non_wrapping_combination, obtain_relevant_sub_rectangle_from_grid_at
+from ..grid.Grid import Grid, get_innermost_combination, has_non_wrapping_combination, obtain_relevant_sub_rectangle_from_grid_at, Rectangle
 from .Display import Display
 from .Canvas import Canvas, Line
 
 class SecondaryDisplay:
 	def __init__(self):
 		self.grid: Grid | None = None
+		self.rectangle: Rectangle | None = None
 
 	def get_secondary_grid_type(self) -> SecondaryGridType | None:
 		"""Returns the type of the secondary grid this is for. Returns None if it is actually for the main grid"""
@@ -13,6 +14,9 @@ class SecondaryDisplay:
 
 	def set_grid(self, grid: Grid): 
 		self.grid = grid
+
+	def set_rectangle(self, rectangle: Rectangle):
+		self.rectangle = rectangle
 
 	@staticmethod
 	def supports_grid(grid: Grid) -> bool:

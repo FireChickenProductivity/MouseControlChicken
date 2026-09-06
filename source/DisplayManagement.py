@@ -2,6 +2,7 @@ from .display.Display import Display
 from .display.Canvas import Canvas
 from .grid.Grid import Grid, Rectangle
 from .SettingsMediator import settings_mediator
+from .display.SecondaryDisplay import SecondaryDisplay
 from talon import cron
 
 class JobHandler:
@@ -100,7 +101,8 @@ class DisplayManager:
         self.flickerer_manager: FlickererManager = FlickererManager([self.flickerer, self.transparency_flickerer])
         self.canvas: Canvas = Canvas()
         self.secondary_canvas: Canvas = Canvas()
-        self.secondary_displays: list[Display] = []
+        # later modified to work with secondary grids
+        self.secondary_displays: list[SecondaryDisplay] = []
         
     
     def set_display(self, display: Display):
@@ -140,6 +142,7 @@ class DisplayManager:
     def refresh_canvas(self, rectangle: Rectangle):
         self.canvas = Canvas()
         self.canvas.setup(rectangle)
+        self.secondary_canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
         for d in self.secondary_displays:
             d.draw_on(self.secondary_canvas)
@@ -148,6 +151,11 @@ class DisplayManager:
         self.hide_temporarily()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
+        for d in self.secondary_displays:
+            d.set_rectangle(rectangle)
+            if d.get_secondary_grid_type() is None:
+                d.set_grid(grid)
+                
         if grid and rectangle: self.refresh_canvas(rectangle)
         self.grid = grid
         self.rectangle = rectangle
