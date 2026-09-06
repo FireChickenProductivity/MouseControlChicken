@@ -154,6 +154,8 @@ class DisplayManager:
         self.canvas.setup(rectangle)
         self.secondary_canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
+        self.secondary_canvas = Canvas()
+        self.secondary_canvas.setup(rectangle)
         for d in self.secondary_displays.values():
             d.draw_on(self.secondary_canvas)
 
