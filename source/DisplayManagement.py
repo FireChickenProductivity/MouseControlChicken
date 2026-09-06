@@ -3,6 +3,7 @@ from .display.Canvas import Canvas
 from .grid.Grid import Grid, Rectangle
 from .SettingsMediator import settings_mediator
 from .display.SecondaryDisplay import SecondaryDisplay
+from .grid.SecondaryGrid import SecondaryGridType
 from talon import cron
 
 class JobHandler:
@@ -102,9 +103,18 @@ class DisplayManager:
         self.canvas: Canvas = Canvas()
         self.secondary_canvas: Canvas = Canvas()
         # later modified to work with secondary grids
-        self.secondary_displays: list[SecondaryDisplay] = []
-        
+        self.secondary_displays: dict[SecondaryGridType | None, SecondaryDisplay] = {}
     
+    def remove_secondary_display(self, secondary_grid_type: SecondaryGridType):
+        if secondary_grid_type in self.secondary_displays:
+            self.secondary_displays.pop(secondary_grid_type)
+            self.refresh_display_using_previous_values()
+
+    def update_secondary_display(self, display: SecondaryDisplay):
+        secondary_grid_type = display.get_secondary_grid_type()
+        self.secondary_displays[secondary_grid_type] = display
+        self.refresh_display_using_previous_values()
+
     def set_display(self, display: Display):
         self.hide()
         self.display = display
@@ -144,14 +154,14 @@ class DisplayManager:
         self.canvas.setup(rectangle)
         self.secondary_canvas.setup(rectangle)
         self.display.draw_on(self.canvas)
-        for d in self.secondary_displays:
+        for d in self.secondary_displays.values():
             d.draw_on(self.secondary_canvas)
 
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.hide_temporarily()
         self.display.set_grid(grid)
         self.display.set_rectangle(rectangle)
-        for d in self.secondary_displays:
+        for d in self.secondary_displays.values():
             d.set_rectangle(rectangle)
             if d.get_secondary_grid_type() is None:
                 d.set_grid(grid)
