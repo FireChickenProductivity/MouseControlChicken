@@ -157,6 +157,13 @@ class DisplayManager:
         for d in self.secondary_displays.values():
             d.draw_on(self.secondary_canvas)
 
+    def refresh_secondary_canvases(self):
+        if not self.secondary_displays:
+            return 
+        for d in self.secondary_displays.values():
+            d.draw_on(self.secondary_canvas)
+        self.secondary_canvas.refresh()
+
     def refresh_display(self, grid: Grid, rectangle: Rectangle):
         self.hide_temporarily()
         self.display.set_grid(grid)

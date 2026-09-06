@@ -13,6 +13,8 @@ from .fire_chicken.mouse_position import MousePosition
 from .GridOptionsList import update_option_default_display, initialize_grid_options, get_grid_options
 from .DisplayManagement import DisplayManager
 from .CoordinatePrefixes import REVERSE_COORDINATES_PREFIX, PREFIX_POSTFIX, obtain_coordinates_and_prefixes
+from .display.SecondaryDisplay import SubRectangleDisplay
+from .grid.SecondaryGrid import SecondaryGridType
 from talon import Module, actions, app
 
 class GridSystemManager:
@@ -246,6 +248,12 @@ class Actions:
         if grid.supports_narrowing():
             actions.user.mouse_control_chicken_reset_narrow_able_grid()
             actions.user.mouse_control_chicken_disable_narrow_able_grid_mode()
+
+    def mouse_control_chicken_show_sub_rectangle() -> None:
+        '''Show the sub rectangle for the active grid if applicable'''
+        display_manager = manager.display_manager
+        secondary_display = SubRectangleDisplay()
+        display_manager.update_secondary_display(secondary_display)
 
 def get_reversed_coordinates_position_on_grid(coordinates: str) -> MousePosition:
     '''Gets the position on the current mouse control chicken grid using coordinates after the action instead of before'''

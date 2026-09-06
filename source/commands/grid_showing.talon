@@ -48,3 +48,5 @@ chicken double [(horizontal|horizontally)]:
     user.mouse_control_chicken_double_grid(true)
 chicken double (vertical|vertically):
     user.mouse_control_chicken_double_grid(false)
+
+chicken show sub rectangle: user.mouse_control_chicken_show_sub_rectangle()
