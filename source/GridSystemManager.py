@@ -221,6 +221,8 @@ class Actions:
             position = get_reversed_coordinates_position_on_grid(coordinates)
         else:
             position = grid.compute_absolute_position_from(coordinates)
+        if position is None:
+            raise ValueError(f"No position for coordinates {coordinates}!")
         return position
 
     def mouse_control_chicken_is_using_narrow_able_grid() -> bool:

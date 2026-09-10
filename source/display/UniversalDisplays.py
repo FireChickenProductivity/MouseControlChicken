@@ -12,5 +12,7 @@ class UniversalPositionDisplay(PositionDisplay):
         coordinate_system = self.grid.get_coordinate_system()
         for coordinates in coordinate_system.get_primary_coordinates():
             position = self.grid.compute_absolute_position_from(coordinates)
+            if position is None:
+                continue
             text = Text(position.get_horizontal(), position.get_vertical(), coordinates)
             canvas.insert_text(text)

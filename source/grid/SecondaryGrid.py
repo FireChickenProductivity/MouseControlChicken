@@ -34,14 +34,10 @@ class RecentPositionsGrid(SecondaryGrid):
 	def compute_absolute_position_from_valid_coordinates(self, grid_coordinates: str) -> MousePosition:
 		index = self.coordinate_to_position_index(grid_coordinates)
 		if index < len(self.positions) - 1:
-			raise ValueError(f"Coordinates {grid_coordinates} are not being shown on the recent position grid!")
+			return None
 		return self.positions[index]
 	
 	def handle_using_position_with_mouse_command(self, position: MousePosition) -> None:
 		if len(self.positions) >= self.n:
 			self.positions.pop(0)
 		self.positions.append(position)
-
-	def get_positions(self) -> list[MousePosition]:
-		return self.positions
-	
