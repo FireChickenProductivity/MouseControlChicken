@@ -41,4 +41,7 @@ class RecentPositionsGrid(SecondaryGrid):
 		if len(self.positions) >= self.n:
 			self.positions.pop(0)
 		self.positions.append(position)
+
+	def get_positions(self) -> list[MousePosition]:
+		return self.positions
 	
